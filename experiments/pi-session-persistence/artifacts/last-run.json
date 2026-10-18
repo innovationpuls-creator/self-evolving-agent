@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "verifiedAt": "2026-10-17T10:04:10.482Z",
+  "environment": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "node": "v26.10.0",
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0"
+  },
+  "checks": {
+    "allEntriesRoundTrip": true,
+    "historyBranchRestored": true,
+    "compactionRestored": true,
+    "customEntryRestored": true,
+    "processCrashRecoveryAfterSigkill": true,
+    "ciphertextHasNoPlaintextMockCredential": true,
+    "plaintextSafeExportRedactsCredential": true,
+    "ciphertextAuthenticationRejectsTampering": true,
+    "toolArgumentsUnchanged": true,
+    "recoveredSessionContinuesToolCalling": true,
+    "persistedFileMode": "0600"
+  },
+  "entryCountAtRecovery": 13,
+  "recoveryWorker": {
+    "allEntriesRoundTrip": true,
+    "historyBranchRestored": true,
+    "compactionRestored": true,
+    "customEntryRestored": true,
+    "ciphertextAuthenticationRejectsTampering": true,
+    "toolArgumentsUnchanged": true,
+    "continuedAfterCrash": true
+  },
+  "crashSignal": "SIGKILL"
+}

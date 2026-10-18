@@ -1,0 +1,119 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import './style.css';
+
+interface Model {provider:string; id:string; name:string}
+interface Message {role:string; content:string|Array<{type:string;text?:string;name?:string;arguments?:unknown}>;toolName?:string;isError?:boolean;errorMessage?:string}
+interface Tree {entry:{id:string;type:string;message?:Message};children:Tree[]}
+interface Session {id:string;title:string;cwd:string;provider:string;model:string;busy:boolean;interrupted?:boolean;error?:string;messages?:Message[];tree?:Tree[];leafId?:string;thinkingLevel?:string;thinkingLevels?:string[]}
+async function api<T>(path:string, method='GET', data?:unknown):Promise<T> {
+  const response=await fetch(`/api${path}`, {method, headers:{'Content-Type':'application/json'}, body:data===undefined?undefined:JSON.stringify(data)});
+  const result=await response.json();
+  if(!response.ok) throw new Error(result.error ?? '连接失败');
+  return result;
+}
+function text(message:Message) {
+  if(typeof message.content==='string')return message.content;
+  return message.content?.map(part=>part.type==='text'?part.text:part.type==='toolCall'?`${part.name}\n${JSON.stringify(part.arguments,null,2)}`:'').filter(Boolean).join('\n') ?? '';
+}
+function App() {
+  const [connected,setConnected]=useState(false),[online,setOnline]=useState(false),[token,setToken]=useState(''),[error,setError]=useState('');
+  const [sessions,setSessions]=useState<Session[]>([]),[selected,setSelected]=useState<Session>(),[models,setModels]=useState<Model[]>([]),[providers,setProviders]=useState<Array<{id:string}>>([]);
+  const [cwd,setCwd]=useState(''),[model,setModel]=useState(''),[prompt,setPrompt]=useState(''),[settings,setSettings]=useState(false),[provider,setProvider]=useState('openai-codex'),[key,setKey]=useState('');
+  const selectedRef=useRef<string|undefined>(undefined),bottom=useRef<HTMLDivElement>(null);
+  selectedRef.current=selected?.id;
+  const guard=async(fn:()=>Promise<unknown>)=>{setError('');try{await fn();}catch(e){setError((e as Error).message);}};
+  const refresh=async()=>{
+    const [list,catalog]=await Promise.all([api<Session[]>('/sessions'),api<{models:Model[];providers:Array<{id:string}>}>('/models')]);
+    setSessions(list);setModels(catalog.models);setProviders(catalog.providers);
+    setModel(old=>old||(catalog.models[0]?`${catalog.models[0].provider}/${catalog.models[0].id}`:''));
+  };
+  const open=async(id:string)=>setSelected(await api<Session>(`/sessions/${id}`));
+  useEffect(()=>{void guard(async()=>{
+    const initial=new URLSearchParams(location.hash.slice(1)).get('token');
+    if(initial){history.replaceState(null,'',location.pathname);await api('/connect','POST',{token:initial});}
+    try{await refresh();setConnected(true);}catch{setConnected(false);}
+  });},[]);
+  useEffect(()=>{
+    if(!connected)return;
+    let stopped=false,timer:ReturnType<typeof setTimeout>,socket:WebSocket;
+    const connect=()=>{
+      socket=new WebSocket(`${location.origin.replace('http','ws')}/events`);
+      socket.onopen=()=>{setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});};
+      socket.onclose=()=>{setOnline(false);if(!stopped)timer=setTimeout(connect,1500);};
+      socket.onmessage=event=>{
+        const data=JSON.parse(event.data);
+        if(data.type==='state') {
+          setSessions(old=>old.some(s=>s.id===data.state.id)?old.map(s=>s.id===data.state.id?data.state:s):[data.state,...old]);
+          if(data.sessionId===selectedRef.current)setSelected(data.state);
+        }
+        if(data.type==='update'&&data.sessionId===selectedRef.current) {
+          const e=data.event;
+          if(e.type==='message_start')setSelected(old=>old?{...old,messages:[...(old.messages??[]),e.message]}:old);
+          if(e.type==='message_update'||e.type==='message_end')setSelected(old=>{
+            if(!old)return old;
+            const messages=[...(old.messages??[])];messages[messages.length-1]=e.message;
+            return {...old,messages};
+          });
+        }
+      };
+    };
+    connect();return()=>{stopped=true;clearTimeout(timer);socket?.close();};
+  },[connected]);
+  useEffect(()=>{bottom.current?.scrollIntoView({behavior:'smooth'});},[selected?.messages]);
+  const newSession=()=>guard(async()=>{
+    const m=models.find(m=>`${m.provider}/${m.id}`===model);if(!m)throw new Error('请先配置模型');
+    const s=await api<Session>('/sessions','POST',{cwd,provider:m.provider,model:m.id});setSelected(s);await refresh();
+  });
+  const send=()=>guard(async()=>{
+    if(!selected||selected.busy||!prompt.trim())return;
+    setSelected({...selected,busy:true});
+    const value=prompt;setPrompt('');
+    try{await api(`/sessions/${selected.id}/prompt`,'POST',{text:value});}catch(e){setPrompt(value);setSelected(old=>old?{...old,busy:false}:old);throw e;}
+  });
+  const nodes=(tree:Tree[],depth=0):React.ReactNode=>tree.map(node=><React.Fragment key={node.entry.id}>
+    <option value={node.entry.id}>{'　'.repeat(depth)}{node.entry.type} {node.entry.message?text(node.entry.message).slice(0,35):''}</option>{nodes(node.children,depth+1)}
+  </React.Fragment>);
+  if(!connected)return <main className="connect"><p className="eyebrow">YOUR WORKSPACE, IN CONVERSATION</p><h1>连接 Agent</h1><p>输入本机 Agent Host 的连接令牌。</p>
+    <form onSubmit={e=>{e.preventDefault();void guard(async()=>{await api('/connect','POST',{token});setToken('');await refresh();setConnected(true);});}}>
+      <input aria-label="连接令牌" type="password" value={token} onChange={e=>setToken(e.target.value)} autoComplete="off"/><button>连接</button>
+    </form>{error&&<p role="alert">{error}</p>}</main>;
+  return <div className="shell"><aside><div className="brand">Agent <span>个人工作空间</span></div>
+    <button onClick={()=>setSelected(undefined)}>＋ 新会话</button>
+    <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} onClick={()=>void guard(()=>open(s.id))}>
+      <b>{s.title}</b><small>{s.busy?'正在处理':s.interrupted?'上次运行中断':s.cwd}</small></button>)}</nav>
+    <button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
+    <main><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
+      {selected&&<div className="actions"><button disabled={selected.busy} onClick={()=>void guard(()=>api(`/sessions/${selected.id}/compact`,'POST',{}))}>压缩上下文</button>
+      <button onClick={()=>void guard(async()=>{
+        const data=await api(`/sessions/${selected.id}/export`);const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+        const a=document.createElement('a');a.href=url;a.download='conversation.json';a.click();URL.revokeObjectURL(url);
+      })}>导出</button></div>}</header>
+    {error&&<div role="alert" className="notice error">{error}</div>}
+    {settings&&<section className="settings"><h2>模型连接</h2><p>凭据加密保存在本机。可导入本机 Pi 中已有的授权。</p>
+      <select aria-label="模型提供方" value={provider} onChange={e=>setProvider(e.target.value)}>{providers.map(p=><option key={p.id}>{p.id}</option>)}</select>
+      <input aria-label="API Key" type="password" placeholder="API Key" value={key} onChange={e=>setKey(e.target.value)} autoComplete="off"/>
+      <button onClick={()=>void guard(async()=>{await api('/credentials','POST',{provider,key});setKey('');await refresh();})}>保存 Key</button>
+      <button onClick={()=>void guard(async()=>{await api('/credentials','POST',{provider,importExisting:true});await refresh();})}>导入 Pi 授权</button></section>}
+    {!selected?<section className="start"><p className="eyebrow">LET’S MAKE SOMETHING</p><h2>从一个具体任务开始。</h2>
+      <label>工作目录<input placeholder="工作目录的绝对路径" value={cwd} onChange={e=>setCwd(e.target.value)}/></label>
+      <label>模型<select value={model} onChange={e=>setModel(e.target.value)}>{models.map(m=><option key={`${m.provider}/${m.id}`} value={`${m.provider}/${m.id}`}>{m.name} · {m.provider}</option>)}</select></label>
+      <button disabled={!cwd||!model} onClick={()=>void newSession()}>创建会话 →</button>{!models.length&&<p>先打开模型设置，配置或导入模型授权。</p>}</section>:<>
+      <div className="session-tools"><select aria-label="当前模型" value={`${selected.provider}/${selected.model}`} disabled={selected.busy} onChange={e=>{
+        const m=models.find(m=>`${m.provider}/${m.id}`===e.target.value);if(m)void guard(()=>api(`/sessions/${selected.id}/model`,'POST',{provider:m.provider,value:m.id}));
+      }}>{models.map(m=><option key={`${m.provider}/${m.id}`} value={`${m.provider}/${m.id}`}>{m.name}</option>)}</select>
+      <select aria-label="推理强度" disabled={selected.busy} value={selected.thinkingLevel} onChange={e=>void guard(()=>api(`/sessions/${selected.id}/thinking`,'POST',{value:e.target.value}))}>{selected.thinkingLevels?.map(level=><option key={level}>{level}</option>)}</select>
+      <select aria-label="历史分支" disabled={selected.busy} value={selected.leafId??''} onChange={e=>void guard(()=>api(`/sessions/${selected.id}/branch`,'POST',{value:e.target.value}))}>
+        <option value="" disabled>选择历史节点</option>{nodes(selected.tree??[])}</select></div>
+      {(selected.error||selected.interrupted&&!selected.busy)&&<div className="notice">{selected.error??'上次运行已中断。请先检查工具结果与实际文件，再决定下一步；系统不会自动重放。'}</div>}
+      <section className="transcript">{(selected.messages??[]).filter(m=>['user','assistant','toolResult'].includes(m.role)).map((m,i)=>m.role==='toolResult'?
+        <details key={i}><summary>{m.isError?'工具失败':'工具结果'} · {m.toolName}</summary><pre>{text(m)}</pre></details>:
+        <article key={i} className={m.role}><span>{m.role==='user'?'你':'Agent'}</span><pre>{text(m)}</pre>{m.errorMessage&&<p role="alert">{m.errorMessage}</p>}</article>)}
+        {selected.busy&&<p className="working">正在处理…</p>}<div ref={bottom}/></section>
+      <form className="composer" onSubmit={e=>{e.preventDefault();void send();}}>
+        <textarea aria-label="任务" placeholder="描述你想完成的任务…" value={prompt} onChange={e=>setPrompt(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();void send();}}}/>
+        <div><small>⌘ / Ctrl + Enter 发送</small>{selected.busy?<button type="button" onClick={()=>void guard(()=>api(`/sessions/${selected.id}/stop`,'POST',{}))}>停止</button>:<button disabled={!prompt.trim()||!online}>发送 ↑</button>}</div>
+      </form></>}
+    </main></div>;
+}
+createRoot(document.getElementById('root')!).render(<App/>);

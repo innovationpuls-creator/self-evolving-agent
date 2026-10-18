@@ -1,0 +1,2 @@
+Pi built-in read tool fixture.
+If this sentence appears in the faux model's tool result, Pi executed its native read tool.

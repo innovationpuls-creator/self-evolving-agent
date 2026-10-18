@@ -1,0 +1,44 @@
+{
+  "result": "PASS",
+  "verifiedAt": "2026-10-17T11:55:14.900Z",
+  "environment": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "node": "v26.10.0",
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0"
+  },
+  "checks": {
+    "skillBodyEditIsReadOnInvocationWithoutRuntimeReload": true,
+    "skillMetadataRefreshUsesNativeResourceInterface": true,
+    "knowledgeOnlyUpdateDoesNotReloadExtensionRuntime": true,
+    "failedCandidateStageLeavesActiveVersionUntouched": true,
+    "failedCandidateStageLeavesPersistedActiveAndLastGoodUntouched": true,
+    "newVersionLoadsAndExecutesInIndependentStage": true,
+    "stagedCandidateHooksPassHealthProbe": true,
+    "successfulActivationPersistsActiveAndLastGoodVersions": true,
+    "oldToolFinishesBeforeVersionSwitch": true,
+    "switchWaitsForIdleAndQueuesNewCalls": true,
+    "postSwitchCallsUseV2": true,
+    "forcedBadActivationRemovesCandidateTool": true,
+    "failureRollbackRestoresToolAndHooks": true,
+    "disableSurvivesPiSessionReload": true,
+    "disableSurvivesVersionSwitch": true,
+    "disabledPackageHooksRemainInactiveAfterReloadAndVersionSelection": true,
+    "disabledSkillDoesNotLoadDuringVersionSelection": true,
+    "disabledSkillRemainsUnloadedAfterNewHostProcessStarts": true
+  },
+  "evidence": {
+    "activeVersionAfterFailure": "v2",
+    "versionAfterIdleSwitch": "v2",
+    "lastGoodVersionAfterHostRestart": "v2",
+    "versionAfterHostRestart": "v2",
+    "disabledAfterHostRestart": true,
+    "restartChildPid": 27003
+  },
+  "securityBoundary": {
+    "loadedFixtureCode": "handwritten local trusted fixtures only",
+    "loadedUntrustedGeneratedCode": false,
+    "osSandboxImplementedOrTested": false
+  }
+}

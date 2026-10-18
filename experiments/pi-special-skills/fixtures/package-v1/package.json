@@ -1,0 +1,13 @@
+{
+  "name": "td09-special-skill",
+  "version": "1.0.0",
+  "private": true,
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": ["./extensions/index.js"],
+    "skills": ["./skills"]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "outcome": "PASS",
+  "enforcement": "macOS Seatbelt via sandbox-exec",
+  "profile": "deny default; allow reads; allow writes only under approved knowledge path; deny private reads; allow process creation",
+  "checks": {
+    "allowedWrite": true,
+    "protectedWriteDenied": true,
+    "secretReadDenied": true,
+    "childProtectedWriteDenied": true,
+    "networkDenied": true
+  },
+  "stderr": ""
+}

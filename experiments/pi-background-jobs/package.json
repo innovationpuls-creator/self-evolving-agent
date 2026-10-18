@@ -1,0 +1,15 @@
+{
+  "name": "pi-background-jobs-experiment",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Pi SDK 1.3.0 SQLite-backed background task scheduling experiment",
+  "scripts": {
+    "verify": "node src/run-experiment.mjs"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "1.3.0",
+    "@earendil-works/pi-coding-agent": "1.3.0",
+    "better-sqlite3": "13.0.3"
+  }
+}

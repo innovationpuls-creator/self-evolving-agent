@@ -1,0 +1,51 @@
+{
+  "outcome": "PASS",
+  "environment": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "node": "26.10.0",
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0",
+    "betterSqlite3": "13.0.3",
+    "sqlite": "3.53.4",
+    "provider": "Pi Faux Provider; allowModelNetwork=false"
+  },
+  "testSignals": {
+    "pendingHost": "SIGKILL",
+    "inFlightHost": "SIGKILL"
+  },
+  "task": {
+    "id": "4e457821-3f66-40dd-969e-9386406f196d",
+    "triggerCount": 3,
+    "debounceMs": 30000,
+    "scheduledAt": 1792235347901,
+    "startedAt": 1792235347902,
+    "startLatenessMs": 1,
+    "firstSourceSessionId": "normal-ea0e2d5e-18f9-4e0d-82dd-825156db8f5a",
+    "recoveredSourceSessionId": "normal-e437119a-f7d5-497b-9b3f-2085b22fa3c7"
+  },
+  "interruptedTask": {
+    "id": "54e3cfcf-6709-49ea-b388-ec6e6a043022",
+    "status": "interrupted",
+    "attempts": 1,
+    "externalEffectCountAfterRestart": 1
+  },
+  "checks": {
+    "settlementDuringRunningQueuesFollowup": true,
+    "agentSettledRegisteredTask": true,
+    "sqliteSavedTaskAndScheduledAt": true,
+    "thirtySecondDebounceAndDeduplication": true,
+    "clientExitLeftHostAlive": true,
+    "restartRecoveredPendingTask": true,
+    "debounceUpdatedFromPostRestartSettlement": true,
+    "clientExitAfterRestartLeftHostAlive": true,
+    "scheduledTaskExecutedAfterDueTime": true,
+    "independentPiSessionAndManager": true,
+    "normalAndBackgroundHistoryIsolated": true,
+    "reflectionSettlementDidNotRequeue": true,
+    "sigkillDuringPendingTaskRecovered": true,
+    "sigkillAfterSideEffectMarkedInterrupted": true,
+    "interruptedExternalEffectWasNotReplayed": true,
+    "sqliteIntegrityAfterForcedStops": true
+  }
+}

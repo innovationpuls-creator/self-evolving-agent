@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pi Host Prototype</title>
+    <style>
+      :root { color-scheme: light; font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #172320; background: #f4f6f2; }
+      body { max-width: 720px; margin: 0 auto; padding: 44px 24px; }
+      h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: -.03em; }
+      p { color: #596661; }
+      .card { margin-top: 24px; padding: 22px; border: 1px solid #dce3dd; border-radius: 14px; background: #fff; }
+      #host { font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; color: #355047; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+      button { border: 0; border-radius: 8px; padding: 10px 14px; background: #20332d; color: #fff; font: inherit; cursor: pointer; }
+      button:disabled { opacity: .55; cursor: wait; }
+      #result { min-height: 112px; margin: 0; padding: 14px; border-radius: 8px; background: #f1f4f0; overflow-wrap: anywhere; white-space: pre-wrap; }
+      .note { margin-top: 22px; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <h1>Pi Agent Host</h1>
+    <p>Pi SDK 会话由桌面 Host 持有；此页面通过本机 HTTP API 调用同一个会话。</p>
+    <section class="card">
+      <strong>Host</strong>
+      <pre id="host">连接中…</pre>
+      <div class="actions">
+        <button data-scenario="builtin-read">调用 Pi 原生 read 工具</button>
+        <button data-scenario="extension">调用随包 Extension 工具</button>
+      </div>
+      <pre id="result">等待调用。</pre>
+    </section>
+    <p class="note">实验响应由 Pi Faux Provider 在本机生成，不会请求外部模型。</p>
+    <script>
+      const host = document.querySelector("#host");
+      const result = document.querySelector("#result");
+      const buttons = [...document.querySelectorAll("button[data-scenario]")];
+
+      async function refreshHost() {
+        try {
+          const response = await fetch("/api/health");
+          const data = await response.json();
+          host.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          host.textContent = `Host unavailable: ${error.message}`;
+        }
+      }
+
+      for (const button of buttons) {
+        button.addEventListener("click", async () => {
+          buttons.forEach((item) => { item.disabled = true; });
+          result.textContent = "Pi Agent 正在执行…";
+          try {
+            const response = await fetch("/api/run", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ scenario: button.dataset.scenario }),
+            });
+            result.textContent = JSON.stringify(await response.json(), null, 2);
+          } catch (error) {
+            result.textContent = `Request failed: ${error.message}`;
+          } finally {
+            buttons.forEach((item) => { item.disabled = false; });
+          }
+        });
+      }
+
+      refreshHost();
+      window.setInterval(refreshHost, 5000);
+    </script>
+  </body>
+</html>

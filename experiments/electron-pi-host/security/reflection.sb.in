@@ -1,0 +1,8 @@
+(version 1)
+(deny default)
+(allow file-read*)
+(allow file-write* (subpath __ALLOWED_WRITE_ROOT__))
+(deny file-read* (subpath __DENIED_READ_ROOT__))
+(allow process*)
+(allow sysctl-read)
+(allow mach-lookup)

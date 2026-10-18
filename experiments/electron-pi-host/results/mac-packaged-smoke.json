@@ -1,0 +1,28 @@
+{
+  "outcome": "PASS",
+  "checks": {
+    "hostAutoStarted": true,
+    "extensionLoaded": true,
+    "piNativeReadCalled": true,
+    "piNativeReadCompleted": true,
+    "extensionToolCalled": true,
+    "extensionToolCompleted": true,
+    "windowHiddenAfterClose": true,
+    "hostSurvivedWindowClose": true
+  },
+  "host": {
+    "hostId": "ca009204-de67-401f-a3ca-84c54c5c323b",
+    "pid": 65486,
+    "origin": "http://127.0.0.1:56732",
+    "node": "24.22.0",
+    "electron": "44.9.0"
+  },
+  "activeTools": [
+    "read",
+    "reflection_probe"
+  ],
+  "loadedExtensions": [
+    "/private/tmp/pi-electron-host-packaged-mac/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js"
+  ],
+  "provider": "Pi Faux Provider (local; no network)"
+}

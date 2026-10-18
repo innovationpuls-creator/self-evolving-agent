@@ -1,0 +1,958 @@
+{
+  "verifiedAt": "2026-10-17T16:26:09.886Z",
+  "platform": "darwin-arm64",
+  "macOS": "27.2.0",
+  "electron": "44.9.0",
+  "piSdkHostVersion": "1.3.0",
+  "nodeVersion": "v24.22.0",
+  "nodeBinaryPackage": "node-bin-darwin-arm64@24.22.0",
+  "nodeBinaryPackageURL": "https://registry.npmjs.org/node-bin-darwin-arm64/-/node-bin-darwin-arm64-24.22.0.tgz",
+  "nodeBinaryPackageRepository": "https://github.com/aredridel/node-bin-gen",
+  "expectedNodeBinaryPackageIntegrity": "sha512-vcD7IMiHzzsanVcQU0whxtEdU6FbQpHyXzV5buIZfIzRKAbvd/yF9kJt7g1sP4p5Nm5gQHOzSCOGVU9gnCegKQ==",
+  "usedDocker": false,
+  "usedElectronFrameworkForWorker": false,
+  "usedRealCredentials": false,
+  "loadedUntrustedGeneratedCode": false,
+  "stage": "TD13: macOS App Sandbox Worker using a Pi 1.3.0 native Provider bridge over anonymous XPC to a trusted Host Faux ModelRuntime, Pi Tool Calling, cancellation, and host-validated knowledge update",
+  "checks": {
+    "packagedHostLaunched": true,
+    "allHostAndNodeBootstrapSmokeChecksPassed": true,
+    "nodeSignatureAndSandboxEntitlementsVerified": true,
+    "signedStandaloneNodeStartedByXpcAndReturnedJSON": true,
+    "osSandboxDeniedFileNetworkAndChildAccess": true,
+    "hostCanariesAndNetworkPositiveControlPassed": true,
+    "macosSandboxDenialWasRecorded": true,
+    "xpcWorkerHostModelRequestRoundTrip": true,
+    "piSdk130FauxToolCallingAndHostValidatedKnowledgeUpdate": true,
+    "piWorkerProductionRuntimePackaged": true,
+    "piSmokeWasGatedOnSuccessfulBridgeProbe": true,
+    "pi130NativeProviderRelayedFauxRequestsThroughHostXpc": true,
+    "hostRejectedUnauthorizedModelAndHandledErrorAndCancel": true
+  },
+  "nodeBinaryPackageSRIValidated": true,
+  "nodeBinaryPackageBytes": 47425954,
+  "nodeBinaryBytes": 122503472,
+  "nodeHasNoElectronFrameworkDependency": true,
+  "piWorkerRuntime": {
+    "productionOnly": true,
+    "lifecycleScriptsDisabled": true,
+    "cliBinaryLinksOmitted": true,
+    "electronPackageOmitted": true,
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0",
+    "typebox": "1.3.27",
+    "installSummary": "added 119 packages in 1s",
+    "location": "XPCService/Contents/Resources/node_modules"
+  },
+  "signing": {
+    "nodeSignatureVerified": true,
+    "xpcServiceSignatureVerified": true,
+    "bridgeAppSignatureVerified": true,
+    "hostAppSignatureVerified": true,
+    "nodeSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.reflection-node",
+      "Format": "Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "0d5a2e113ff4a9917bcf9e850993e4263184d8e7"
+    },
+    "xpcServiceSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.node-bootstrap",
+      "Format": "bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "05cc76329f3c63005276b598ab6b4a9b099d30de"
+    },
+    "bridgeAppSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.reflection-bridge",
+      "Format": "app bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "4eb6fa23fcf52b573403fc1aeefcb086e1a53340"
+    },
+    "hostAppSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype",
+      "Format": "app bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "102036b47c18754cf8b2e80d5e2a6acbe29ed3f4"
+    },
+    "nodeHasAppSandbox": true,
+    "nodeInheritsParentSandbox": true,
+    "serviceHasAppSandbox": true,
+    "serviceHasNetworkClient": false
+  },
+  "appSmoke": {
+    "outcome": "PASS",
+    "checks": {
+      "hostAutoStarted": true,
+      "extensionLoaded": true,
+      "piNativeReadCalled": true,
+      "piNativeReadCompleted": true,
+      "extensionToolCalled": true,
+      "extensionToolCompleted": true,
+      "windowHiddenAfterClose": true,
+      "hostSurvivedWindowClose": true,
+      "signedNodeStartedByXpcService": true,
+      "pinnedNodeVersionReturned": true,
+      "workerReturnedRequestData": true,
+      "missingServiceFailedClosed": true,
+      "normalPiHostContinuedAfterSandboxFailure": true,
+      "hostPositiveControlCanReadFakeCredential": true,
+      "hostPositiveControlCanReadFormalSkill": true,
+      "hostPositiveControlCanReadKnowledge": true,
+      "hostPositiveControlCanReachLoopback": true,
+      "signedNodeReturnedPermissionProbe": true,
+      "osDeniedFakeCredentialRead": true,
+      "osDeniedFormalSkillRead": true,
+      "osDeniedHostKnowledgeWrite": true,
+      "osDeniedLoopbackNetwork": true,
+      "hostKnowledgeCanaryUnchanged": true,
+      "signedNodeChildStartedAndReturned": true,
+      "childOsDeniedFakeCredentialRead": true,
+      "childOsDeniedFormalSkillRead": true,
+      "childOsDeniedHostKnowledgeWrite": true,
+      "childOsDeniedLoopbackNetwork": true,
+      "workerNetworkDidNotReachLoopback": true,
+      "normalPiHostContinuedAfterPermissionProbe": true,
+      "xpcWorkerHostModelRequestRoundTrip": true,
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedByTrustedHostWithoutWorkerNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "threePiProviderRoundsRelayedThroughHost": true,
+      "secondModelRoundContainsPriorToolResult": true,
+      "hostAuthorizedFixedModelAndBoundedTranscript": true,
+      "modelChannelContainsNoCredentialOrResourceProxyFields": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true,
+      "hostRejectedUnapprovedModelID": true,
+      "upstreamFailureReachedWorkerAsPiError": true,
+      "PiAbortSignalSentHostCancellationAndWorkerContinued": true
+    },
+    "host": {
+      "hostId": "8b7229f9-0c90-4a00-a9a8-d3d622451b46",
+      "pid": 46408,
+      "origin": "http://127.0.0.1:52010",
+      "node": "24.22.0",
+      "electron": "44.9.0"
+    },
+    "activeTools": [
+      "read",
+      "reflection_probe"
+    ],
+    "loadedExtensions": [
+      "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-IUUFTg/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js"
+    ],
+    "provider": "Pi Faux Provider (local; no network)",
+    "nodeBootstrapEvidence": {
+      "checks": {
+        "signedNodeStartedByXpcService": true,
+        "pinnedNodeVersionReturned": true,
+        "workerReturnedRequestData": true,
+        "missingServiceFailedClosed": true,
+        "normalPiHostContinuedAfterSandboxFailure": true
+      },
+      "response": {
+        "nodeVersion": "v24.22.0",
+        "echo": "td12-node-bootstrap",
+        "servicePID": 46448,
+        "workerPID": 46450,
+        "success": true
+      },
+      "hostAfterFailure": {
+        "assistantText": "faux-finished:read",
+        "pendingFauxResponses": 0
+      }
+    },
+    "nodePermissionEvidence": {
+      "checks": {
+        "hostPositiveControlCanReadFakeCredential": true,
+        "hostPositiveControlCanReadFormalSkill": true,
+        "hostPositiveControlCanReadKnowledge": true,
+        "hostPositiveControlCanReachLoopback": true,
+        "signedNodeReturnedPermissionProbe": true,
+        "osDeniedFakeCredentialRead": true,
+        "osDeniedFormalSkillRead": true,
+        "osDeniedHostKnowledgeWrite": true,
+        "osDeniedLoopbackNetwork": true,
+        "hostKnowledgeCanaryUnchanged": true,
+        "signedNodeChildStartedAndReturned": true,
+        "childOsDeniedFakeCredentialRead": true,
+        "childOsDeniedFormalSkillRead": true,
+        "childOsDeniedHostKnowledgeWrite": true,
+        "childOsDeniedLoopbackNetwork": true,
+        "workerNetworkDidNotReachLoopback": true,
+        "normalPiHostContinuedAfterPermissionProbe": true,
+        "xpcWorkerHostModelRequestRoundTrip": true,
+        "piSdk130WorkerStartedWithPinnedNode": true,
+        "fauxProviderUsedByTrustedHostWithoutWorkerNetwork": true,
+        "piSdkReadSimulatedHistory": true,
+        "piSdkSubmittedKnowledgeUpdateToolCall": true,
+        "onlyTwoExplicitToolsAvailable": true,
+        "threePiProviderRoundsRelayedThroughHost": true,
+        "secondModelRoundContainsPriorToolResult": true,
+        "hostAuthorizedFixedModelAndBoundedTranscript": true,
+        "modelChannelContainsNoCredentialOrResourceProxyFields": true,
+        "noSkillsOrExtensionsLoaded": true,
+        "workerEnvironmentIsCredentialFreeAllowlist": true,
+        "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+        "normalPiHostContinuedAfterPiWorker": true,
+        "hostRejectedUnapprovedModelID": true,
+        "upstreamFailureReachedWorkerAsPiError": true,
+        "PiAbortSignalSentHostCancellationAndWorkerContinued": true
+      },
+      "response": {
+        "success": true,
+        "child": {
+          "started": true,
+          "workerPID": 46456,
+          "exitStatus": 0,
+          "security": {
+            "credentialReadDenied": true,
+            "credentialReadErrorCode": "EPERM",
+            "networkErrorCode": "EPERM",
+            "networkDenied": true,
+            "formalSkillReadErrorCode": "EPERM",
+            "hostKnowledgeWriteDenied": true,
+            "formalSkillReadDenied": true,
+            "hostKnowledgeWriteErrorCode": "EPERM"
+          }
+        },
+        "nodeVersion": "v24.22.0",
+        "servicePID": 46454,
+        "security": {
+          "hostKnowledgeWriteDenied": true,
+          "formalSkillReadDenied": true,
+          "credentialReadDenied": true,
+          "hostKnowledgeWriteErrorCode": "EPERM",
+          "networkDenied": true,
+          "networkErrorCode": "EPERM",
+          "formalSkillReadErrorCode": "EPERM",
+          "credentialReadErrorCode": "EPERM"
+        },
+        "workerPID": 46455
+      },
+      "probePaths": {
+        "credentialPath": "/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-credentials/fake-credential.json",
+        "skillPath": "/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/formal-skills/example/SKILL.md",
+        "knowledgePath": "/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-knowledge/knowledge.json",
+        "networkProbeURL": "http://127.0.0.1:52014/probe"
+      },
+      "bridgeProbeEvidence": {
+        "checks": {
+          "xpcWorkerHostModelRequestRoundTrip": true
+        },
+        "response": {
+          "echo": "xpc-bridge-ok",
+          "modelCalls": [
+            "reflection-host-approved"
+          ],
+          "servicePID": 46459,
+          "nodeVersion": "v24.22.0",
+          "success": true,
+          "modelProvider": "xpc-probe",
+          "workerPID": 46460
+        },
+        "error": null,
+        "hostRequestsReceived": 1
+      },
+      "piEvidence": {
+        "checks": {
+          "piSdk130WorkerStartedWithPinnedNode": true,
+          "fauxProviderUsedByTrustedHostWithoutWorkerNetwork": true,
+          "piSdkReadSimulatedHistory": true,
+          "piSdkSubmittedKnowledgeUpdateToolCall": true,
+          "onlyTwoExplicitToolsAvailable": true,
+          "threePiProviderRoundsRelayedThroughHost": true,
+          "secondModelRoundContainsPriorToolResult": true,
+          "hostAuthorizedFixedModelAndBoundedTranscript": true,
+          "modelChannelContainsNoCredentialOrResourceProxyFields": true,
+          "noSkillsOrExtensionsLoaded": true,
+          "workerEnvironmentIsCredentialFreeAllowlist": true,
+          "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+          "normalPiHostContinuedAfterPiWorker": true,
+          "hostRejectedUnapprovedModelID": true,
+          "upstreamFailureReachedWorkerAsPiError": true,
+          "PiAbortSignalSentHostCancellationAndWorkerContinued": true
+        },
+        "response": {
+          "servicePID": 46462,
+          "readHistoryResult": [
+            {
+              "text": "The learner prefers short explanations with source-linked notes.",
+              "id": "history-1"
+            },
+            {
+              "text": "The learner wants generated knowledge updates to remain reviewable.",
+              "id": "history-2"
+            }
+          ],
+          "knowledgeUpdate": {
+            "topic": "reflection",
+            "summary": "The simulated history records a preference for concise, source-linked learning notes.",
+            "sourceIDs": [
+              "history-1"
+            ]
+          },
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "loadedSkills": 0,
+          "abortObserved": false,
+          "modelProvider": "reflection-host-bridge",
+          "toolEvents": [
+            "tool_execution_start:read_simulated_history",
+            "tool_execution_end:read_simulated_history",
+            "tool_execution_start:submit_knowledge_update",
+            "tool_execution_end:submit_knowledge_update"
+          ],
+          "workerPID": 46463,
+          "loadedExtensions": 0,
+          "nodeVersion": "v24.22.0",
+          "success": true,
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "modelCalls": [
+            "reflection-host-approved:83cf226f-eac1-40c0-abe5-7ea0baf722e0",
+            "reflection-host-approved:b1a1bf37-3c20-456d-a0eb-c90d3e7897f8",
+            "reflection-host-approved:d4484b8a-569e-4548-acaf-10fe241d77a6"
+          ]
+        },
+        "hostChannel": {
+          "modelProvider": "td13-host-faux",
+          "modelRequests": 3,
+          "authorizedRequests": 3,
+          "deniedRequests": 0,
+          "hostCancelRequests": 0,
+          "hostUpstreamErrors": 0,
+          "fauxCalls": 3,
+          "maxContextBytes": 2806,
+          "requestSchemaValid": true,
+          "requestFields": [
+            "kind",
+            "requestID",
+            "modelID",
+            "contextJSON"
+          ],
+          "responseFields": [
+            "kind",
+            "requestID",
+            "ok",
+            "assistantMessageJSON",
+            "error"
+          ]
+        },
+        "negativeCases": {
+          "unauthorized": {
+            "mode": "pi-unauthorized-model",
+            "response": {
+              "loadedSkills": 0,
+              "modelProvider": "reflection-host-bridge",
+              "workerPID": 46469,
+              "loadedExtensions": 0,
+              "modelError": "model_not_authorized",
+              "processEnvironmentKeys": [
+                "PATH",
+                "PI_OFFLINE",
+                "PI_SKIP_VERSION_CHECK",
+                "PI_TELEMETRY",
+                "TD12_XPC_SERVICE_PID",
+                "TMPDIR",
+                "__CF_USER_TEXT_ENCODING"
+              ],
+              "servicePID": 46468,
+              "toolNames": [
+                "read_simulated_history",
+                "submit_knowledge_update"
+              ],
+              "modelCalls": [
+                "host-admin-model:9a3bae9b-d3e4-43e5-ba6d-6570e989a4f8"
+              ],
+              "abortObserved": false,
+              "toolEvents": [],
+              "readHistoryResult": [],
+              "success": true,
+              "nodeVersion": "v24.22.0"
+            },
+            "hostDenied": 1,
+            "hostCancelRequests": 0,
+            "hostUpstreamErrors": 0,
+            "modelErrorMatches": true
+          },
+          "upstreamError": {
+            "mode": "pi-error",
+            "response": {
+              "servicePID": 46473,
+              "loadedExtensions": 0,
+              "processEnvironmentKeys": [
+                "PATH",
+                "PI_OFFLINE",
+                "PI_SKIP_VERSION_CHECK",
+                "PI_TELEMETRY",
+                "TD12_XPC_SERVICE_PID",
+                "TMPDIR",
+                "__CF_USER_TEXT_ENCODING"
+              ],
+              "abortObserved": false,
+              "toolNames": [
+                "read_simulated_history",
+                "submit_knowledge_update"
+              ],
+              "workerPID": 46474,
+              "modelCalls": [
+                "reflection-host-approved:1d3d8c46-149d-48c6-8134-8cc627669ee4"
+              ],
+              "readHistoryResult": [],
+              "loadedSkills": 0,
+              "modelError": "mock_upstream_unavailable",
+              "modelProvider": "reflection-host-bridge",
+              "success": true,
+              "toolEvents": [],
+              "nodeVersion": "v24.22.0"
+            },
+            "hostDenied": 0,
+            "hostCancelRequests": 0,
+            "hostUpstreamErrors": 1,
+            "modelErrorMatches": true
+          },
+          "cancellation": {
+            "mode": "pi-cancel",
+            "response": {
+              "readHistoryResult": [],
+              "toolNames": [
+                "read_simulated_history",
+                "submit_knowledge_update"
+              ],
+              "loadedExtensions": 0,
+              "success": true,
+              "workerPID": 46479,
+              "nodeVersion": "v24.22.0",
+              "abortObserved": true,
+              "toolEvents": [],
+              "processEnvironmentKeys": [
+                "PATH",
+                "PI_OFFLINE",
+                "PI_SKIP_VERSION_CHECK",
+                "PI_TELEMETRY",
+                "TD12_XPC_SERVICE_PID",
+                "TMPDIR",
+                "__CF_USER_TEXT_ENCODING"
+              ],
+              "modelCalls": [
+                "reflection-host-approved:ee165a96-d48f-4982-95c2-473b1c1f40f6"
+              ],
+              "modelProvider": "reflection-host-bridge",
+              "loadedSkills": 0,
+              "servicePID": 46478
+            },
+            "hostDenied": 0,
+            "hostCancelRequests": 1,
+            "hostUpstreamErrors": 0,
+            "modelErrorMatches": false
+          }
+        },
+        "hostAfterPi": {
+          "assistantText": "faux-finished:read",
+          "pendingFauxResponses": 0
+        }
+      },
+      "loopbackRequests": 1,
+      "hostAfterProbe": {
+        "assistantText": "faux-finished:read",
+        "pendingFauxResponses": 0
+      }
+    }
+  },
+  "processOutput": {
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "{\"event\":\"agent-host-ready\",\"hostId\":\"8b7229f9-0c90-4a00-a9a8-d3d622451b46\",\"pid\":46408,\"origin\":\"http://127.0.0.1:52010\",\"node\":\"24.22.0\"}\nSMOKE_REPORT=/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-IUUFTg/electron-smoke.json\n{\"outcome\":\"PASS\",\"checks\":{\"hostAutoStarted\":true,\"extensionLoaded\":true,\"piNativeReadCalled\":true,\"piNativeReadCompleted\":true,\"extensionToolCalled\":true,\"extensionToolCompleted\":true,\"windowHiddenAfterClose\":true,\"hostSurvivedWindowClose\":true,\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true,\"hostPositiveControlCanReadFakeCredential\":true,\"hostPositiveControlCanReadFormalSkill\":true,\"hostPositiveControlCanReadKnowledge\":true,\"hostPositiveControlCanReachLoopback\":true,\"signedNodeReturnedPermissionProbe\":true,\"osDeniedFakeCredentialRead\":true,\"osDeniedFormalSkillRead\":true,\"osDeniedHostKnowledgeWrite\":true,\"osDeniedLoopbackNetwork\":true,\"hostKnowledgeCanaryUnchanged\":true,\"signedNodeChildStartedAndReturned\":true,\"childOsDeniedFakeCredentialRead\":true,\"childOsDeniedFormalSkillRead\":true,\"childOsDeniedHostKnowledgeWrite\":true,\"childOsDeniedLoopbackNetwork\":true,\"workerNetworkDidNotReachLoopback\":true,\"normalPiHostContinuedAfterPermissionProbe\":true,\"xpcWorkerHostModelRequestRoundTrip\":true,\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedByTrustedHostWithoutWorkerNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"threePiProviderRoundsRelayedThroughHost\":true,\"secondModelRoundContainsPriorToolResult\":true,\"hostAuthorizedFixedModelAndBoundedTranscript\":true,\"modelChannelContainsNoCredentialOrResourceProxyFields\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true,\"hostRejectedUnapprovedModelID\":true,\"upstreamFailureReachedWorkerAsPiError\":true,\"PiAbortSignalSentHostCancellationAndWorkerContinued\":true},\"host\":{\"hostId\":\"8b7229f9-0c90-4a00-a9a8-d3d622451b46\",\"pid\":46408,\"origin\":\"http://127.0.0.1:52010\",\"node\":\"24.22.0\",\"electron\":\"44.9.0\"},\"activeTools\":[\"read\",\"reflection_probe\"],\"loadedExtensions\":[\"/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-IUUFTg/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js\"],\"provider\":\"Pi Faux Provider (local; no network)\",\"nodeBootstrapEvidence\":{\"checks\":{\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true},\"response\":{\"nodeVersion\":\"v24.22.0\",\"echo\":\"td12-node-bootstrap\",\"servicePID\":46448,\"workerPID\":46450,\"success\":true},\"hostAfterFailure\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}},\"nodePermissionEvidence\":{\"checks\":{\"hostPositiveControlCanReadFakeCredential\":true,\"hostPositiveControlCanReadFormalSkill\":true,\"hostPositiveControlCanReadKnowledge\":true,\"hostPositiveControlCanReachLoopback\":true,\"signedNodeReturnedPermissionProbe\":true,\"osDeniedFakeCredentialRead\":true,\"osDeniedFormalSkillRead\":true,\"osDeniedHostKnowledgeWrite\":true,\"osDeniedLoopbackNetwork\":true,\"hostKnowledgeCanaryUnchanged\":true,\"signedNodeChildStartedAndReturned\":true,\"childOsDeniedFakeCredentialRead\":true,\"childOsDeniedFormalSkillRead\":true,\"childOsDeniedHostKnowledgeWrite\":true,\"childOsDeniedLoopbackNetwork\":true,\"workerNetworkDidNotReachLoopback\":true,\"normalPiHostContinuedAfterPermissionProbe\":true,\"xpcWorkerHostModelRequestRoundTrip\":true,\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedByTrustedHostWithoutWorkerNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"threePiProviderRoundsRelayedThroughHost\":true,\"secondModelRoundContainsPriorToolResult\":true,\"hostAuthorizedFixedModelAndBoundedTranscript\":true,\"modelChannelContainsNoCredentialOrResourceProxyFields\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true,\"hostRejectedUnapprovedModelID\":true,\"upstreamFailureReachedWorkerAsPiError\":true,\"PiAbortSignalSentHostCancellationAndWorkerContinued\":true},\"response\":{\"success\":true,\"child\":{\"started\":true,\"workerPID\":46456,\"exitStatus\":0,\"security\":{\"credentialReadDenied\":true,\"credentialReadErrorCode\":\"EPERM\",\"networkErrorCode\":\"EPERM\",\"networkDenied\":true,\"formalSkillReadErrorCode\":\"EPERM\",\"hostKnowledgeWriteDenied\":true,\"formalSkillReadDenied\":true,\"hostKnowledgeWriteErrorCode\":\"EPERM\"}},\"nodeVersion\":\"v24.22.0\",\"servicePID\":46454,\"security\":{\"hostKnowledgeWriteDenied\":true,\"formalSkillReadDenied\":true,\"credentialReadDenied\":true,\"hostKnowledgeWriteErrorCode\":\"EPERM\",\"networkDenied\":true,\"networkErrorCode\":\"EPERM\",\"formalSkillReadErrorCode\":\"EPERM\",\"credentialReadErrorCode\":\"EPERM\"},\"workerPID\":46455},\"probePaths\":{\"credentialPath\":\"/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-credentials/fake-credential.json\",\"skillPath\":\"/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/formal-skills/example/SKILL.md\",\"knowledgePath\":\"/Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-knowledge/knowledge.json\",\"networkProbeURL\":\"http://127.0.0.1:52014/probe\"},\"bridgeProbeEvidence\":{\"checks\":{\"xpcWorkerHostModelRequestRoundTrip\":true},\"response\":{\"echo\":\"xpc-bridge-ok\",\"modelCalls\":[\"reflection-host-approved\"],\"servicePID\":46459,\"nodeVersion\":\"v24.22.0\",\"success\":true,\"modelProvider\":\"xpc-probe\",\"workerPID\":46460},\"error\":null,\"hostRequestsReceived\":1},\"piEvidence\":{\"checks\":{\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedByTrustedHostWithoutWorkerNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"threePiProviderRoundsRelayedThroughHost\":true,\"secondModelRoundContainsPriorToolResult\":true,\"hostAuthorizedFixedModelAndBoundedTranscript\":true,\"modelChannelContainsNoCredentialOrResourceProxyFields\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true,\"hostRejectedUnapprovedModelID\":true,\"upstreamFailureReachedWorkerAsPiError\":true,\"PiAbortSignalSentHostCancellationAndWorkerContinued\":true},\"response\":{\"servicePID\":46462,\"readHistoryResult\":[{\"text\":\"The learner prefers short explanations with source-linked notes.\",\"id\":\"history-1\"},{\"text\":\"The learner wants generated knowledge updates to remain reviewable.\",\"id\":\"history-2\"}],\"knowledgeUpdate\":{\"topic\":\"reflection\",\"summary\":\"The simulated history records a preference for concise, source-linked learning notes.\",\"sourceIDs\":[\"history-1\"]},\"processEnvironmentKeys\":[\"PATH\",\"PI_OFFLINE\",\"PI_SKIP_VERSION_CHECK\",\"PI_TELEMETRY\",\"TD12_XPC_SERVICE_PID\",\"TMPDIR\",\"__CF_USER_TEXT_ENCODING\"],\"loadedSkills\":0,\"abortObserved\":false,\"modelProvider\":\"reflection-host-bridge\",\"toolEvents\":[\"tool_execution_start:read_simulated_history\",\"tool_execution_end:read_simulated_history\",\"tool_execution_start:submit_knowledge_update\",\"tool_execution_end:submit_knowledge_update\"],\"workerPID\":46463,\"loadedExtensions\":0,\"nodeVersion\":\"v24.22.0\",\"success\":true,\"toolNames\":[\"read_simulated_history\",\"submit_knowledge_update\"],\"modelCalls\":[\"reflection-host-approved:83cf226f-eac1-40c0-abe5-7ea0baf722e0\",\"reflection-host-approved:b1a1bf37-3c20-456d-a0eb-c90d3e7897f8\",\"reflection-host-approved:d4484b8a-569e-4548-acaf-10fe241d77a6\"]},\"hostChannel\":{\"modelProvider\":\"td13-host-faux\",\"modelRequests\":3,\"authorizedRequests\":3,\"deniedRequests\":0,\"hostCancelRequests\":0,\"hostUpstreamErrors\":0,\"fauxCalls\":3,\"maxContextBytes\":2806,\"requestSchemaValid\":true,\"requestFields\":[\"kind\",\"requestID\",\"modelID\",\"contextJSON\"],\"responseFields\":[\"kind\",\"requestID\",\"ok\",\"assistantMessageJSON\",\"error\"]},\"negativeCases\":{\"unauthorized\":{\"mode\":\"pi-unauthorized-model\",\"response\":{\"loadedSkills\":0,\"modelProvider\":\"reflection-host-bridge\",\"workerPID\":46469,\"loadedExtensions\":0,\"modelError\":\"model_not_authorized\",\"processEnvironmentKeys\":[\"PATH\",\"PI_OFFLINE\",\"PI_SKIP_VERSION_CHECK\",\"PI_TELEMETRY\",\"TD12_XPC_SERVICE_PID\",\"TMPDIR\",\"__CF_USER_TEXT_ENCODING\"],\"servicePID\":46468,\"toolNames\":[\"read_simulated_history\",\"submit_knowledge_update\"],\"modelCalls\":[\"host-admin-model:9a3bae9b-d3e4-43e5-ba6d-6570e989a4f8\"],\"abortObserved\":false,\"toolEvents\":[],\"readHistoryResult\":[],\"success\":true,\"nodeVersion\":\"v24.22.0\"},\"hostDenied\":1,\"hostCancelRequests\":0,\"hostUpstreamErrors\":0,\"modelErrorMatches\":true},\"upstreamError\":{\"mode\":\"pi-error\",\"response\":{\"servicePID\":46473,\"loadedExtensions\":0,\"processEnvironmentKeys\":[\"PATH\",\"PI_OFFLINE\",\"PI_SKIP_VERSION_CHECK\",\"PI_TELEMETRY\",\"TD12_XPC_SERVICE_PID\",\"TMPDIR\",\"__CF_USER_TEXT_ENCODING\"],\"abortObserved\":false,\"toolNames\":[\"read_simulated_history\",\"submit_knowledge_update\"],\"workerPID\":46474,\"modelCalls\":[\"reflection-host-approved:1d3d8c46-149d-48c6-8134-8cc627669ee4\"],\"readHistoryResult\":[],\"loadedSkills\":0,\"modelError\":\"mock_upstream_unavailable\",\"modelProvider\":\"reflection-host-bridge\",\"success\":true,\"toolEvents\":[],\"nodeVersion\":\"v24.22.0\"},\"hostDenied\":0,\"hostCancelRequests\":0,\"hostUpstreamErrors\":1,\"modelErrorMatches\":true},\"cancellation\":{\"mode\":\"pi-cancel\",\"response\":{\"readHistoryResult\":[],\"toolNames\":[\"read_simulated_history\",\"submit_knowledge_update\"],\"loadedExtensions\":0,\"success\":true,\"workerPID\":46479,\"nodeVersion\":\"v24.22.0\",\"abortObserved\":true,\"toolEvents\":[],\"processEnvironmentKeys\":[\"PATH\",\"PI_OFFLINE\",\"PI_SKIP_VERSION_CHECK\",\"PI_TELEMETRY\",\"TD12_XPC_SERVICE_PID\",\"TMPDIR\",\"__CF_USER_TEXT_ENCODING\"],\"modelCalls\":[\"reflection-host-approved:ee165a96-d48f-4982-95c2-473b1c1f40f6\"],\"modelProvider\":\"reflection-host-bridge\",\"loadedSkills\":0,\"servicePID\":46478},\"hostDenied\":0,\"hostCancelRequests\":1,\"hostUpstreamErrors\":0,\"modelErrorMatches\":false}},\"hostAfterPi\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}},\"loopbackRequests\":1,\"hostAfterProbe\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}}}\n",
+    "stderr": "sandbox_extension_issue_file_to_process failed for /var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-IUUFTg/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app: 1 (Operation not permitted)\n"
+  },
+  "osSandboxDenialLog": {
+    "query": "eventMessage CONTAINS[c] 'Sandbox:' AND eventMessage CONTAINS[c] 'ReflectionNode'",
+    "available": true,
+    "lines": [
+      "2026-10-18 00:26:36.887 E  kernel[0:a72888] (Sandbox) Sandbox: ReflectionNode(46455) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-knowledge/knowledge.json",
+      "2026-10-18 00:26:36.897 E  kernel[0:a72888] (Sandbox) Sandbox: ReflectionNode(46455) deny(1) network-outbound remote:*:52014",
+      "2026-10-18 00:26:36.898 E  kernel[0:a72888] (Sandbox) Sandbox: ReflectionNode(46455) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-credentials/fake-credential.json",
+      "2026-10-18 00:26:36.898 E  kernel[0:a72888] (Sandbox) Sandbox: ReflectionNode(46455) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/formal-skills/example/SKILL.md",
+      "2026-10-18 00:26:36.925 E  kernel[0:a72890] (Sandbox) Sandbox: ReflectionNode(46456) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-knowledge/knowledge.json",
+      "2026-10-18 00:26:36.934 E  kernel[0:a72890] (Sandbox) Sandbox: ReflectionNode(46456) deny(1) network-outbound remote:*:52014",
+      "2026-10-18 00:26:36.935 E  kernel[0:a72890] (Sandbox) Sandbox: ReflectionNode(46456) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/host-credentials/fake-credential.json",
+      "2026-10-18 00:26:36.935 E  kernel[0:a72890] (Sandbox) Sandbox: ReflectionNode(46456) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Gkvr16/td12-node-permissions-46408-9b54570e-55d6-49df-b333-d75e5085afdb/formal-skills/example/SKILL.md",
+      "2026-10-18 00:26:37.336 E  kernel[0:a728ba] (Sandbox) Sandbox: ReflectionNode(46463) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:37.408 E  kernel[0:a728ba] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(46463) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:37.408 E  kernel[0:a728ba] (Sandbox) Sandbox: ReflectionNode(46463) deny(1) file-read-data /Users/torch/.agents/skills",
+      "2026-10-18 00:26:37.746 E  kernel[0:a728df] (Sandbox) Sandbox: ReflectionNode(46469) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:37.816 E  kernel[0:a728df] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(46469) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:37.816 E  kernel[0:a728df] (Sandbox) Sandbox: ReflectionNode(46469) deny(1) file-read-data /Users/torch/.agents/skills",
+      "2026-10-18 00:26:38.138 E  kernel[0:a728fc] (Sandbox) Sandbox: ReflectionNode(46474) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:38.170 E  kernel[0:a72015] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(46474) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:38.209 E  kernel[0:a728fc] (Sandbox) Sandbox: ReflectionNode(46474) deny(1) file-read-data /Users/torch/.agents/skills",
+      "2026-10-18 00:26:38.531 E  kernel[0:a7291a] (Sandbox) Sandbox: ReflectionNode(46479) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:38.604 E  kernel[0:a7291a] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(46479) deny(1) system-info net.link.addr",
+      "2026-10-18 00:26:38.604 E  kernel[0:a7291a] (Sandbox) Sandbox: ReflectionNode(46479) deny(1) file-read-data /Users/torch/.agents/skills"
+    ]
+  },
+  "osSandboxDenialEvidence": {
+    "directCredentialRead": true,
+    "childCredentialRead": true,
+    "directFormalSkillRead": true,
+    "childFormalSkillRead": true,
+    "directHostKnowledgeWrite": true,
+    "childHostKnowledgeWrite": true,
+    "directLoopbackNetwork": true,
+    "childLoopbackNetwork": true
+  },
+  "permissionProbeResult": {
+    "directNode": {
+      "hostKnowledgeWriteDenied": true,
+      "formalSkillReadDenied": true,
+      "credentialReadDenied": true,
+      "hostKnowledgeWriteErrorCode": "EPERM",
+      "networkDenied": true,
+      "networkErrorCode": "EPERM",
+      "formalSkillReadErrorCode": "EPERM",
+      "credentialReadErrorCode": "EPERM"
+    },
+    "childNode": {
+      "started": true,
+      "workerPID": 46456,
+      "exitStatus": 0,
+      "security": {
+        "credentialReadDenied": true,
+        "credentialReadErrorCode": "EPERM",
+        "networkErrorCode": "EPERM",
+        "networkDenied": true,
+        "formalSkillReadErrorCode": "EPERM",
+        "hostKnowledgeWriteDenied": true,
+        "formalSkillReadDenied": true,
+        "hostKnowledgeWriteErrorCode": "EPERM"
+      }
+    },
+    "hostChecks": {
+      "hostAutoStarted": true,
+      "extensionLoaded": true,
+      "piNativeReadCalled": true,
+      "piNativeReadCompleted": true,
+      "extensionToolCalled": true,
+      "extensionToolCompleted": true,
+      "windowHiddenAfterClose": true,
+      "hostSurvivedWindowClose": true,
+      "signedNodeStartedByXpcService": true,
+      "pinnedNodeVersionReturned": true,
+      "workerReturnedRequestData": true,
+      "missingServiceFailedClosed": true,
+      "normalPiHostContinuedAfterSandboxFailure": true,
+      "hostPositiveControlCanReadFakeCredential": true,
+      "hostPositiveControlCanReadFormalSkill": true,
+      "hostPositiveControlCanReadKnowledge": true,
+      "hostPositiveControlCanReachLoopback": true,
+      "signedNodeReturnedPermissionProbe": true,
+      "osDeniedFakeCredentialRead": true,
+      "osDeniedFormalSkillRead": true,
+      "osDeniedHostKnowledgeWrite": true,
+      "osDeniedLoopbackNetwork": true,
+      "hostKnowledgeCanaryUnchanged": true,
+      "signedNodeChildStartedAndReturned": true,
+      "childOsDeniedFakeCredentialRead": true,
+      "childOsDeniedFormalSkillRead": true,
+      "childOsDeniedHostKnowledgeWrite": true,
+      "childOsDeniedLoopbackNetwork": true,
+      "workerNetworkDidNotReachLoopback": true,
+      "normalPiHostContinuedAfterPermissionProbe": true,
+      "xpcWorkerHostModelRequestRoundTrip": true,
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedByTrustedHostWithoutWorkerNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "threePiProviderRoundsRelayedThroughHost": true,
+      "secondModelRoundContainsPriorToolResult": true,
+      "hostAuthorizedFixedModelAndBoundedTranscript": true,
+      "modelChannelContainsNoCredentialOrResourceProxyFields": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true,
+      "hostRejectedUnapprovedModelID": true,
+      "upstreamFailureReachedWorkerAsPiError": true,
+      "PiAbortSignalSentHostCancellationAndWorkerContinued": true
+    }
+  },
+  "modelBridgeProbeEvidence": {
+    "checks": {
+      "xpcWorkerHostModelRequestRoundTrip": true
+    },
+    "response": {
+      "echo": "xpc-bridge-ok",
+      "modelCalls": [
+        "reflection-host-approved"
+      ],
+      "servicePID": 46459,
+      "nodeVersion": "v24.22.0",
+      "success": true,
+      "modelProvider": "xpc-probe",
+      "workerPID": 46460
+    },
+    "error": null,
+    "hostRequestsReceived": 1
+  },
+  "piReflectionEvidence": {
+    "checks": {
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedByTrustedHostWithoutWorkerNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "threePiProviderRoundsRelayedThroughHost": true,
+      "secondModelRoundContainsPriorToolResult": true,
+      "hostAuthorizedFixedModelAndBoundedTranscript": true,
+      "modelChannelContainsNoCredentialOrResourceProxyFields": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true,
+      "hostRejectedUnapprovedModelID": true,
+      "upstreamFailureReachedWorkerAsPiError": true,
+      "PiAbortSignalSentHostCancellationAndWorkerContinued": true
+    },
+    "response": {
+      "servicePID": 46462,
+      "readHistoryResult": [
+        {
+          "text": "The learner prefers short explanations with source-linked notes.",
+          "id": "history-1"
+        },
+        {
+          "text": "The learner wants generated knowledge updates to remain reviewable.",
+          "id": "history-2"
+        }
+      ],
+      "knowledgeUpdate": {
+        "topic": "reflection",
+        "summary": "The simulated history records a preference for concise, source-linked learning notes.",
+        "sourceIDs": [
+          "history-1"
+        ]
+      },
+      "processEnvironmentKeys": [
+        "PATH",
+        "PI_OFFLINE",
+        "PI_SKIP_VERSION_CHECK",
+        "PI_TELEMETRY",
+        "TD12_XPC_SERVICE_PID",
+        "TMPDIR",
+        "__CF_USER_TEXT_ENCODING"
+      ],
+      "loadedSkills": 0,
+      "abortObserved": false,
+      "modelProvider": "reflection-host-bridge",
+      "toolEvents": [
+        "tool_execution_start:read_simulated_history",
+        "tool_execution_end:read_simulated_history",
+        "tool_execution_start:submit_knowledge_update",
+        "tool_execution_end:submit_knowledge_update"
+      ],
+      "workerPID": 46463,
+      "loadedExtensions": 0,
+      "nodeVersion": "v24.22.0",
+      "success": true,
+      "toolNames": [
+        "read_simulated_history",
+        "submit_knowledge_update"
+      ],
+      "modelCalls": [
+        "reflection-host-approved:83cf226f-eac1-40c0-abe5-7ea0baf722e0",
+        "reflection-host-approved:b1a1bf37-3c20-456d-a0eb-c90d3e7897f8",
+        "reflection-host-approved:d4484b8a-569e-4548-acaf-10fe241d77a6"
+      ]
+    },
+    "hostChannel": {
+      "modelProvider": "td13-host-faux",
+      "modelRequests": 3,
+      "authorizedRequests": 3,
+      "deniedRequests": 0,
+      "hostCancelRequests": 0,
+      "hostUpstreamErrors": 0,
+      "fauxCalls": 3,
+      "maxContextBytes": 2806,
+      "requestSchemaValid": true,
+      "requestFields": [
+        "kind",
+        "requestID",
+        "modelID",
+        "contextJSON"
+      ],
+      "responseFields": [
+        "kind",
+        "requestID",
+        "ok",
+        "assistantMessageJSON",
+        "error"
+      ]
+    },
+    "negativeCases": {
+      "unauthorized": {
+        "mode": "pi-unauthorized-model",
+        "response": {
+          "loadedSkills": 0,
+          "modelProvider": "reflection-host-bridge",
+          "workerPID": 46469,
+          "loadedExtensions": 0,
+          "modelError": "model_not_authorized",
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "servicePID": 46468,
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "modelCalls": [
+            "host-admin-model:9a3bae9b-d3e4-43e5-ba6d-6570e989a4f8"
+          ],
+          "abortObserved": false,
+          "toolEvents": [],
+          "readHistoryResult": [],
+          "success": true,
+          "nodeVersion": "v24.22.0"
+        },
+        "hostDenied": 1,
+        "hostCancelRequests": 0,
+        "hostUpstreamErrors": 0,
+        "modelErrorMatches": true
+      },
+      "upstreamError": {
+        "mode": "pi-error",
+        "response": {
+          "servicePID": 46473,
+          "loadedExtensions": 0,
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "abortObserved": false,
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "workerPID": 46474,
+          "modelCalls": [
+            "reflection-host-approved:1d3d8c46-149d-48c6-8134-8cc627669ee4"
+          ],
+          "readHistoryResult": [],
+          "loadedSkills": 0,
+          "modelError": "mock_upstream_unavailable",
+          "modelProvider": "reflection-host-bridge",
+          "success": true,
+          "toolEvents": [],
+          "nodeVersion": "v24.22.0"
+        },
+        "hostDenied": 0,
+        "hostCancelRequests": 0,
+        "hostUpstreamErrors": 1,
+        "modelErrorMatches": true
+      },
+      "cancellation": {
+        "mode": "pi-cancel",
+        "response": {
+          "readHistoryResult": [],
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "loadedExtensions": 0,
+          "success": true,
+          "workerPID": 46479,
+          "nodeVersion": "v24.22.0",
+          "abortObserved": true,
+          "toolEvents": [],
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "modelCalls": [
+            "reflection-host-approved:ee165a96-d48f-4982-95c2-473b1c1f40f6"
+          ],
+          "modelProvider": "reflection-host-bridge",
+          "loadedSkills": 0,
+          "servicePID": 46478
+        },
+        "hostDenied": 0,
+        "hostCancelRequests": 1,
+        "hostUpstreamErrors": 0,
+        "modelErrorMatches": false
+      }
+    },
+    "hostAfterPi": {
+      "assistantText": "faux-finished:read",
+      "pendingFauxResponses": 0
+    }
+  },
+  "modelChannelEvidence": {
+    "host": {
+      "modelProvider": "td13-host-faux",
+      "modelRequests": 3,
+      "authorizedRequests": 3,
+      "deniedRequests": 0,
+      "hostCancelRequests": 0,
+      "hostUpstreamErrors": 0,
+      "fauxCalls": 3,
+      "maxContextBytes": 2806,
+      "requestSchemaValid": true,
+      "requestFields": [
+        "kind",
+        "requestID",
+        "modelID",
+        "contextJSON"
+      ],
+      "responseFields": [
+        "kind",
+        "requestID",
+        "ok",
+        "assistantMessageJSON",
+        "error"
+      ]
+    },
+    "negativeCases": {
+      "unauthorized": {
+        "mode": "pi-unauthorized-model",
+        "response": {
+          "loadedSkills": 0,
+          "modelProvider": "reflection-host-bridge",
+          "workerPID": 46469,
+          "loadedExtensions": 0,
+          "modelError": "model_not_authorized",
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "servicePID": 46468,
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "modelCalls": [
+            "host-admin-model:9a3bae9b-d3e4-43e5-ba6d-6570e989a4f8"
+          ],
+          "abortObserved": false,
+          "toolEvents": [],
+          "readHistoryResult": [],
+          "success": true,
+          "nodeVersion": "v24.22.0"
+        },
+        "hostDenied": 1,
+        "hostCancelRequests": 0,
+        "hostUpstreamErrors": 0,
+        "modelErrorMatches": true
+      },
+      "upstreamError": {
+        "mode": "pi-error",
+        "response": {
+          "servicePID": 46473,
+          "loadedExtensions": 0,
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "abortObserved": false,
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "workerPID": 46474,
+          "modelCalls": [
+            "reflection-host-approved:1d3d8c46-149d-48c6-8134-8cc627669ee4"
+          ],
+          "readHistoryResult": [],
+          "loadedSkills": 0,
+          "modelError": "mock_upstream_unavailable",
+          "modelProvider": "reflection-host-bridge",
+          "success": true,
+          "toolEvents": [],
+          "nodeVersion": "v24.22.0"
+        },
+        "hostDenied": 0,
+        "hostCancelRequests": 0,
+        "hostUpstreamErrors": 1,
+        "modelErrorMatches": true
+      },
+      "cancellation": {
+        "mode": "pi-cancel",
+        "response": {
+          "readHistoryResult": [],
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "loadedExtensions": 0,
+          "success": true,
+          "workerPID": 46479,
+          "nodeVersion": "v24.22.0",
+          "abortObserved": true,
+          "toolEvents": [],
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "modelCalls": [
+            "reflection-host-approved:ee165a96-d48f-4982-95c2-473b1c1f40f6"
+          ],
+          "modelProvider": "reflection-host-bridge",
+          "loadedSkills": 0,
+          "servicePID": 46478
+        },
+        "hostDenied": 0,
+        "hostCancelRequests": 1,
+        "hostUpstreamErrors": 0,
+        "modelErrorMatches": false
+      }
+    }
+  },
+  "outcome": "PASS"
+}

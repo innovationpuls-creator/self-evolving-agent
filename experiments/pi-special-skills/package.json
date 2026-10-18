@@ -1,0 +1,14 @@
+{
+  "name": "pi-special-skills-experiment",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Pi SDK 1.3.0 experiment for packaged Skills, Tools, Hooks, lifecycle, and trust boundaries",
+  "scripts": {
+    "verify": "node run.mjs"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "1.3.0",
+    "@earendil-works/pi-coding-agent": "1.3.0"
+  }
+}

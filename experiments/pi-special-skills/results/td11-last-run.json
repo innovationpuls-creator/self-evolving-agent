@@ -1,0 +1,40 @@
+{
+  "result": "PASS",
+  "verifiedAt": "2026-10-17T12:27:51.834Z",
+  "environment": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "node": "v26.10.0",
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0"
+  },
+  "checks": {
+    "candidateVersionLoadsAndExecutesInIndependentSession": true,
+    "inFlightOldToolFinishesBeforeSameSessionReload": true,
+    "sameSessionHistoryBranchAndCompactionSurviveReload": true,
+    "modelThinkingAndActiveToolStateSurviveReload": true,
+    "hostRestoresToolSelectionAfterNativeReloadExpansion": true,
+    "messagesQueuedDuringUpdateAreDeliveredExactlyOnce": true,
+    "messagesQueuedDuringUpdateRetainArrivalOrder": true,
+    "sameAgentSessionUsesNewVersionOnLaterToolCalls": true,
+    "updatingOneSessionLeavesParallelSessionOnItsVersion": true,
+    "failedUpdateRestoresOldPackageAndContinuesOriginalSession": true,
+    "rollbackRestoresPreviouslyActiveToolSelection": true,
+    "messageQueuedDuringFailureContinuesOnceAfterRollback": true,
+    "sameSessionContinuesToolCallingAfterRollback": true
+  },
+  "evidence": {
+    "originalSessionId": "td11-original-session",
+    "peerSessionId": "td11-peer-session",
+    "candidateSessionId": "td11-candidate-session",
+    "versionAfterIdleReload": "v2",
+    "queuedMessagesDispatched": 3,
+    "compactionEntriesAfterRollback": 1,
+    "branchLeafAfterRollback": "ed5f14a9"
+  },
+  "securityBoundary": {
+    "loadedFixtureCode": "handwritten local trusted fixtures only",
+    "loadedUntrustedGeneratedCode": false,
+    "osSandboxImplementedOrTested": false
+  }
+}

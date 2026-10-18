@@ -1,0 +1,28 @@
+{
+  "outcome": "PASS",
+  "checks": {
+    "hostAutoStarted": true,
+    "extensionLoaded": true,
+    "piNativeReadCalled": true,
+    "piNativeReadCompleted": true,
+    "extensionToolCalled": true,
+    "extensionToolCompleted": true,
+    "windowHiddenAfterClose": true,
+    "hostSurvivedWindowClose": true
+  },
+  "host": {
+    "hostId": "93bbf637-bd23-4474-9a3b-54fea08622ab",
+    "pid": 64974,
+    "origin": "http://127.0.0.1:56610",
+    "node": "24.22.0",
+    "electron": "44.9.0"
+  },
+  "activeTools": [
+    "read",
+    "reflection_probe"
+  ],
+  "loadedExtensions": [
+    "/Users/torch/Documents/ChatGPT/agent/experiments/electron-pi-host/extensions/reflection-probe.js"
+  ],
+  "provider": "Pi Faux Provider (local; no network)"
+}

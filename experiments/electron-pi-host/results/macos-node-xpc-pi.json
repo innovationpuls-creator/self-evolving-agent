@@ -1,0 +1,461 @@
+{
+  "verifiedAt": "2026-10-17T14:52:06.031Z",
+  "platform": "darwin-arm64",
+  "macOS": "27.2.0",
+  "electron": "44.9.0",
+  "piSdkHostVersion": "1.3.0",
+  "nodeVersion": "v24.22.0",
+  "nodeBinaryPackage": "node-bin-darwin-arm64@24.22.0",
+  "nodeBinaryPackageURL": "https://registry.npmjs.org/node-bin-darwin-arm64/-/node-bin-darwin-arm64-24.22.0.tgz",
+  "nodeBinaryPackageRepository": "https://github.com/aredridel/node-bin-gen",
+  "expectedNodeBinaryPackageIntegrity": "sha512-vcD7IMiHzzsanVcQU0whxtEdU6FbQpHyXzV5buIZfIzRKAbvd/yF9kJt7g1sP4p5Nm5gQHOzSCOGVU9gnCegKQ==",
+  "usedDocker": false,
+  "usedElectronFrameworkForWorker": false,
+  "usedRealCredentials": false,
+  "loadedUntrustedGeneratedCode": false,
+  "stage": "standalone Node bootstrap, macOS sandbox probes, then Pi SDK 1.3.0 Faux Tool Calling and host-validated knowledge update",
+  "checks": {
+    "packagedHostLaunched": true,
+    "allHostAndNodeBootstrapSmokeChecksPassed": true,
+    "nodeSignatureAndSandboxEntitlementsVerified": true,
+    "signedStandaloneNodeStartedByXpcAndReturnedJSON": true,
+    "osSandboxDeniedFileNetworkAndChildAccess": true,
+    "hostCanariesAndNetworkPositiveControlPassed": true,
+    "macosSandboxDenialWasRecorded": true,
+    "piSdk130FauxToolCallingAndHostValidatedKnowledgeUpdate": true,
+    "piWorkerProductionRuntimePackaged": true
+  },
+  "nodeBinaryPackageSRIValidated": true,
+  "nodeBinaryPackageBytes": 47425954,
+  "nodeBinaryBytes": 122503472,
+  "nodeHasNoElectronFrameworkDependency": true,
+  "piWorkerRuntime": {
+    "productionOnly": true,
+    "lifecycleScriptsDisabled": true,
+    "cliBinaryLinksOmitted": true,
+    "electronPackageOmitted": true,
+    "piCodingAgent": "1.3.0",
+    "piAi": "1.3.0",
+    "typebox": "1.3.27",
+    "installSummary": "added 119 packages in 1s",
+    "location": "XPCService/Contents/Resources/node_modules"
+  },
+  "signing": {
+    "nodeSignatureVerified": true,
+    "xpcServiceSignatureVerified": true,
+    "bridgeAppSignatureVerified": true,
+    "hostAppSignatureVerified": true,
+    "nodeSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.reflection-node",
+      "Format": "Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "0d5a2e113ff4a9917bcf9e850993e4263184d8e7"
+    },
+    "xpcServiceSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.node-bootstrap",
+      "Format": "bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "4b7e5cf8f1b942c973c094f9f1eac531136dbae8"
+    },
+    "bridgeAppSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype.reflection-bridge",
+      "Format": "app bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "3b2cc51d0db73a06f9910ff44b42707758ed01df"
+    },
+    "hostAppSignatureDetails": {
+      "Identifier": "com.electron.pi-host-prototype",
+      "Format": "app bundle with Mach-O thin (arm64)",
+      "Signature": "adhoc",
+      "TeamIdentifier": "not set",
+      "CDHash": "5bfa5f3a20578994129a89a327f6fd6794b6e9c7"
+    },
+    "nodeHasAppSandbox": true,
+    "nodeInheritsParentSandbox": true,
+    "serviceHasAppSandbox": true,
+    "serviceHasNetworkClient": false
+  },
+  "appSmoke": {
+    "outcome": "PASS",
+    "checks": {
+      "hostAutoStarted": true,
+      "extensionLoaded": true,
+      "piNativeReadCalled": true,
+      "piNativeReadCompleted": true,
+      "extensionToolCalled": true,
+      "extensionToolCompleted": true,
+      "windowHiddenAfterClose": true,
+      "hostSurvivedWindowClose": true,
+      "signedNodeStartedByXpcService": true,
+      "pinnedNodeVersionReturned": true,
+      "workerReturnedRequestData": true,
+      "missingServiceFailedClosed": true,
+      "normalPiHostContinuedAfterSandboxFailure": true,
+      "hostPositiveControlCanReadFakeCredential": true,
+      "hostPositiveControlCanReadFormalSkill": true,
+      "hostPositiveControlCanReadKnowledge": true,
+      "hostPositiveControlCanReachLoopback": true,
+      "signedNodeReturnedPermissionProbe": true,
+      "osDeniedFakeCredentialRead": true,
+      "osDeniedFormalSkillRead": true,
+      "osDeniedHostKnowledgeWrite": true,
+      "osDeniedLoopbackNetwork": true,
+      "hostKnowledgeCanaryUnchanged": true,
+      "signedNodeChildStartedAndReturned": true,
+      "childOsDeniedFakeCredentialRead": true,
+      "childOsDeniedFormalSkillRead": true,
+      "childOsDeniedHostKnowledgeWrite": true,
+      "childOsDeniedLoopbackNetwork": true,
+      "workerNetworkDidNotReachLoopback": true,
+      "normalPiHostContinuedAfterPermissionProbe": true,
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedWithoutNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true
+    },
+    "host": {
+      "hostId": "c830bddd-0cdf-43c4-836e-112551a06b77",
+      "pid": 6205,
+      "origin": "http://127.0.0.1:62919",
+      "node": "24.22.0",
+      "electron": "44.9.0"
+    },
+    "activeTools": [
+      "read",
+      "reflection_probe"
+    ],
+    "loadedExtensions": [
+      "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-mRlHRk/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js"
+    ],
+    "provider": "Pi Faux Provider (local; no network)",
+    "nodeBootstrapEvidence": {
+      "checks": {
+        "signedNodeStartedByXpcService": true,
+        "pinnedNodeVersionReturned": true,
+        "workerReturnedRequestData": true,
+        "missingServiceFailedClosed": true,
+        "normalPiHostContinuedAfterSandboxFailure": true
+      },
+      "response": {
+        "success": true,
+        "workerPID": 6239,
+        "nodeVersion": "v24.22.0",
+        "servicePID": 6237,
+        "echo": "td12-node-bootstrap"
+      },
+      "hostAfterFailure": {
+        "assistantText": "faux-finished:read",
+        "pendingFauxResponses": 0
+      }
+    },
+    "nodePermissionEvidence": {
+      "checks": {
+        "hostPositiveControlCanReadFakeCredential": true,
+        "hostPositiveControlCanReadFormalSkill": true,
+        "hostPositiveControlCanReadKnowledge": true,
+        "hostPositiveControlCanReachLoopback": true,
+        "signedNodeReturnedPermissionProbe": true,
+        "osDeniedFakeCredentialRead": true,
+        "osDeniedFormalSkillRead": true,
+        "osDeniedHostKnowledgeWrite": true,
+        "osDeniedLoopbackNetwork": true,
+        "hostKnowledgeCanaryUnchanged": true,
+        "signedNodeChildStartedAndReturned": true,
+        "childOsDeniedFakeCredentialRead": true,
+        "childOsDeniedFormalSkillRead": true,
+        "childOsDeniedHostKnowledgeWrite": true,
+        "childOsDeniedLoopbackNetwork": true,
+        "workerNetworkDidNotReachLoopback": true,
+        "normalPiHostContinuedAfterPermissionProbe": true,
+        "piSdk130WorkerStartedWithPinnedNode": true,
+        "fauxProviderUsedWithoutNetwork": true,
+        "piSdkReadSimulatedHistory": true,
+        "piSdkSubmittedKnowledgeUpdateToolCall": true,
+        "onlyTwoExplicitToolsAvailable": true,
+        "noSkillsOrExtensionsLoaded": true,
+        "workerEnvironmentIsCredentialFreeAllowlist": true,
+        "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+        "normalPiHostContinuedAfterPiWorker": true
+      },
+      "response": {
+        "child": {
+          "exitStatus": 0,
+          "workerPID": 6245,
+          "security": {
+            "hostKnowledgeWriteDenied": true,
+            "networkDenied": true,
+            "credentialReadDenied": true,
+            "formalSkillReadDenied": true
+          },
+          "started": true
+        },
+        "workerPID": 6244,
+        "success": true,
+        "servicePID": 6243,
+        "security": {
+          "credentialReadDenied": true,
+          "hostKnowledgeWriteDenied": true,
+          "networkDenied": true,
+          "formalSkillReadDenied": true
+        },
+        "nodeVersion": "v24.22.0"
+      },
+      "probePaths": {
+        "credentialPath": "/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-credentials/fake-credential.json",
+        "skillPath": "/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/formal-skills/example/SKILL.md",
+        "knowledgePath": "/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-knowledge/knowledge.json",
+        "networkProbeURL": "http://127.0.0.1:62924/probe"
+      },
+      "piEvidence": {
+        "checks": {
+          "piSdk130WorkerStartedWithPinnedNode": true,
+          "fauxProviderUsedWithoutNetwork": true,
+          "piSdkReadSimulatedHistory": true,
+          "piSdkSubmittedKnowledgeUpdateToolCall": true,
+          "onlyTwoExplicitToolsAvailable": true,
+          "noSkillsOrExtensionsLoaded": true,
+          "workerEnvironmentIsCredentialFreeAllowlist": true,
+          "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+          "normalPiHostContinuedAfterPiWorker": true
+        },
+        "response": {
+          "success": true,
+          "processEnvironmentKeys": [
+            "PATH",
+            "PI_OFFLINE",
+            "PI_SKIP_VERSION_CHECK",
+            "PI_TELEMETRY",
+            "TD12_XPC_SERVICE_PID",
+            "TMPDIR",
+            "__CF_USER_TEXT_ENCODING"
+          ],
+          "toolEvents": [
+            "tool_execution_start:read_simulated_history",
+            "tool_execution_end:read_simulated_history",
+            "tool_execution_start:submit_knowledge_update",
+            "tool_execution_end:submit_knowledge_update"
+          ],
+          "readHistoryResult": [
+            {
+              "id": "history-1",
+              "text": "The learner prefers short explanations with source-linked notes."
+            },
+            {
+              "id": "history-2",
+              "text": "The learner wants generated knowledge updates to remain reviewable."
+            }
+          ],
+          "toolNames": [
+            "read_simulated_history",
+            "submit_knowledge_update"
+          ],
+          "servicePID": 6247,
+          "nodeVersion": "v24.22.0",
+          "workerPID": 6249,
+          "knowledgeUpdate": {
+            "topic": "reflection",
+            "sourceIDs": [
+              "history-1"
+            ],
+            "summary": "The simulated history records a preference for concise, source-linked learning notes."
+          },
+          "loadedSkills": 0,
+          "loadedExtensions": 0,
+          "modelProvider": "faux"
+        },
+        "hostAfterPi": {
+          "assistantText": "faux-finished:read",
+          "pendingFauxResponses": 0
+        }
+      },
+      "loopbackRequests": 1,
+      "hostAfterProbe": {
+        "assistantText": "faux-finished:read",
+        "pendingFauxResponses": 0
+      }
+    }
+  },
+  "processOutput": {
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "{\"event\":\"agent-host-ready\",\"hostId\":\"c830bddd-0cdf-43c4-836e-112551a06b77\",\"pid\":6205,\"origin\":\"http://127.0.0.1:62919\",\"node\":\"24.22.0\"}\nSMOKE_REPORT=/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-mRlHRk/electron-smoke.json\n{\"outcome\":\"PASS\",\"checks\":{\"hostAutoStarted\":true,\"extensionLoaded\":true,\"piNativeReadCalled\":true,\"piNativeReadCompleted\":true,\"extensionToolCalled\":true,\"extensionToolCompleted\":true,\"windowHiddenAfterClose\":true,\"hostSurvivedWindowClose\":true,\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true,\"hostPositiveControlCanReadFakeCredential\":true,\"hostPositiveControlCanReadFormalSkill\":true,\"hostPositiveControlCanReadKnowledge\":true,\"hostPositiveControlCanReachLoopback\":true,\"signedNodeReturnedPermissionProbe\":true,\"osDeniedFakeCredentialRead\":true,\"osDeniedFormalSkillRead\":true,\"osDeniedHostKnowledgeWrite\":true,\"osDeniedLoopbackNetwork\":true,\"hostKnowledgeCanaryUnchanged\":true,\"signedNodeChildStartedAndReturned\":true,\"childOsDeniedFakeCredentialRead\":true,\"childOsDeniedFormalSkillRead\":true,\"childOsDeniedHostKnowledgeWrite\":true,\"childOsDeniedLoopbackNetwork\":true,\"workerNetworkDidNotReachLoopback\":true,\"normalPiHostContinuedAfterPermissionProbe\":true,\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedWithoutNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true},\"host\":{\"hostId\":\"c830bddd-0cdf-43c4-836e-112551a06b77\",\"pid\":6205,\"origin\":\"http://127.0.0.1:62919\",\"node\":\"24.22.0\",\"electron\":\"44.9.0\"},\"activeTools\":[\"read\",\"reflection_probe\"],\"loadedExtensions\":[\"/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-mRlHRk/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js\"],\"provider\":\"Pi Faux Provider (local; no network)\",\"nodeBootstrapEvidence\":{\"checks\":{\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true},\"response\":{\"success\":true,\"workerPID\":6239,\"nodeVersion\":\"v24.22.0\",\"servicePID\":6237,\"echo\":\"td12-node-bootstrap\"},\"hostAfterFailure\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}},\"nodePermissionEvidence\":{\"checks\":{\"hostPositiveControlCanReadFakeCredential\":true,\"hostPositiveControlCanReadFormalSkill\":true,\"hostPositiveControlCanReadKnowledge\":true,\"hostPositiveControlCanReachLoopback\":true,\"signedNodeReturnedPermissionProbe\":true,\"osDeniedFakeCredentialRead\":true,\"osDeniedFormalSkillRead\":true,\"osDeniedHostKnowledgeWrite\":true,\"osDeniedLoopbackNetwork\":true,\"hostKnowledgeCanaryUnchanged\":true,\"signedNodeChildStartedAndReturned\":true,\"childOsDeniedFakeCredentialRead\":true,\"childOsDeniedFormalSkillRead\":true,\"childOsDeniedHostKnowledgeWrite\":true,\"childOsDeniedLoopbackNetwork\":true,\"workerNetworkDidNotReachLoopback\":true,\"normalPiHostContinuedAfterPermissionProbe\":true,\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedWithoutNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true},\"response\":{\"child\":{\"exitStatus\":0,\"workerPID\":6245,\"security\":{\"hostKnowledgeWriteDenied\":true,\"networkDenied\":true,\"credentialReadDenied\":true,\"formalSkillReadDenied\":true},\"started\":true},\"workerPID\":6244,\"success\":true,\"servicePID\":6243,\"security\":{\"credentialReadDenied\":true,\"hostKnowledgeWriteDenied\":true,\"networkDenied\":true,\"formalSkillReadDenied\":true},\"nodeVersion\":\"v24.22.0\"},\"probePaths\":{\"credentialPath\":\"/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-credentials/fake-credential.json\",\"skillPath\":\"/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/formal-skills/example/SKILL.md\",\"knowledgePath\":\"/Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-knowledge/knowledge.json\",\"networkProbeURL\":\"http://127.0.0.1:62924/probe\"},\"piEvidence\":{\"checks\":{\"piSdk130WorkerStartedWithPinnedNode\":true,\"fauxProviderUsedWithoutNetwork\":true,\"piSdkReadSimulatedHistory\":true,\"piSdkSubmittedKnowledgeUpdateToolCall\":true,\"onlyTwoExplicitToolsAvailable\":true,\"noSkillsOrExtensionsLoaded\":true,\"workerEnvironmentIsCredentialFreeAllowlist\":true,\"hostValidatedAndCommittedBoundedKnowledgeUpdate\":true,\"normalPiHostContinuedAfterPiWorker\":true},\"response\":{\"success\":true,\"processEnvironmentKeys\":[\"PATH\",\"PI_OFFLINE\",\"PI_SKIP_VERSION_CHECK\",\"PI_TELEMETRY\",\"TD12_XPC_SERVICE_PID\",\"TMPDIR\",\"__CF_USER_TEXT_ENCODING\"],\"toolEvents\":[\"tool_execution_start:read_simulated_history\",\"tool_execution_end:read_simulated_history\",\"tool_execution_start:submit_knowledge_update\",\"tool_execution_end:submit_knowledge_update\"],\"readHistoryResult\":[{\"id\":\"history-1\",\"text\":\"The learner prefers short explanations with source-linked notes.\"},{\"id\":\"history-2\",\"text\":\"The learner wants generated knowledge updates to remain reviewable.\"}],\"toolNames\":[\"read_simulated_history\",\"submit_knowledge_update\"],\"servicePID\":6247,\"nodeVersion\":\"v24.22.0\",\"workerPID\":6249,\"knowledgeUpdate\":{\"topic\":\"reflection\",\"sourceIDs\":[\"history-1\"],\"summary\":\"The simulated history records a preference for concise, source-linked learning notes.\"},\"loadedSkills\":0,\"loadedExtensions\":0,\"modelProvider\":\"faux\"},\"hostAfterPi\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}},\"loopbackRequests\":1,\"hostAfterProbe\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}}}\n",
+    "stderr": "sandbox_extension_issue_file_to_process failed for /var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-mRlHRk/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app: 1 (Operation not permitted)\n"
+  },
+  "osSandboxDenialLog": {
+    "query": "eventMessage CONTAINS[c] 'Sandbox:' AND eventMessage CONTAINS[c] 'ReflectionNode'",
+    "available": true,
+    "lines": [
+      "2026-10-17 22:48:23.454 E  kernel[0:a45cd0] (Sandbox) Sandbox: ReflectionNode(3680) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-NBxKiV/td12-node-permissions-3638-2cfdabbd-7530-49ca-bc0d-f674100a9afe/formal-skills/example/SKILL.md",
+      "2026-10-17 22:48:23.478 E  kernel[0:a45cd9] (Sandbox) Sandbox: ReflectionNode(3681) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-NBxKiV/td12-node-permissions-3638-2cfdabbd-7530-49ca-bc0d-f674100a9afe/host-knowledge/knowledge.json",
+      "2026-10-17 22:48:23.489 E  kernel[0:a45cd9] (Sandbox) Sandbox: ReflectionNode(3681) deny(1) network-outbound remote:*:62547",
+      "2026-10-17 22:48:23.490 E  kernel[0:a45cd9] (Sandbox) Sandbox: ReflectionNode(3681) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-NBxKiV/td12-node-permissions-3638-2cfdabbd-7530-49ca-bc0d-f674100a9afe/host-credentials/fake-credential.json",
+      "2026-10-17 22:48:23.490 E  kernel[0:a45cd9] (Sandbox) Sandbox: ReflectionNode(3681) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-NBxKiV/td12-node-permissions-3638-2cfdabbd-7530-49ca-bc0d-f674100a9afe/formal-skills/example/SKILL.md",
+      "2026-10-17 22:48:23.886 E  kernel[0:a45cec] (Sandbox) Sandbox: ReflectionNode(3685) deny(1) system-info net.link.addr",
+      "2026-10-17 22:48:23.962 E  kernel[0:a45cec] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(3685) deny(1) system-info net.link.addr",
+      "2026-10-17 22:48:23.962 E  kernel[0:a45cec] (Sandbox) Sandbox: ReflectionNode(3685) deny(1) file-read-data /Users/torch/.agents/skills",
+      "2026-10-17 22:49:29.499 E  kernel[0:a46926] (Sandbox) Sandbox: ReflectionNode(4537) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/host-knowledge/knowledge.json",
+      "2026-10-17 22:49:29.512 E  kernel[0:a46926] (Sandbox) Sandbox: ReflectionNode(4537) deny(1) network-outbound remote:*:62665",
+      "2026-10-17 22:49:29.513 E  kernel[0:a46926] (Sandbox) Sandbox: ReflectionNode(4537) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/host-credentials/fake-credential.json",
+      "2026-10-17 22:49:29.513 E  kernel[0:a46926] (Sandbox) Sandbox: ReflectionNode(4537) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/formal-skills/example/SKILL.md",
+      "2026-10-17 22:49:29.537 E  kernel[0:a4692f] (Sandbox) Sandbox: ReflectionNode(4538) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/host-knowledge/knowledge.json",
+      "2026-10-17 22:49:29.551 E  kernel[0:a4692f] (Sandbox) Sandbox: ReflectionNode(4538) deny(1) network-outbound remote:*:62665",
+      "2026-10-17 22:49:29.552 E  kernel[0:a4692f] (Sandbox) Sandbox: ReflectionNode(4538) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/host-credentials/fake-credential.json",
+      "2026-10-17 22:49:29.552 E  kernel[0:a4692f] (Sandbox) Sandbox: ReflectionNode(4538) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-Vx8lie/td12-node-permissions-4504-0e273983-15e5-4adc-8431-08f774a87622/formal-skills/example/SKILL.md",
+      "2026-10-17 22:49:29.953 E  kernel[0:a46943] (Sandbox) Sandbox: ReflectionNode(4542) deny(1) system-info net.link.addr",
+      "2026-10-17 22:49:30.038 E  kernel[0:a46943] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(4542) deny(1) system-info net.link.addr",
+      "2026-10-17 22:49:30.038 E  kernel[0:a46943] (Sandbox) Sandbox: ReflectionNode(4542) deny(1) file-read-data /Users/torch/.agents/skills",
+      "2026-10-17 22:52:32.374 E  kernel[0:a483f5] (Sandbox) Sandbox: ReflectionNode(6244) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-knowledge/knowledge.json",
+      "2026-10-17 22:52:32.387 E  kernel[0:a483f5] (Sandbox) Sandbox: ReflectionNode(6244) deny(1) network-outbound remote:*:62924",
+      "2026-10-17 22:52:32.388 E  kernel[0:a483f5] (Sandbox) Sandbox: ReflectionNode(6244) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-credentials/fake-credential.json",
+      "2026-10-17 22:52:32.388 E  kernel[0:a483f5] (Sandbox) Sandbox: ReflectionNode(6244) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/formal-skills/example/SKILL.md",
+      "2026-10-17 22:52:32.412 E  kernel[0:a483fd] (Sandbox) Sandbox: ReflectionNode(6245) deny(1) file-write-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-knowledge/knowledge.json",
+      "2026-10-17 22:52:32.423 E  kernel[0:a483fd] (Sandbox) Sandbox: ReflectionNode(6245) deny(1) network-outbound remote:*:62924",
+      "2026-10-17 22:52:32.424 E  kernel[0:a483fd] (Sandbox) Sandbox: ReflectionNode(6245) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/host-credentials/fake-credential.json",
+      "2026-10-17 22:52:32.424 E  kernel[0:a483fd] (Sandbox) Sandbox: ReflectionNode(6245) deny(1) file-read-data /Users/torch/.td12-node-xpc-host-data-wxDAhJ/td12-node-permissions-6205-0f2dc043-1c35-4d6c-9c4f-b5e8fb8726d8/formal-skills/example/SKILL.md",
+      "2026-10-17 22:52:32.807 E  kernel[0:a48411] (Sandbox) Sandbox: ReflectionNode(6249) deny(1) system-info net.link.addr",
+      "2026-10-17 22:52:32.896 E  kernel[0:a48411] (Sandbox) 163 duplicate reports for Sandbox: ReflectionNode(6249) deny(1) system-info net.link.addr",
+      "2026-10-17 22:52:32.896 E  kernel[0:a48411] (Sandbox) Sandbox: ReflectionNode(6249) deny(1) file-read-data /Users/torch/.agents/skills"
+    ]
+  },
+  "osSandboxDenialEvidence": {
+    "directCredentialRead": true,
+    "childCredentialRead": true,
+    "directFormalSkillRead": true,
+    "childFormalSkillRead": true,
+    "directHostKnowledgeWrite": true,
+    "childHostKnowledgeWrite": true,
+    "directLoopbackNetwork": true,
+    "childLoopbackNetwork": true
+  },
+  "permissionProbeResult": {
+    "directNode": {
+      "credentialReadDenied": true,
+      "hostKnowledgeWriteDenied": true,
+      "networkDenied": true,
+      "formalSkillReadDenied": true
+    },
+    "childNode": {
+      "exitStatus": 0,
+      "workerPID": 6245,
+      "security": {
+        "hostKnowledgeWriteDenied": true,
+        "networkDenied": true,
+        "credentialReadDenied": true,
+        "formalSkillReadDenied": true
+      },
+      "started": true
+    },
+    "hostChecks": {
+      "hostAutoStarted": true,
+      "extensionLoaded": true,
+      "piNativeReadCalled": true,
+      "piNativeReadCompleted": true,
+      "extensionToolCalled": true,
+      "extensionToolCompleted": true,
+      "windowHiddenAfterClose": true,
+      "hostSurvivedWindowClose": true,
+      "signedNodeStartedByXpcService": true,
+      "pinnedNodeVersionReturned": true,
+      "workerReturnedRequestData": true,
+      "missingServiceFailedClosed": true,
+      "normalPiHostContinuedAfterSandboxFailure": true,
+      "hostPositiveControlCanReadFakeCredential": true,
+      "hostPositiveControlCanReadFormalSkill": true,
+      "hostPositiveControlCanReadKnowledge": true,
+      "hostPositiveControlCanReachLoopback": true,
+      "signedNodeReturnedPermissionProbe": true,
+      "osDeniedFakeCredentialRead": true,
+      "osDeniedFormalSkillRead": true,
+      "osDeniedHostKnowledgeWrite": true,
+      "osDeniedLoopbackNetwork": true,
+      "hostKnowledgeCanaryUnchanged": true,
+      "signedNodeChildStartedAndReturned": true,
+      "childOsDeniedFakeCredentialRead": true,
+      "childOsDeniedFormalSkillRead": true,
+      "childOsDeniedHostKnowledgeWrite": true,
+      "childOsDeniedLoopbackNetwork": true,
+      "workerNetworkDidNotReachLoopback": true,
+      "normalPiHostContinuedAfterPermissionProbe": true,
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedWithoutNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true
+    }
+  },
+  "piReflectionEvidence": {
+    "checks": {
+      "piSdk130WorkerStartedWithPinnedNode": true,
+      "fauxProviderUsedWithoutNetwork": true,
+      "piSdkReadSimulatedHistory": true,
+      "piSdkSubmittedKnowledgeUpdateToolCall": true,
+      "onlyTwoExplicitToolsAvailable": true,
+      "noSkillsOrExtensionsLoaded": true,
+      "workerEnvironmentIsCredentialFreeAllowlist": true,
+      "hostValidatedAndCommittedBoundedKnowledgeUpdate": true,
+      "normalPiHostContinuedAfterPiWorker": true
+    },
+    "response": {
+      "success": true,
+      "processEnvironmentKeys": [
+        "PATH",
+        "PI_OFFLINE",
+        "PI_SKIP_VERSION_CHECK",
+        "PI_TELEMETRY",
+        "TD12_XPC_SERVICE_PID",
+        "TMPDIR",
+        "__CF_USER_TEXT_ENCODING"
+      ],
+      "toolEvents": [
+        "tool_execution_start:read_simulated_history",
+        "tool_execution_end:read_simulated_history",
+        "tool_execution_start:submit_knowledge_update",
+        "tool_execution_end:submit_knowledge_update"
+      ],
+      "readHistoryResult": [
+        {
+          "id": "history-1",
+          "text": "The learner prefers short explanations with source-linked notes."
+        },
+        {
+          "id": "history-2",
+          "text": "The learner wants generated knowledge updates to remain reviewable."
+        }
+      ],
+      "toolNames": [
+        "read_simulated_history",
+        "submit_knowledge_update"
+      ],
+      "servicePID": 6247,
+      "nodeVersion": "v24.22.0",
+      "workerPID": 6249,
+      "knowledgeUpdate": {
+        "topic": "reflection",
+        "sourceIDs": [
+          "history-1"
+        ],
+        "summary": "The simulated history records a preference for concise, source-linked learning notes."
+      },
+      "loadedSkills": 0,
+      "loadedExtensions": 0,
+      "modelProvider": "faux"
+    },
+    "hostAfterPi": {
+      "assistantText": "faux-finished:read",
+      "pendingFauxResponses": 0
+    }
+  },
+  "outcome": "PASS"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "electron-pi-host-prototype",
+  "productName": "Pi Host Prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Electron app embedding a Pi Agent Host for a packaging experiment",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "smoke": "electron . --smoke-test",
+    "package:mac": "electron-forge package --platform darwin --arch arm64",
+    "experiment:macos-xpc": "node scripts/td12-macos-node-xpc-bootstrap.mjs",
+    "experiment:macos-xpc-permissions": "TD12_INCLUDE_PERMISSION_PROBES=1 node scripts/td12-macos-node-xpc-bootstrap.mjs",
+    "experiment:macos-xpc-pi": "TD12_INCLUDE_PERMISSION_PROBES=1 TD12_INCLUDE_PI_SMOKE=1 node scripts/td12-macos-node-xpc-bootstrap.mjs",
+    "experiment:macos-xpc-model-channel": "TD12_INCLUDE_PERMISSION_PROBES=1 TD13_INCLUDE_MODEL_CHANNEL=1 node scripts/td12-macos-node-xpc-bootstrap.mjs",
+    "package:win": "electron-forge package --platform win32 --arch x64",
+    "make:mac": "electron-forge make --platform darwin --arch arm64",
+    "make:win": "electron-forge make --platform win32 --arch x64"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "1.3.0",
+    "@earendil-works/pi-coding-agent": "1.3.0",
+    "typebox": "1.3.27"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "8.0.1",
+    "@electron-forge/maker-zip": "8.0.1",
+    "electron": "44.9.0"
+  }
+}

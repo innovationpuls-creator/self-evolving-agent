@@ -1,0 +1,95 @@
+{
+  "verifiedAt": "2026-10-17T13:50:08.701Z",
+  "platform": "darwin-arm64",
+  "macOS": "27.2.0",
+  "electron": "44.9.0",
+  "piSdkHostVersion": "0.83.0",
+  "nodeVersion": "v24.22.0",
+  "nodeArchiveURL": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-arm64.tar.xz",
+  "expectedNodeArchiveSHA256": "75ddfb875bbd868ebe57536f4442225f54dd10f6d2178dd439de869a5c648dc3",
+  "usedDocker": false,
+  "usedElectronFrameworkForWorker": false,
+  "usedRealCredentials": false,
+  "loadedUntrustedGeneratedCode": false,
+  "stage": "signed standalone Node launch and JSON round-trip only; OS permission probes are gated on this stage passing",
+  "checks": {
+    "packagedHostLaunched": true,
+    "allHostAndNodeBootstrapSmokeChecksPassed": true,
+    "nodeSignatureAndSandboxEntitlementsVerified": true,
+    "signedStandaloneNodeStartedByXpcAndReturnedJSON": true
+  },
+  "nodeArchiveSHA256Verified": true,
+  "nodeArchiveBytes": 27503188,
+  "nodeBinaryBytes": 122503472,
+  "nodeHasNoElectronFrameworkDependency": true,
+  "signing": {
+    "nodeSignatureVerified": true,
+    "xpcServiceSignatureVerified": true,
+    "bridgeAppSignatureVerified": true,
+    "hostAppSignatureVerified": true,
+    "nodeHasAppSandbox": true,
+    "nodeInheritsParentSandbox": true,
+    "serviceHasAppSandbox": true,
+    "serviceHasNetworkClient": false
+  },
+  "appSmoke": {
+    "outcome": "PASS",
+    "checks": {
+      "hostAutoStarted": true,
+      "extensionLoaded": true,
+      "piNativeReadCalled": true,
+      "piNativeReadCompleted": true,
+      "extensionToolCalled": true,
+      "extensionToolCompleted": true,
+      "windowHiddenAfterClose": true,
+      "hostSurvivedWindowClose": true,
+      "signedNodeStartedByXpcService": true,
+      "pinnedNodeVersionReturned": true,
+      "workerReturnedRequestData": true,
+      "missingServiceFailedClosed": true,
+      "normalPiHostContinuedAfterSandboxFailure": true
+    },
+    "host": {
+      "hostId": "839c70b0-b4f5-48f8-ae2b-4f8d59099047",
+      "pid": 77645,
+      "origin": "http://127.0.0.1:59017",
+      "node": "24.22.0",
+      "electron": "44.9.0"
+    },
+    "activeTools": [
+      "read",
+      "reflection_probe"
+    ],
+    "loadedExtensions": [
+      "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-SYbRsJ/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js"
+    ],
+    "provider": "Pi Faux Provider (local; no network)",
+    "sandboxEvidence": {
+      "checks": {
+        "signedNodeStartedByXpcService": true,
+        "pinnedNodeVersionReturned": true,
+        "workerReturnedRequestData": true,
+        "missingServiceFailedClosed": true,
+        "normalPiHostContinuedAfterSandboxFailure": true
+      },
+      "response": {
+        "echo": "td12-node-bootstrap",
+        "workerPID": 77667,
+        "nodeVersion": "v24.22.0",
+        "servicePID": 77666,
+        "success": true
+      },
+      "hostAfterFailure": {
+        "assistantText": "faux-finished:read",
+        "pendingFauxResponses": 0
+      }
+    }
+  },
+  "processOutput": {
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "{\"event\":\"agent-host-ready\",\"hostId\":\"839c70b0-b4f5-48f8-ae2b-4f8d59099047\",\"pid\":77645,\"origin\":\"http://127.0.0.1:59017\",\"node\":\"24.22.0\"}\nSMOKE_REPORT=/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-SYbRsJ/electron-smoke.json\n{\"outcome\":\"PASS\",\"checks\":{\"hostAutoStarted\":true,\"extensionLoaded\":true,\"piNativeReadCalled\":true,\"piNativeReadCompleted\":true,\"extensionToolCalled\":true,\"extensionToolCompleted\":true,\"windowHiddenAfterClose\":true,\"hostSurvivedWindowClose\":true,\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true},\"host\":{\"hostId\":\"839c70b0-b4f5-48f8-ae2b-4f8d59099047\",\"pid\":77645,\"origin\":\"http://127.0.0.1:59017\",\"node\":\"24.22.0\",\"electron\":\"44.9.0\"},\"activeTools\":[\"read\",\"reflection_probe\"],\"loadedExtensions\":[\"/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-SYbRsJ/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Resources/app.asar/extensions/reflection-probe.js\"],\"provider\":\"Pi Faux Provider (local; no network)\",\"sandboxEvidence\":{\"checks\":{\"signedNodeStartedByXpcService\":true,\"pinnedNodeVersionReturned\":true,\"workerReturnedRequestData\":true,\"missingServiceFailedClosed\":true,\"normalPiHostContinuedAfterSandboxFailure\":true},\"response\":{\"echo\":\"td12-node-bootstrap\",\"workerPID\":77667,\"nodeVersion\":\"v24.22.0\",\"servicePID\":77666,\"success\":true},\"hostAfterFailure\":{\"assistantText\":\"faux-finished:read\",\"pendingFauxResponses\":0}}}\n",
+    "stderr": "sandbox_extension_issue_file_to_process failed for /var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-node-xpc-SYbRsJ/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app: 1 (Operation not permitted)\n"
+  },
+  "outcome": "PASS"
+}

@@ -1,0 +1,335 @@
+{
+  "format": "pi-session-safe-export-v1",
+  "resumable": false,
+  "session": {
+    "format": "pi-session-snapshot-v1",
+    "header": {
+      "type": "session",
+      "version": 3,
+      "id": "pi-persistence-prototype",
+      "timestamp": "2026-10-17T10:04:10.137Z",
+      "cwd": "/Users/torch/Documents/ChatGPT/agent/experiments/pi-session-persistence"
+    },
+    "entries": [
+      {
+        "type": "message",
+        "id": "2bc24792",
+        "parentId": null,
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "message": {
+          "role": "user",
+          "content": "root branch sentinel",
+          "timestamp": 1792231450138
+        }
+      },
+      {
+        "type": "message",
+        "id": "b58aadc6",
+        "parentId": "2bc24792",
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "message": {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "abandoned branch sentinel"
+            }
+          ],
+          "api": "faux",
+          "provider": "faux",
+          "model": "faux-1",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1792231450138
+        }
+      },
+      {
+        "type": "message",
+        "id": "fcb498b1",
+        "parentId": "2bc24792",
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "message": {
+          "role": "user",
+          "content": "active pre-compaction sentinel",
+          "timestamp": 1792231450138
+        }
+      },
+      {
+        "type": "message",
+        "id": "eb3272bb",
+        "parentId": "fcb498b1",
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "message": {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "kept response sentinel"
+            }
+          ],
+          "api": "faux",
+          "provider": "faux",
+          "model": "faux-1",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1792231450138
+        }
+      },
+      {
+        "type": "custom",
+        "customType": "persistence-experiment",
+        "data": {
+          "nested": {
+            "revision": 1,
+            "marker": "custom entry sentinel"
+          }
+        },
+        "id": "5d2fe110",
+        "parentId": "eb3272bb",
+        "timestamp": "2026-10-17T10:04:10.138Z"
+      },
+      {
+        "type": "compaction",
+        "id": "d4979a19",
+        "parentId": "5d2fe110",
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "summary": "compacted history sentinel",
+        "firstKeptEntryId": "fcb498b1",
+        "tokensBefore": 64,
+        "details": {
+          "source": "prototype",
+          "marker": "compaction details sentinel"
+        },
+        "fromHook": true
+      },
+      {
+        "type": "message",
+        "id": "8436c1fb",
+        "parentId": "fcb498b1",
+        "timestamp": "2026-10-17T10:04:10.138Z",
+        "message": {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "second historical branch sentinel"
+            }
+          ],
+          "api": "faux",
+          "provider": "faux",
+          "model": "faux-1",
+          "usage": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "totalTokens": 0,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1792231450138
+        }
+      },
+      {
+        "type": "thinking_level_change",
+        "id": "4ada5b14",
+        "parentId": "d4979a19",
+        "timestamp": "2026-10-17T10:04:10.147Z",
+        "thinkingLevel": "off"
+      },
+      {
+        "type": "message",
+        "id": "256fae75",
+        "parentId": "4ada5b14",
+        "timestamp": "2026-10-17T10:04:10.151Z",
+        "message": {
+          "role": "system",
+          "content": "",
+          "sections": {
+            "preamble": "You are an SDK persistence test agent. Call the requested tool exactly once.",
+            "cwd": "<cwd>\n/Users/torch/Documents/ChatGPT/agent/experiments/pi-session-persistence\n</cwd>"
+          },
+          "timestamp": 1792231450150,
+          "toolsAdded": [
+            {
+              "name": "mock_vault",
+              "description": "Records a simulated credential operation for the persistence experiment.",
+              "parameters": {
+                "type": "object",
+                "required": [
+                  "accountId",
+                  "apiToken",
+                  "operation",
+                  "amount"
+                ],
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  },
+                  "apiToken": {
+                    "type": "string"
+                  },
+                  "operation": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "message",
+        "id": "1423e52c",
+        "parentId": "256fae75",
+        "timestamp": "2026-10-17T10:04:10.151Z",
+        "message": {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Use mock_vault with the supplied simulated credential and return the result."
+            }
+          ],
+          "timestamp": 1792231450150
+        }
+      },
+      {
+        "type": "message",
+        "id": "b5adb45a",
+        "parentId": "1423e52c",
+        "timestamp": "2026-10-17T10:04:10.152Z",
+        "message": {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "toolCall",
+              "id": "initial-mock-call",
+              "name": "mock_vault",
+              "arguments": {
+                "accountId": "demo-account-001",
+                "apiToken": "[REDACTED]",
+                "operation": "read_balance",
+                "amount": 0
+              }
+            }
+          ],
+          "api": "faux:1792231450138:6ki42zwp7gg",
+          "provider": "faux",
+          "model": "mock-session-model",
+          "usage": {
+            "input": 200,
+            "output": 37,
+            "cacheRead": 0,
+            "cacheWrite": 200,
+            "totalTokens": 437,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "toolUse",
+          "timestamp": 1792231450138,
+          "thinkingLevel": "off"
+        }
+      },
+      {
+        "type": "message",
+        "id": "da67b397",
+        "parentId": "b5adb45a",
+        "timestamp": "2026-10-17T10:04:10.153Z",
+        "message": {
+          "role": "toolResult",
+          "toolCallId": "initial-mock-call",
+          "toolName": "mock_vault",
+          "content": [
+            {
+              "type": "text",
+              "text": "simulated operation accepted"
+            }
+          ],
+          "details": {
+            "accepted": true
+          },
+          "isError": false,
+          "durationMs": 0,
+          "timestamp": 1792231450153
+        }
+      },
+      {
+        "type": "message",
+        "id": "8679ba6f",
+        "parentId": "da67b397",
+        "timestamp": "2026-10-17T10:04:10.154Z",
+        "message": {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "Initial simulated operation completed."
+            }
+          ],
+          "api": "faux:1792231450138:6ki42zwp7gg",
+          "provider": "faux",
+          "model": "mock-session-model",
+          "usage": {
+            "input": 53,
+            "output": 10,
+            "cacheRead": 200,
+            "cacheWrite": 53,
+            "totalTokens": 316,
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0
+            }
+          },
+          "stopReason": "stop",
+          "timestamp": 1792231450138,
+          "thinkingLevel": "off"
+        }
+      }
+    ],
+    "leafId": "d4979a19"
+  }
+}

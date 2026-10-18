@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-17T13:02:09.543Z",
+  "platform": "darwin-arm64",
+  "macOS": "27.2.0",
+  "node": "v26.10.0",
+  "electron": "44.9.0",
+  "piSdk": "@earendil-works/pi-coding-agent@0.83.0",
+  "packaging": "Electron Forge 8.0.1 package API; temporary output directory",
+  "appSandbox": "XPC Service with com.apple.security.app-sandbox; child Electron Node runtime with app-sandbox + inherit",
+  "codeSigning": "ad-hoc; no Developer ID identity or notarization",
+  "usedDocker": false,
+  "loadedUntrustedGeneratedCode": false,
+  "usedRealCredentials": false,
+  "windowsAppContainer": "UNVERIFIED: no Windows kernel/runtime was available",
+  "checks": {},
+  "outcome": "FAIL",
+  "error": "Error: codesign --force --deep --sign - --timestamp=none /var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-macos-xpc-eQuBVP/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/com.electron.pi-host-prototype.reflection.xpc/Contents/Frameworks/Electron Framework.framework failed (1): /var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-macos-xpc-eQuBVP/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/com.electron.pi-host-prototype.reflection.xpc/Contents/Frameworks/Electron Framework.framework: replacing existing signature\n/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/td12-macos-xpc-eQuBVP/forge-out/Pi Host Prototype-darwin-arm64/Pi Host Prototype.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/com.electron.pi-host-prototype.reflection.xpc/Contents/Frameworks/Electron Framework.framework: unsealed contents present in the root directory of an embedded framework\n\n    at run (file:///Users/torch/Documents/ChatGPT/agent/experiments/electron-pi-host/scripts/td12-macos-xpc-experiment.mjs:22:9)\n    at file:///Users/torch/Documents/ChatGPT/agent/experiments/electron-pi-host/scripts/td12-macos-xpc-experiment.mjs:117:2"
+}

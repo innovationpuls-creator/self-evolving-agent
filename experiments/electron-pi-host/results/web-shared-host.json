@@ -1,0 +1,33 @@
+{
+  "outcome": "PASS",
+  "client": "independent in-app browser tab on the same Mac",
+  "origin": "http://127.0.0.1:56311",
+  "hostId": "f5eccc31-13d2-4fa3-92e3-4061754e78d7",
+  "pid": 63510,
+  "health": {
+    "agentReady": true,
+    "activeTools": [
+      "read",
+      "reflection_probe"
+    ]
+  },
+  "scenarios": [
+    {
+      "scenario": "builtin-read",
+      "toolEvents": [
+        "tool_execution_start:read",
+        "tool_execution_end:read"
+      ],
+      "assistantText": "faux-finished:read"
+    },
+    {
+      "scenario": "extension",
+      "toolEvents": [
+        "tool_execution_start:reflection_probe",
+        "tool_execution_end:reflection_probe"
+      ],
+      "assistantText": "faux-finished:reflection_probe"
+    }
+  ],
+  "provider": "local Pi Faux Provider; no external model or network request"
+}
