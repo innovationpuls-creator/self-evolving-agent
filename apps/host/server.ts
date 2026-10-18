@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { extname, resolve, sep } from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
+import {SkillError} from './skills.js';
 import { AgentService } from './agent.js';
 
 const createInput=z.object({cwd:z.string().min(1).max(4096),provider:z.string().min(1),model:z.string().min(1)}).strict();
@@ -46,6 +47,31 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
         if(route==='/api/credentials' && req.method==='POST') {const x=credentialInput.parse(await body(req));await service.credentials(x.provider,x.key,x.importExisting);json(res,200,{ok:true});return;}
         if(route==='/api/sessions' && req.method==='GET') {json(res,200,await service.list());return;}
         if(route==='/api/sessions' && req.method==='POST') {const x=createInput.parse(await body(req));json(res,201,await service.create(x.cwd,x.provider,x.model));return;}
+        if(route==='/api/skills' && req.method==='GET'){json(res,200,service.sensitive.copy(await service.skills.discover(url.searchParams.get('project')??undefined)));return;}
+        if(route==='/api/skills' && req.method==='POST'){
+          const input=z.object({source:z.string().min(1).max(4096),project:z.string().optional(),bindings:z.array(z.object({skill:z.string(),extensions:z.array(z.string()),knowledgeFiles:z.array(z.string()).optional()}).strict()).optional()}).strict().parse(await body(req));
+          json(res,202,service.sensitive.copy(service.skills.startImport(input)));return;
+        }
+        const operation=/^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
+        if(operation&&req.method==='GET'){json(res,200,service.sensitive.copy(service.skills.operation(operation[1]!)));return;}
+        const skillRoute=/^\/api\/skills\/([a-f0-9-]{36})(?:\/(files|edit|review|publish|enabled|rollback|knowledge|draft|import-draft))?$/.exec(route);
+        if(skillRoute){
+          const id=skillRoute[1]!,action=skillRoute[2];
+          if(!action&&req.method==='GET'){json(res,200,service.sensitive.copy(await service.skillDetail(id)));return;}
+          if(action==='files'&&req.method==='GET'){json(res,200,service.sensitive.copy(await service.skills.read(id,url.searchParams.get('version')??'',url.searchParams.get('path')??'',url.searchParams.get('snapshot')==='true')));return;}
+          if(action==='draft'&&req.method==='DELETE'){await service.skills.discardDraft(id);json(res,200,{ok:true});return;}
+          if(req.method==='POST'){
+            if(action==='edit'){const x=z.object({baseRevision:z.number().int(),files:z.array(z.object({path:z.string(),content:z.string().max(1000000).nullable()}).strict()).min(1).max(50)}).strict().parse(await body(req));json(res,201,service.sensitive.copy(await service.skills.edit(id,x.baseRevision,x.files)));return;}
+            if(action==='review'){const x=z.object({version:z.string().uuid(),digest:z.string(),notes:z.string().max(10000),reviewedCode:z.literal(true),reviewedDependencies:z.literal(true),reviewedPermissions:z.literal(true)}).strict().parse(await body(req));json(res,200,service.sensitive.copy(await service.skills.review(id,x.version,x.digest,x.notes)));return;}
+            if(action==='publish'||action==='rollback'){const x=z.object({version:z.string().uuid(),baseRevision:z.number().int()}).strict().parse(await body(req));json(res,202,service.sensitive.copy(service.skills.publish(id,x.version,x.baseRevision)));return;}
+            if(action==='enabled'){const x=z.object({enabled:z.boolean(),baseRevision:z.number().int()}).strict().parse(await body(req));const r=service.skills.record(id);json(res,202,service.sensitive.copy(service.skills.publish(id,r.current??r.latest,x.baseRevision,x.enabled)));return;}
+            if(action==='knowledge'){const x=z.object({baseRevision:z.number().int(),path:z.string(),content:z.string().max(1000000)}).strict().parse(await body(req));const result=await service.skills.setKnowledge(id,x.baseRevision,x.path,x.content);await service.refreshSkillKnowledge();json(res,200,service.sensitive.copy(result));return;}
+            if(action==='draft'){await body(req);json(res,201,await service.skills.prepareDraft(id));return;}
+            if(action==='import-draft'){const x=z.object({baseRevision:z.number().int()}).strict().parse(await body(req));json(res,201,service.sensitive.copy(await service.skills.importDraft(id,x.baseRevision)));return;}
+          }
+        }
+        const recover=/^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
+        if(recover&&req.method==='POST'){await service.recoverSkills(recover[1]!);json(res,200,{ok:true});return;}
         const match=/^\/api\/sessions\/([a-f0-9-]{36})(?:\/(prompt|stop|compact|branch|model|thinking|export))?$/.exec(route);
         if(match) {
           const id=match[1]!,action=match[2];
@@ -66,7 +92,8 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       const data=await readFile(path);
       res.writeHead(200,{'Content-Type':({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'} as Record<string,string>)[extname(path)] ?? 'application/octet-stream'});res.end(data);
     } catch(error) {
-      if(error instanceof z.ZodError) json(res,400,{error:'请求字段无效'});
+      if(error instanceof SkillError) json(res,error.status,{error:error.message});
+      else if(error instanceof z.ZodError) json(res,400,{error:'请求字段无效'});
       else json(res,409,{error:error instanceof Error && error.message==='Nothing to compact (session too small)'?'当前对话较短，暂时无需压缩':'操作未完成，请检查会话状态、模型凭据或数据目录'});
     }
   });

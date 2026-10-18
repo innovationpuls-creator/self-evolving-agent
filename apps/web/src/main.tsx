@@ -1,11 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import './style.css';
+import {SkillsPanel} from './skills';
 
 interface Model {provider:string; id:string; name:string}
 interface Message {role:string; content:string|Array<{type:string;text?:string;name?:string;arguments?:unknown}>;toolName?:string;isError?:boolean;errorMessage?:string}
 interface Tree {entry:{id:string;type:string;message?:Message};children:Tree[]}
-interface Session {id:string;title:string;cwd:string;provider:string;model:string;busy:boolean;interrupted?:boolean;error?:string;unavailable?:boolean;messages?:Message[];tree?:Tree[];leafId?:string;thinkingLevel?:string;thinkingLevels?:string[]}
+interface Session {id:string;title:string;cwd:string;provider:string;model:string;busy:boolean;skillFailed?:boolean;queued?:number;interrupted?:boolean;error?:string;unavailable?:boolean;messages?:Message[];tree?:Tree[];leafId?:string;thinkingLevel?:string;thinkingLevels?:string[]}
 const connectionKey='agent-connection-token';
 function lostAuthentication(){sessionStorage.removeItem(connectionKey);window.dispatchEvent(new Event('agent-auth-lost'));}
 async function api<T>(path:string, method='GET', data?:unknown):Promise<T> {
@@ -23,6 +24,9 @@ function App() {
   const [connected,setConnected]=useState(false),[online,setOnline]=useState(false),[token,setToken]=useState(''),[error,setError]=useState('');
   const [sessions,setSessions]=useState<Session[]>([]),[selected,setSelected]=useState<Session>(),[models,setModels]=useState<Model[]>([]),[providers,setProviders]=useState<Array<{id:string}>>([]);
   const [cwd,setCwd]=useState(''),[model,setModel]=useState(''),[prompt,setPrompt]=useState(''),[settings,setSettings]=useState(false),[provider,setProvider]=useState('openai-codex'),[key,setKey]=useState('');
+  const [showSkills,setShowSkills]=useState(false);
+  const skillsDirty=useRef(false);
+  const leaveSkills=(fn:()=>void)=>{if(skillsDirty.current&&!window.confirm('当前文件有未保存修改，离开并放弃这些修改？'))return;fn();};
   const selectionEpoch=useRef(0);
   const selectedRef=useRef<string|undefined>(undefined),bottom=useRef<HTMLDivElement>(null);
   const guard=async(fn:()=>Promise<unknown>)=>{setError('');try{await fn();}catch(e){setError((e as Error).message);}};
@@ -52,7 +56,9 @@ function App() {
       socket.onclose=event=>{setOnline(false);if(event.code===4401){lostAuthentication();return;}if(!stopped)timer=setTimeout(connect,1500);};
       socket.onmessage=event=>{
         const data=JSON.parse(event.data);
-        if(data.type==='connected'){setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});}
+        if(data.type==='skills')window.dispatchEvent(new Event('agent-skills-changed'));
+        if(data.type==='queue_failed')setError(data.error);
+        if(data.type==='connected'){window.dispatchEvent(new Event('agent-reconnected'));setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});}
         if(data.type==='blocked' && data.sessionId===selectedRef.current){setError(data.error);setSelected(old=>old && old.id===data.sessionId?{...old,busy:false,error:data.error}:old);}
         if(data.type==='state') {
           setSessions(old=>old.some(s=>s.id===data.state.id)?old.map(s=>s.id===data.state.id?data.state:s):[data.state,...old]);
@@ -91,11 +97,11 @@ function App() {
       <input aria-label="连接令牌" type="password" value={token} onChange={e=>setToken(e.target.value)} autoComplete="off"/><button>连接</button>
     </form>{error&&<p role="alert">{error}</p>}</main>;
   return <div className="shell"><aside><div className="brand">Agent <span>个人工作空间</span></div>
-    <button onClick={()=>{selectionEpoch.current++;selectedRef.current=undefined;setSelected(undefined);}}>＋ 新会话</button>
-    <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} disabled={s.unavailable} onClick={()=>void guard(()=>open(s.id))}>
+    <button onClick={()=>leaveSkills(()=>{selectionEpoch.current++;selectedRef.current=undefined;setSelected(undefined);})}>＋ 新会话</button>
+    <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} disabled={s.unavailable} onClick={()=>leaveSkills(()=>{void guard(()=>open(s.id));})}>
       <b>{s.title}</b><small>{s.unavailable?s.error:s.busy?'正在处理':s.interrupted?'上次运行中断':s.cwd}</small></button>)}</nav>
-    <button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
-    <main><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
+    <button type="button" onClick={()=>leaveSkills(()=>setShowSkills(!showSkills))}>能力管理</button><button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
+    <main>{showSkills?<SkillsPanel api={api} project={selected?.cwd??cwd} onDirtyChange={value=>{skillsDirty.current=value;}} onClose={()=>leaveSkills(()=>setShowSkills(false))} onAssist={value=>leaveSkills(()=>{setPrompt(value);setShowSkills(false);})}/>:<><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
       {selected&&<div className="actions"><button disabled={selected.busy} onClick={()=>void guard(()=>api(`/sessions/${selected.id}/compact`,'POST',{}))}>压缩上下文</button>
       <button onClick={()=>void guard(async()=>{
         const data=await api(`/sessions/${selected.id}/export`);const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
@@ -118,14 +124,15 @@ function App() {
       <select aria-label="历史分支" disabled={selected.busy} value={selected.leafId??''} onChange={e=>void guard(()=>api(`/sessions/${selected.id}/branch`,'POST',{value:e.target.value}))}>
         <option value="" disabled>选择历史节点</option>{nodes(selected.tree??[])}</select></div>
       {(selected.error||selected.interrupted&&!selected.busy)&&<div className="notice">{selected.error??'上次运行已中断。请先检查工具结果与实际文件，再决定下一步；系统不会自动重放。'}</div>}
+      {selected.skillFailed&&<button type="button" onClick={()=>void guard(()=>api(`/sessions/${selected.id}/recover-skills`,'POST',{}))}>重试恢复能力</button>}
       <section className="transcript">{(selected.messages??[]).filter(m=>['user','assistant','toolResult'].includes(m.role)).map((m,i)=>m.role==='toolResult'?
         <details key={i}><summary>{m.isError?'工具失败':'工具结果'} · {m.toolName}</summary><pre>{text(m)}</pre></details>:
         <article key={i} className={m.role}><span>{m.role==='user'?'你':'Agent'}</span><pre>{text(m)}</pre>{m.errorMessage&&<p role="alert">{m.errorMessage}</p>}</article>)}
-        {selected.busy&&<p className="working">正在处理…</p>}<div ref={bottom}/></section>
+        {!!selected.queued&&<p className="working">等待能力切换完成 · {selected.queued} 条消息</p>}{selected.busy&&<p className="working">正在处理…</p>}<div ref={bottom}/></section>
       <form className="composer" onSubmit={e=>{e.preventDefault();void send();}}>
         <textarea aria-label="任务" placeholder="描述你想完成的任务…" value={prompt} onChange={e=>setPrompt(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();void send();}}}/>
         <div><small>⌘ / Ctrl + Enter 发送</small>{selected.busy?<button type="button" onClick={()=>void guard(()=>api(`/sessions/${selected.id}/stop`,'POST',{}))}>停止</button>:<button disabled={!prompt.trim()||!online}>发送 ↑</button>}</div>
       </form></>}
-    </main></div>;
+    </>}</main></div>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);

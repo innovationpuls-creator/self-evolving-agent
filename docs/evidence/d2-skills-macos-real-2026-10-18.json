@@ -1,0 +1,24 @@
+{
+  "testedAt": "2026-10-18T10:32:56.040Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "humanReview": {
+    "digest": "8dd88097d08051818bc644d9febcad2f730f698e86c2cd862825a370a4d35192",
+    "notes": "用户独立审查并批准此精确摘要用于 D2 macOS 验收：仅注册 deferred Tool d2_receipt，返回输入回执；依赖应用自带 Pi 1.3.0 / TypeBox 1.3.27，无额外依赖、网络、文件操作、子进程或 Hooks。内容或依赖身份变化需重新审查，人工审查不是沙箱。",
+    "at": 1792319558082
+  },
+  "result": "passed",
+  "packagedDesktop": true,
+  "webBrowser": "Chrome",
+  "model": "openai-codex/gpt-6-luna",
+  "ordinaryNativeDiscoveryAndRead": true,
+  "dualClientEnableDisable": true,
+  "originalSession": true,
+  "reconnect": true,
+  "unreviewedRejected": true,
+  "specialRealModel": true,
+  "ordinaryVersionSwitchAndRollback": true,
+  "specialDisableSearchAndReenable": true,
+  "modelAndThinkingPreserved": true,
+  "reviewDigest": "8dd88097d08051818bc644d9febcad2f730f698e86c2cd862825a370a4d35192"
+}

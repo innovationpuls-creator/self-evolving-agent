@@ -1,15 +1,17 @@
 import { EventEmitter } from 'node:events';
-import { mkdir, stat, readdir, chmod, copyFile } from 'node:fs/promises';
+import { mkdir, stat, readdir, chmod, copyFile, realpath } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
-import { createAgentSession, DefaultResourceLoader, ModelRuntime, readStoredCredential, SessionManager, SettingsManager, type AgentSession } from '@earendil-works/pi-coding-agent';
+import { createAgentSession, ModelRuntime, readStoredCredential, SessionManager, SettingsManager, type AgentSession } from '@earendil-works/pi-coding-agent';
 import { InMemoryCredentialStore, type Credential, type CredentialStore } from '@earendil-works/pi-ai';
+import {SkillService, SkillError, type SkillLoadout, type SkillOperation} from './skills.js';
+import {SkillResourceLoader} from './skill-loader.js';
 import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from './storage.js';
 
 interface RecordData { id: string; cwd: string; provider: string; model: string; title: string; updated: number; interrupted?: boolean }
 interface Saved { record: RecordData; session: Snapshot }
-interface Active { record: RecordData; session: AgentSession; busy: boolean; error?: string; storageFailed?: boolean; save: Promise<void>; run?: Promise<void>; checkpoint:Promise<void>; recovered?:boolean; blocked?:boolean }
+interface Active { loader:SkillResourceLoader; skillFailed?:boolean; dispatchDone?:Promise<void>; actionDone?:Promise<void>; record: RecordData; session: AgentSession; busy: boolean; error?: string; storageFailed?: boolean; save: Promise<void>; run?: Promise<void>; checkpoint:Promise<void>; recovered?:boolean; blocked?:boolean }
 
 class Vault implements CredentialStore {
   private memory = new InMemoryCredentialStore();
@@ -49,6 +51,14 @@ export class AgentService extends EventEmitter {
   readonly sensitive = new SensitiveData();
   readonly store: EncryptedStore;
   runtime!: ModelRuntime;
+  skills!:SkillService;
+  private gate?:{promise:Promise<void>;release:()=>void};
+  private queued:Array<{id:string;text:string}>=[];
+  private draining=false;
+  private drainDone?:Promise<void>;
+  private async waitBarrier(){while(this.gate)await this.gate.promise;if(this.closing)throw new Error('Host 正在退出');}
+
+  private async acquireBarrier(){if(this.closing)throw new SkillError('Host 正在退出');while(this.gate)await this.gate.promise;if(this.closing)throw new SkillError('Host 正在退出');let release!:()=>void;const promise=new Promise<void>(ok=>release=ok);this.gate={promise,release};return release;}
   private vault: Vault;
   private db!: DatabaseSync;
   private active = new Map<string, Active>();
@@ -65,6 +75,9 @@ export class AgentService extends EventEmitter {
     this.db = new DatabaseSync(join(this.dataDir, 'product.sqlite'));
     this.db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY, updated INTEGER NOT NULL)');
     await chmod(join(this.dataDir,'product.sqlite'),0o600);
+    this.skills=new SkillService(this.dataDir,this.db,event=>this.emit('event',this.sensitive.copy(event)));
+    await this.skills.init();
+    this.skills.connect((next,previous,op,commit)=>this.applySkills(next,previous,op,commit));
     await mkdir(join(this.dataDir,'sessions'),{recursive:true,mode:0o700});
     // Reconcile each encrypted session independently; one broken file cannot hide healthy sessions.
     const ids=new Set(this.db.prepare('SELECT id FROM sessions').all().map(row=>String(row.id)));
@@ -124,9 +137,10 @@ export class AgentService extends EventEmitter {
     }));
   }
   async create(cwd: string, provider: string, model: string) {
+    await this.waitBarrier();while(this.gate)await this.waitBarrier();
     if (this.closing) throw new Error('Host 正在退出');
     const task=(async()=>{
-      const path = resolve(cwd);
+      const path = await realpath(resolve(cwd));
       if (!(await stat(path)).isDirectory()) throw new Error('工作目录不存在');
       if (!this.runtime.getModel(provider,model)) throw new Error('模型不存在');
       const record: RecordData = {id:randomUUID(),cwd:path,provider,model,title:'新会话',updated:Date.now()};
@@ -139,14 +153,13 @@ export class AgentService extends EventEmitter {
   }
   private async build(record: RecordData, manager: SessionManager): Promise<Active> {
     const agentDir = join(this.dataDir,'pi');
-    const settings = SettingsManager.inMemory({compaction:{enabled:true}});
-    const loader = new DefaultResourceLoader({cwd:record.cwd,agentDir,settingsManager:settings,
-      // Native project trust remains in Pi; no third-party executable extension is auto-approved.
-      extensionFactories:[]});
+    const settings = SettingsManager.inMemory({compaction:{enabled:true},defaultTools:['read','bash','edit','write','tool_search']},{projectTrusted:false});
+    const loader = new SkillResourceLoader(this.skills,record.cwd,agentDir,settings);
     await loader.reload();
     const {session} = await createAgentSession({cwd:record.cwd,agentDir,modelRuntime:this.runtime,
       model:this.runtime.getModel(record.provider,record.model),sessionManager:manager,settingsManager:settings,resourceLoader:loader});
-    const item: Active = {record,session,busy:false,save:Promise.resolve(),checkpoint:Promise.resolve()};
+    const item: Active = {record,session,loader,busy:false,save:Promise.resolve(),checkpoint:Promise.resolve()};
+    await session.bindExtensions({onError:()=>{item.skillFailed=true;item.error='Skill 生命周期执行失败，请恢复能力后重试';}});
     session.subscribe(event => {
       try {
         if (['message_start','message_update','message_end','tool_execution_start','tool_execution_update','tool_execution_end','auto_compaction_start','auto_compaction_end'].includes(event.type)) {
@@ -177,7 +190,7 @@ export class AgentService extends EventEmitter {
   }
   private async get(id: string): Promise<Active> {
     const live = this.active.get(id); if (live) return live;
-    if(this.closing)throw new Error('Host 正在退出');
+    await this.waitBarrier();while(this.gate)await this.waitBarrier();
     const pending = this.loading.get(id); if (pending) return pending;
     const task = (async () => {
       if (!/^[a-f0-9-]{36}$/.test(id)) throw new Error('会话不存在');
@@ -226,22 +239,30 @@ export class AgentService extends EventEmitter {
   }
   private view(item: Active) {
     return this.sensitive.copy({ ...item.record,busy:item.busy,error:item.error,
-      thinkingLevel:item.session.thinkingLevel,thinkingLevels:item.session.getAvailableThinkingLevels(),
+      skillFailed:item.skillFailed,queued:this.queued.filter(q=>q.id===item.record.id).length,thinkingLevel:item.session.thinkingLevel,thinkingLevels:item.session.getAvailableThinkingLevels(),
       messages:item.session.messages,tree:item.session.sessionManager.getTree(),leafId:item.session.sessionManager.getLeafId() });
   }
   private changed(item: Active) {try {this.emit('event',{sessionId:item.record.id,type:'state',state:this.view(item)});}catch{this.protectionFailure(item);}}
   async viewSession(id: string) { return this.view(await this.get(id)); }
   async prompt(id: string, text: string) {
+    if(this.closing)throw new Error('Host 正在退出');
+    if(this.gate || this.draining){this.queued.push({id,text});const item=this.active.get(id);if(item)this.changed(item);return;}
+    return this.dispatchPrompt(id,text);
+  }
+  private async dispatchPrompt(id:string,text:string) {
     const item = await this.get(id);
+    if(this.gate){this.queued.push({id,text});this.changed(item);return;}
+    if(item.skillFailed)throw new SkillError('Skill 恢复未完成，不能继续执行');
     if (this.closing || item.busy || item.storageFailed || item.blocked) throw new Error('会话正在运行或需要处理保存错误');
+    let dispatched!:()=>void;item.dispatchDone=new Promise<void>(ok=>dispatched=ok);
     item.busy=true; item.error=undefined; item.record.interrupted=true;
     item.record.updated=Date.now();
     if (item.record.title === '新会话') item.record.title=this.sensitive.text(text.slice(0,48));
-    try { await this.persist(item); } catch (error) { item.busy=false; item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; throw error; }
+    try { await this.persist(item); } catch (error) { item.busy=false; item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; dispatched();throw error; }
     this.changed(item);
-    if(item.blocked){item.busy=false;throw new Error('敏感信息检查失败');}
+    if(item.blocked){item.busy=false;dispatched();throw new Error('敏感信息检查失败');}
     item.run = (async () => {
-      try { await item.session.prompt(text); }
+      try { await item.loader.refreshSkills();item.session.setActiveToolsByName(item.session.getActiveToolNames());await item.session.prompt(text); }
       catch { item.error='模型请求失败，请检查连接与模型凭据后重试'; }
       finally {
         const last=item.session.messages.at(-1);
@@ -250,16 +271,17 @@ export class AgentService extends EventEmitter {
         item.record.updated=Date.now();
         await item.checkpoint;
         try { await this.persist(item); } catch { item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; }
-        item.busy=false;this.changed(item);
+        item.busy=false;dispatched();this.changed(item);
       }
     })();
   }
   async stop(id: string) { const item=await this.get(id); await item.session.abort(); }
   async action(id: string, action: 'compact'|'branch'|'model'|'thinking', value?: string, provider?: string) {
     const item = await this.get(id);
-    if (item.busy || item.storageFailed || item.blocked || this.closing) throw new Error('请等待当前操作完成');
-    item.busy=true; this.changed(item);
-    if(item.blocked){item.busy=false;throw new Error('敏感信息检查失败');}
+    await this.waitBarrier();while(this.gate||this.draining){if(this.gate)await this.waitBarrier();else await this.drainDone;}
+    if (item.busy || item.storageFailed || item.blocked || item.skillFailed || this.closing) throw new Error('请等待当前操作完成');
+    item.busy=true; let finish!:()=>void;item.actionDone=new Promise<void>(ok=>finish=ok);this.changed(item);
+    if(item.blocked){item.busy=false;finish();throw new Error('敏感信息检查失败');}
     try {
       if (action === 'thinking') {
         const level=item.session.getAvailableThinkingLevels().find(level => level===value);
@@ -273,16 +295,98 @@ export class AgentService extends EventEmitter {
         await item.session.setModel(model); item.record.provider=model.provider; item.record.model=model.id;
       }
       await this.persist(item);
-    } finally { item.busy=false; this.changed(item); }
+    } finally { item.busy=false; finish();this.changed(item); }
     return this.view(item);
+  }
+  private async applySkills(next:SkillLoadout,previous:SkillLoadout,op:SkillOperation,commit:()=>void) {
+    const changed=next.records.find(r=>r.id===op.skillId);
+    if(!changed)throw new SkillError('Skill 不存在');
+    // A separate Session validates reviewed factories before the formal barrier.
+    const sample=[...this.active.values()].find(a=>!changed.project||a.record.cwd===changed.project);
+    const model=sample?this.runtime.getModel(sample.record.provider,sample.record.model):((await this.runtime.getAvailable())[0]??this.runtime.getModels()[0]);
+    if(!model)throw new SkillError('请先配置一个可用模型，再检查 Skill');
+    const cwd=changed.project||sample?.record.cwd||process.cwd();
+    const settings=SettingsManager.inMemory({defaultTools:['read','bash','edit','write','tool_search']},{projectTrusted:false});
+    const loader=new SkillResourceLoader(this.skills,cwd,join(this.dataDir,'pi'),settings);loader.selected=next;
+    const validationRuntime=await ModelRuntime.create({credentials:new InMemoryCredentialStore(),modelsPath:null,refreshOnCreate:false});
+    let candidate:AgentSession|undefined;
+    try {
+      await loader.reload();
+      candidate=(await createAgentSession({cwd,agentDir:join(this.dataDir,'pi'),model,modelRuntime:validationRuntime,sessionManager:SessionManager.inMemory(cwd),settingsManager:settings,resourceLoader:loader})).session;
+      let failed=false;await candidate.bindExtensions({onError:()=>{failed=true;}});
+      if(failed)throw new SkillError('候选生命周期检查失败');
+    }finally{candidate?.dispose();}
+    this.skills.waiting(op);
+    const release=await this.acquireBarrier();
+    const states=new Map<Active,{active:string[];definitions:Map<string,string>}>();
+    try {
+      await Promise.all([...this.loading.values(),...this.creating]);
+      const affected=[...this.active.values()].filter(a=>!changed.project||a.record.cwd===changed.project);
+      for(const item of affected){await item.dispatchDone;await item.run;await item.actionDone;await item.session.waitForIdle();await item.checkpoint;await item.save;}
+      for(const item of affected) {
+        states.set(item,{active:item.session.getActiveToolNames(),definitions:new Map(item.session.getAllTools().map(t=>[t.name,JSON.stringify(item.session.getToolDefinition(t.name)?.parameters)]))});
+        item.loader.selected=next;
+        await item.session.reload();
+        if(item.skillFailed)throw new SkillError('正式生命周期检查失败');
+        const before=states.get(item)!;
+        const active=before.active.filter(name=>before.definitions.get(name)===JSON.stringify(item.session.getToolDefinition(name)?.parameters)&&item.session.getToolDefinition(name));
+        for(const t of item.session.getAllTools())if(!before.definitions.has(t.name)&&t.exposure==='direct')active.push(t.name);
+        item.session.setActiveToolsByName(active);item.skillFailed=false;
+      }
+      commit();
+      for(const item of affected){item.loader.selected=undefined;this.changed(item);}
+    }catch(error) {
+      for(const [item,before] of states) {
+        try {item.skillFailed=false;item.loader.selected=previous;await item.session.reload();if(item.skillFailed)throw new SkillError('回退生命周期失败');item.session.setActiveToolsByName(before.active.filter(n=>!!item.session.getToolDefinition(n)));item.loader.selected=undefined;}
+        catch{item.skillFailed=true;item.error='Skill 恢复失败，历史已保留；请重试恢复能力';}
+        this.changed(item);
+      }
+      throw error;
+    }finally{this.gate=undefined;release();void this.drainPrompts();}
+  }
+  private async drainPrompts(){
+    if(this.draining)return;this.draining=true;let finish!:()=>void;this.drainDone=new Promise<void>(ok=>finish=ok);
+    try{while(this.queued.length&&!this.closing&&!this.gate){const q=this.queued.shift()!;try{await this.dispatchPrompt(q.id,q.text);await this.active.get(q.id)?.run;}catch{this.emit('event',{type:'queue_failed',sessionId:q.id,error:'等待消息未执行，请检查会话后重新提交'});}}}finally{this.draining=false;finish();}
+  }
+  async refreshSkillKnowledge(){
+    await this.waitBarrier();
+    for(const item of this.active.values()) {
+      if(item.busy)continue;
+      await item.loader.refreshSkills();
+      item.session.setActiveToolsByName(item.session.getActiveToolNames());
+    }
+  }
+  async recoverSkills(id:string) {
+    await this.waitBarrier();const item=await this.get(id);await this.waitBarrier();
+    if(item.busy)throw new SkillError('请等待当前操作结束');
+    const release=await this.acquireBarrier();
+    if(item.busy){this.gate=undefined;release();throw new SkillError('请等待当前操作结束');}
+    item.busy=true;let finish!:()=>void;item.actionDone=new Promise<void>(ok=>finish=ok);const active=item.session.getActiveToolNames();item.skillFailed=false;item.loader.selected=undefined;this.changed(item);
+    try{await item.session.waitForIdle();await item.session.reload();if(item.skillFailed)throw new SkillError('恢复生命周期检查失败');item.session.setActiveToolsByName(active.filter(n=>!!item.session.getToolDefinition(n)));item.error=undefined;}
+    catch{item.skillFailed=true;throw new SkillError('恢复失败，请检查正式版本内容及审查记录');}
+    finally{item.busy=false;finish();this.gate=undefined;release();this.changed(item);void this.drainPrompts();}
+  }
+  async skillDetail(id:string){
+    const detail=await this.skills.detail(id),record=detail.skill;
+    const v=record.current?this.skills.version(record.current):undefined;
+    const paths=new Set(v?v.extensions.map(p=>resolve(this.skills.packagePath(v),p)):[]);
+    const tools=new Map<string,{name:string;description:string;exposure:string;parameters:unknown}>(),hooks=new Set<string>();let loaded=false;
+    for(const item of this.active.values()){
+      if(record.project&&record.project!==item.record.cwd)continue;
+      for(const extension of item.loader.getExtensions().extensions)if(paths.has(resolve(extension.resolvedPath))){loaded=true;for(const name of extension.handlers.keys())hooks.add(name);}
+      for(const t of item.session.getAllTools())if(paths.has(resolve(t.sourceInfo.path)))tools.set(t.name,{name:t.name,description:t.description,exposure:t.exposure,parameters:t.parameters});
+    }
+    return {...detail,runtime:{loaded,tools:[...tools.values()],hooks:[...hooks]}};
   }
   async export(id: string) { return {resumable:false,session:await this.viewSession(id)}; }
   async close() {
     this.closing=true;
+    await Promise.allSettled([...this.active.values()].map(async item=>{await item.session.abort();item.session.abortCompaction();}));
+    await this.skills?.close();
     await Promise.allSettled([...this.loading.values(),...this.creating]);
     try {
       const outcomes=await Promise.allSettled([...this.active.values()].map(async item => {
-        try {await item.session.abort();await item.run;await item.checkpoint;await item.save;}
+        try {await item.session.abort();await item.dispatchDone;await item.actionDone;await item.run;await item.checkpoint;await item.save;}
         finally {item.session.dispose();}
       }));
       if(outcomes.some(outcome=>outcome.status==='rejected'))throw new Error('退出时部分会话未能保存，原检查点已保留');

@@ -1,0 +1,92 @@
+{
+  "platform": "darwin arm64",
+  "node": "26.10.0",
+  "piSdk": "1.3.0",
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "passed": 34,
+      "failed": 0,
+      "includes": "19 existing Host tests and 15 Skill tests"
+    },
+    {
+      "command": "npm run test:skills:browser",
+      "exitCode": 0,
+      "checks": [
+        "twoClientConflict",
+        "cleanStaleBufferConflict",
+        "unsavedExitGuard",
+        "exactReviewReset",
+        "asyncImportWebSocket",
+        "reconnectAuthoritativeState",
+        "ordinaryPublishDisable"
+      ]
+    },
+    {
+      "command": "npm run package:desktop",
+      "exitCode": 0,
+      "output": "release/Agent-darwin-arm64/Agent.app"
+    },
+    {
+      "command": "npm run test:skills:ui with actual human-approved digest and review notes",
+      "exitCode": 0,
+      "receipt": "d2-skills-macos-real-2026-10-18.json"
+    }
+  ],
+  "review": {
+    "contexts": [
+      "pi_integration",
+      "d2_constraints"
+    ],
+    "result": "passed after fixes",
+    "method": "independent read-only source and requirement review; targeted reproductions; no repeat historical experiments"
+  },
+  "remainingBoundaries": [
+    "Windows real device",
+    "signing and notarization",
+    "OAuth long rotation",
+    "long-running stress",
+    "complete security matrix",
+    "OS isolation for untrusted code"
+  ],
+  "historicalExperimentsModified": false,
+  "finalRegression": {
+    "nativeConfiguredTextPaths": true,
+    "projectExtensionsNotLoaded": true,
+    "fullSuiteAfterFinalEdits": {
+      "passed": 34,
+      "failed": 0
+    },
+    "typecheckExitCode": 0,
+    "packageExitCode": 0,
+    "browserExitCode": 0
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run lint",
+      "exitCode": 1,
+      "errors": 16,
+      "warnings": 45,
+      "infos": 18,
+      "note": "New project-wide Biome configuration also checks existing code. Remaining errors are in unchanged existing statements; no repository-wide cleanup performed."
+    },
+    {
+      "command": "npm run format:check",
+      "exitCode": 1,
+      "filesWithDifferences": 14,
+      "note": "Existing compact source formatting retained. Ten newly added implementation/test scripts formatted with project-local Biome; reviewed executable fixture not reformatted."
+    },
+    {
+      "command": "biome lint on ten newly added implementation/test scripts",
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 21,
+      "infos": 9
+    }
+  ]
+}
