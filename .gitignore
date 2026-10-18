@@ -6,7 +6,7 @@ release/
 .env
 .env.*
 *.enc
-*.enc.prev
+*.enc.*
 *.sqlite
 *.sqlite-*
 *.pem

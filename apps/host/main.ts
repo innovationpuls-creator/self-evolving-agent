@@ -13,7 +13,7 @@ async function run(config:Config) {
   try {host=await startHost({...config,dataDir,key:Buffer.from(config.key,'base64')});}
   catch(error) {await unlink(lock);throw error;}
   let stopping=false;
-  const close=async()=>{if(stopping)return;stopping=true;try{await host.close();}finally{await unlink(lock);process.exit(0);}};
+  const close=async()=>{if(stopping)return;stopping=true;let status=0;try{await host.close();}catch{status=1;}finally{await unlink(lock).catch(()=>{status=1;});process.exit(status);}};
   process.on('SIGINT',()=>void close());process.on('SIGTERM',()=>void close());
   process.parentPort?.on('message',event=>{if(event.data?.type==='shutdown')void close();});
   if(process.parentPort) process.parentPort.postMessage({type:'ready',origin:host.origin});

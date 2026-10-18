@@ -5,10 +5,13 @@ import './style.css';
 interface Model {provider:string; id:string; name:string}
 interface Message {role:string; content:string|Array<{type:string;text?:string;name?:string;arguments?:unknown}>;toolName?:string;isError?:boolean;errorMessage?:string}
 interface Tree {entry:{id:string;type:string;message?:Message};children:Tree[]}
-interface Session {id:string;title:string;cwd:string;provider:string;model:string;busy:boolean;interrupted?:boolean;error?:string;messages?:Message[];tree?:Tree[];leafId?:string;thinkingLevel?:string;thinkingLevels?:string[]}
+interface Session {id:string;title:string;cwd:string;provider:string;model:string;busy:boolean;interrupted?:boolean;error?:string;unavailable?:boolean;messages?:Message[];tree?:Tree[];leafId?:string;thinkingLevel?:string;thinkingLevels?:string[]}
+const connectionKey='agent-connection-token';
+function lostAuthentication(){sessionStorage.removeItem(connectionKey);window.dispatchEvent(new Event('agent-auth-lost'));}
 async function api<T>(path:string, method='GET', data?:unknown):Promise<T> {
-  const response=await fetch(`/api${path}`, {method, headers:{'Content-Type':'application/json'}, body:data===undefined?undefined:JSON.stringify(data)});
+  const response=await fetch(`/api${path}`, {method, headers:{'Content-Type':'application/json',...(sessionStorage.getItem(connectionKey)?{Authorization:`Bearer ${sessionStorage.getItem(connectionKey)}`}:{})}, body:data===undefined?undefined:JSON.stringify(data)});
   const result=await response.json();
+  if(response.status===401)lostAuthentication();
   if(!response.ok) throw new Error(result.error ?? '连接失败');
   return result;
 }
@@ -20,18 +23,24 @@ function App() {
   const [connected,setConnected]=useState(false),[online,setOnline]=useState(false),[token,setToken]=useState(''),[error,setError]=useState('');
   const [sessions,setSessions]=useState<Session[]>([]),[selected,setSelected]=useState<Session>(),[models,setModels]=useState<Model[]>([]),[providers,setProviders]=useState<Array<{id:string}>>([]);
   const [cwd,setCwd]=useState(''),[model,setModel]=useState(''),[prompt,setPrompt]=useState(''),[settings,setSettings]=useState(false),[provider,setProvider]=useState('openai-codex'),[key,setKey]=useState('');
+  const selectionEpoch=useRef(0);
   const selectedRef=useRef<string|undefined>(undefined),bottom=useRef<HTMLDivElement>(null);
-  selectedRef.current=selected?.id;
   const guard=async(fn:()=>Promise<unknown>)=>{setError('');try{await fn();}catch(e){setError((e as Error).message);}};
   const refresh=async()=>{
     const [list,catalog]=await Promise.all([api<Session[]>('/sessions'),api<{models:Model[];providers:Array<{id:string}>}>('/models')]);
     setSessions(list);setModels(catalog.models);setProviders(catalog.providers);
     setModel(old=>old||(catalog.models[0]?`${catalog.models[0].provider}/${catalog.models[0].id}`:''));
   };
-  const open=async(id:string)=>setSelected(await api<Session>(`/sessions/${id}`));
+  const open=async(id:string)=>{
+    const epoch=++selectionEpoch.current;selectedRef.current=id;
+    const state=await api<Session>(`/sessions/${id}`);
+    if(epoch===selectionEpoch.current)setSelected(state);
+  };
+  const connectHost=async(value:string)=>{await api('/connect','POST',{token:value});sessionStorage.setItem(connectionKey,value);};
+  useEffect(()=>{const lost=()=>{setConnected(false);setOnline(false);setSelected(undefined);selectedRef.current=undefined;selectionEpoch.current++;};window.addEventListener('agent-auth-lost',lost);return()=>window.removeEventListener('agent-auth-lost',lost);},[]);
   useEffect(()=>{void guard(async()=>{
     const initial=new URLSearchParams(location.hash.slice(1)).get('token');
-    if(initial){history.replaceState(null,'',location.pathname);await api('/connect','POST',{token:initial});}
+    if(initial){history.replaceState(null,'',location.pathname);await connectHost(initial);}
     try{await refresh();setConnected(true);}catch{setConnected(false);}
   });},[]);
   useEffect(()=>{
@@ -39,19 +48,21 @@ function App() {
     let stopped=false,timer:ReturnType<typeof setTimeout>,socket:WebSocket;
     const connect=()=>{
       socket=new WebSocket(`${location.origin.replace('http','ws')}/events`);
-      socket.onopen=()=>{setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});};
-      socket.onclose=()=>{setOnline(false);if(!stopped)timer=setTimeout(connect,1500);};
+      socket.onopen=()=>socket.send(JSON.stringify({type:'authenticate',token:sessionStorage.getItem(connectionKey)}));
+      socket.onclose=event=>{setOnline(false);if(event.code===4401){lostAuthentication();return;}if(!stopped)timer=setTimeout(connect,1500);};
       socket.onmessage=event=>{
         const data=JSON.parse(event.data);
+        if(data.type==='connected'){setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});}
+        if(data.type==='blocked' && data.sessionId===selectedRef.current){setError(data.error);setSelected(old=>old && old.id===data.sessionId?{...old,busy:false,error:data.error}:old);}
         if(data.type==='state') {
           setSessions(old=>old.some(s=>s.id===data.state.id)?old.map(s=>s.id===data.state.id?data.state:s):[data.state,...old]);
           if(data.sessionId===selectedRef.current)setSelected(data.state);
         }
         if(data.type==='update'&&data.sessionId===selectedRef.current) {
           const e=data.event;
-          if(e.type==='message_start')setSelected(old=>old?{...old,messages:[...(old.messages??[]),e.message]}:old);
+          if(e.type==='message_start')setSelected(old=>old && old.id===data.sessionId?{...old,messages:[...(old.messages??[]),e.message]}:old);
           if(e.type==='message_update'||e.type==='message_end')setSelected(old=>{
-            if(!old)return old;
+            if(!old || old.id!==data.sessionId)return old;
             const messages=[...(old.messages??[])];messages[messages.length-1]=e.message;
             return {...old,messages};
           });
@@ -63,25 +74,26 @@ function App() {
   useEffect(()=>{bottom.current?.scrollIntoView({behavior:'smooth'});},[selected?.messages]);
   const newSession=()=>guard(async()=>{
     const m=models.find(m=>`${m.provider}/${m.id}`===model);if(!m)throw new Error('请先配置模型');
-    const s=await api<Session>('/sessions','POST',{cwd,provider:m.provider,model:m.id});setSelected(s);await refresh();
+    const s=await api<Session>('/sessions','POST',{cwd,provider:m.provider,model:m.id});selectionEpoch.current++;selectedRef.current=s.id;setSelected(s);await refresh();
   });
   const send=()=>guard(async()=>{
     if(!selected||selected.busy||!prompt.trim())return;
+    if(selectedRef.current!==selected.id)throw new Error('会话切换中，请稍后发送');
     setSelected({...selected,busy:true});
     const value=prompt;setPrompt('');
-    try{await api(`/sessions/${selected.id}/prompt`,'POST',{text:value});}catch(e){setPrompt(value);setSelected(old=>old?{...old,busy:false}:old);throw e;}
+    try{await api(`/sessions/${selected.id}/prompt`,'POST',{text:value});}catch(e){setPrompt(value);setSelected(old=>old?.id===selected.id?{...old,busy:false}:old);throw e;}
   });
   const nodes=(tree:Tree[],depth=0):React.ReactNode=>tree.map(node=><React.Fragment key={node.entry.id}>
     <option value={node.entry.id}>{'　'.repeat(depth)}{node.entry.type} {node.entry.message?text(node.entry.message).slice(0,35):''}</option>{nodes(node.children,depth+1)}
   </React.Fragment>);
   if(!connected)return <main className="connect"><p className="eyebrow">YOUR WORKSPACE, IN CONVERSATION</p><h1>连接 Agent</h1><p>输入本机 Agent Host 的连接令牌。</p>
-    <form onSubmit={e=>{e.preventDefault();void guard(async()=>{await api('/connect','POST',{token});setToken('');await refresh();setConnected(true);});}}>
+    <form onSubmit={e=>{e.preventDefault();void guard(async()=>{await connectHost(token);setToken('');await refresh();setConnected(true);});}}>
       <input aria-label="连接令牌" type="password" value={token} onChange={e=>setToken(e.target.value)} autoComplete="off"/><button>连接</button>
     </form>{error&&<p role="alert">{error}</p>}</main>;
   return <div className="shell"><aside><div className="brand">Agent <span>个人工作空间</span></div>
-    <button onClick={()=>setSelected(undefined)}>＋ 新会话</button>
-    <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} onClick={()=>void guard(()=>open(s.id))}>
-      <b>{s.title}</b><small>{s.busy?'正在处理':s.interrupted?'上次运行中断':s.cwd}</small></button>)}</nav>
+    <button onClick={()=>{selectionEpoch.current++;selectedRef.current=undefined;setSelected(undefined);}}>＋ 新会话</button>
+    <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} disabled={s.unavailable} onClick={()=>void guard(()=>open(s.id))}>
+      <b>{s.title}</b><small>{s.unavailable?s.error:s.busy?'正在处理':s.interrupted?'上次运行中断':s.cwd}</small></button>)}</nav>
     <button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
     <main><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
       {selected&&<div className="actions"><button disabled={selected.busy} onClick={()=>void guard(()=>api(`/sessions/${selected.id}/compact`,'POST',{}))}>压缩上下文</button>

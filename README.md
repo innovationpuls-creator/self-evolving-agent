@@ -31,7 +31,7 @@ npm start
 
 浏览器打开 `http://127.0.0.1:4317`，输入同一连接令牌。`PORT` 和 `AGENT_DATA_DIR` 可指定端口和独立数据目录（默认 `.agent-data`）。每次启动必须使用相同数据密钥才能恢复历史；请自行安全保存密钥。不要把密钥或令牌写入项目文件。
 
-Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 仅保存会话索引；导出为经过保护的查看副本，不能作为恢复文件。
+Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 仅保存会话索引；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
 
 ## 桌面应用
 
@@ -47,16 +47,18 @@ npm run package:desktop
 npm run typecheck
 npm test
 npm run build
+npm run test:browser
 ```
 
 以下检查会使用真实模型及本机 Pi 的 `openai-codex` 授权，可能产生模型使用量：
 
 ```sh
 npm run test:real
+npm run package:desktop
 npm run test:ui
 ```
 
-打包后可运行 `npm run test:desktop` 检查桌面启动与后台运行。界面检查需要可运行的桌面环境及 Chrome；可通过 `CHROME_PATH` 指定 Chrome 程序路径。`AGENT_SMOKE_MODEL` 可覆盖 API 检查使用的模型。检查仅在临时工作目录操作，结束后清理。
+打包后可运行 `npm run test:desktop` 检查实际应用的启动、后台运行、Host 重连及空会话重开；`test:ui` 使用同一打包应用验证真实模型、原生工具、Web 共用会话、导出与执行中崩溃恢复。界面检查需要可运行的桌面环境及 Chrome；可通过 `CHROME_PATH` 指定 Chrome 程序路径。`AGENT_SMOKE_MODEL` 可覆盖 API 检查使用的模型。检查仅在临时工作目录操作，结束后清理。真实模型检查要求本机 Pi 授权仍有效；若返回 `refresh_token_reused`，先在 Pi 重新登录再运行，检查不改写原 Pi 授权。
 
 ## 当前边界
 

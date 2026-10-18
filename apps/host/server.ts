@@ -1,5 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { extname, resolve, sep } from 'node:path';
@@ -20,12 +20,10 @@ function json(res: ServerResponse,status: number,value: unknown) { res.writeHead
 export async function startHost(options: {dataDir:string;key:Buffer;token:string;port?:number;webDir?:string;service?:AgentService}) {
   if(options.token.length<32) throw new Error('连接令牌至少需要 32 个字符');
   const service=options.service ?? new AgentService(options.dataDir,options.key);
-  await service.init();
+  try{await service.init();}catch(error){await service.close().catch(()=>{});throw error;}
   service.sensitive.add(options.token); service.sensitive.add(options.key.toString('base64'));
-  const cookie=createHmac('sha256',options.token).update('agent-browser-cookie-v1').digest('hex'); service.sensitive.add(cookie);
-  let origin='',cookieName='';
-  const authenticated=(req:IncomingMessage) => equal(req.headers.authorization ?? '',`Bearer ${options.token}`) || (req.headers.cookie ?? '').split(';').some(c=>equal(c.trim(),`${cookieName}=${cookie}`));
-  const bearer=(req:IncomingMessage) => equal(req.headers.authorization ?? '',`Bearer ${options.token}`);
+  let origin='';
+  const authenticated=(req:IncomingMessage) => equal(req.headers.authorization ?? '',`Bearer ${options.token}`);
   const server=createServer(async (req,res) => {
     res.setHeader('Cache-Control','no-store');
     res.setHeader('X-Content-Type-Options','nosniff');
@@ -37,12 +35,12 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       if(url.pathname==='/api/connect' && req.method==='POST') {
         const input=z.object({token:z.string()}).strict().parse(await body(req));
         if(!equal(input.token,options.token)) {json(res,401,{error:'连接令牌无效'});return;}
-        res.setHeader('Set-Cookie',`${cookieName}=${cookie}; HttpOnly; SameSite=Strict; Path=/`);
+        // Remove the legacy cookie; cookies are shared across ports on a host.
+        res.setHeader('Set-Cookie',`agent-${new URL(origin).port}=; Max-Age=0; Path=/`);
         json(res,200,{ok:true}); return;
       }
       if(url.pathname.startsWith('/api/')) {
         if(!authenticated(req)) {json(res,401,{error:'请连接 Agent Host'});return;}
-        if(req.method!=='GET' && !bearer(req) && req.headers.origin!==origin) {json(res,403,{error:'缺少可信来源'});return;}
         const route=url.pathname;
         if(route==='/api/models' && req.method==='GET') {json(res,200,await service.models());return;}
         if(route==='/api/credentials' && req.method==='POST') {const x=credentialInput.parse(await body(req));await service.credentials(x.provider,x.key,x.importExisting);json(res,200,{ok:true});return;}
@@ -73,20 +71,44 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
     }
   });
   const sockets=new WebSocketServer({noServer:true,maxPayload:1024});
+  const verified=new Set<WebSocket>();
   server.on('upgrade',(req,socket,head)=>{
-    if(req.url!=='/events' || req.headers.host!==new URL(origin).host || req.headers.origin!==origin || !authenticated(req)) {socket.end('HTTP/1.1 403 Forbidden\r\n\r\n');return;}
-    sockets.handleUpgrade(req,socket,head,ws=>{sockets.emit('connection',ws,req);ws.send(JSON.stringify({type:'connected'}));});
+    if(req.url!=='/events' || req.headers.host!==new URL(origin).host || req.headers.origin!==origin) {socket.end('HTTP/1.1 403 Forbidden\r\n\r\n');return;}
+    sockets.handleUpgrade(req,socket,head,ws=>{
+      ws.on('error',()=>ws.terminate());
+      const authorize=()=>{verified.add(ws);ws.send(JSON.stringify({type:'connected'}));};
+      ws.once('close',()=>verified.delete(ws));
+      if(authenticated(req)) {authorize();return;}
+      const timer=setTimeout(()=>ws.close(4401,'认证超时'),5000);timer.unref();
+      ws.once('close',()=>clearTimeout(timer));
+      ws.once('message',bytes=>{
+        clearTimeout(timer);
+        try {
+          const input=z.object({type:z.literal('authenticate'),token:z.string().max(512)}).strict().parse(JSON.parse(bytes.toString()));
+          if(equal(input.token,options.token)) authorize();else ws.close(4401,'认证失败');
+        } catch {ws.close(4401,'认证失败');}
+      });
+    });
   });
   const broadcast=(event:unknown)=>{
     const data=JSON.stringify(event);
-    for(const ws of sockets.clients) if(ws.readyState===WebSocket.OPEN) {
+    for(const ws of verified) if(ws.readyState===WebSocket.OPEN) {
       if(ws.bufferedAmount>4*1024*1024) ws.close(1013,'请重新连接'); else ws.send(data);
     }
   };
   service.on('event',broadcast);
-  const heartbeat=setInterval(()=>{for(const ws of sockets.clients) ws.ping();},30000);heartbeat.unref();
-  await new Promise<void>((ok,fail)=>{server.once('error',fail);server.listen(options.port ?? 0,'127.0.0.1',ok);});
+  const heartbeat=setInterval(()=>{for(const ws of verified) ws.ping();},30000);heartbeat.unref();
+  try{await new Promise<void>((ok,fail)=>{server.once('error',fail);server.listen(options.port ?? 0,'127.0.0.1',ok);});}
+  catch(error){clearInterval(heartbeat);service.off('event',broadcast);sockets.close();await service.close().catch(()=>{});throw error;}
   const address=server.address(); if(!address || typeof address==='string') throw new Error('Host 启动失败');
-  origin=`http://127.0.0.1:${address.port}`;cookieName=`agent-${address.port}`;
-  return {origin,service,async close(){clearInterval(heartbeat);service.off('event',broadcast);for(const ws of sockets.clients)ws.terminate();sockets.close();await service.close();await new Promise<void>((ok,fail)=>server.close(error=>error?fail(error):ok()));}};
+  origin=`http://127.0.0.1:${address.port}`;
+  let closing:Promise<void>|undefined;
+  return {origin,service,close(){
+    return closing ??= (async()=>{
+      clearInterval(heartbeat);service.off('event',broadcast);
+      for(const ws of sockets.clients)ws.terminate();sockets.close();
+      const stopped=new Promise<void>((ok,fail)=>server.close(error=>error?fail(error):ok()));
+      try {await service.close();} finally {await stopped;}
+    })();
+  }};
 }

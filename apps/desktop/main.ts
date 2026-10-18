@@ -40,7 +40,7 @@ async function start(key:string,dir:string) {
   current.on('message',async message=>{
     if(message.type==='ready') {
       ready=true;origin=message.origin;port=Number(new URL(origin).port);
-      // The cookie survives same-port Host recovery; keep the live UI and reconnect its socket.
+      // The origin-scoped client token survives same-port Host recovery; keep the live UI and reconnect its socket.
       if(window && !window.webContents.getURL().startsWith(`${origin}/`)) {
         await window.loadURL(`${origin}/#token=${encodeURIComponent(token)}`);
       }

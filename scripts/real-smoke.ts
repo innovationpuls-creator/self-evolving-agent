@@ -37,7 +37,7 @@ try {
   const toolNames=state.messages.filter((m:{role:string})=>m.role==='toolResult').map((m:{toolName:string})=>m.toolName);
   assert.ok(toolNames.includes('write')&&toolNames.includes('read'));
   ws.close();await host.close();host=undefined;
-  const files=await readdir(join(root,'data','sessions'));assert.equal(files.length,1);
+  const files=await readdir(join(root,'data','sessions'));assert.equal(files.filter(name=>name.endsWith('.enc')).length,1);
   const bytes=await readFile(join(root,'data','sessions',files[0]!),'utf8');assert.ok(!bytes.includes('D1 real model native tool success'));
   host=await startHost({dataDir:join(root,'data'),key,token});
   const restored=await request(`/sessions/${session.id}`);

@@ -47,6 +47,7 @@ export function snapshot(manager: SessionManager): Snapshot {
   return structuredClone({header, entries: manager.getEntries(), leafId: manager.getLeafId()});
 }
 export function restore(saved: Snapshot) {
+  if(!saved || !saved.header || !Array.isArray(saved.entries) || (saved.leafId!==null && !saved.entries.some(entry=>entry.id===saved.leafId)))throw new Error('会话检查点结构无效');
   const manager = SessionManager.inMemory(saved.header.cwd, {id: saved.header.id}, [saved.header, ...saved.entries]);
   if (saved.leafId === null) manager.resetLeaf();
   else if (saved.leafId !== manager.getLeafId()) manager.branch(saved.leafId);
@@ -74,17 +75,18 @@ export class SensitiveData {
       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')
       .replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi, 'Bearer [已保护]')
-      .replace(/((?:password|passwd|api[_-]?key|access[_-]?token|secret)\s*["']?\s*[=:]\s*["']?)[^\s,;"']+/gi, '$1[已保护]')
+      .replace(/((?:password|passwd|authorization|api[_-]?(?:key|token)|access(?:[_-]?token)?|refresh(?:[_-]?token)?|token|secret|private[_-]?key)\s*["']?\s*[=:]\s*)(?:"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?|[^\s,;"']+)/gi, '$1[已保护]')
       .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[身份信息已保护]')
       .replace(/(?<!\d)1[3-9]\d{9}(?!\d)/g, '[身份信息已保护]')
       .replace(/(?<!\d)[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[0-9Xx](?!\d)/g, '[身份信息已保护]');
   }
   copy<T>(value: T, partial = false): T {
-    const walk = (item: unknown, key = ''): unknown => {
-      if (typeof item === 'string') return this.text(item, partial && (key==='text'||key==='content')); 
-      if (Array.isArray(item)) return item.map(v => walk(v,key));
+    const secretKey=/^(password|passwd|authorization|api[_-]?(?:key|token)|access(?:[_-]?token)?|refresh(?:[_-]?token)?|token|secret|private[_-]?key)$/i;
+    const walk = (item: unknown, schema = false): unknown => {
+      if (typeof item === 'string') return this.text(item, partial);
+      if (Array.isArray(item)) return item.map(v => walk(v,schema));
       if (item && typeof item === 'object') return Object.fromEntries(Object.entries(item).map(([k,v]) => [k,
-        /^(password|passwd|authorization|apiKey|api_key|access|refresh|token|privateKey)$/i.test(k) && typeof v === 'string' ? '[已保护]' : walk(v,k)]));
+        !schema && secretKey.test(k) ? '[已保护]' : walk(v,schema || ((k==='schema'||k==='parameters') && !!v && typeof v==='object' && ('properties' in v || 'type' in v)))]));
       return item;
     };
     return walk(value) as T;
