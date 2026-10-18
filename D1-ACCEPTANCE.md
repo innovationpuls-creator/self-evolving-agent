@@ -2,16 +2,16 @@
 
 ## 结论
 
-本轮已完成已确认工程缺陷的修复、自动化回归、浏览器回归和 macOS 打包应用的基础生命周期回归。**D1 本轮验收尚未完成，暂不满足进入 D2 的条件**：现有 Pi `openai-codex` 授权刷新返回 `401 / refresh_token_reused`，真实模型回归在首轮请求失败，未执行后续真实模型业务场景。
+D1 已完成约定的 macOS 端到端验收，可以进入 D2。工程回归证据沿用原报告；真实模型补充结果由用户在本轮明确提供：`openai-codex/gpt-6-luna`，`npm run test:ui` 退出码为 0。本次归档不重新执行已有充分证据的验证。
 
-该结论只覆盖本轮实际证据，不用之前的真实模型成功记录替代当前版本的验收。
+仓库未单独保存该次成功运行的 stdout、退出码 receipt 或打包产物摘要；这里明确记录结果来源，不声称本次归档重新运行过验收。
 
 ## 环境与正式基线
 
 - 验收日期：2026-10-18；macOS / arm64。
 - Node.js 26.10.0、npm 11.19.1、TypeScript 7.0.2、Pi SDK 1.3.0、Electron 44.9.0。
 - 修复前本地提交：`532010f`（`chore: establish D1 development baseline`）。
-- 修复后本地提交：包含本报告的 `fix: close D1 authentication and recovery gaps` 提交；精确标识在交付对话及本地 Git 日志中记录。
+- 修复后本地提交：`0047231c50fe4ba4566ccd26654e2081d19215f3`（`fix: close D1 authentication and recovery gaps`）。
 - 未创建额外分支、未推送。源码、设计与历史实验经明确清单审查后入库；本轮没有修改 `docs/` 或 `experiments/`。
 - `.gitignore` 排除环境文件、凭证和密钥、加密运行数据、SQLite、锁、临时文件、依赖及构建与发布产物。打包根目录采用允许清单，仅包含 `dist`、生产依赖、`package.json` 与 `README.md`。
 
@@ -38,6 +38,7 @@
 | `npm run build` / `npm run package:desktop` | 通过，生成当前 macOS arm64 应用。 |
 | `npm run test:browser` | 实际 Chrome 通过：刷新认证、不同本机端口无认证泄露、逆序会话响应隔离、无效认证回连接页。使用 Faux Provider，不作为真实模型证据。 |
 | `npm run test:desktop` | 实际打包 Agent.app 通过：隔离 renderer、独立 Utility Host、关窗继续运行、杀死 Host 后重启和客户端重连、退出应用后重新打开空会话、打包内容允许清单。未调用 LLM。 |
+| `npm run test:ui` | 用户补充验收：macOS 打包应用、真实模型 `openai-codex/gpt-6-luna`，退出码 0；覆盖内容见下节。 |
 | Git 和范围检查 | 差异空白检查通过；设计和历史实验未改动；提交候选不含运行数据、实际凭证或构建产物。 |
 
 自动化覆盖：
@@ -48,36 +49,29 @@
 - 原生 Tool 完成而下一次模型请求未完成时的检查点；实际子进程 SIGKILL 后恢复已提交 Tool 结果，不发起模型请求或重放副作用。该测试使用 Faux Provider。
 - 分支与非末尾 leaf、原生 Compaction、停止、模型错误重试、多会话并行、保存失败后的拒绝及完整关闭。
 
-## 实际真实模型尝试与阻塞
+## 真实模型补充验收
 
-`npm run test:ui` 已改为启动打包后的 Agent.app，以临时产品数据和工作目录操作，通过 UI 导入本机 Pi `openai-codex` 授权，选择 `gpt-6-luna`。实际尝试在首轮模型请求失败，服务返回：
+此前首轮曾因 `401 / refresh_token_reused` 失败；该历史阻塞已由用户补充的成功验收解除，不再作为 D2 准入阻塞。
 
-```text
-OAuth refresh failed for openai-codex
-401 / refresh_token_reused
-Your refresh token has already been used to generate a new access token.
-Please try signing in again.
-```
+`test:ui` 启动已有打包 Agent.app，通过 UI 导入本机 Pi 授权，使用 `openai-codex/gpt-6-luna`。按 `scripts/ui-smoke.ts` 的成功断言，覆盖：
 
-没有修改原 Pi 授权，没有保留或提交凭据、测试用户数据或模型原始日志；临时测试目录已清理。需要在 Pi 重新登录，再重跑以下当前版本验收：
+1. Renderer 不暴露 Node.js；真实模型使用原生 write/read，关窗后 Host 继续工作。
+2. Chrome 与桌面共用同一 Session，多轮继续；指定敏感样例在界面和导出中受保护，导出明确不可恢复。
+3. 原生 bash 执行中 SIGKILL Host，Host 重建，双端重连并显示中断，不自动重放未知副作用。
+4. 退出应用后重新打开同一 Session；用户明确发起下一步 read 后继续，先前文件不因恢复被重放修改。
 
-1. 多轮真实模型原生 write/read/bash Tool Calling，桌面关窗后继续运行。
-2. Chrome 与桌面共用同一真实会话，敏感样例在界面和导出中受保护。
-3. 原生工具正在执行时杀死 Host，桌面及 Web 重连、显示中断、不自动重放未知副作用。
-4. 退出应用后重新打开原真实会话，并明确提交下一步 read 操作继续工作。
-
-这些场景已写入 `scripts/ui-smoke.ts`，但本轮因授权失败未运行到，不声明通过。`npm run test:real` 的检查点文件计数已适配当前/上一份检查点，本轮未另行运行该真实模型 API 脚本。
+脚本清理临时用户数据和工作目录。不提交凭据或模型原始日志；本轮未另行执行 `npm run test:real`。
 
 ## 未验证与 D2 准入
 
 | 项目 | 状态及影响 |
 |---|---|
-| 上述当前版本真实模型完整 macOS 回归 | 当前 D1 验收阻塞；重新登录后必须实际完成，不能以 Faux 或历史成功替代。 |
+| OAuth 长期轮换 | 本次覆盖有效授权导入及实际调用，未验证跨 access-token 到期的长期 refresh-token 轮换、反复刷新、撤销及重新授权。 |
 | Windows 实机 / AppContainer | 未验证；macOS 结果不能外推。生成代码隔离也未在 D1 实现。 |
 | 正式签名与公证 | 未验证；当前本地打包回归不代表正式发行验收。 |
 | 任意敏感格式、多解释器、完整数据传播、迁移恢复、压力及长期运行 | 未完成完整验收；本轮只覆盖报告列出的本地回归，保留既定后续阶段边界。 |
 
-已确认缺陷对应回归通过，但真实模型业务验收仍被授权阻塞，故暂不满足本轮约定的 D2 准入条件。质量设计、自动化通过和本地打包成功均不等于产品完整验收通过。
+D1 的约定 macOS 验收已完成，D2 可以启动。该结论不代表 Windows、正式发行及完整安全与长期运行验收完成。
 
 ## 启动与复验
 
@@ -85,4 +79,4 @@ Please try signing in again.
 
 macOS 应用：`release/Agent-darwin-arm64/Agent.app`；重新打包使用 `npm run package:desktop`。`test:ui` 使用该产物，源码修改后应先重新打包；可通过 `AGENT_APP_PATH` 指定其他已有应用。
 
-修复授权后执行 `npm run test:ui`；需要进一步定位独立 Host 真实模型通道时使用 `npm run test:real`。两者均可能产生真实模型使用量，仅在临时工作目录操作。
+需要复验相关行为时执行 `npm run test:ui`；需要进一步定位独立 Host 真实模型通道时使用 `npm run test:real`。两者均可能产生真实模型使用量，仅在临时工作目录操作。
