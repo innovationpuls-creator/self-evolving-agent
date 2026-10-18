@@ -1,0 +1,25 @@
+{
+  "at": "2026-10-18T15:20:28.051Z",
+  "client": "packaged Electron + Chrome",
+  "model": "openai-codex/gpt-6-luna",
+  "agentSaveAndCrossSessionUse": true,
+  "sessionATools": [
+    "read",
+    "memory_save",
+    "memory_save",
+    "memory_save"
+  ],
+  "sessionBTools": [
+    "memory_search",
+    "memory_get",
+    "write"
+  ],
+  "randomMarker": "d47b1295-2932-4eca-ad52-d2234fbab495",
+  "correctedMarker": "03d4bc35-4be7-4379-94f5-c5af89a6946d",
+  "uiCorrectionConflictAndSync": true,
+  "sharedRollbackWithdrawal": true,
+  "globalAndProjectIsolation": true,
+  "scopeAndLogicalDeletion": true,
+  "restartRetainsKnowledgeSourcesAndHistory": true,
+  "result": "passed"
+}

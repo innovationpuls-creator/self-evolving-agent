@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import './style.css';
 import {SkillsPanel} from './skills';
+import {MemoryPanel} from './memory';
 
 interface Model {provider:string; id:string; name:string}
 interface Message {role:string; content:string|Array<{type:string;text?:string;name?:string;arguments?:unknown}>;toolName?:string;isError?:boolean;errorMessage?:string}
@@ -13,7 +14,7 @@ async function api<T>(path:string, method='GET', data?:unknown):Promise<T> {
   const response=await fetch(`/api${path}`, {method, headers:{'Content-Type':'application/json',...(sessionStorage.getItem(connectionKey)?{Authorization:`Bearer ${sessionStorage.getItem(connectionKey)}`}:{})}, body:data===undefined?undefined:JSON.stringify(data)});
   const result=await response.json();
   if(response.status===401)lostAuthentication();
-  if(!response.ok) throw new Error(result.error ?? '连接失败');
+  if(!response.ok) throw Object.assign(new Error(result.error ?? '连接失败'),{status:response.status,code:result.code});
   return result;
 }
 function text(message:Message) {
@@ -25,8 +26,10 @@ function App() {
   const [sessions,setSessions]=useState<Session[]>([]),[selected,setSelected]=useState<Session>(),[models,setModels]=useState<Model[]>([]),[providers,setProviders]=useState<Array<{id:string}>>([]);
   const [cwd,setCwd]=useState(''),[model,setModel]=useState(''),[prompt,setPrompt]=useState(''),[settings,setSettings]=useState(false),[provider,setProvider]=useState('openai-codex'),[key,setKey]=useState('');
   const [showSkills,setShowSkills]=useState(false);
+  const [showMemory,setShowMemory]=useState(false);
+  const memoryDirty=useRef(false);
   const skillsDirty=useRef(false);
-  const leaveSkills=(fn:()=>void)=>{if(skillsDirty.current&&!window.confirm('当前文件有未保存修改，离开并放弃这些修改？'))return;fn();};
+  const leaveSkills=(fn:()=>void)=>{if((skillsDirty.current||memoryDirty.current)&&!window.confirm('当前内容有未保存修改，离开并放弃这些修改？'))return;fn();};
   const selectionEpoch=useRef(0);
   const selectedRef=useRef<string|undefined>(undefined),bottom=useRef<HTMLDivElement>(null);
   const guard=async(fn:()=>Promise<unknown>)=>{setError('');try{await fn();}catch(e){setError((e as Error).message);}};
@@ -57,6 +60,7 @@ function App() {
       socket.onmessage=event=>{
         const data=JSON.parse(event.data);
         if(data.type==='skills')window.dispatchEvent(new Event('agent-skills-changed'));
+        if(data.type==='memory')window.dispatchEvent(new Event('agent-memory-changed'));
         if(data.type==='queue_failed')setError(data.error);
         if(data.type==='connected'){window.dispatchEvent(new Event('agent-reconnected'));setOnline(true);void guard(async()=>{await refresh();if(selectedRef.current)await open(selectedRef.current);});}
         if(data.type==='blocked' && data.sessionId===selectedRef.current){setError(data.error);setSelected(old=>old && old.id===data.sessionId?{...old,busy:false,error:data.error}:old);}
@@ -100,8 +104,9 @@ function App() {
     <button onClick={()=>leaveSkills(()=>{selectionEpoch.current++;selectedRef.current=undefined;setSelected(undefined);})}>＋ 新会话</button>
     <nav>{sessions.map(s=><button className={s.id===selected?.id?'selected':''} key={s.id} disabled={s.unavailable} onClick={()=>leaveSkills(()=>{void guard(()=>open(s.id));})}>
       <b>{s.title}</b><small>{s.unavailable?s.error:s.busy?'正在处理':s.interrupted?'上次运行中断':s.cwd}</small></button>)}</nav>
-    <button type="button" onClick={()=>leaveSkills(()=>setShowSkills(!showSkills))}>能力管理</button><button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
-    <main>{showSkills?<SkillsPanel api={api} project={selected?.cwd??cwd} onDirtyChange={value=>{skillsDirty.current=value;}} onClose={()=>leaveSkills(()=>setShowSkills(false))} onAssist={value=>leaveSkills(()=>{setPrompt(value);setShowSkills(false);})}/>:<><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
+    <button type="button" onClick={()=>leaveSkills(()=>{setShowMemory(false);setShowSkills(!showSkills);})}>能力管理</button>
+    <button type="button" onClick={()=>leaveSkills(()=>{setShowSkills(false);setShowMemory(!showMemory);})}>记忆管理</button><button onClick={()=>setSettings(!settings)}>模型设置</button><p className="connection">{online?'● 已连接':'○ 连接恢复中'}</p></aside>
+    <main>{showMemory?<MemoryPanel api={api} project={selected?.cwd??cwd} onDirtyChange={value=>{memoryDirty.current=value;}} onClose={()=>leaveSkills(()=>setShowMemory(false))}/>:showSkills?<SkillsPanel api={api} project={selected?.cwd??cwd} onDirtyChange={value=>{skillsDirty.current=value;}} onClose={()=>leaveSkills(()=>setShowSkills(false))} onAssist={value=>leaveSkills(()=>{setPrompt(value);setShowSkills(false);})}/>:<><header><div><h1>{selected?.title??'开始一项工作'}</h1><p>{selected?.cwd??'选择工作目录，Agent 将使用本机文件与命令完成任务。'}</p></div>
       {selected&&<div className="actions"><button disabled={selected.busy} onClick={()=>void guard(()=>api(`/sessions/${selected.id}/compact`,'POST',{}))}>压缩上下文</button>
       <button onClick={()=>void guard(async()=>{
         const data=await api(`/sessions/${selected.id}/export`);const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));

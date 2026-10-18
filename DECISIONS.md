@@ -1,6 +1,6 @@
 # 当前开发决策索引
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；当前仅实施 D2 首个 Skill 管理纵向功能，不提前实现完整 Memory、Diagnostic Log、D3～D5。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 Skill 与 Memory 纵向功能已交付；Diagnostic Log、D3～D5 尚未实施。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。
@@ -15,3 +15,8 @@
 - D2 获取过程与加载过程分开：原生 PackageManager 使用独立准备目录、固定本机 npm/Git、强制 --ignore-scripts 和可信 Git 执行入口，避免包内 npm 配置改写执行命令。不执行包入口、自检或构建。缺少依赖或锁文件的候选不得批准和加载。
 - D2 发布沿用 [TD-10](docs/06-技术决策/TD-10-Skill安全发布与版本切换.md)、[TD-11](docs/06-技术决策/TD-11-Skill更新与AgentSession连续性.md)：先独立无用户凭据 Session 检查，再建立全局协调屏障，等待已准入 dispatch/action/native idle，在原 AgentSession reload；全部成功后 SQLite 事务提交正式引用，失败恢复旧配置，恢复失败拒绝执行并提供重试。发布意图及结果持久保存，FIFO 消息仅在内存中等待；Host 重启不重放未完成请求。
 - D2 知识轻量修改只适用于明确声明的独立 Markdown 文件，修订独立留史；SKILL.md 和未分离内容走正式版本。D4 对不可信生成代码的隔离和自动发布目标不变，本轮不实现 OS 隔离。
+
+- D2 Memory 入口：[TD-07](docs/06-技术决策/TD-07-Memory实现与检索方案.md)、[DM-04](docs/04-领域建模/DM-04-Memory-Knowledge与Reflection的关系.md)、[Memory 管理与作用域](docs/02-用户体验设计/08-Memory管理与作用域.md)，交付证据见 [D2-MEMORY-ACCEPTANCE.md](D2-MEMORY-ACCEPTANCE.md)。复用产品 SQLite、FTS5 trigram 与五个 Pi 原生 Tool；短查询参数化字面匹配。Memory 不加载为执行规则、不自动全文注入、不复制 Session 历史，也不等待 D3 才能由普通 Agent 维护。
+- Memory 的事实/经验/决定/怀疑与当前/撤销/删除分开；同一记录追加不可变修订及前驱引用。Global 跨项目，Project 取规范化路径的 SHA-256 标识；当前头与每个历史版本分别做作用域过滤。用户删除为可追溯逻辑删除，普通检索退出、显式历史保留；作用域扩大不披露原项目历史或来源引用。
+- 项目决定的来源证据与适用依据分离。Agent 写入先保存含对应 Entry 的加密检查点；普通修正继承旧依据并补入修正来源，明确重新确认建立新依据。来源会话切换分支时先阻止相关当前读取及修改，再在快照成功后以短同步事务追加撤销；历史和通用经验保留，切回旧分支不自动复活。启动从有效检查点协调，无法确认的来源不视为有效；不跨 Pi 导航/Hook 持有异步 Memory 锁。
+- Memory 修订、当前引用和索引同事务提交，baseRevision 冲突返回 409，WebSocket 只广播失效通知。敏感正文、标题和依据在写库/建索引前与模型/客户端读取时复用现有保护；Session 与凭据继续加密。恢复旧 Session 或回到旧分支后，通过 Pi 原生活动工具 API 补入 Memory，保留其他活动工具集合。

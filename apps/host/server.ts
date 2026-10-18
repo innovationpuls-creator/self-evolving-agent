@@ -7,6 +7,7 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
 import {SkillError} from './skills.js';
 import { AgentService } from './agent.js';
+import { memoryContent, memoryReason, MemoryError } from './memory.js';
 
 const createInput=z.object({cwd:z.string().min(1).max(4096),provider:z.string().min(1),model:z.string().min(1)}).strict();
 const credentialInput=z.object({provider:z.string().min(1),key:z.string().max(16384).optional(),importExisting:z.boolean().optional()}).strict();
@@ -43,6 +44,32 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       if(url.pathname.startsWith('/api/')) {
         if(!authenticated(req)) {json(res,401,{error:'请连接 Agent Host'});return;}
         const route=url.pathname;
+        const memoryRoute=/^\/api\/memory(?:\/([a-f0-9-]{36})(?:\/(revise))?)?$/.exec(route);
+        if(memoryRoute){
+          const query=z.object({project:z.string().max(4096).optional(),query:z.string().max(1000).optional(),
+            includeHistory:z.enum(['true','false']).optional(),scope:z.enum(['global','project']).optional(),
+            limit:z.coerce.number().int().min(1).max(100).optional(),offset:z.coerce.number().int().min(0).optional()})
+            .strict().parse(Object.fromEntries(url.searchParams));
+          const ctx=await service.memoryUserContext(query.project),id=memoryRoute[1];
+          if(req.method==='GET'){
+            json(res,200,id?service.memory.get(ctx,id,query.includeHistory==='true'):
+              service.memory.search(ctx,{...query,includeHistory:query.includeHistory==='true'}));return;
+          }
+          if(req.method==='POST'&&!id){
+            const x=z.object({knowledge:memoryContent,reason:memoryReason}).strict().parse(await body(req));
+            json(res,201,service.memory.create(ctx,x.knowledge,x.reason));return;
+          }
+          if(req.method==='POST'&&id&&memoryRoute[2]==='revise'){
+            const x=z.object({baseRevision:z.number().int().positive(),knowledge:memoryContent.optional(),reason:memoryReason,
+              confirm:z.boolean().optional(),retire:z.boolean().optional()}).strict().parse(await body(req));
+            json(res,200,service.memory.revise(ctx,id,{...x,content:x.knowledge}));return;
+          }
+          if(req.method==='DELETE'&&id&&!memoryRoute[2]){
+            const x=z.object({baseRevision:z.number().int().positive(),reason:memoryReason}).strict().parse(await body(req));
+            json(res,200,service.memory.revise(ctx,id,{...x,remove:true}));return;
+          }
+          json(res,405,{error:'不支持的 Memory 操作'});return;
+        }
         if(route==='/api/models' && req.method==='GET') {json(res,200,await service.models());return;}
         if(route==='/api/credentials' && req.method==='POST') {const x=credentialInput.parse(await body(req));await service.credentials(x.provider,x.key,x.importExisting);json(res,200,{ok:true});return;}
         if(route==='/api/sessions' && req.method==='GET') {json(res,200,await service.list());return;}
@@ -92,7 +119,8 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       const data=await readFile(path);
       res.writeHead(200,{'Content-Type':({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'} as Record<string,string>)[extname(path)] ?? 'application/octet-stream'});res.end(data);
     } catch(error) {
-      if(error instanceof SkillError) json(res,error.status,{error:error.message});
+      if(error instanceof MemoryError) json(res,error.status,{error:error.message,code:error.code});
+      else if(error instanceof SkillError) json(res,error.status,{error:error.message});
       else if(error instanceof z.ZodError) json(res,400,{error:'请求字段无效'});
       else json(res,409,{error:error instanceof Error && error.message==='Nothing to compact (session too small)'?'当前对话较短，暂时无需压缩':'操作未完成，请检查会话状态、模型凭据或数据目录'});
     }

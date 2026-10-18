@@ -8,6 +8,8 @@ import { InMemoryCredentialStore, type Credential, type CredentialStore } from '
 import {SkillService, SkillError, type SkillLoadout, type SkillOperation} from './skills.js';
 import {SkillResourceLoader} from './skill-loader.js';
 import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from './storage.js';
+import { MemoryService, MemoryError, type MemoryContext } from './memory.js';
+import { memoryTools, memoryToolNames } from './memory-tools.js';
 
 interface RecordData { id: string; cwd: string; provider: string; model: string; title: string; updated: number; interrupted?: boolean }
 interface Saved { record: RecordData; session: Snapshot }
@@ -52,6 +54,7 @@ export class AgentService extends EventEmitter {
   readonly store: EncryptedStore;
   runtime!: ModelRuntime;
   skills!:SkillService;
+  memory!:MemoryService;
   private gate?:{promise:Promise<void>;release:()=>void};
   private queued:Array<{id:string;text:string}>=[];
   private draining=false;
@@ -75,6 +78,8 @@ export class AgentService extends EventEmitter {
     this.db = new DatabaseSync(join(this.dataDir, 'product.sqlite'));
     this.db.exec('PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY, updated INTEGER NOT NULL)');
     await chmod(join(this.dataDir,'product.sqlite'),0o600);
+    this.memory=new MemoryService(this.db,this.sensitive,()=>this.emit('event',{type:'memory'}));
+    this.memory.init();
     this.skills=new SkillService(this.dataDir,this.db,event=>this.emit('event',this.sensitive.copy(event)));
     await this.skills.init();
     this.skills.connect((next,previous,op,commit)=>this.applySkills(next,previous,op,commit));
@@ -88,8 +93,11 @@ export class AgentService extends EventEmitter {
     for(const id of ids) {
       try {
         const loaded=await this.loadSaved(id);if(!loaded)throw new Error('缺少会话快照');
+        const manager=restore(loaded.saved.session);
+        this.memory.reconcileSource(id,manager.getLeafId(),manager.getBranch().map(entry=>entry.id));
         this.db.prepare('INSERT INTO sessions VALUES (?,?) ON CONFLICT(id) DO UPDATE SET updated=excluded.updated').run(id,loaded.saved.record.updated);valid++;
       } catch {
+        this.memory.sourceFailed(id);
         this.db.prepare('INSERT OR IGNORE INTO sessions VALUES (?,?)').run(id,0);
       }
     }
@@ -153,13 +161,15 @@ export class AgentService extends EventEmitter {
   }
   private async build(record: RecordData, manager: SessionManager): Promise<Active> {
     const agentDir = join(this.dataDir,'pi');
-    const settings = SettingsManager.inMemory({compaction:{enabled:true},defaultTools:['read','bash','edit','write','tool_search']},{projectTrusted:false});
+    const settings = SettingsManager.inMemory({compaction:{enabled:true},defaultTools:['read','bash','edit','write','tool_search',...memoryToolNames]},{projectTrusted:false});
     const loader = new SkillResourceLoader(this.skills,record.cwd,agentDir,settings);
     await loader.reload();
     const {session} = await createAgentSession({cwd:record.cwd,agentDir,modelRuntime:this.runtime,
-      model:this.runtime.getModel(record.provider,record.model),sessionManager:manager,settingsManager:settings,resourceLoader:loader});
+      model:this.runtime.getModel(record.provider,record.model),sessionManager:manager,settingsManager:settings,resourceLoader:loader,
+      customTools:memoryTools(this.memory,record.cwd,callId=>this.memorySource(record.id,callId))});
     const item: Active = {record,session,loader,busy:false,save:Promise.resolve(),checkpoint:Promise.resolve()};
     await session.bindExtensions({onError:()=>{item.skillFailed=true;item.error='Skill 生命周期执行失败，请恢复能力后重试';}});
+    this.enableMemoryTools(session);
     session.subscribe(event => {
       try {
         if (['message_start','message_update','message_end','tool_execution_start','tool_execution_update','tool_execution_end','auto_compaction_start','auto_compaction_end'].includes(event.type)) {
@@ -187,6 +197,10 @@ export class AgentService extends EventEmitter {
       copy.message={...this.sensitive.copy(data.message),content:protectedContent};
     }
     return copy;
+  }
+  private enableMemoryTools(session:AgentSession) {
+    const active=session.getActiveToolNames();
+    if(memoryToolNames.some(name=>!active.includes(name)))session.setActiveToolsByName([...new Set([...active,...memoryToolNames])]);
   }
   private async get(id: string): Promise<Active> {
     const live = this.active.get(id); if (live) return live;
@@ -232,6 +246,9 @@ export class AgentService extends EventEmitter {
       if(previous)await this.store.write(`${name}.prev`,previous);
       await this.store.write(name,data);item.recovered=false;
       this.db.prepare('INSERT INTO sessions VALUES (?,?) ON CONFLICT(id) DO UPDATE SET updated=excluded.updated').run(item.record.id,data.record.updated);
+      const committed=restore(data.session);
+      try {this.memory.reconcileSource(item.record.id,committed.getLeafId(),committed.getBranch().map(entry=>entry.id));}
+      catch(error){this.memory.sourceFailed(item.record.id);throw error;}
     });
     item.save=task;
     void task.catch(()=>this.storageFailure(item));
@@ -244,6 +261,23 @@ export class AgentService extends EventEmitter {
   }
   private changed(item: Active) {try {this.emit('event',{sessionId:item.record.id,type:'state',state:this.view(item)});}catch{this.protectionFailure(item);}}
   async viewSession(id: string) { return this.view(await this.get(id)); }
+  async memoryUserContext(project?:string):Promise<MemoryContext> {
+    if(this.closing)throw new MemoryError('Host 正在退出',503,'MEMORY_CLOSED');
+    if(!project)return {actor:'user'};
+    const path=await realpath(resolve(project));
+    if(!(await stat(path)).isDirectory())throw new MemoryError('项目目录不存在',400,'MEMORY_PROJECT_REQUIRED');
+    return {actor:'user',project:path};
+  }
+  private async memorySource(id:string,callId:string):Promise<MemoryContext> {
+    const item=this.active.get(id);
+    if(!item || item.storageFailed || item.blocked)throw new MemoryError('来源会话不可用',503,'MEMORY_SOURCE_UNAVAILABLE');
+    const manager=item.session.sessionManager;
+    const entry=manager.getBranch().findLast(entry=>entry.type==='message' && entry.message.role==='assistant' &&
+      entry.message.content.some(part=>part.type==='toolCall' && part.id===callId));
+    if(!entry)throw new MemoryError('缺少来源 Entry',503,'MEMORY_SOURCE_UNAVAILABLE');
+    await this.persist(item);
+    return {actor:'agent',project:item.record.cwd,source:{sessionId:id,entryId:entry.id,project:item.record.cwd}};
+  }
   async prompt(id: string, text: string) {
     if(this.closing)throw new Error('Host 正在退出');
     if(this.gate || this.draining){this.queued.push({id,text});const item=this.active.get(id);if(item)this.changed(item);return;}
@@ -289,12 +323,23 @@ export class AgentService extends EventEmitter {
         item.session.setThinkingLevel(level);
       }
       else if (action === 'compact') await item.session.compact();
-      else if (action === 'branch') { if (!value) throw new Error('请选择分支节点'); await item.session.navigateTree(value,{summarize:false}); }
+      else if (action === 'branch') {
+        if (!value) throw new Error('请选择分支节点');
+        if(!item.session.sessionManager.getEntry(value))throw new Error('分支节点不存在');
+        this.memory.beginTransition(id);
+        try {
+          await item.session.navigateTree(value,{summarize:false});
+          this.enableMemoryTools(item.session);
+          await this.persist(item);
+          const manager=item.session.sessionManager;
+          this.memory.reconcileSource(id,manager.getLeafId(),manager.getBranch().map(entry=>entry.id),true);
+        } catch(error){this.memory.sourceFailed(id);throw error;}
+      }
       else {
         const model=this.runtime.getModel(provider ?? '',value ?? ''); if (!model) throw new Error('模型不存在');
         await item.session.setModel(model); item.record.provider=model.provider; item.record.model=model.id;
       }
-      await this.persist(item);
+      if(action!=='branch')await this.persist(item);
     } finally { item.busy=false; finish();this.changed(item); }
     return this.view(item);
   }
@@ -390,6 +435,6 @@ export class AgentService extends EventEmitter {
         finally {item.session.dispose();}
       }));
       if(outcomes.some(outcome=>outcome.status==='rejected'))throw new Error('退出时部分会话未能保存，原检查点已保留');
-    } finally {this.db.close();}
+    } finally {this.memory?.close();this.db.close();}
   }
 }

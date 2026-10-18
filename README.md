@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)。
 
 ## 从源码启动
 
@@ -33,7 +33,7 @@ npm start
 
 浏览器打开 `http://127.0.0.1:4317`，输入同一连接令牌。`PORT` 和 `AGENT_DATA_DIR` 可指定端口和独立数据目录（默认 `.agent-data`）。每次启动必须使用相同数据密钥才能恢复历史；请自行安全保存密钥。不要把密钥或令牌写入项目文件。
 
-Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 保存会话索引及 Skill 管理状态；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
+Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 保存会话索引、Skill 管理状态及经过敏感信息保护的 Memory 修订与检索索引；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
 
 ## 桌面应用
 
@@ -88,3 +88,17 @@ npm run test:skills:ui
 当前提供 D1 的本机纵向集成及 D2 首个 Skill 管理纵向功能。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
 
 尚未实现完整 Memory、Diagnostic Log、Reflection、Evolution 或生成代码隔离。特殊 Skill 经过人工审查仍与 Host 同进程、同权限运行；这不等于代码沙箱。Windows 实机、长期运行与完整安全场景仍待验收。
+
+## 长期记忆
+
+“记忆管理”可检索当前项目与 Global 知识，查看、编辑、调整作用域或删除，来源和修订历史按需展开。删除后退出当前检索，历史仍保留。其他窗口同时修改时保留草稿并提示重新读取；修改必须填写依据。
+
+Agent 可按需调用 `memory_search`、`memory_get`、`memory_save`、`memory_revise`、`memory_retire`，区分事实、经验、决定与未经验证的怀疑。项目决定在来源会话回档后退出其他会话的当前检索；通用经验和历史证据保留。已读入模型上下文的旧内容不会被远程擦除，后续判断应重新检索当前认识。Memory 内容不授予执行权限。
+
+Memory 回归命令（客户端检查前先 build，真实模型检查前先 package:desktop）：
+
+```sh
+npx tsx --test tests/memory.test.ts
+npx tsx scripts/memory-browser-smoke.ts
+npx tsx scripts/memory-ui-smoke.ts
+```

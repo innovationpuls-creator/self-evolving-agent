@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {randomBytes} from 'node:crypto';
-import {mkdir,mkdtemp,rm} from 'node:fs/promises';
+import {mkdir,mkdtemp,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {chromium} from 'playwright-core';
 import {fauxProvider} from '@earendil-works/pi-ai/providers/faux';
 import {startHost} from '../apps/host/server.js';
-const root=await mkdtemp(join(tmpdir(),'agent-browser-')),token=randomBytes(32).toString('hex');
+const root=await realpath(await mkdtemp(join(tmpdir(),'agent-browser-'))),token=randomBytes(32).toString('hex');
 const host=await startHost({dataDir:join(root,'data'),key:randomBytes(32),token,webDir:resolve('dist/web')});
 const fake=fauxProvider({models:[{id:'browser-model',contextWindow:100000,maxTokens:512}]});host.service.runtime.registerNativeProvider(fake.provider);
 const browser=await chromium.launch({executablePath:process.env.CHROME_PATH??'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});

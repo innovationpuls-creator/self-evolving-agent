@@ -12,7 +12,7 @@
 
 前五阶段保留各阶段的设计语境，其中候选方案和验证问题的后续结论见第六阶段。技术决策记录已确定的方案，合并后续修订，并以原会话及本地实验报告说明依据、取舍和适用范围。原型证据注明实际版本、运行环境与覆盖范围，第七阶段承接产品工程质量及正式发行验收要求，第八阶段明确 D1～D5 的交付顺序、依赖、开发交接与完成标准。设计收口不代表产品开发完成或验收通过。
 
-当前实现入口为根目录 [DECISIONS.md](../DECISIONS.md)。D1 macOS 用户验收已归档至 [D1-ACCEPTANCE.md](../D1-ACCEPTANCE.md)；D2 首个 Skill 管理纵向功能已交付，结果见 [D2-ACCEPTANCE.md](../D2-ACCEPTANCE.md)；完整 Memory、Diagnostic Log 及 D3/D4 不在本轮范围。D2 的精确版本人工审查准入是本轮明确修订，同进程代码风险和后续隔离目标继续保留。
+当前实现入口为根目录 [DECISIONS.md](../DECISIONS.md)。D1 macOS 用户验收已归档至 [D1-ACCEPTANCE.md](../D1-ACCEPTANCE.md)；D2 首个 Skill 管理纵向功能已交付，结果见 [D2-ACCEPTANCE.md](../D2-ACCEPTANCE.md)；Memory 长期知识系统已交付，结果见 [D2-MEMORY-ACCEPTANCE.md](../D2-MEMORY-ACCEPTANCE.md)；Diagnostic Log 及 D3/D4 尚未实施。D2 的精确版本人工审查准入是本轮明确修订，同进程代码风险和后续隔离目标继续保留。
 
 ## 八阶段与阅读顺序
 
