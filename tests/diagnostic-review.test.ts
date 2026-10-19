@@ -1,3 +1,5 @@
+import { diagnosticResources } from '../apps/host/diagnostic-resources.js';
+import { DiagnosticHistory } from '../apps/host/diagnostic-history.js';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises';
@@ -9,13 +11,7 @@ import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { SessionManager } from '@earendil-works/pi-coding-agent';
 import { AgentService } from '../apps/host/agent.js';
-import {
-  DiagnosticRecorder,
-  type DiagnosticResources,
-  DiagnosticService,
-  type DiagnosticTrace,
-  traceMarker,
-} from '../apps/host/diagnostics.js';
+import { DiagnosticRecorder, DiagnosticService, type DiagnosticTrace, traceMarker } from '../apps/host/diagnostics.js';
 import { SensitiveData, snapshot } from '../apps/host/storage.js';
 
 const project = '/__diagnostic_independent_review__';
@@ -193,39 +189,28 @@ test('independent review: a locked metadata writer drops bounded work promptly a
 test('independent review: knowledge overlays on one package version retain distinct diagnostic revisions', () => {
   const f = index();
   try {
-    const host = new AgentService(project, Buffer.alloc(32));
     const skillId = randomUUID(),
       version = randomUUID();
     const revisions = [randomUUID(), randomUUID()];
-    const loadout = {
-      records: [{ id: skillId, name: 'review-skill', enabled: true, current: version, project: '' }],
-      versions: [
-        {
-          id: version,
-          skillId,
-          digest: 'same-immutable-package-digest',
-          skillFile: 'skills/review/SKILL.md',
-          knowledgeFiles: ['notes.md'],
-          extensions: [],
-        },
-      ],
-    };
-    host.skills = {
-      loadout: () => loadout,
-      packagePath: () => '/review-data/immutable-package',
-    } as unknown as AgentService['skills'];
-    const bridge = host as unknown as { diagnosticResources(item: unknown): DiagnosticResources };
     const recorded: Array<Array<{ skillId: string; version: string; knowledgeRevision: string }>> = [];
     for (const revision of revisions) {
-      const resources = bridge.diagnosticResources({
-        record: { cwd: project },
-        loader: {
-          getSkills: () => ({
-            skills: [{ filePath: `/review-data/skills/views/${version}-${revision}/skills/review/SKILL.md` }],
-          }),
-        },
-        session: { getAllTools: () => [] },
-      });
+      // Deliberately unrelated layout: identity comes from Skill, not the path string.
+      const skillPath = `/arbitrary-layout/${revision}/SKILL.md`;
+      const resources = diagnosticResources(
+        [
+          {
+            skillPath,
+            knowledgePaths: [`/arbitrary-layout/${revision}/notes.md`],
+            extensionPaths: [],
+            skillId,
+            version,
+            digest: 'same-immutable-package-digest',
+            knowledgeRevision: revision,
+          },
+        ],
+        [{ filePath: skillPath }],
+        [],
+      );
       const manager = SessionManager.inMemory(project, { id: randomUUID() });
       const recorder = new DiagnosticRecorder(f.diagnostics, manager.getSessionId(), project, manager);
       recorder.start();
@@ -253,23 +238,24 @@ test('independent review: unavailable raw checkpoints do not hide scoped Session
   try {
     const trace = task();
     f.diagnostics.trace(project, trace);
-    const host = new AgentService(project, Buffer.alloc(32));
-    host.diagnostics = f.diagnostics;
-    const bridge = host as unknown as { loadSaved(id: string): Promise<never> };
-    bridge.loadSaved = async () => {
-      throw new Error('isolated missing checkpoint fixture');
-    };
-    const result = await host.diagnosticSearch(user, { sessionId: trace.sessionId });
+    const history = new DiagnosticHistory(
+      async () => {
+        throw new Error('isolated missing checkpoint fixture');
+      },
+      f.diagnostics,
+      new SensitiveData(),
+    );
+    const result = await history.search(user, { sessionId: trace.sessionId });
     assert.equal(result.total, 1);
     assert.equal(result.items[0]?.id, trace.id);
     assert.ok('sessionEventsUnavailable' in result && result.sessionEventsUnavailable);
-    const hidden = await host.diagnosticSearch(
+    const hidden = await history.search(
       { actor: 'agent', project: '/another-project' },
       { sessionId: trace.sessionId },
     );
     assert.equal(hidden.total, 0);
-    await assert.rejects(host.diagnosticSearch(user, { sessionId: trace.sessionId, branchLeafId: 'unknown-branch' }));
-    await assert.rejects(host.diagnosticEvidence(user, { sessionId: trace.sessionId, entryId: 'missing' }), {
+    await assert.rejects(history.search(user, { sessionId: trace.sessionId, branchLeafId: 'unknown-branch' }));
+    await assert.rejects(history.evidence(user, { sessionId: trace.sessionId, entryId: 'missing' }), {
       code: 'DIAGNOSTIC_EVIDENCE_UNAVAILABLE',
     });
   } finally {
@@ -564,5 +550,33 @@ test('independent review: published native Skill reads keep version references t
   } finally {
     if (initialized) await host.close();
     await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('historical evidence is independently readable with whole-entry protection and fixed project access', async () => {
+  const f = index();
+  try {
+    const manager = SessionManager.inMemory(project);
+    const secret = 'independent-history-secret-12345';
+    const entryId = manager.appendMessage({ role: 'user', content: `Before ${secret} after`, timestamp: Date.now() });
+    const saved = { record: { cwd: project }, session: snapshot(manager) };
+    const sensitive = new SensitiveData();
+    sensitive.add(secret);
+    const history = new DiagnosticHistory(async () => ({ saved, previous: true }), f.diagnostics, sensitive);
+    const query = { sessionId: manager.getSessionId(), entryId, limit: 32768 };
+    const evidence = await history.evidence({ actor: 'agent', project }, query);
+    assert.ok('content' in evidence);
+    assert.equal(evidence.source, 'previous_checkpoint');
+    assert.ok(!evidence.content.includes(secret));
+    assert.ok(evidence.content.includes('[已保护]'));
+    const page = await history.evidence(user, { ...query, offset: 15, limit: 19 });
+    assert.ok('content' in page);
+    assert.equal(page.content, evidence.content.slice(15, 34));
+    assert.ok(JSON.stringify(saved).includes(secret), 'projection must not change the native snapshot');
+    await assert.rejects(history.evidence({ actor: 'agent', project: '/other-project' }, query), {
+      code: 'DIAGNOSTIC_NOT_FOUND',
+    });
+  } finally {
+    f.close();
   }
 });

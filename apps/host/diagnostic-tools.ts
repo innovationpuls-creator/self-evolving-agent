@@ -1,14 +1,11 @@
 import { Type, type Static, type TSchema } from 'typebox';
 import type { ToolDefinition } from '@earendil-works/pi-coding-agent';
-import { DiagnosticError, type DiagnosticContext, type DiagnosticService } from './diagnostics.js';
+import { DiagnosticError, type DiagnosticContext } from './diagnostics.js';
+
+import type { DiagnosticReader } from './diagnostic-history.js';
 
 export const diagnosticToolNames = ['diagnostic_search', 'diagnostic_get', 'diagnostic_evidence'];
-export function diagnosticTools(
-  diagnostics: DiagnosticService,
-  project: string,
-  search: (ctx: DiagnosticContext, input: unknown) => Promise<unknown>,
-  evidence: (ctx: DiagnosticContext, input: unknown) => Promise<unknown>,
-): ToolDefinition[] {
+export function diagnosticTools(diagnostics: DiagnosticReader, project: string): ToolDefinition[] {
   const ctx: DiagnosticContext = { actor: 'agent', project };
   const ref = Type.String({ minLength: 1, maxLength: 128 });
   function tool<T extends TSchema>(
@@ -65,7 +62,7 @@ export function diagnosticTools(
         },
         { additionalProperties: false },
       ),
-      (params) => search(ctx, params),
+      (params) => diagnostics.search(ctx, params),
     ),
     tool(
       'diagnostic_get',
@@ -93,7 +90,7 @@ export function diagnosticTools(
         },
         { additionalProperties: false },
       ),
-      (params) => evidence(ctx, params),
+      (params) => diagnostics.evidence(ctx, params),
     ),
   ];
 }

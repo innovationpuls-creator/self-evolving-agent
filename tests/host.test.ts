@@ -640,3 +640,24 @@ test('oversize and unauthenticated WebSocket handshakes close without crashing t
     await f.close();
   }
 });
+
+test('the shared HTTP boundary authenticates before invoking an extracted business route', async () => {
+  const f = await fixture();
+  try {
+    let calls = 0;
+    const models = f.host.service.models.bind(f.host.service);
+    f.host.service.models = async () => {
+      calls++;
+      return models();
+    };
+    assert.equal((await fetch(`${f.host.origin}/api/models`)).status, 401);
+    assert.equal((await f.request('/models', 'GET', undefined, { Origin: 'https://untrusted.example' })).status, 403);
+    assert.equal(calls, 0);
+    assert.equal((await f.request('/models')).status, 200);
+    assert.equal(calls, 1);
+    assert.equal((await f.request('/models', 'DELETE')).status, 404);
+    assert.equal(calls, 1);
+  } finally {
+    await f.close();
+  }
+});

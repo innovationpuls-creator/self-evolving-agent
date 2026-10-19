@@ -1,3 +1,5 @@
+import { SettingsManager } from '@earendil-works/pi-coding-agent';
+import { SkillResourceLoader } from '../apps/host/skill-loader.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, symlink } from 'node:fs/promises';
@@ -718,5 +720,54 @@ test('disabled special Skill stays absent across restart and upgrade while its p
     await second?.close();
     if (!closed) await f.host.close();
     await rm(f.dir, { recursive: true, force: true });
+  }
+});
+
+test('resource provenance follows successful native loads and knowledge refresh; failed candidates retain the loaded snapshot', async () => {
+  const f = await fixture();
+  try {
+    const [record] = await f.skills.import({ source: await skillPackage(join(f.dir, 'provenance-package')), bindings });
+    assert.ok(record);
+    await f.review(record);
+    assert.equal((await f.publish(record)).status, 'applied');
+    const loader = new SkillResourceLoader(
+      f.skills,
+      f.dir,
+      join(f.dir, 'pi-test'),
+      SettingsManager.inMemory({}, { projectTrusted: false }),
+    );
+    await loader.reload();
+    const original = loader.getResourceSources();
+    const source = original.find((s) => s.skillId === record.id);
+    assert.ok(source);
+    assert.equal(source.version, record.latest);
+    assert.equal(source.knowledgeRevision, undefined);
+    assert.ok(loader.getSkills().skills.some((s) => s.filePath === source.skillPath));
+    await f.skills.setKnowledge(
+      record.id,
+      f.skills.record(record.id).revision,
+      'skills/echo/notes.md',
+      'Updated provenance note.',
+    );
+    await loader.refreshSkills();
+    const refreshed = loader.getResourceSources();
+    const overlay = refreshed.find((s) => s.skillId === record.id);
+    assert.ok(overlay?.knowledgeRevision);
+    assert.notEqual(overlay.skillPath, source.skillPath);
+    assert.ok(loader.getSkills().skills.some((s) => s.filePath === overlay.skillPath));
+    assert.equal(source.knowledgeRevision, undefined, 'earlier provenance remains a snapshot');
+    const next = f.skills.loadout();
+    const version = next.versions.find((v) => v.id === record.latest);
+    assert.ok(version);
+    version.digest = 'tampered-candidate';
+    loader.setLoadout(next);
+    await assert.rejects(loader.reload(), /内容或依赖已改变/);
+    assert.deepEqual(loader.getResourceSources(), refreshed);
+    assert.ok(loader.getSkills().skills.some((s) => s.filePath === overlay.skillPath));
+    loader.setLoadout();
+    await loader.reload();
+    assert.deepEqual(loader.getResourceSources(), refreshed);
+  } finally {
+    await f.close();
   }
 });

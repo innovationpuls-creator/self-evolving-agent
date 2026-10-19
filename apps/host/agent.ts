@@ -20,13 +20,12 @@ import { memoryTools, memoryToolNames } from './memory-tools.js';
 import {
   DiagnosticService,
   DiagnosticRecorder,
-  DiagnosticError,
-  diagnosticQuery,
-  evidenceQuery,
   type DiagnosticContext,
   type DiagnosticResources,
 } from './diagnostics.js';
 import { diagnosticTools, diagnosticToolNames } from './diagnostic-tools.js';
+import { diagnosticResources } from './diagnostic-resources.js';
+import { DiagnosticHistory } from './diagnostic-history.js';
 
 interface RecordData {
   id: string;
@@ -106,6 +105,7 @@ export class AgentService extends EventEmitter {
   skills!: SkillService;
   memory!: MemoryService;
   diagnostics!: DiagnosticService;
+  diagnosticHistory!: DiagnosticHistory;
   private gate?: { promise: Promise<void>; release: () => void };
   private queued: Array<{ id: string; text: string }> = [];
   private draining = false;
@@ -151,6 +151,7 @@ export class AgentService extends EventEmitter {
     this.memory.init();
     this.diagnostics = new DiagnosticService(this.db, this.sensitive, () => this.emit('event', { type: 'diagnostic' }));
     this.diagnostics.init();
+    this.diagnosticHistory = new DiagnosticHistory((id) => this.loadSaved(id), this.diagnostics, this.sensitive);
     this.diagnostics.system('HOST_STARTED', 'info');
     this.skills = new SkillService(this.dataDir, this.db, (event) => this.emit('event', this.sensitive.copy(event)));
     await this.skills.init();
@@ -321,12 +322,7 @@ export class AgentService extends EventEmitter {
       resourceLoader: loader,
       customTools: [
         ...memoryTools(this.memory, record.cwd, (callId) => this.memorySource(record.id, callId)),
-        ...diagnosticTools(
-          this.diagnostics,
-          record.cwd,
-          (ctx, input) => this.diagnosticSearch(ctx, input),
-          (ctx, input) => this.diagnosticEvidence(ctx, input),
-        ),
+        ...diagnosticTools(this.diagnosticHistory, record.cwd),
       ],
     });
     const item: Active = {
@@ -555,135 +551,17 @@ export class AgentService extends EventEmitter {
     };
   }
   private diagnosticResources(item: Active): DiagnosticResources {
-    const loadout = item.loader.selected ?? this.skills.loadout();
-    const loaded: DiagnosticResources['loaded'] = [];
-    const tools: DiagnosticResources['tools'] = new Map();
-    const discovered = item.loader.getSkills().skills;
-    for (const r of loadout.records.filter(
-      (r) => r.enabled && r.current && (!r.project || r.project === item.record.cwd),
-    )) {
-      const v = loadout.versions.find((v) => v.id === r.current);
-      if (!v) continue;
-      const skill = discovered.find(
-        (s) =>
-          s.filePath === resolve(this.skills.packagePath(v), v.skillFile) ||
-          s.filePath.includes(`/skills/views/${v.id}-`),
-      );
-      const viewPrefix = `/skills/views/${v.id}-`;
-      const knowledgeRevision = skill?.filePath.includes(viewPrefix)
-        ? skill.filePath.split(viewPrefix)[1]?.split('/')[0]
-        : undefined;
-      const ref = {
-        skillId: r.id,
-        version: v.id,
-        digest: v.digest,
-        ...(knowledgeRevision ? { knowledgeRevision } : {}),
-      };
-      if (skill) {
-        loaded.push({ ...ref, path: resolve(skill.filePath) });
-        for (const file of v.knowledgeFiles)
-          loaded.push({ ...ref, path: resolve(skill.filePath.slice(0, -v.skillFile.length), file) });
-      }
-      const paths = new Set(v.extensions.map((p) => resolve(this.skills.packagePath(v), p)));
-      for (const t of item.session.getAllTools()) if (paths.has(resolve(t.sourceInfo.path))) tools.set(t.name, ref);
-    }
-    for (const skill of discovered)
-      if (!loaded.some((r) => r.path === resolve(skill.filePath))) loaded.push({ path: resolve(skill.filePath) });
-    return { loaded, tools };
-  }
-  private async diagnosticSnapshot(ctx: DiagnosticContext, id: string) {
-    if (!/^[a-f0-9-]{36}$/.test(id)) throw new DiagnosticError('证据不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
-    const loaded = await this.loadSaved(id);
-    if (!loaded) throw new DiagnosticError('证据不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
-    if (ctx.actor === 'agent' && (!ctx.project || ctx.project !== loaded.saved.record.cwd))
-      throw new DiagnosticError('证据不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
-    return loaded;
+    return diagnosticResources(
+      item.loader.getResourceSources(),
+      item.loader.getSkills().skills,
+      item.session.getAllTools(),
+    );
   }
   async diagnosticSearch(ctx: DiagnosticContext, input: unknown) {
-    const q = diagnosticQuery.parse(input);
-    let branch: string[] | undefined;
-    if (q.branchLeafId) {
-      if (!q.sessionId) throw new DiagnosticError('分支筛选需要 Session', 400, 'DIAGNOSTIC_BRANCH_REQUIRED');
-      const loaded = await this.diagnosticSnapshot(ctx, q.sessionId),
-        manager = restore(loaded.saved.session);
-      if (!manager.getEntry(q.branchLeafId)) throw new DiagnosticError('分支节点不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
-      branch = manager.getBranch(q.branchLeafId).map((e) => e.id);
-    }
-    const result = this.diagnostics.search(ctx, q, branch);
-    if (q.sessionId) {
-      try {
-        const loaded = await this.diagnosticSnapshot(ctx, q.sessionId);
-        const sessionEvents = this.diagnostics.sessionEvents(ctx, q.sessionId, loaded.saved.record.cwd);
-        return { ...result, sessionEvents, sessionEventsTruncated: sessionEvents.length === 100 };
-      } catch {
-        return { ...result, sessionEvents: [], sessionEventsUnavailable: true };
-      }
-    }
-    return result;
+    return this.diagnosticHistory.search(ctx, input);
   }
   async diagnosticEvidence(ctx: DiagnosticContext, input: unknown) {
-    const q = evidenceQuery.parse(input);
-    let loaded: Awaited<ReturnType<AgentService['diagnosticSnapshot']>>;
-    try {
-      loaded = await this.diagnosticSnapshot(ctx, q.sessionId);
-    } catch (error) {
-      if (error instanceof DiagnosticError) throw error;
-      throw new DiagnosticError('会话证据无法恢复', 503, 'DIAGNOSTIC_EVIDENCE_UNAVAILABLE');
-    }
-    const entry = loaded.saved.session.entries.find((e) => e.id === q.entryId);
-    const selected = restore(loaded.saved.session)
-      .getBranch()
-      .some((e) => e.id === q.entryId);
-    const base = {
-      onSelectedBranch: selected,
-      sessionId: q.sessionId,
-      entryId: q.entryId,
-      source: loaded.previous ? ('previous_checkpoint' as const) : ('checkpoint' as const),
-      recovered: loaded.previous,
-      truncated: false,
-      total: 0,
-    };
-    if (!entry) return { ...base, available: false, reason: 'entry_missing_from_checkpoint' };
-    let value: unknown = entry,
-      nested = false;
-    if (q.toolCallId) {
-      if (entry.type !== 'message' || entry.message.role !== 'toolResult')
-        return { ...base, available: false, reason: 'not_a_tool_result' };
-      if (entry.message.toolCallId !== q.toolCallId) {
-        const child = entry.message.nestedCalls?.calls.find((c) => c.id === q.toolCallId);
-        if (!child) return { ...base, available: false, reason: 'nested_summary_missing' };
-        nested = true;
-        value = {
-          sessionId: q.sessionId,
-          entryId: q.entryId,
-          summaryParentToolCallId: entry.message.toolCallId,
-          parentToolCallId: null,
-          parentAvailability: 'not_recorded_in_native_summary',
-          call: child,
-          complete: entry.message.nestedCalls?.complete,
-          resultAvailability: 'not_persisted_native',
-        };
-      }
-    }
-    // Protection must complete on the entire selected Entry before any text is sliced.
-    let text: string;
-    try {
-      text = JSON.stringify(this.sensitive.copy(value), null, 2);
-    } catch {
-      throw new DiagnosticError('证据敏感信息检查未完成', 503, 'DIAGNOSTIC_PROTECTION_FAILED');
-    }
-    const content = text.slice(q.offset, q.offset + q.limit),
-      next = q.offset + content.length;
-    return {
-      ...base,
-      available: !nested,
-      nested,
-      ...(nested ? { reason: 'not_persisted_native' } : {}),
-      content,
-      total: text.length,
-      truncated: q.offset > 0 || next < text.length,
-      ...(next < text.length ? { nextOffset: next } : {}),
-    };
+    return this.diagnosticHistory.evidence(ctx, input);
   }
   async prompt(id: string, text: string) {
     if (this.closing) throw new Error('Host 正在退出');
@@ -847,7 +725,7 @@ export class AgentService extends EventEmitter {
       { projectTrusted: false },
     );
     const loader = new SkillResourceLoader(this.skills, cwd, join(this.dataDir, 'pi'), settings);
-    loader.selected = next;
+    loader.setLoadout(next);
     const validationRuntime = await ModelRuntime.create({
       credentials: new InMemoryCredentialStore(),
       modelsPath: null,
@@ -900,7 +778,7 @@ export class AgentService extends EventEmitter {
               .map((t) => [t.name, JSON.stringify(item.session.getToolDefinition(t.name)?.parameters)]),
           ),
         });
-        item.loader.selected = next;
+        item.loader.setLoadout(next);
         await item.session.reload();
         if (item.skillFailed) throw new SkillError('正式生命周期检查失败');
         const before = states.get(item)!;
@@ -916,18 +794,18 @@ export class AgentService extends EventEmitter {
       }
       commit();
       for (const item of affected) {
-        item.loader.selected = undefined;
+        item.loader.setLoadout(undefined);
         this.changed(item);
       }
     } catch (error) {
       for (const [item, before] of states) {
         try {
           item.skillFailed = false;
-          item.loader.selected = previous;
+          item.loader.setLoadout(previous);
           await item.session.reload();
           if (item.skillFailed) throw new SkillError('回退生命周期失败');
           item.session.setActiveToolsByName(before.active.filter((n) => !!item.session.getToolDefinition(n)));
-          item.loader.selected = undefined;
+          item.loader.setLoadout(undefined);
         } catch {
           item.skillFailed = true;
           item.error = 'Skill 恢复失败，历史已保留；请重试恢复能力';
@@ -985,7 +863,7 @@ export class AgentService extends EventEmitter {
     item.actionDone = new Promise<void>((ok) => (finish = ok));
     const active = item.session.getActiveToolNames();
     item.skillFailed = false;
-    item.loader.selected = undefined;
+    item.loader.setLoadout(undefined);
     this.changed(item);
     try {
       await item.session.waitForIdle();

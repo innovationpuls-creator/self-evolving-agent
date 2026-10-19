@@ -1,0 +1,376 @@
+{
+  "startedAt": "2026-10-19T07:57:16.359Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "model": "openai-codex/gpt-6-luna",
+  "toolErrors": [],
+  "interruptedReads": [],
+  "desktopNavigations": [],
+  "hostExits": [
+    {
+      "type": "Utility",
+      "name": "Agent Host",
+      "reason": "killed",
+      "exitCode": 9
+    }
+  ],
+  "steps": [
+    {
+      "step": "Skill task and sourced Memory",
+      "at": "2026-10-19T07:57:27.864Z",
+      "evidence": {
+        "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+        "traceId": "662905d2-5ba3-47e1-9d61-045a44fa6e3b",
+        "skill": {
+          "skillId": "137e23d3-b615-4e88-b14c-2c56d7db0a7a",
+          "version": "ae3545bf-466d-4490-9cd6-94f4fe96f6b9",
+          "digest": "5705f24d705ac6eaaa3c678a38f898c1a9b9723bc44dd18f826df6078b080f78",
+          "observation": "observed_read"
+        },
+        "calls": [
+          {
+            "toolName": "read",
+            "toolCallId": "call_cf8f4a10130c470d99c5b3f3ef9120b7|fc_02e3221794b42814016ad5cd60071c8195a611b10291097296",
+            "assistantEntryId": "658b844e",
+            "resultEntryId": "5d55e37d",
+            "data": {
+              "turnOrdinal": 1,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "skillRead": {
+                "skillId": "137e23d3-b615-4e88-b14c-2c56d7db0a7a",
+                "version": "ae3545bf-466d-4490-9cd6-94f4fe96f6b9",
+                "digest": "5705f24d705ac6eaaa3c678a38f898c1a9b9723bc44dd18f826df6078b080f78",
+                "observation": "observed_read"
+              },
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes"
+            }
+          },
+          {
+            "toolName": "read",
+            "toolCallId": "call_9429731b7966439787cf2431a80461a0|fc_02e3221794b42814016ad5cd62a814819594d105f5cedbfaab",
+            "assistantEntryId": "084f68cb",
+            "resultEntryId": "426562a6",
+            "data": {
+              "turnOrdinal": 2,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes"
+            }
+          },
+          {
+            "toolName": "write",
+            "toolCallId": "call_1915828b9b99454a854821a3db5ee337|fc_02e3221794b42814016ad5cd643a34819586d06aeacc4fe28a",
+            "assistantEntryId": "c9ceeac2",
+            "resultEntryId": "526584b1",
+            "data": {
+              "turnOrdinal": 3,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes"
+            }
+          },
+          {
+            "toolName": "memory_save",
+            "toolCallId": "call_c47599975be94c7b8c75c941867b49a9|fc_02e3221794b42814016ad5cd656998819589501c0378222a70",
+            "assistantEntryId": "c9ceeac2",
+            "resultEntryId": "cdb922d8",
+            "data": {
+              "turnOrdinal": 3,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "memory": {
+                "references": [
+                  {
+                    "id": "ba7f66c7-dfdb-47e7-a96b-d7283743a1ef",
+                    "revision": 1,
+                    "sources": [
+                      {
+                        "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                        "entryId": "c9ceeac2"
+                      }
+                    ]
+                  }
+                ],
+                "complete": true
+              }
+            }
+          },
+          {
+            "toolName": "memory_save",
+            "toolCallId": "call_ecce9d27ab50408e8940fc760c217361|fc_02e3221794b42814016ad5cd6569988195814276fc365a6609",
+            "assistantEntryId": "c9ceeac2",
+            "resultEntryId": "7f8ee2b5",
+            "data": {
+              "turnOrdinal": 3,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "memory": {
+                "references": [
+                  {
+                    "id": "6cae2aa7-79fa-4e33-b2db-4be017fc435f",
+                    "revision": 1,
+                    "sources": [
+                      {
+                        "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                        "entryId": "c9ceeac2"
+                      }
+                    ]
+                  }
+                ],
+                "complete": true
+              }
+            }
+          },
+          {
+            "toolName": "memory_save",
+            "toolCallId": "call_eb63c2a1b56f4e27a4e5b3b2b7d18a63|fc_02e3221794b42814016ad5cd6569988195a54a91f465f2d8ed",
+            "assistantEntryId": "c9ceeac2",
+            "resultEntryId": "36c39506",
+            "data": {
+              "turnOrdinal": 3,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "memory": {
+                "references": [
+                  {
+                    "id": "be35602b-ef65-40b4-a929-fae0178c5295",
+                    "revision": 1,
+                    "sources": [
+                      {
+                        "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                        "entryId": "c9ceeac2"
+                      }
+                    ]
+                  }
+                ],
+                "complete": true
+              }
+            }
+          }
+        ],
+        "evidencePath": "/diagnostics/evidence?sessionId=979bea76-00a0-4405-b909-bd00ec4ab6dd&entryId=c9ceeac2&limit=32768",
+        "evidenceSha256": "e743d0c42c9064aea848850d5bb9f13b9ffbc3521025dfc3d16f6449533e707e"
+      }
+    },
+    {
+      "step": "Cross-session knowledge use",
+      "at": "2026-10-19T07:57:48.072Z",
+      "evidence": {
+        "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+        "tools": [
+          "memory_search",
+          "memory_search",
+          "memory_search",
+          "memory_search",
+          "memory_get",
+          "write",
+          "memory_search"
+        ],
+        "outputSha256": "ee01f6e9a1924d625f639a6b74756670ca5b9ef86f1327f82349727d7f12eaab"
+      }
+    },
+    {
+      "step": "Correction and dual-client state",
+      "at": "2026-10-19T07:57:56.202Z",
+      "evidence": {
+        "memoryId": "ba7f66c7-dfdb-47e7-a96b-d7283743a1ef",
+        "revisions": [
+          1,
+          2
+        ],
+        "conflictStatus": 409,
+        "desktopAndChromeCurrentValue": true,
+        "outputSha256": "0f112f8b9138ef7f3ef4d36364d4a168703a2d3d8cb9a6263bc5f23879d5dc67"
+      }
+    },
+    {
+      "step": "Native diagnostic investigation and evidence navigation",
+      "at": "2026-10-19T07:58:14.275Z",
+      "evidence": {
+        "tools": [
+          "diagnostic_search",
+          "diagnostic_get",
+          "diagnostic_evidence"
+        ],
+        "outputSha256": "37ef840d1b61a479c5d040751d60facc5b999abba716a56f59b8ed07195532ca",
+        "desktopSourceNavigation": true
+      }
+    },
+    {
+      "step": "Source branch rollback",
+      "at": "2026-10-19T07:58:18.866Z",
+      "evidence": {
+        "memoryId": "ba7f66c7-dfdb-47e7-a96b-d7283743a1ef",
+        "withdrawnRevision": 3,
+        "sourceEntry": "8b5e5969",
+        "newSearchCount": 1,
+        "historicalEvidencePreserved": true
+      }
+    },
+    {
+      "step": "New evidence confirms knowledge",
+      "at": "2026-10-19T07:58:30.296Z",
+      "evidence": {
+        "memoryId": "ba7f66c7-dfdb-47e7-a96b-d7283743a1ef",
+        "revision": 4,
+        "basis": [
+          {
+            "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+            "entryId": "4dc907a8",
+            "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+          }
+        ],
+        "history": [
+          {
+            "revision": 4,
+            "operation": "confirm",
+            "sources": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              },
+              {
+                "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+                "entryId": "4dc907a8",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ],
+            "basis": [
+              {
+                "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+                "entryId": "4dc907a8",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ]
+          },
+          {
+            "revision": 3,
+            "operation": "branch",
+            "sources": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ],
+            "basis": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ]
+          },
+          {
+            "revision": 2,
+            "operation": "revise",
+            "sources": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ],
+            "basis": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ]
+          },
+          {
+            "revision": 1,
+            "operation": "create",
+            "sources": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ],
+            "basis": [
+              {
+                "sessionId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+                "entryId": "c9ceeac2",
+                "project": "8f406be6b344fff55df2604ae526c2da4ad00ec879c8dabe56bc3cdd94502141"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "step": "Active crash and reconnect",
+      "at": "2026-10-19T07:58:44.597Z",
+      "evidence": {
+        "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+        "interruptedTrace": "8a980b72-5d19-4025-861c-dc5cc0128caf",
+        "authoritativeRefetches": 4,
+        "externalStarts": 1,
+        "externalCompletions": 1,
+        "noReplay": true
+      }
+    },
+    {
+      "step": "Full restart and native continuation",
+      "at": "2026-10-19T07:58:55.398Z",
+      "evidence": {
+        "sessionId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+        "leafId": "b13003f2",
+        "priorMessageCount": 52,
+        "formalSkillVersion": "ae3545bf-466d-4490-9cd6-94f4fe96f6b9",
+        "memoryRevision": 4,
+        "originalEvidenceUnchanged": true,
+        "outputSha256": "885e6520768e820de8367be2652a3d83475f3bccf078d62808dc4699ed6e9599",
+        "currentToolCalls": [
+          "memory_search",
+          "write"
+        ]
+      }
+    },
+    {
+      "step": "SQLite ownership inspection",
+      "at": "2026-10-19T07:58:55.404Z",
+      "evidence": {
+        "revisions": [
+          {
+            "revision": 1,
+            "sha256": "20409b83574e900e39fb908c08d5578d989b34a456b3b1898d8680adf9554681"
+          },
+          {
+            "revision": 2,
+            "sha256": "afad904b733b0cb4ecd6febef79657b42b909d6a9b40a43a61f4383f5f1c79f4"
+          },
+          {
+            "revision": 3,
+            "sha256": "72b771407477a3b34eef2831152e99d74e1e73986103e185a7ee7dbda77d81ea"
+          },
+          {
+            "revision": 4,
+            "sha256": "5ffa66c8354a6ce87610b7bbd37d8bd98d17dd77d4e53670e10596f94adbbd07"
+          }
+        ],
+        "noRawContentDuplicated": true,
+        "noSyntheticSecret": true
+      }
+    }
+  ],
+  "specialSkillLoaded": false,
+  "status": "passed",
+  "completedAt": "2026-10-19T07:58:55.406Z",
+  "details": {
+    "ordinarySkillId": "137e23d3-b615-4e88-b14c-2c56d7db0a7a",
+    "sessionAId": "979bea76-00a0-4405-b909-bd00ec4ab6dd",
+    "sessionBId": "1064bf83-6610-4e49-9be8-fcd9966f839e",
+    "markerUUID": "ba62a1fc-c2c9-4d14-bee5-da01b801a797",
+    "correctedUUID": "cf83bcb8-f2cf-48e3-b2a9-edd6abfbe29f",
+    "memoryId": "ba7f66c7-dfdb-47e7-a96b-d7283743a1ef",
+    "traceAId": "662905d2-5ba3-47e1-9d61-045a44fa6e3b"
+  }
+}

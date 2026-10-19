@@ -6,25 +6,31 @@ import {
   type ResourceLoader,
   type SettingsManager,
 } from '@earendil-works/pi-coding-agent';
-import { SkillService, type SkillLoadout, SkillError } from './skills.js';
+import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
 
 // Only the native loader's approved, materialized local paths may import code.
 export class SkillResourceLoader implements ResourceLoader {
   private base!: DefaultResourceLoader;
-  selected?: SkillLoadout;
+  private selected?: SkillLoadout;
   private skillPaths: string[] = [];
+  private sources: readonly SkillResourceSource[] = [];
   constructor(
     private service: SkillService,
     private cwd: string,
     private agentDir: string,
     private settings: SettingsManager,
   ) {}
+  setLoadout(loadout?: SkillLoadout) {
+    this.selected = loadout;
+  }
+  getResourceSources(): readonly SkillResourceSource[] {
+    return this.sources;
+  }
   async reload() {
     const loadout = this.selected ?? this.service.loadout();
     const paths = await this.service.resourcePaths(this.cwd, loadout);
-    this.skillPaths = paths.skillPaths;
     const native = await discoverSkillText(this.cwd);
-    this.base = new DefaultResourceLoader({
+    const base = new DefaultResourceLoader({
       cwd: this.cwd,
       agentDir: this.agentDir,
       settingsManager: this.settings,
@@ -50,18 +56,34 @@ export class SkillResourceLoader implements ResourceLoader {
         };
       },
     });
-    await this.base.reload();
-    if (this.base.getExtensions().errors.length) throw new SkillError('Extension 加载失败，正式版本未改变');
+    const previousPaths = this.skillPaths;
+    this.skillPaths = paths.skillPaths;
+    try {
+      await base.reload();
+      if (base.getExtensions().errors.length) throw new SkillError('Extension 加载失败，正式版本未改变');
+      this.base = base;
+      this.sources = paths.sources;
+    } catch (error) {
+      this.skillPaths = previousPaths;
+      throw error;
+    }
   }
   async refreshSkills() {
     const paths = await this.service.resourcePaths(this.cwd, this.selected);
+    const previousPaths = this.skillPaths;
     this.skillPaths = paths.skillPaths;
-    this.base.extendResources({
-      skillPaths: paths.skillPaths.map((path) => ({
-        path,
-        metadata: { source: 'local', scope: 'user', origin: 'top-level' },
-      })),
-    });
+    try {
+      this.base.extendResources({
+        skillPaths: paths.skillPaths.map((path) => ({
+          path,
+          metadata: { source: 'local', scope: 'user', origin: 'top-level' },
+        })),
+      });
+      this.sources = paths.sources;
+    } catch (error) {
+      this.skillPaths = previousPaths;
+      throw error;
+    }
   }
   getExtensions: ResourceLoader['getExtensions'] = () => this.base.getExtensions();
   getSkills: ResourceLoader['getSkills'] = () => this.base.getSkills();

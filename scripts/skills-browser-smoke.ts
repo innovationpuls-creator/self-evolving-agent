@@ -85,8 +85,9 @@ try {
   await a.getByRole('button', { name: '能力管理', exact: true }).click();
   await a.locator('.skill-item').filter({ hasText: 'browser-plain' }).click();
   await a.getByRole('button', { name: '启用', exact: true }).waitFor();
-  await mkdir(resolve('release/d2-evidence'), { recursive: true });
-  await a.screenshot({ path: resolve('release/d2-evidence/skills-browser.png'), fullPage: true });
+  const screenshotDir = resolve(process.env.AGENT_ACCEPTANCE_SCREENSHOTS ?? 'release/d2-evidence');
+  await mkdir(screenshotDir, { recursive: true });
+  await a.screenshot({ path: join(screenshotDir, 'skills-browser.png'), fullPage: true });
   console.log(
     JSON.stringify({
       result: 'passed',

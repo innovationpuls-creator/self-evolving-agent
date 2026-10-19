@@ -69,6 +69,16 @@ export interface SkillLoadout {
   records: SkillRecord[];
   versions: SkillVersion[];
 }
+/** Identity of materialized resources, independent of their on-disk layout. */
+export interface SkillResourceSource {
+  readonly skillPath: string;
+  readonly knowledgePaths: readonly string[];
+  readonly extensionPaths: readonly string[];
+  readonly skillId: string;
+  readonly version: string;
+  readonly digest: string;
+  readonly knowledgeRevision?: string;
+}
 interface KnowledgeRevision {
   id: string;
   skillId: string;
@@ -113,7 +123,14 @@ async function files(root: string, dir = root): Promise<string[]> {
   }
   return result;
 }
-async function digest(root: string, meta: { packageRoot: string; extensions: string[]; [key: string]: unknown }) {
+async function versionDigest(root: string, version: SkillVersion) {
+  // Field order is part of the existing reviewed snapshot identity.
+  const meta = {
+    packageRoot: version.packageRoot,
+    skillFile: version.skillFile,
+    extensions: version.extensions,
+    knowledgeFiles: version.knowledgeFiles,
+  };
   const runtime = meta.extensions.length ? await hostIdentity() : '';
   const hash = createHash('sha256').update(JSON.stringify(meta)).update(runtime);
   for (const path of await files(root)) {
@@ -245,12 +262,7 @@ export class SkillService {
   }
   async verify(v: SkillVersion) {
     await this.verifyDependencies(v);
-    const current = await digest(this.root(v), {
-      packageRoot: v.packageRoot,
-      skillFile: v.skillFile,
-      extensions: v.extensions,
-      knowledgeFiles: v.knowledgeFiles,
-    });
+    const current = await versionDigest(this.root(v), v);
     if (current !== v.digest) throw new SkillError('版本内容或依赖已改变，需要重新审查');
     if (v.extensions.length && v.review?.digest !== v.digest)
       throw new SkillError('可执行版本尚未完成人工代码、依赖及权限审查');
@@ -447,12 +459,7 @@ export class SkillService {
               digest: '',
               created: Date.now(),
             };
-          v.digest = await digest(destination, {
-            packageRoot,
-            skillFile,
-            extensions: v.extensions,
-            knowledgeFiles: v.knowledgeFiles,
-          });
+          v.digest = await versionDigest(destination, v);
           const record: SkillRecord = {
             id,
             source,
@@ -561,12 +568,7 @@ export class SkillService {
         const parsed = result.skills[0];
         if (!parsed || result.diagnostics.some((d) => d.type === 'error'))
           throw new SkillError('SKILL.md 解析失败，请检查名称和描述');
-        v.digest = await digest(target, {
-          packageRoot: v.packageRoot,
-          skillFile: v.skillFile,
-          extensions: v.extensions,
-          knowledgeFiles: v.knowledgeFiles,
-        });
+        v.digest = await versionDigest(target, v);
         this.transaction(() => {
           this.saveVersion(v);
           this.save({
@@ -631,12 +633,7 @@ export class SkillService {
       const v = this.version(versionId);
       if (v.skillId !== id || v.digest !== digestValue) throw new SkillError('审查对象与版本摘要不匹配');
       if (notes.trim().length < 10) throw new SkillError('请记录实际代码、依赖及权限审查结论');
-      const actual = await digest(this.root(v), {
-        packageRoot: v.packageRoot,
-        skillFile: v.skillFile,
-        extensions: v.extensions,
-        knowledgeFiles: v.knowledgeFiles,
-      });
+      const actual = await versionDigest(this.root(v), v);
       if (actual !== v.digest) throw new SkillError('内容已改变，不能沿用此次审查');
       await this.verifyDependencies(v);
       v.review = { digest: v.digest, notes, at: Date.now() };
@@ -737,14 +734,16 @@ export class SkillService {
     cwd = await realpath(cwd);
     const skillPaths: string[] = [],
       extensionPaths: string[] = [];
+    const sources: SkillResourceSource[] = [];
     for (const r of loadout.records.filter((r) => r.enabled && r.current && (!r.project || r.project === cwd))) {
       const v = loadout.versions.find((v) => v.id === r.current);
       if (!v) throw new SkillError('正式版本引用缺失');
       await this.verify(v);
       let root = this.packagePath(v);
       const knowledge = this.knowledge(r.id).filter((k) => v.knowledgeFiles.includes(k.file));
-      if (knowledge.length) {
-        const view = join(this.dataDir, 'skills', 'views', `${v.id}-${knowledge.at(-1)!.id}`);
+      const latestKnowledge = knowledge.at(-1);
+      if (latestKnowledge) {
+        const view = join(this.dataDir, 'skills', 'views', `${v.id}-${latestKnowledge.id}`);
         if (!existsSync(view)) {
           const temp = `${view}.${randomUUID()}.tmp`;
           await mkdir(dirname(view), { recursive: true });
@@ -757,10 +756,21 @@ export class SkillService {
         }
         root = view;
       }
-      skillPaths.push(child(root, v.skillFile));
-      for (const p of v.extensions) extensionPaths.push(child(this.packagePath(v), p));
+      const skillPath = child(root, v.skillFile);
+      const extensions = v.extensions.map((p) => child(this.packagePath(v), p));
+      skillPaths.push(skillPath);
+      extensionPaths.push(...extensions);
+      sources.push({
+        skillPath,
+        knowledgePaths: v.knowledgeFiles.map((file) => child(root, file)),
+        extensionPaths: extensions,
+        skillId: r.id,
+        version: v.id,
+        digest: v.digest,
+        ...(latestKnowledge ? { knowledgeRevision: latestKnowledge.id } : {}),
+      });
     }
-    return { skillPaths, extensionPaths };
+    return { skillPaths, extensionPaths, sources };
   }
   filterNative(skills: Skill[], cwd: string, loadout = this.loadout()) {
     const relevant = loadout.records.filter((r) => !r.project || r.project === cwd);

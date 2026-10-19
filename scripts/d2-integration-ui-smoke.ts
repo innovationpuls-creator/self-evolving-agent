@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomUUID } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
 import type { DiagnosticEvent, DiagnosticTrace, DiagnosticTurn } from '../apps/host/diagnostics.js';
@@ -95,6 +95,9 @@ const flatten = (tree: Tree[]): Tree[] => tree.flatMap((n) => [n, ...flatten(n.c
 const root = await realpath(await mkdtemp(join(tmpdir(), 'd2-integration-ui-')));
 const executable = process.env.AGENT_APP_PATH ?? resolve('release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent');
 const model = { provider: 'openai-codex', model: 'gpt-6-luna' };
+const evidenceFile = resolve(process.env.AGENT_ACCEPTANCE_EVIDENCE ?? 'docs/evidence/d2-integration-real-ui.json');
+const screenshotDir = resolve(process.env.AGENT_ACCEPTANCE_SCREENSHOTS ?? 'release/d2-integration-evidence');
+await mkdir(dirname(evidenceFile), { recursive: true });
 const approvedDigestArg =
   process.env.D2_SPECIAL_SKILL_APPROVED_DIGEST ??
   process.argv.find((a) => a.startsWith('--approved-digest='))?.split('=')[1];
@@ -438,10 +441,10 @@ Instructions:
       receipt.errorMessage = errorA.message;
     }
     receipt.completedAt = new Date().toISOString();
-    await mkdir(resolve('release/d2-integration-evidence'), { recursive: true });
-    await page.screenshot({ path: resolve('release/d2-integration-evidence/desktop-blocked.png') });
-    await mkdir(resolve('docs/evidence'), { recursive: true });
-    await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+    await mkdir(screenshotDir, { recursive: true });
+    await page.screenshot({ path: join(screenshotDir, 'desktop-blocked.png') });
+    await mkdir(dirname(evidenceFile), { recursive: true });
+    await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
     throw new Error(errorA.message);
   }
 
@@ -525,8 +528,8 @@ Do not read deploy-spec.txt or use bash.`,
     receipt.stage = 'session_b_retrieval';
     receipt.errorMessage = errorB.message;
     receipt.completedAt = new Date().toISOString();
-    await mkdir(resolve('docs/evidence'), { recursive: true });
-    await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+    await mkdir(dirname(evidenceFile), { recursive: true });
+    await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
     throw new Error(errorB.message);
   }
 
@@ -633,8 +636,8 @@ Do not read deploy-spec.txt or use bash.`,
     receipt.stage = 'session_b_update';
     receipt.errorMessage = errorB2.message;
     receipt.completedAt = new Date().toISOString();
-    await mkdir(resolve('docs/evidence'), { recursive: true });
-    await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+    await mkdir(dirname(evidenceFile), { recursive: true });
+    await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
     throw new Error(errorB2.message);
   }
 
@@ -674,8 +677,8 @@ Do not use bash.`,
     receipt.stage = 'session_b_diagnostic_investigation';
     receipt.errorMessage = errorB3.message;
     receipt.completedAt = new Date().toISOString();
-    await mkdir(resolve('docs/evidence'), { recursive: true });
-    await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+    await mkdir(dirname(evidenceFile), { recursive: true });
+    await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
     throw new Error(errorB3.message);
   }
 
@@ -702,9 +705,9 @@ Do not use bash.`,
   await page.getByRole('button', { name: '查看执行证据', exact: true }).first().click();
   await page.locator('.diagnostics-evidence pre').filter({ hasText: 'memory_save' }).waitFor();
 
-  await mkdir(resolve('release/d2-integration-evidence'), { recursive: true });
-  await page.screenshot({ path: resolve('release/d2-integration-evidence/desktop-evidence.png') });
-  await web.screenshot({ path: resolve('release/d2-integration-evidence/web-client.png') });
+  await mkdir(screenshotDir, { recursive: true });
+  await page.screenshot({ path: join(screenshotDir, 'desktop-evidence.png') });
+  await web.screenshot({ path: join(screenshotDir, 'web-client.png') });
   console.log('Native diagnostic tools and dual-client evidence navigation verified');
   passed('Native diagnostic investigation and evidence navigation', {
     tools: ['diagnostic_search', 'diagnostic_get', 'diagnostic_evidence'],
@@ -751,8 +754,8 @@ Do not use bash.`,
     receipt.stage = 'session_b_rollback_check';
     receipt.errorMessage = errorB4.message;
     receipt.completedAt = new Date().toISOString();
-    await mkdir(resolve('docs/evidence'), { recursive: true });
-    await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+    await mkdir(dirname(evidenceFile), { recursive: true });
+    await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
     throw new Error(errorB4.message);
   }
 
@@ -1014,8 +1017,8 @@ Do not use bash.`,
     traceAId: traceA.id,
   };
 
-  await mkdir(resolve('docs/evidence'), { recursive: true });
-  await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+  await mkdir(dirname(evidenceFile), { recursive: true });
+  await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
   console.log('\n=== D2 End-to-End Real Model Integration Passed Successfully ===\n');
   console.log(JSON.stringify(receipt, null, 2));
 } catch (error) {
@@ -1023,7 +1026,7 @@ Do not use bash.`,
   receipt.status = receipt.status === 'blocked' ? 'blocked' : 'failed';
   receipt.completedAt = new Date().toISOString();
   receipt.errorMessage = error instanceof Error ? error.message : String(error);
-  await writeFile(resolve('docs/evidence/d2-integration-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+  await writeFile(evidenceFile, `${JSON.stringify(receipt, null, 2)}\n`);
   throw error;
 } finally {
   await browser?.close();

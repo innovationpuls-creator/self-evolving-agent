@@ -1,4 +1,4 @@
-import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
+import { createServer, type IncomingMessage } from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -7,37 +7,18 @@ import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
 import { SkillError } from './skills.js';
 import { AgentService } from './agent.js';
-import { memoryContent, memoryReason, MemoryError } from './memory.js';
+import { MemoryError } from './memory.js';
 import { DiagnosticError } from './diagnostics.js';
+import { body, json } from './http.js';
+import { diagnosticRoutes } from './diagnostic-routes.js';
+import { memoryRoutes } from './memory-routes.js';
+import { sessionRoutes } from './session-routes.js';
+import { skillRoutes } from './skill-routes.js';
 
-const createInput = z
-  .object({ cwd: z.string().min(1).max(4096), provider: z.string().min(1), model: z.string().min(1) })
-  .strict();
-const credentialInput = z
-  .object({
-    provider: z.string().min(1),
-    key: z.string().max(16384).optional(),
-    importExisting: z.boolean().optional(),
-  })
-  .strict();
 function equal(a: string, b: string) {
   const x = Buffer.from(a),
     y = Buffer.from(b);
   return x.length === y.length && timingSafeEqual(x, y);
-}
-async function body(req: IncomingMessage): Promise<unknown> {
-  let size = 0;
-  const chunks: Buffer[] = [];
-  for await (const chunk of req) {
-    size += chunk.length;
-    if (size > 1024 * 1024) throw new Error('请求过大');
-    chunks.push(chunk);
-  }
-  return JSON.parse(Buffer.concat(chunks).toString('utf8'));
-}
-function json(res: ServerResponse, status: number, value: unknown) {
-  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8' });
-  res.end(JSON.stringify(value));
 }
 
 export async function startHost(options: {
@@ -93,287 +74,13 @@ export async function startHost(options: {
           json(res, 401, { error: '请连接 Agent Host' });
           return;
         }
-        const route = url.pathname;
-        if (route === '/api/diagnostics/evidence' && req.method === 'GET') {
-          json(res, 200, await service.diagnosticEvidence({ actor: 'user' }, Object.fromEntries(url.searchParams)));
+        if (
+          (await diagnosticRoutes(service.diagnosticHistory, req, res, url)) ||
+          (await memoryRoutes(service, req, res, url)) ||
+          (await sessionRoutes(service, req, res, url)) ||
+          (await skillRoutes(service, req, res, url))
+        )
           return;
-        }
-        if (route === '/api/diagnostics' && req.method === 'GET') {
-          json(res, 200, await service.diagnosticSearch({ actor: 'user' }, Object.fromEntries(url.searchParams)));
-          return;
-        }
-        const diagnostic = /^\/api\/diagnostics\/([a-f0-9-]{36})$/.exec(route);
-        if (diagnostic && req.method === 'GET') {
-          json(
-            res,
-            200,
-            service.diagnostics.get({ actor: 'user' }, diagnostic[1] ?? '', Object.fromEntries(url.searchParams)),
-          );
-          return;
-        }
-        const memoryRoute = /^\/api\/memory(?:\/([a-f0-9-]{36})(?:\/(revise))?)?$/.exec(route);
-        if (memoryRoute) {
-          const query = z
-            .object({
-              project: z.string().max(4096).optional(),
-              query: z.string().max(1000).optional(),
-              includeHistory: z.enum(['true', 'false']).optional(),
-              scope: z.enum(['global', 'project']).optional(),
-              limit: z.coerce.number().int().min(1).max(100).optional(),
-              offset: z.coerce.number().int().min(0).optional(),
-            })
-            .strict()
-            .parse(Object.fromEntries(url.searchParams));
-          const ctx = await service.memoryUserContext(query.project),
-            id = memoryRoute[1];
-          if (req.method === 'GET') {
-            json(
-              res,
-              200,
-              id
-                ? service.memory.get(ctx, id, query.includeHistory === 'true')
-                : service.memory.search(ctx, { ...query, includeHistory: query.includeHistory === 'true' }),
-            );
-            return;
-          }
-          if (req.method === 'POST' && !id) {
-            const x = z
-              .object({ knowledge: memoryContent, reason: memoryReason })
-              .strict()
-              .parse(await body(req));
-            json(res, 201, service.memory.create(ctx, x.knowledge, x.reason));
-            return;
-          }
-          if (req.method === 'POST' && id && memoryRoute[2] === 'revise') {
-            const x = z
-              .object({
-                baseRevision: z.number().int().positive(),
-                knowledge: memoryContent.optional(),
-                reason: memoryReason,
-                confirm: z.boolean().optional(),
-                retire: z.boolean().optional(),
-              })
-              .strict()
-              .parse(await body(req));
-            json(res, 200, service.memory.revise(ctx, id, { ...x, content: x.knowledge }));
-            return;
-          }
-          if (req.method === 'DELETE' && id && !memoryRoute[2]) {
-            const x = z
-              .object({ baseRevision: z.number().int().positive(), reason: memoryReason })
-              .strict()
-              .parse(await body(req));
-            json(res, 200, service.memory.revise(ctx, id, { ...x, remove: true }));
-            return;
-          }
-          json(res, 405, { error: '不支持的 Memory 操作' });
-          return;
-        }
-        if (route === '/api/models' && req.method === 'GET') {
-          json(res, 200, await service.models());
-          return;
-        }
-        if (route === '/api/credentials' && req.method === 'POST') {
-          const x = credentialInput.parse(await body(req));
-          await service.credentials(x.provider, x.key, x.importExisting);
-          json(res, 200, { ok: true });
-          return;
-        }
-        if (route === '/api/sessions' && req.method === 'GET') {
-          json(res, 200, await service.list());
-          return;
-        }
-        if (route === '/api/sessions' && req.method === 'POST') {
-          const x = createInput.parse(await body(req));
-          json(res, 201, await service.create(x.cwd, x.provider, x.model));
-          return;
-        }
-        if (route === '/api/skills' && req.method === 'GET') {
-          json(
-            res,
-            200,
-            service.sensitive.copy(await service.skills.discover(url.searchParams.get('project') ?? undefined)),
-          );
-          return;
-        }
-        if (route === '/api/skills' && req.method === 'POST') {
-          const input = z
-            .object({
-              source: z.string().min(1).max(4096),
-              project: z.string().optional(),
-              bindings: z
-                .array(
-                  z
-                    .object({
-                      skill: z.string(),
-                      extensions: z.array(z.string()),
-                      knowledgeFiles: z.array(z.string()).optional(),
-                    })
-                    .strict(),
-                )
-                .optional(),
-            })
-            .strict()
-            .parse(await body(req));
-          json(res, 202, service.sensitive.copy(service.skills.startImport(input)));
-          return;
-        }
-        const operation = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
-        if (operation && req.method === 'GET') {
-          json(res, 200, service.sensitive.copy(service.skills.operation(operation[1]!)));
-          return;
-        }
-        const skillRoute =
-          /^\/api\/skills\/([a-f0-9-]{36})(?:\/(files|edit|review|publish|enabled|rollback|knowledge|draft|import-draft))?$/.exec(
-            route,
-          );
-        if (skillRoute) {
-          const id = skillRoute[1]!,
-            action = skillRoute[2];
-          if (!action && req.method === 'GET') {
-            json(res, 200, service.sensitive.copy(await service.skillDetail(id)));
-            return;
-          }
-          if (action === 'files' && req.method === 'GET') {
-            json(
-              res,
-              200,
-              service.sensitive.copy(
-                await service.skills.read(
-                  id,
-                  url.searchParams.get('version') ?? '',
-                  url.searchParams.get('path') ?? '',
-                  url.searchParams.get('snapshot') === 'true',
-                ),
-              ),
-            );
-            return;
-          }
-          if (action === 'draft' && req.method === 'DELETE') {
-            await service.skills.discardDraft(id);
-            json(res, 200, { ok: true });
-            return;
-          }
-          if (req.method === 'POST') {
-            if (action === 'edit') {
-              const x = z
-                .object({
-                  baseRevision: z.number().int(),
-                  files: z
-                    .array(z.object({ path: z.string(), content: z.string().max(1000000).nullable() }).strict())
-                    .min(1)
-                    .max(50),
-                })
-                .strict()
-                .parse(await body(req));
-              json(res, 201, service.sensitive.copy(await service.skills.edit(id, x.baseRevision, x.files)));
-              return;
-            }
-            if (action === 'review') {
-              const x = z
-                .object({
-                  version: z.string().uuid(),
-                  digest: z.string(),
-                  notes: z.string().max(10000),
-                  reviewedCode: z.literal(true),
-                  reviewedDependencies: z.literal(true),
-                  reviewedPermissions: z.literal(true),
-                })
-                .strict()
-                .parse(await body(req));
-              json(res, 200, service.sensitive.copy(await service.skills.review(id, x.version, x.digest, x.notes)));
-              return;
-            }
-            if (action === 'publish' || action === 'rollback') {
-              const x = z
-                .object({ version: z.string().uuid(), baseRevision: z.number().int() })
-                .strict()
-                .parse(await body(req));
-              json(res, 202, service.sensitive.copy(service.skills.publish(id, x.version, x.baseRevision)));
-              return;
-            }
-            if (action === 'enabled') {
-              const x = z
-                .object({ enabled: z.boolean(), baseRevision: z.number().int() })
-                .strict()
-                .parse(await body(req));
-              const r = service.skills.record(id);
-              json(
-                res,
-                202,
-                service.sensitive.copy(service.skills.publish(id, r.current ?? r.latest, x.baseRevision, x.enabled)),
-              );
-              return;
-            }
-            if (action === 'knowledge') {
-              const x = z
-                .object({ baseRevision: z.number().int(), path: z.string(), content: z.string().max(1000000) })
-                .strict()
-                .parse(await body(req));
-              const result = await service.skills.setKnowledge(id, x.baseRevision, x.path, x.content);
-              await service.refreshSkillKnowledge();
-              json(res, 200, service.sensitive.copy(result));
-              return;
-            }
-            if (action === 'draft') {
-              await body(req);
-              json(res, 201, await service.skills.prepareDraft(id));
-              return;
-            }
-            if (action === 'import-draft') {
-              const x = z
-                .object({ baseRevision: z.number().int() })
-                .strict()
-                .parse(await body(req));
-              json(res, 201, service.sensitive.copy(await service.skills.importDraft(id, x.baseRevision)));
-              return;
-            }
-          }
-        }
-        const recover = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
-        if (recover && req.method === 'POST') {
-          await service.recoverSkills(recover[1]!);
-          json(res, 200, { ok: true });
-          return;
-        }
-        const match =
-          /^\/api\/sessions\/([a-f0-9-]{36})(?:\/(prompt|stop|compact|branch|model|thinking|export))?$/.exec(route);
-        if (match) {
-          const id = match[1]!,
-            action = match[2];
-          if (!action && req.method === 'GET') {
-            json(res, 200, await service.viewSession(id));
-            return;
-          }
-          if (action === 'export' && req.method === 'GET') {
-            json(res, 200, await service.export(id));
-            return;
-          }
-          if (req.method === 'POST') {
-            if (action === 'prompt') {
-              const x = z
-                .object({ text: z.string().min(1).max(200000) })
-                .strict()
-                .parse(await body(req));
-              await service.prompt(id, x.text);
-              json(res, 202, { ok: true });
-              return;
-            }
-            if (action === 'stop') {
-              await service.stop(id);
-              json(res, 200, { ok: true });
-              return;
-            }
-            if (action === 'compact' || action === 'branch' || action === 'model' || action === 'thinking') {
-              const x = z
-                .object({ value: z.string().optional(), provider: z.string().optional() })
-                .strict()
-                .parse(await body(req));
-              json(res, 200, await service.action(id, action, x.value, x.provider));
-              return;
-            }
-          }
-        }
         json(res, 404, { error: '接口不存在' });
         return;
       }
