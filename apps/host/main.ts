@@ -1,6 +1,6 @@
 import { mkdir, open, readFile, unlink } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
-import { startHost } from './server.js';
+import { startHost } from './transport/server.js';
 
 interface Config {
   dataDir: string;

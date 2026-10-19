@@ -3,7 +3,7 @@ import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
-import type { AgentService } from '../apps/host/agent.js';
+import type { AgentService } from '../apps/host/runtime/agent.js';
 
 const root = await mkdtemp(join(tmpdir(), 'agent-ui-'));
 const executable = process.env.AGENT_APP_PATH ?? resolve('release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent');

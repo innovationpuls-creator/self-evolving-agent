@@ -12,20 +12,20 @@ import {
   type AgentSession,
 } from '@earendil-works/pi-coding-agent';
 import { InMemoryCredentialStore, type Credential, type CredentialStore } from '@earendil-works/pi-ai';
-import { SkillService, SkillError, type SkillLoadout, type SkillOperation } from './skills.js';
-import { SkillResourceLoader } from './skill-loader.js';
-import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from './storage.js';
-import { MemoryService, MemoryError, type MemoryContext } from './memory.js';
-import { memoryTools, memoryToolNames } from './memory-tools.js';
+import { SkillService, SkillError, type SkillLoadout, type SkillOperation } from '../skills/skills.js';
+import { SkillResourceLoader } from '../skills/skill-loader.js';
+import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from '../storage/storage.js';
+import { MemoryService, MemoryError, type MemoryContext } from '../memory/memory.js';
+import { memoryTools, memoryToolNames } from '../memory/memory-tools.js';
 import {
   DiagnosticService,
   DiagnosticRecorder,
   type DiagnosticContext,
   type DiagnosticResources,
-} from './diagnostics.js';
-import { diagnosticTools, diagnosticToolNames } from './diagnostic-tools.js';
-import { diagnosticResources } from './diagnostic-resources.js';
-import { DiagnosticHistory } from './diagnostic-history.js';
+} from '../diagnostics/diagnostics.js';
+import { diagnosticTools, diagnosticToolNames } from '../diagnostics/diagnostic-tools.js';
+import { diagnosticResources } from '../diagnostics/diagnostic-resources.js';
+import { DiagnosticHistory } from '../diagnostics/diagnostic-history.js';
 
 interface RecordData {
   id: string;

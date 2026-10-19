@@ -4,7 +4,7 @@ import type {
   DiagnosticEvent,
   DiagnosticTrace as Trace,
   DiagnosticTurn as Turn,
-} from '../../host/diagnostics';
+} from '../../../../host/diagnostics/diagnostics';
 
 type Api = <T>(path: string, method?: string, data?: unknown, signal?: AbortSignal) => Promise<T>;
 type TraceStatus = Trace['status'];

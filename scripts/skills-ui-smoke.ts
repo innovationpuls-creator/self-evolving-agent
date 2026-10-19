@@ -28,6 +28,7 @@ interface State {
 }
 const root = await mkdtemp(join(tmpdir(), 'd2-skill-ui-'));
 const executable = process.env.AGENT_APP_PATH ?? resolve('release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent');
+const evidenceDir = resolve(process.env.AGENT_SKILL_EVIDENCE_DIR ?? 'release/d2-evidence');
 let desktop: ElectronApplication | undefined, browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
 const call = <T>(page: Page, path: string, method = 'GET', body?: unknown) =>
   page.evaluate(
@@ -294,8 +295,8 @@ try {
   assert.equal(same.id, id);
   await web.getByRole('button', { name: '能力管理', exact: true }).click();
   await web.locator('.skill-item').filter({ hasText: 'd2-receipt' }).click();
-  await mkdir(resolve('release/d2-evidence'), { recursive: true });
-  await web.screenshot({ path: resolve('release/d2-evidence/skills-macos.png'), fullPage: true });
+  await mkdir(evidenceDir, { recursive: true });
+  await web.screenshot({ path: join(evidenceDir, 'skills-macos.png'), fullPage: true });
   const receipt = {
     testedAt: new Date().toISOString(),
     platform: process.platform,
@@ -316,7 +317,7 @@ try {
     modelAndThinkingPreserved: specialRealModel,
     reviewDigest: version.digest,
   };
-  await writeFile(resolve('release/d2-evidence/skills-real.json'), JSON.stringify(receipt, null, 2) + '\n');
+  await writeFile(join(evidenceDir, 'skills-real.json'), JSON.stringify(receipt, null, 2) + '\n');
   console.log(JSON.stringify(receipt));
 } finally {
   await browser?.close();

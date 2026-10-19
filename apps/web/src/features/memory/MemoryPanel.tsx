@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import type { MemoryContent, MemoryView } from '../../host/memory';
-import type { EvidenceReference } from './diagnostics';
+import type { MemoryContent, MemoryView } from '../../../../host/memory/memory';
+import type { EvidenceReference } from '../diagnostics/DiagnosticsPanel';
 
 type Api = <T>(path: string, method?: string, data?: unknown) => Promise<T>;
 interface Catalog {

@@ -25,11 +25,11 @@ import {
   diagnosticUsage,
   type DiagnosticContext,
   type DiagnosticTrace,
-} from '../apps/host/diagnostics.js';
-import { diagnosticToolNames } from '../apps/host/diagnostic-tools.js';
-import type { AgentService } from '../apps/host/agent.js';
-import { startHost } from '../apps/host/server.js';
-import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from '../apps/host/storage.js';
+} from '../apps/host/diagnostics/diagnostics.js';
+import { diagnosticToolNames } from '../apps/host/diagnostics/diagnostic-tools.js';
+import type { AgentService } from '../apps/host/runtime/agent.js';
+import { startHost } from '../apps/host/transport/server.js';
+import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from '../apps/host/storage/storage.js';
 
 const project = '/__diagnostics_in_memory_probe__';
 const user = { actor: 'user' } as const;

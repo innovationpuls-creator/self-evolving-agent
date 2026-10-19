@@ -4,7 +4,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { chromium } from 'playwright-core';
-import { startHost } from '../apps/host/server.js';
+import { startHost } from '../apps/host/transport/server.js';
 
 const root = await mkdtemp(join(tmpdir(), 'memory-browser-'));
 const token = randomBytes(32).toString('hex');

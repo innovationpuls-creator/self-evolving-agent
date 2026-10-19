@@ -7,9 +7,9 @@ import { DatabaseSync } from 'node:sqlite';
 import test from 'node:test';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
-import type { MemoryView } from '../apps/host/memory.js';
-import { startHost } from '../apps/host/server.js';
-import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills.js';
+import type { MemoryView } from '../apps/host/memory/memory.js';
+import { startHost } from '../apps/host/transport/server.js';
+import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills/skills.js';
 
 interface DiagnosticCatalog {
   items: Array<{ id: string; sessionId: string; [key: string]: unknown }>;

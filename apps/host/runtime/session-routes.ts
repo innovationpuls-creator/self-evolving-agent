@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { body, json } from './http.js';
+import { body, json } from '../transport/http.js';
 import { z } from 'zod';
 import type { AgentService } from './agent.js';
 

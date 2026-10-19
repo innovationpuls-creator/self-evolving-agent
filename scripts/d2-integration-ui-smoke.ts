@@ -5,9 +5,9 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
-import type { DiagnosticEvent, DiagnosticTrace, DiagnosticTurn } from '../apps/host/diagnostics.js';
-import type { MemoryView } from '../apps/host/memory.js';
-import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills.js';
+import type { DiagnosticEvent, DiagnosticTrace, DiagnosticTurn } from '../apps/host/diagnostics/diagnostics.js';
+import type { MemoryView } from '../apps/host/memory/memory.js';
+import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills/skills.js';
 
 interface DiagnosticCall {
   id: string;
@@ -535,6 +535,7 @@ Do not read deploy-spec.txt or use bash.`,
 
   // Assert Session B tool execution (Must NOT read spec file directly)
   const bSearches = toolPayloads(stateB, 'memory_search');
+  receipt.sessionBRetrieval = { sessionId: sessionB.id, messages: stateB.messages };
   assert.ok(bSearches.length >= 1, 'Session B must call memory_search');
   assert.ok(JSON.stringify(bSearches).includes(markerUUID), 'Search must actually return the saved deployment target');
   assert.ok(

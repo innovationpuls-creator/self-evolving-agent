@@ -1,5 +1,5 @@
 import { resolve } from 'node:path';
-import type { SkillResourceSource } from './skills.js';
+import type { SkillResourceSource } from '../skills/skills.js';
 import type { DiagnosticResources } from './diagnostics.js';
 
 /** Match prepared identities against resources Pi actually loaded. */

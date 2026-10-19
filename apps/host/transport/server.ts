@@ -5,15 +5,15 @@ import { fileURLToPath } from 'node:url';
 import { extname, resolve, sep } from 'node:path';
 import { WebSocketServer, WebSocket } from 'ws';
 import { z } from 'zod';
-import { SkillError } from './skills.js';
-import { AgentService } from './agent.js';
-import { MemoryError } from './memory.js';
-import { DiagnosticError } from './diagnostics.js';
+import { SkillError } from '../skills/skills.js';
+import { AgentService } from '../runtime/agent.js';
+import { MemoryError } from '../memory/memory.js';
+import { DiagnosticError } from '../diagnostics/diagnostics.js';
 import { body, json } from './http.js';
-import { diagnosticRoutes } from './diagnostic-routes.js';
-import { memoryRoutes } from './memory-routes.js';
-import { sessionRoutes } from './session-routes.js';
-import { skillRoutes } from './skill-routes.js';
+import { diagnosticRoutes } from '../diagnostics/diagnostic-routes.js';
+import { memoryRoutes } from '../memory/memory-routes.js';
+import { sessionRoutes } from '../runtime/session-routes.js';
+import { skillRoutes } from '../skills/skill-routes.js';
 
 function equal(a: string, b: string) {
   const x = Buffer.from(a),
@@ -88,7 +88,7 @@ export async function startHost(options: {
         json(res, 405, { error: '请求方法不支持' });
         return;
       }
-      const root = options.webDir ?? fileURLToPath(new URL('../web/', import.meta.url));
+      const root = options.webDir ?? fileURLToPath(new URL('../../web/', import.meta.url));
       const path = resolve(root, url.pathname === '/' ? 'index.html' : `.${decodeURIComponent(url.pathname)}`);
       if (!path.startsWith(resolve(root) + sep)) {
         json(res, 404, { error: '页面不存在' });

@@ -1,8 +1,8 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { body, json } from './http.js';
+import { body, json } from '../transport/http.js';
 import { z } from 'zod';
 import { memoryContent, memoryReason } from './memory.js';
-import type { AgentService } from './agent.js';
+import type { AgentService } from '../runtime/agent.js';
 
 export async function memoryRoutes(
   service: Pick<AgentService, 'memory' | 'memoryUserContext'>,

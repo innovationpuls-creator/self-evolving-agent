@@ -4,7 +4,7 @@ import { mkdtemp, readFile, rm, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { WebSocket } from 'ws';
-import { startHost } from '../apps/host/server.js';
+import { startHost } from '../apps/host/transport/server.js';
 
 const root = await mkdtemp(join(tmpdir(), 'agent-real-'));
 const token = randomBytes(32).toString('hex'),

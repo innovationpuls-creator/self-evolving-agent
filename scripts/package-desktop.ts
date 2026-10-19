@@ -7,7 +7,7 @@ if (arch !== 'arm64' && arch !== 'x64') throw new Error('Unsupported desktop arc
 const paths = await packager({
   dir: '.',
   name: 'Agent',
-  out: 'release',
+  out: process.env.AGENT_PACKAGE_OUT ?? 'release',
   overwrite: true,
   platform,
   arch,

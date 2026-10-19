@@ -1,4 +1,4 @@
-import { startHost } from '../../apps/host/server.js';
+import { startHost } from '../../apps/host/transport/server.js';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 process.once('message', async (config: { dataDir: string; key: string; token: string }) => {

@@ -5,7 +5,7 @@ import type { DatabaseSync, SQLInputValue } from 'node:sqlite';
 import { z } from 'zod';
 import type { AgentSessionEvent, SessionEntry, SessionManager } from '@earendil-works/pi-coding-agent';
 import type { Usage } from '@earendil-works/pi-ai';
-import type { SensitiveData, Snapshot } from './storage.js';
+import type { SensitiveData, Snapshot } from '../storage/storage.js';
 
 export const traceMarker = 'diagnostic_trace_v1';
 export const diagnosticStatus = z.enum(['running', 'ended', 'stopped', 'failed', 'interrupted']);

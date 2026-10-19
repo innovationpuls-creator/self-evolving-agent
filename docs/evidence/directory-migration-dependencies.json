@@ -1,0 +1,300 @@
+{
+  "baseline": "5d0f77e",
+  "hostFileMappings": {
+    "apps/host/agent.ts": "apps/host/runtime/agent.ts",
+    "apps/host/diagnostic-history.ts": "apps/host/diagnostics/diagnostic-history.ts",
+    "apps/host/diagnostic-resources.ts": "apps/host/diagnostics/diagnostic-resources.ts",
+    "apps/host/diagnostic-routes.ts": "apps/host/diagnostics/diagnostic-routes.ts",
+    "apps/host/diagnostic-tools.ts": "apps/host/diagnostics/diagnostic-tools.ts",
+    "apps/host/diagnostics.ts": "apps/host/diagnostics/diagnostics.ts",
+    "apps/host/http.ts": "apps/host/transport/http.ts",
+    "apps/host/main.ts": "apps/host/main.ts",
+    "apps/host/memory-routes.ts": "apps/host/memory/memory-routes.ts",
+    "apps/host/memory-tools.ts": "apps/host/memory/memory-tools.ts",
+    "apps/host/memory.ts": "apps/host/memory/memory.ts",
+    "apps/host/server.ts": "apps/host/transport/server.ts",
+    "apps/host/session-routes.ts": "apps/host/runtime/session-routes.ts",
+    "apps/host/skill-acquire.ts": "apps/host/skills/skill-acquire.ts",
+    "apps/host/skill-dependencies.ts": "apps/host/skills/skill-dependencies.ts",
+    "apps/host/skill-discovery.ts": "apps/host/skills/skill-discovery.ts",
+    "apps/host/skill-loader.ts": "apps/host/skills/skill-loader.ts",
+    "apps/host/skill-routes.ts": "apps/host/skills/skill-routes.ts",
+    "apps/host/skills.ts": "apps/host/skills/skills.ts",
+    "apps/host/storage.ts": "apps/host/storage/storage.ts"
+  },
+  "hostFilesEquivalentExceptImportsAndWebRoot": [
+    "apps/host/runtime/agent.ts",
+    "apps/host/diagnostics/diagnostic-history.ts",
+    "apps/host/diagnostics/diagnostic-resources.ts",
+    "apps/host/diagnostics/diagnostic-routes.ts",
+    "apps/host/diagnostics/diagnostic-tools.ts",
+    "apps/host/diagnostics/diagnostics.ts",
+    "apps/host/transport/http.ts",
+    "apps/host/main.ts",
+    "apps/host/memory/memory-routes.ts",
+    "apps/host/memory/memory-tools.ts",
+    "apps/host/memory/memory.ts",
+    "apps/host/transport/server.ts",
+    "apps/host/runtime/session-routes.ts",
+    "apps/host/skills/skill-acquire.ts",
+    "apps/host/skills/skill-dependencies.ts",
+    "apps/host/skills/skill-discovery.ts",
+    "apps/host/skills/skill-loader.ts",
+    "apps/host/skills/skill-routes.ts",
+    "apps/host/skills/skills.ts",
+    "apps/host/storage/storage.ts"
+  ],
+  "staticRelativeImportEdges": [
+    {
+      "source": "apps/host/main.ts",
+      "target": "apps/host/transport/server.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/skills/skills.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/runtime/agent.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/memory/memory.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/transport/http.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/diagnostics/diagnostic-routes.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/memory/memory-routes.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/runtime/session-routes.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/transport/server.ts",
+      "target": "apps/host/skills/skill-routes.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/memory/memory-routes.ts",
+      "target": "apps/host/transport/http.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/memory/memory-routes.ts",
+      "target": "apps/host/memory/memory.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/memory/memory-routes.ts",
+      "target": "apps/host/runtime/agent.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/memory/memory-tools.ts",
+      "target": "apps/host/memory/memory.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/memory/memory.ts",
+      "target": "apps/host/storage/storage.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/runtime/session-routes.ts",
+      "target": "apps/host/transport/http.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/session-routes.ts",
+      "target": "apps/host/runtime/agent.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/skills/skills.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/skills/skill-loader.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/storage/storage.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/memory/memory.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/memory/memory-tools.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/diagnostics/diagnostic-tools.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/diagnostics/diagnostic-resources.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/runtime/agent.ts",
+      "target": "apps/host/diagnostics/diagnostic-history.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-history.ts",
+      "target": "apps/host/storage/storage.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-history.ts",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-resources.ts",
+      "target": "apps/host/skills/skills.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-resources.ts",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-tools.ts",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-tools.ts",
+      "target": "apps/host/diagnostics/diagnostic-history.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostics.ts",
+      "target": "apps/host/storage/storage.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-routes.ts",
+      "target": "apps/host/transport/http.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/diagnostics/diagnostic-routes.ts",
+      "target": "apps/host/diagnostics/diagnostic-history.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/skills/skill-loader.ts",
+      "target": "apps/host/skills/skill-discovery.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/skills/skill-loader.ts",
+      "target": "apps/host/skills/skills.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/skills/skill-routes.ts",
+      "target": "apps/host/transport/http.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/skills/skill-routes.ts",
+      "target": "apps/host/runtime/agent.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/host/skills/skills.ts",
+      "target": "apps/host/skills/skill-discovery.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/host/skills/skills.ts",
+      "target": "apps/host/skills/skill-dependencies.ts",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/web/src/main.tsx",
+      "target": "apps/web/src/app/App.tsx",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/web/src/app/App.tsx",
+      "target": "apps/web/src/features/skills/SkillsPanel.tsx",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/web/src/app/App.tsx",
+      "target": "apps/web/src/features/memory/MemoryPanel.tsx",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/web/src/app/App.tsx",
+      "target": "apps/web/src/features/diagnostics/DiagnosticsPanel.tsx",
+      "typeOnly": false
+    },
+    {
+      "source": "apps/web/src/features/memory/MemoryPanel.tsx",
+      "target": "apps/host/memory/memory.ts",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/web/src/features/memory/MemoryPanel.tsx",
+      "target": "apps/web/src/features/diagnostics/DiagnosticsPanel.tsx",
+      "typeOnly": true
+    },
+    {
+      "source": "apps/web/src/features/diagnostics/DiagnosticsPanel.tsx",
+      "target": "apps/host/diagnostics/diagnostics.ts",
+      "typeOnly": true
+    }
+  ],
+  "missingRelativeImports": [],
+  "runtimeFileCycles": [],
+  "allImportFileCycles": [],
+  "directoryAggregation": "transport/server -> domain routes -> transport/http is an adapter/codec relationship; directory aggregates are not claimed to be a DAG",
+  "dynamicPathReview": [
+    "transport/server.ts: ../../web/ -> dist/web",
+    "skills/skills.ts: ./skill-acquire.js and .ts fallback remain adjacent",
+    "skills/skill-dependencies.ts: import.meta.resolve uses installed packages",
+    "desktop/main.ts: ../host/main.js unchanged",
+    "tests fixtures stay adjacent to their fork URLs"
+  ]
+}

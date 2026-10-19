@@ -9,9 +9,9 @@ import { fork } from 'node:child_process';
 import { once } from 'node:events';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
-import { MemoryService, MemoryError, type MemoryContext, type MemoryView } from '../apps/host/memory.js';
-import { SensitiveData, type Snapshot } from '../apps/host/storage.js';
-import { startHost } from '../apps/host/server.js';
+import { MemoryService, MemoryError, type MemoryContext, type MemoryView } from '../apps/host/memory/memory.js';
+import { SensitiveData, type Snapshot } from '../apps/host/storage/storage.js';
+import { startHost } from '../apps/host/transport/server.js';
 
 const knowledge = {
   title: '数据库认识',

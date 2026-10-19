@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { json } from './http.js';
+import { json } from '../transport/http.js';
 import type { DiagnosticReader } from './diagnostic-history.js';
 
 export async function diagnosticRoutes(

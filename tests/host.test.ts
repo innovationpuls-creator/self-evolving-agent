@@ -11,8 +11,8 @@ import { WebSocket } from 'ws';
 import { fauxProvider, fauxThinking } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { SessionManager } from '@earendil-works/pi-coding-agent';
-import { startHost } from '../apps/host/server.js';
-import { EncryptedStore, SensitiveData, snapshot, restore } from '../apps/host/storage.js';
+import { startHost } from '../apps/host/transport/server.js';
+import { EncryptedStore, SensitiveData, snapshot, restore } from '../apps/host/storage/storage.js';
 
 async function fixture() {
   const dir = await mkdtemp(join(tmpdir(), 'agent-test-')),

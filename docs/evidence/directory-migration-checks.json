@@ -1,0 +1,218 @@
+{
+  "baseline": "5d0f77e",
+  "recordedAt": "2026-10-19T08:26:40.338623+00:00",
+  "platform": "Darwin",
+  "arch": "arm64",
+  "node": "26.10.0",
+  "electron": "44.9.0",
+  "pi": "1.3.0",
+  "chrome": "155.0.8059.84",
+  "tests": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 44,
+    "infos": 17,
+    "baselineUnchanged": true
+  },
+  "commands": [
+    {
+      "log": "release/directory-migration/checks/test.txt",
+      "exitCode": 0,
+      "sha256": "a8d5f7cb09a805a2a469e484aa6af1057cf8f03ba80c7465522bc53d1325e6f3"
+    },
+    {
+      "log": "release/directory-migration/checks/typecheck.txt",
+      "exitCode": 0,
+      "sha256": "7a94d08118cbbecac2c5699f96bf9389c5d298ffa3deda22f020c3df84b57d30"
+    },
+    {
+      "log": "release/directory-migration/checks/lint.txt",
+      "exitCode": 0,
+      "sha256": "81b8572eceebd2b0ee7096032054cec780a7e124b7b9186fc36d4e8ad3b92f3f"
+    },
+    {
+      "log": "release/directory-migration/checks/format.txt",
+      "exitCode": 0,
+      "sha256": "986f8e59d1e62df474be3c8ea736e3b246c1e10ba7afe46df0780a07210a277c"
+    },
+    {
+      "log": "release/directory-migration/checks/build.txt",
+      "exitCode": 0,
+      "sha256": "5f8320d25a385ea9c5ddf07ff657a4fd6d3bba529616f39e2651ea3982899cc3"
+    },
+    {
+      "log": "release/directory-migration/checks/package.txt",
+      "exitCode": 0,
+      "sha256": "69296587ede426cb6bfc3c61e45d45bd41bff3270f7277c10179821b3eb4d81c"
+    },
+    {
+      "log": "release/directory-migration/checks/browser.txt",
+      "exitCode": 0,
+      "sha256": "c6cd84a0985deb167e8f6867afa9da5a1fd202b342443878497c9252b9bf94ad"
+    },
+    {
+      "log": "release/directory-migration/checks/skills-browser.txt",
+      "exitCode": 0,
+      "sha256": "83dff41e436d359a1766891b67d36bcfb4279f05b405f31f52be3fde571cbae3"
+    },
+    {
+      "log": "release/directory-migration/checks/memory-browser.txt",
+      "exitCode": 0,
+      "sha256": "544a6bfeb5f562aaafa440b91c390559b3c4d817eb67ab05c9a99a4c0865d1b9"
+    },
+    {
+      "log": "release/directory-migration/checks/skills-response-browser.txt",
+      "exitCode": 0,
+      "sha256": "4fb39e6685db72144aa3bb35d28966ec058d4a782dabb394cb79cb217edb6374"
+    },
+    {
+      "log": "release/directory-migration/checks/desktop.txt",
+      "exitCode": 0,
+      "sha256": "05b1d4111e830bd7b7cf47f17bcee7083ea624bd82b073b71119ae8439c4ab24"
+    },
+    {
+      "log": "release/directory-migration/checks/skills-ui.txt",
+      "exitCode": 0,
+      "sha256": "74d9508ec08a4a4f983fb335adbe748ced5ae2b389b952493cb31e195c609c45"
+    },
+    {
+      "log": "release/directory-migration/checks/integration-ui.txt",
+      "exitCode": 0,
+      "sha256": "bdefb62cc0a332351c336cb2c87134ff355eecf66344187e87dab0f073695a9f"
+    }
+  ],
+  "browser": {
+    "browser": [
+      {
+        "browserRegression": "passed",
+        "crossPortCredentialIsolation": true,
+        "refreshAuthentication": true,
+        "sessionSelectionRace": true,
+        "invalidAuthenticationReturnsToConnect": true
+      }
+    ],
+    "skills-browser": [
+      {
+        "result": "passed",
+        "twoClientConflict": true,
+        "cleanStaleBufferConflict": true,
+        "unsavedExitGuard": true,
+        "exactReviewReset": true,
+        "asyncImportWebSocket": true,
+        "reconnectAuthoritativeState": true,
+        "ordinaryPublishDisable": true
+      }
+    ],
+    "memory-browser": [
+      {
+        "result": "passed",
+        "uiCreate": true,
+        "delayedMutationFreeze": true,
+        "scopeLossClearsDetail": true,
+        "accessLossPreservesDraft": true,
+        "accessRecovery": true,
+        "authoritativeReload": true
+      }
+    ],
+    "skills-response-browser": [
+      {
+        "result": "passed",
+        "reconnectCatalogOrder": true,
+        "reconnectDetailOrder": true,
+        "refreshBeforeOpen": true,
+        "openBeforeRefresh": true,
+        "readAndDirtyDraft": true,
+        "projectRoundTrip": true,
+        "projectInvalidatesRead": true,
+        "unmountInvalidatesResponse": true,
+        "oldMutationRefreshContext": true,
+        "oldSaveDoesNotReplaceProject": true
+      }
+    ]
+  },
+  "desktop": [
+    {
+      "packagedDesktop": "passed",
+      "platform": "darwin",
+      "arch": "arm64",
+      "independentHost": true,
+      "bundledRuntime": true,
+      "windowCloseKeepsHost": true,
+      "hostRestartReconnect": true,
+      "emptySessionAppReopen": true,
+      "packageContents": "allowlisted",
+      "compiledAcquisition": true,
+      "acquiredLockedDependencyTree": true,
+      "installScriptsSkipped": true
+    }
+  ],
+  "ordinarySkill": {
+    "testedAt": "2026-10-19T08:21:16.751Z",
+    "platform": "darwin",
+    "arch": "arm64",
+    "result": "ordinary-passed-special-awaits-human-review",
+    "packagedDesktop": true,
+    "webBrowser": "Chrome",
+    "model": "openai-codex/gpt-6-luna",
+    "ordinaryNativeDiscoveryAndRead": true,
+    "dualClientEnableDisable": true,
+    "originalSession": true,
+    "reconnect": true,
+    "unreviewedRejected": true,
+    "specialRealModel": false,
+    "ordinaryVersionSwitchAndRollback": false,
+    "specialDisableSearchAndReenable": false,
+    "modelAndThinkingPreserved": false,
+    "reviewDigest": "8dd88097d08051818bc644d9febcad2f730f698e86c2cd862825a370a4d35192"
+  },
+  "package": "release/directory-migration/package/Agent-darwin-arm64/Agent.app",
+  "bundledJavaScriptSha256": {
+    "dist/desktop/main.js": "a53ca3e01ca75cdcabd68a94f4f290306e79f09af75a2d1602ccac75f92eac77",
+    "dist/host/diagnostics/diagnostic-history.js": "d113bf2e2e9ab9ac71919571f46102a5edeb812941ba5a94c75eb33989af442d",
+    "dist/host/diagnostics/diagnostic-resources.js": "57f0f5a765125aa15334011da93584e2d7b928df47a7bd07dccc789b6a113ead",
+    "dist/host/diagnostics/diagnostic-routes.js": "c20b5ea7da916d1edc963505bc43fd63eb104382a631f7cf567adcdc0d392186",
+    "dist/host/diagnostics/diagnostic-tools.js": "71f671aef58c520e5abc8b6080a9b444678321d65b53624baa651c0c9e9c0674",
+    "dist/host/diagnostics/diagnostics.js": "54375bce70e4e9564117790f25fa9e33fd9f5b9861265e2f4d073a28ebedb3d3",
+    "dist/host/main.js": "2f5a2813bf1d5752525589baf17e5bd25511c28e4c2fb0d06ed0d25627f5ca8a",
+    "dist/host/memory/memory-routes.js": "27eb024915d3acb3f84cb10d02943c7c64d97728125a8a641887569051639068",
+    "dist/host/memory/memory-tools.js": "6de0c00dffa033f259d60667459256e5ac6dd56b27d2089cc201731ede9d73d2",
+    "dist/host/memory/memory.js": "8c641c75fbd021e586a241347c3386a731574a0bfb7ac8754d05fb980f99a64c",
+    "dist/host/runtime/agent.js": "2f4de678d1f80cf434a2437ae98d27fa7407617bb9ad65a64551dc1b6d310779",
+    "dist/host/runtime/session-routes.js": "4a575c9f6337add238ca659bab3d8aa559bbae9da8fc0dd86bad9da554c71940",
+    "dist/host/skills/skill-acquire.js": "72c8bdc07b2a1ae8a805159c11bcd38052ae7f9e0b1416dd1069545454af5b8f",
+    "dist/host/skills/skill-dependencies.js": "3db2c69de4a9905bb0e3711f32aedbd39622f6efc8163a8398a7e4ee8c2eadf1",
+    "dist/host/skills/skill-discovery.js": "fefcd71575676b8a1bbd6773484ab0901b3dfc8e7140609be35f0504449358ec",
+    "dist/host/skills/skill-loader.js": "cd013c76d29a6d12ab8ec0e4a26693f435dea7b31ff7b530bad60f7a91cc1a5c",
+    "dist/host/skills/skill-routes.js": "215fdcd72c90e67f95f688a1fccbe6fe20967b9b3fc6292dd20df42bd6e593b9",
+    "dist/host/skills/skills.js": "f4ffcdd6a45eb884cd9d62f5d36a1e063085e266d2bd94396cb357a9b87ea121",
+    "dist/host/storage/storage.js": "0530022f0ea49757c32e62fdb59f6ab70a2ffc4635cb905d8c01f525ed60d8c3",
+    "dist/host/transport/http.js": "9baee86f6fd216c0bde27dd244a16f0332f50f546eb5d18c16699e8d7f47bc8c",
+    "dist/host/transport/server.js": "e7c7db7ca934790e8a2871b400228cd800f757ff421b074c69788e8432e18272",
+    "dist/web/assets/index-C-dX_bFk.js": "ba910728b0a1d0bc7e88ffa6fdd2178feb30eb97fb448a12216a13b2f6a42ac9"
+  },
+  "specialSkillVerification": "Current deterministic native Pi tests; no new human approval and no real-model special execution",
+  "firstIntegrationAttempt": "directory-migration-real-ui-attempt1.json",
+  "integration": {
+    "receipt": "directory-migration-real-ui.json",
+    "status": "passed",
+    "startedAt": "2026-10-19T08:23:48.077Z",
+    "completedAt": "2026-10-19T08:26:37.589Z",
+    "steps": [
+      "Skill task and sourced Memory",
+      "Cross-session knowledge use",
+      "Correction and dual-client state",
+      "Native diagnostic investigation and evidence navigation",
+      "Source branch rollback",
+      "New evidence confirms knowledge",
+      "Active crash and reconnect",
+      "Full restart and native continuation",
+      "SQLite ownership inspection"
+    ],
+    "toolErrors": [],
+    "specialSkillLoaded": false
+  }
+}

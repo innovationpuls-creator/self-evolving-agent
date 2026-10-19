@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
-import type { MemoryView } from '../apps/host/memory.js';
+import type { MemoryView } from '../apps/host/memory/memory.js';
 
 interface Tree {
   entry: { id: string; message?: { role: string } };

@@ -5,9 +5,14 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
-import type { DiagnosticCall, DiagnosticEvent, DiagnosticTrace, DiagnosticTurn } from '../apps/host/diagnostics.js';
-import type { MemoryView } from '../apps/host/memory.js';
-import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills.js';
+import type {
+  DiagnosticCall,
+  DiagnosticEvent,
+  DiagnosticTrace,
+  DiagnosticTurn,
+} from '../apps/host/diagnostics/diagnostics.js';
+import type { MemoryView } from '../apps/host/memory/memory.js';
+import type { SkillOperation, SkillRecord, SkillVersion } from '../apps/host/skills/skills.js';
 
 interface Message {
   role: string;

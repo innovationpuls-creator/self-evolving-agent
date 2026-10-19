@@ -1,4 +1,4 @@
-import { restore, type Snapshot, type SensitiveData } from './storage.js';
+import { restore, type Snapshot, type SensitiveData } from '../storage/storage.js';
 import {
   DiagnosticError,
   diagnosticQuery,

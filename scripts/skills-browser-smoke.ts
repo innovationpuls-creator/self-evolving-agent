@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { chromium, type Page } from 'playwright-core';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
-import { startHost } from '../apps/host/server.js';
+import { startHost } from '../apps/host/transport/server.js';
 import { skillPackage, bindings } from '../tests/fixtures/skills-package.js';
 const root = await mkdtemp(join(tmpdir(), 'skills-browser-')),
   token = randomBytes(32).toString('hex');

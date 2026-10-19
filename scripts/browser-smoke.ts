@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { chromium } from 'playwright-core';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
-import { startHost } from '../apps/host/server.js';
+import { startHost } from '../apps/host/transport/server.js';
 const root = await realpath(await mkdtemp(join(tmpdir(), 'agent-browser-'))),
   token = randomBytes(32).toString('hex');
 const host = await startHost({ dataDir: join(root, 'data'), key: randomBytes(32), token, webDir: resolve('dist/web') });

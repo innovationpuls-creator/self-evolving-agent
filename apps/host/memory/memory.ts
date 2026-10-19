@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { DatabaseSync } from 'node:sqlite';
 import { z } from 'zod';
-import type { SensitiveData } from './storage.js';
+import type { SensitiveData } from '../storage/storage.js';
 
 export const memoryContent = z
   .object({

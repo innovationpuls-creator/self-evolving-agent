@@ -1,5 +1,5 @@
 import { SettingsManager } from '@earendil-works/pi-coding-agent';
-import { SkillResourceLoader } from '../apps/host/skill-loader.js';
+import { SkillResourceLoader } from '../apps/host/skills/skill-loader.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, rm, symlink } from 'node:fs/promises';
@@ -8,8 +8,8 @@ import { join } from 'node:path';
 import { randomBytes } from 'node:crypto';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
-import { startHost } from '../apps/host/server.js';
-import { SkillError, type SkillRecord } from '../apps/host/skills.js';
+import { startHost } from '../apps/host/transport/server.js';
+import { SkillError, type SkillRecord } from '../apps/host/skills/skills.js';
 import { skillPackage, bindings, echoCode } from './fixtures/skills-package.js';
 declare global {
   var __skillEvidence:

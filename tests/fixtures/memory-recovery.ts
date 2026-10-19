@@ -1,4 +1,4 @@
-import { startHost } from '../../apps/host/server.js';
+import { startHost } from '../../apps/host/transport/server.js';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 
 process.once(

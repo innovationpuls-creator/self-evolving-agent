@@ -1,5 +1,5 @@
-import { diagnosticResources } from '../apps/host/diagnostic-resources.js';
-import { DiagnosticHistory } from '../apps/host/diagnostic-history.js';
+import { diagnosticResources } from '../apps/host/diagnostics/diagnostic-resources.js';
+import { DiagnosticHistory } from '../apps/host/diagnostics/diagnostic-history.js';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdir, mkdtemp, realpath, rm, symlink, writeFile } from 'node:fs/promises';
@@ -10,9 +10,14 @@ import test from 'node:test';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { SessionManager } from '@earendil-works/pi-coding-agent';
-import { AgentService } from '../apps/host/agent.js';
-import { DiagnosticRecorder, DiagnosticService, type DiagnosticTrace, traceMarker } from '../apps/host/diagnostics.js';
-import { SensitiveData, snapshot } from '../apps/host/storage.js';
+import { AgentService } from '../apps/host/runtime/agent.js';
+import {
+  DiagnosticRecorder,
+  DiagnosticService,
+  type DiagnosticTrace,
+  traceMarker,
+} from '../apps/host/diagnostics/diagnostics.js';
+import { SensitiveData, snapshot } from '../apps/host/storage/storage.js';
 
 const project = '/__diagnostic_independent_review__';
 const user = { actor: 'user' } as const;
