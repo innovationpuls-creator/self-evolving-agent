@@ -38,7 +38,7 @@ interface Detail {
     tools: Array<{ name: string; description: string; exposure: string; parameters: unknown }>;
     hooks: string[];
   };
-  knowledge: Array<{ version: string; file: string; content: string; created: number }>;
+  knowledge: Array<{ id: string; version: string; file: string; content: string; created: number }>;
 }
 interface Catalog {
   skills: Skill[];
@@ -49,12 +49,16 @@ type Api = <T>(path: string, method?: string, data?: unknown) => Promise<T>;
 export function SkillsPanel({
   api,
   project,
+  initialId,
+  initialKnowledgeRevision,
   onClose,
   onAssist,
   onDirtyChange,
 }: {
   api: Api;
   project: string;
+  initialId?: string;
+  initialKnowledgeRevision?: string;
   onClose: () => void;
   onAssist: (prompt: string) => void;
   onDirtyChange: (dirty: boolean) => void;
@@ -174,6 +178,9 @@ export function SkillsPanel({
     const data = await api<Detail>(`/skills/${id}`);
     if (owner === generation.current && epoch.current === current && request === detailEpoch.current) setDetail(data);
   };
+  useEffect(() => {
+    if (initialId) void guard(() => open(initialId));
+  }, [initialId, project]);
   const read = async (file: string, version?: string) => {
     if (dirty.current && !window.confirm('放弃当前文件未保存的修改？')) return;
     if (!detail || detailRef.current !== detail.skill.id) return;
@@ -644,7 +651,7 @@ export function SkillsPanel({
                   </div>
                 ))}
                 {detail.knowledge.map((k, i) => (
-                  <details key={i}>
+                  <details key={k.id ?? i} open={k.id === initialKnowledgeRevision ? true : undefined}>
                     <summary>
                       知识修订 · {k.file} · {new Date(k.created).toLocaleString()}
                     </summary>

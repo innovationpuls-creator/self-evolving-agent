@@ -661,3 +661,12 @@ test('the shared HTTP boundary authenticates before invoking an extracted busine
     await f.close();
   }
 });
+
+test('PII protection preserves UUID correlation identities but still protects phone numbers and UUID credentials', () => {
+  const sensitive = new SensitiveData();
+  const id = '00000000-0000-4000-8000-a13812345678';
+  assert.equal(sensitive.copy({ id }).id, id);
+  assert.match(sensitive.text('Contact a13812345678'), /身份信息已保护/);
+  sensitive.add(id);
+  assert.equal(sensitive.text(id), '[已保护]');
+});

@@ -1,0 +1,68 @@
+{
+  "time": "2026-10-19T14:28:22.436Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "executable": "/Users/torch/Documents/ChatGPT/agent/release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent",
+  "scope": "Packaged Desktop/Web integration; unavailable Reflection is never substituted",
+  "checks": [
+    "ad-hoc package reports unavailable rather than privileged fallback",
+    "real ordinary Provider task produces durable settled source and explicit waiting_user",
+    "Web adoption opens visible native discussion context without automatic prompt",
+    "Desktop archive is authoritative in Web and retains discussion link",
+    "Host SIGKILL reconnect reads persisted suggestion state"
+  ],
+  "reflectionBusinessChain": "blocked",
+  "packageEntrySha256": "aa79d23bfad74bfd3394c531da904749403889c7695b2af589038bbb24697e41",
+  "nativeRuntime": {
+    "protocol": 1,
+    "version": "0.1.0",
+    "nodeVersion": "24.22.0",
+    "node": {
+      "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-darwin-arm64.tar.gz",
+      "sha256": "6a9724d9b50a5f22b4816cded441b5a8d9ddae546191a5e5b7efa5a5e2ee26d5"
+    },
+    "identity": "-",
+    "architecture": "arm64"
+  },
+  "compiledSha256": {
+    "host/reflection/reflection-service.js": "6fecebb49e414431b4dfeffda24aa77f7953667ceaa4278ce88c748a2fbcdf34",
+    "host/reflection/worker.js": "dfb5cd1f2206146f19e10c22afbbf6bd19f33800d7122c18a073d2de39cd2863",
+    "desktop/main.js": "86c7ee022678ddd4711c8a148ad48f5beb44e568f4b7c35017ccee14c953c268"
+  },
+  "availability": {
+    "available": false,
+    "reason": "Reflection 需要 Apple Development 或 Developer ID 签名以验证 XPC 对端；当前应用为 ad-hoc 签名"
+  },
+  "provider": {
+    "provider": "openai-codex",
+    "model": "gpt-6-luna",
+    "sessionId": "5fecb2f1-19ea-4c1d-a384-4cb7c541edc4",
+    "status": "succeeded"
+  },
+  "trigger": {
+    "id": "e79981cd-5ff4-4b2b-81c7-43972eeee923",
+    "sessionId": "5fecb2f1-19ea-4c1d-a384-4cb7c541edc4",
+    "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-packaged-4rAJpl",
+    "provider": "openai-codex",
+    "model": "gpt-6-luna",
+    "scheduledAt": 1792420165402,
+    "created": 1792420165327,
+    "updated": 1792420170306,
+    "runId": null,
+    "status": "waiting_user",
+    "error": "Reflection 需要 Apple Development 或 Developer ID 签名以验证 XPC 对端；当前应用为 ad-hoc 签名",
+    "sources": [
+      {
+        "markerEntryId": "7dfb1a46",
+        "settledAt": 1792420165288,
+        "traceId": "88e74ab6-8a38-44e2-ba40-ed8c1bdf1ed5",
+        "status": "ended"
+      }
+    ]
+  },
+  "discussion": {
+    "suggestionId": "9ff50d6d-057b-413f-91a2-c18ec025dfe0",
+    "sessionId": "b3c775bd-0e62-4153-a566-4f6fb464fe7c"
+  },
+  "blocker": "No Apple-issued signing identity is installed. Same-team XPC authentication cannot be accepted with ad-hoc signing. Full real Provider Reflection chain and OS deny probes remain unverified."
+}

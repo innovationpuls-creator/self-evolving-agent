@@ -79,13 +79,20 @@ export interface SkillResourceSource {
   readonly digest: string;
   readonly knowledgeRevision?: string;
 }
-interface KnowledgeRevision {
+export interface KnowledgeRevision {
   id: string;
   skillId: string;
   version: string;
   file: string;
   content: string;
   created: number;
+  provenance?: {
+    reason: string;
+    sessionId: string;
+    entryId: string;
+    reflectionId?: string;
+    evidence?: Array<{ sessionId: string; entryId: string; project: string }>;
+  };
 }
 export type ApplySkills = (
   next: SkillLoadout,
@@ -706,7 +713,14 @@ export class SkillService {
     }).catch(() => {});
     return op;
   }
-  async setKnowledge(id: string, baseRevision: number, path: string, content: string) {
+  async setKnowledge(
+    id: string,
+    baseRevision: number,
+    path: string,
+    content: string,
+    provenance?: KnowledgeRevision['provenance'],
+    onCommit?: (entry: KnowledgeRevision) => void,
+  ) {
     return this.serialize(async () => {
       const r = this.record(id);
       this.assertRevision(r, baseRevision);
@@ -721,10 +735,12 @@ export class SkillService {
         file: path,
         content,
         created: Date.now(),
+        ...(provenance ? { provenance } : {}),
       };
       this.transaction(() => {
         this.db.prepare('INSERT INTO skill_knowledge VALUES (?,?,?)').run(entry.id, id, JSON.stringify(entry));
         this.save({ ...r, revision: r.revision + 1 });
+        onCommit?.(entry);
       });
       this.changed({ type: 'skills' });
       return entry;

@@ -145,7 +145,7 @@ export class SensitiveData {
     }
     chunks.push(value.slice(offset));
     text = chunks.join('');
-    return text
+    const protectedText = text
       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')
       .replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi, 'Bearer [已保护]')
@@ -154,11 +154,17 @@ export class SensitiveData {
         '$1[已保护]',
       )
       .replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, '[身份信息已保护]')
-      .replace(/(?<!\d)1[3-9]\d{9}(?!\d)/g, '[身份信息已保护]')
       .replace(
         /(?<!\d)[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[0-9Xx](?!\d)/g,
         '[身份信息已保护]',
       );
+    // UUID correlation identities are not telephone numbers. Known credentials were protected above.
+    const uuidSpans = [
+      ...protectedText.matchAll(/\b[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b/gi),
+    ].map((match) => [match.index, match.index + match[0].length] as const);
+    return protectedText.replace(/(?<!\d)1[3-9]\d{9}(?!\d)/g, (match, offset: number) =>
+      uuidSpans.some(([start, end]) => offset >= start && offset + match.length <= end) ? match : '[身份信息已保护]',
+    );
   }
   copy<T>(value: T, partial = false): T {
     const secretKey =

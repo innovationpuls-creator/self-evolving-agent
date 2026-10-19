@@ -745,7 +745,7 @@ export class DiagnosticRecorder {
   private settledAborted = false;
   private compaction?: { started: number; beforeLeaf: string | null };
   constructor(
-    private service: DiagnosticService,
+    private service: Pick<DiagnosticService, 'gap' | 'trace' | 'turn' | 'call' | 'event' | 'flush'>,
     private sessionId: string,
     private project: string,
     private manager: SessionManager,
@@ -762,10 +762,9 @@ export class DiagnosticRecorder {
       this.service.gap(this.trace);
     }
   }
-  start() {
+  start(id: string = randomUUID()) {
     this.guard(() => {
-      const id = randomUUID(),
-        at = Date.now();
+      const at = Date.now();
       const trace: DiagnosticTrace = {
         id,
         sessionId: this.sessionId,

@@ -38,6 +38,10 @@ export interface MemoryContext {
   project?: string;
   actor: 'agent' | 'user';
   source?: MemorySource;
+  /** Trusted Host-supplied evidence; callers cannot grant themselves access. */
+  evidenceSources?: MemorySource[];
+  basisSources?: MemorySource[];
+  onCommit?: (revision: MemoryView) => void;
 }
 export interface MemoryView extends MemoryRevision {
   isCurrent: boolean;
@@ -140,10 +144,12 @@ export class MemoryService {
   }
   private checkSource(ctx: MemoryContext) {
     if (
-      ctx.source &&
-      (this.changing.has(ctx.source.sessionId) ||
-        this.unresolved.has(ctx.source.sessionId) ||
-        !this.sources.get(ctx.source.sessionId)?.has(ctx.source.entryId))
+      [...(ctx.source ? [ctx.source] : []), ...(ctx.basisSources ?? [])].some(
+        (source) =>
+          this.changing.has(source.sessionId) ||
+          this.unresolved.has(source.sessionId) ||
+          !this.sources.get(source.sessionId)?.has(source.entryId),
+      )
     ) {
       throw new MemoryError('来源会话正在切换或尚未恢复，请稍后重试', 503, 'MEMORY_SOURCE_UNAVAILABLE');
     }
@@ -175,8 +181,11 @@ export class MemoryService {
     if (input.scope === 'project' && !ctx.project) throw new MemoryError('请选择项目', 400, 'MEMORY_PROJECT_REQUIRED');
     const rev = this.transaction(() => {
       this.checkSource(ctx);
-      const sources = ctx.source ? [{ ...ctx.source, project: projectKey(ctx.source.project) ?? '' }] : [];
-      return this.insert({
+      const sources = [...(ctx.source ? [ctx.source] : []), ...(ctx.evidenceSources ?? [])].map((s) => ({
+        ...s,
+        project: projectKey(s.project) ?? '',
+      }));
+      const saved = this.insert({
         ...input,
         id: randomUUID(),
         revision: 1,
@@ -188,8 +197,13 @@ export class MemoryService {
         actor: ctx.actor,
         created: Date.now(),
         sources,
-        basis: input.kind === 'decision' && input.scope === 'project' ? sources : [],
+        basis:
+          input.kind === 'decision' && input.scope === 'project'
+            ? (ctx.basisSources?.map((s) => ({ ...s, project: projectKey(s.project) ?? '' })) ?? sources)
+            : [],
       });
+      ctx.onCommit?.(this.view(saved, ctx, true));
+      return saved;
     });
     this.changed();
     return this.view(rev, ctx, true);
@@ -223,9 +237,12 @@ export class MemoryService {
         source = ctx.source ? { ...ctx.source, project: projectKey(ctx.source.project) ?? '' } : undefined;
       if (source && !sources.some((s) => s.sessionId === source.sessionId && s.entryId === source.entryId))
         sources.push(source);
+      for (const s of ctx.evidenceSources ?? [])
+        if (!sources.some((old) => old.sessionId === s.sessionId && old.entryId === s.entryId))
+          sources.push({ ...s, project: projectKey(s.project) ?? '' });
       const scopeChanged =
         next.scope !== old.scope || (next.scope === 'project' && old.project !== projectKey(ctx.project));
-      return this.insert({
+      const saved = this.insert({
         ...old,
         ...next,
         id,
@@ -250,9 +267,8 @@ export class MemoryService {
           next.kind !== 'decision' || next.scope !== 'project'
             ? []
             : input.confirm || scopeChanged || old.kind !== 'decision'
-              ? source
-                ? [source]
-                : []
+              ? (ctx.basisSources?.map((s) => ({ ...s, project: projectKey(s.project) ?? '' })) ??
+                (source ? [source] : []))
               : [
                   ...old.basis,
                   ...(source && !old.basis.some((s) => s.sessionId === source.sessionId && s.entryId === source.entryId)
@@ -260,9 +276,25 @@ export class MemoryService {
                     : []),
                 ],
       });
+      ctx.onCommit?.(this.view(saved, ctx, true));
+      return saved;
     });
     this.changed();
     return this.view(rev, ctx, true);
+  }
+  assertReference(ctx: MemoryContext, id: string, revision?: number) {
+    if (ctx.actor === 'agent') {
+      const value = this.get(ctx, id, true);
+      if (revision && !value.history.some((entry) => entry.revision === revision))
+        throw new MemoryError('Memory 修订不存在', 404, 'MEMORY_NOT_FOUND');
+      return;
+    }
+    this.assertOpen();
+    const row = this.db
+      .prepare('SELECT data FROM memory_revisions WHERE memory_id=? AND (? IS NULL OR revision=?) LIMIT 1')
+      .get(id, revision ?? null, revision ?? null);
+    if (!row) throw new MemoryError('Memory 修订不存在', 404, 'MEMORY_NOT_FOUND');
+    revisionSchema.parse(JSON.parse(String(row.data)));
   }
   get(ctx: MemoryContext, id: string, includeHistory = false) {
     const current = this.head(id, ctx);

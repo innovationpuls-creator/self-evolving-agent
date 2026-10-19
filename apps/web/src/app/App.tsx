@@ -1,3 +1,6 @@
+import { ReflectionPanel } from '../features/reflection/ReflectionPanel';
+import { ReflectionStatus } from '../features/reflection/ReflectionStatus';
+import { SuggestionsPanel } from '../features/evolution/SuggestionsPanel';
 import React, { useEffect, useRef, useState } from 'react';
 import { SkillsPanel } from '../features/skills/SkillsPanel';
 import { MemoryPanel } from '../features/memory/MemoryPanel';
@@ -12,6 +15,8 @@ interface Message {
   role: string;
   content: string | Array<{ type: string; text?: string; name?: string; arguments?: unknown }>;
   toolName?: string;
+  display?: boolean;
+  customType?: string;
   isError?: boolean;
   errorMessage?: string;
 }
@@ -90,6 +95,11 @@ export function App() {
     [settings, setSettings] = useState(false),
     [provider, setProvider] = useState('openai-codex'),
     [key, setKey] = useState('');
+  const [knowledgeRevision, setKnowledgeRevision] = useState<string>();
+  const [knowledgeTarget, setKnowledgeTarget] = useState<string>();
+  const [knowledgeProject, setKnowledgeProject] = useState<string>();
+  const [d3Panel, setD3Panel] = useState<'reflection' | 'suggestions'>();
+  const [attention, setAttention] = useState(0);
   const [showSkills, setShowSkills] = useState(false);
   const [showMemory, setShowMemory] = useState(false);
   const [diagnostics, setDiagnostics] = useState<{
@@ -103,6 +113,8 @@ export function App() {
       return;
     fn();
   };
+  const displayedSession = useRef<string | undefined>(undefined);
+  displayedSession.current = selected?.id;
   const selectionEpoch = useRef(0);
   const selectedRef = useRef<string | undefined>(undefined),
     bottom = useRef<HTMLDivElement>(null);
@@ -129,6 +141,29 @@ export function App() {
     selectedRef.current = id;
     const state = await api<Session>(`/sessions/${id}`);
     if (epoch === selectionEpoch.current) setSelected(state);
+  };
+  const expedite = async () => {
+    if (selectedRef.current) await api('/reflections/expedite', 'POST', { sessionId: selectedRef.current });
+  };
+  const selectSession = async (id: string) => {
+    const previous = selectedRef.current;
+    const epoch = ++selectionEpoch.current;
+    selectedRef.current = id;
+    if (previous && previous !== id)
+      void api('/reflections/expedite', 'POST', { sessionId: previous }).catch(() =>
+        window.dispatchEvent(new Event('agent-reflection-changed')),
+      );
+    if (epoch !== selectionEpoch.current) return;
+    try {
+      const state = await api<Session>(`/sessions/${id}`);
+      if (epoch === selectionEpoch.current) {
+        setSelected(state);
+        setD3Panel(undefined);
+      }
+    } catch (error) {
+      if (epoch === selectionEpoch.current) selectedRef.current = displayedSession.current;
+      throw error;
+    }
   };
   const connectHost = async (value: string) => {
     await api('/connect', 'POST', { token: value });
@@ -179,6 +214,8 @@ export function App() {
       };
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        if (data.type === 'reflection') window.dispatchEvent(new Event('agent-reflection-changed'));
+        if (data.type === 'evolution') window.dispatchEvent(new Event('agent-suggestions-changed'));
         if (data.type === 'skills') window.dispatchEvent(new Event('agent-skills-changed'));
         if (data.type === 'memory') window.dispatchEvent(new Event('agent-memory-changed'));
         if (data.type === 'diagnostic' || data.type === 'diagnostics')
@@ -228,14 +265,42 @@ export function App() {
     };
   }, [connected]);
   useEffect(() => {
+    if (!connected) return;
+    let alive = true,
+      requestEpoch = 0;
+    const refreshAttention = () => {
+      const epoch = ++requestEpoch;
+      void api<{ highPriorityPending: number }>('/suggestions?limit=1')
+        .then((v) => {
+          if (alive && epoch === requestEpoch) setAttention(v.highPriorityPending);
+        })
+        .catch(() => {});
+    };
+    refreshAttention();
+    window.addEventListener('agent-suggestions-changed', refreshAttention);
+    window.addEventListener('agent-reconnected', refreshAttention);
+    return () => {
+      alive = false;
+      window.removeEventListener('agent-suggestions-changed', refreshAttention);
+      window.removeEventListener('agent-reconnected', refreshAttention);
+    };
+  }, [connected]);
+  useEffect(() => {
     bottom.current?.scrollIntoView({ behavior: 'smooth' });
   }, [selected?.messages]);
   const newSession = () =>
     guard(async () => {
       const m = models.find((m) => `${m.provider}/${m.id}` === model);
       if (!m) throw new Error('请先配置模型');
+      const epoch = ++selectionEpoch.current;
+      const previous = selectedRef.current;
+      selectedRef.current = undefined;
+      if (previous)
+        void api('/reflections/expedite', 'POST', { sessionId: previous }).catch(() =>
+          window.dispatchEvent(new Event('agent-reflection-changed')),
+        );
       const s = await api<Session>('/sessions', 'POST', { cwd, provider: m.provider, model: m.id });
-      selectionEpoch.current++;
+      if (epoch !== selectionEpoch.current) return;
       selectedRef.current = s.id;
       setSelected(s);
       await refresh();
@@ -255,7 +320,9 @@ export function App() {
         throw e;
       }
     });
-  const internalNode = (node: Tree) => node.entry.type === 'custom' && node.entry.customType === 'diagnostic_trace_v1';
+  const internalNode = (node: Tree) =>
+    node.entry.type === 'custom' &&
+    ['diagnostic_trace_v1', 'reflection_settled_v1'].includes(node.entry.customType ?? '');
   const internalLeaf = (tree: Tree[]): boolean =>
     tree.some((node) => (node.entry.id === selected?.leafId && internalNode(node)) || internalLeaf(node.children));
   const nodes = (tree: Tree[], depth = 0): React.ReactNode =>
@@ -309,6 +376,8 @@ export function App() {
           type="button"
           onClick={() =>
             leaveSkills(() => {
+              setD3Panel(undefined);
+              void guard(expedite);
               setDiagnostics(undefined);
               selectionEpoch.current++;
               selectedRef.current = undefined;
@@ -328,7 +397,7 @@ export function App() {
               onClick={() =>
                 leaveSkills(() => {
                   setDiagnostics(undefined);
-                  void guard(() => open(s.id));
+                  void guard(() => selectSession(s.id));
                 })
               }
             >
@@ -342,7 +411,10 @@ export function App() {
           onClick={() =>
             leaveSkills(() => {
               setDiagnostics(undefined);
+              setD3Panel(undefined);
               setShowMemory(false);
+              setKnowledgeTarget(undefined);
+              setKnowledgeProject(undefined);
               setShowSkills(!showSkills);
             })
           }
@@ -354,7 +426,10 @@ export function App() {
           onClick={() =>
             leaveSkills(() => {
               setDiagnostics(undefined);
+              setD3Panel(undefined);
               setShowSkills(false);
+              setKnowledgeTarget(undefined);
+              setKnowledgeProject(undefined);
               setShowMemory(!showMemory);
             })
           }
@@ -365,7 +440,9 @@ export function App() {
           type="button"
           onClick={() =>
             leaveSkills(() => {
+              setD3Panel(undefined);
               setShowMemory(false);
+              setD3Panel(undefined);
               setShowSkills(false);
               setDiagnostics({});
             })
@@ -373,13 +450,72 @@ export function App() {
         >
           历史日志
         </button>
+        <button
+          type="button"
+          onClick={() =>
+            leaveSkills(() => {
+              setDiagnostics(undefined);
+              setShowMemory(false);
+              setShowSkills(false);
+              setD3Panel('reflection');
+            })
+          }
+        >
+          反思记录
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            leaveSkills(() => {
+              setDiagnostics(undefined);
+              setShowMemory(false);
+              setShowSkills(false);
+              setD3Panel('suggestions');
+            })
+          }
+        >
+          进化建议{attention > 0 ? ` · ${attention}` : ''}
+        </button>
         <button type="button" onClick={() => setSettings(!settings)}>
           模型设置
         </button>
         <p className="connection">{online ? '● 已连接' : '○ 连接恢复中'}</p>
       </aside>
       <main>
-        {diagnostics ? (
+        {d3Panel === 'reflection' ? (
+          <ReflectionPanel
+            api={api}
+            session={selected}
+            onClose={() => setD3Panel(undefined)}
+            onEvidence={(source) => {
+              setD3Panel(undefined);
+              setDiagnostics({ evidence: source });
+            }}
+            onMemory={(id, _revision, project) => {
+              setKnowledgeProject(project);
+              setKnowledgeTarget(id);
+              setD3Panel(undefined);
+              setShowMemory(true);
+            }}
+            onSkill={(id, _revision, project, revisionId) => {
+              setKnowledgeRevision(revisionId);
+              setKnowledgeProject(project);
+              setKnowledgeTarget(id);
+              setD3Panel(undefined);
+              setShowSkills(true);
+            }}
+          />
+        ) : d3Panel === 'suggestions' ? (
+          <SuggestionsPanel
+            api={api}
+            onClose={() => setD3Panel(undefined)}
+            onDiscuss={selectSession}
+            onEvidence={(source) => {
+              setD3Panel(undefined);
+              setDiagnostics({ evidence: source });
+            }}
+          />
+        ) : diagnostics ? (
           <DiagnosticsPanel
             key={`${diagnostics.session?.id ?? 'all'}:${diagnostics.evidence?.sessionId ?? ''}:${diagnostics.evidence?.entryId ?? ''}`}
             api={api}
@@ -389,14 +525,16 @@ export function App() {
           />
         ) : showMemory ? (
           <MemoryPanel
+            initialId={knowledgeTarget}
             api={api}
-            project={selected?.cwd ?? cwd}
+            project={knowledgeProject ?? selected?.cwd ?? cwd}
             onDirtyChange={(value) => {
               memoryDirty.current = value;
             }}
             onClose={() => leaveSkills(() => setShowMemory(false))}
             onEvidence={(source) =>
               leaveSkills(() => {
+                setD3Panel(undefined);
                 setShowMemory(false);
                 setDiagnostics({ evidence: source });
               })
@@ -404,8 +542,10 @@ export function App() {
           />
         ) : showSkills ? (
           <SkillsPanel
+            initialKnowledgeRevision={knowledgeRevision}
+            initialId={knowledgeTarget}
             api={api}
-            project={selected?.cwd ?? cwd}
+            project={knowledgeProject ?? selected?.cwd ?? cwd}
             onDirtyChange={(value) => {
               skillsDirty.current = value;
             }}
@@ -413,6 +553,7 @@ export function App() {
             onAssist={(value) =>
               leaveSkills(() => {
                 setPrompt(value);
+                setD3Panel(undefined);
                 setShowSkills(false);
               })
             }
@@ -460,6 +601,7 @@ export function App() {
                 </div>
               )}
             </header>
+            <ReflectionStatus api={api} sessionId={selected?.id} onOpen={() => setD3Panel('reflection')} />
             {error && (
               <div role="alert" className="notice error">
                 {error}
@@ -597,7 +739,11 @@ export function App() {
                 )}
                 <section className="transcript">
                   {(selected.messages ?? [])
-                    .filter((m) => ['user', 'assistant', 'toolResult'].includes(m.role))
+                    .filter(
+                      (m) =>
+                        ['user', 'assistant', 'toolResult'].includes(m.role) ||
+                        (m.role === 'custom' && m.display !== false),
+                    )
                     .map((m, i) =>
                       m.role === 'toolResult' ? (
                         <details key={i}>

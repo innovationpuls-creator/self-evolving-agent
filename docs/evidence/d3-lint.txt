@@ -1,0 +1,341 @@
+
+> self-evolving-agent@0.1.0 lint
+> biome lint
+
+apps/host/storage/storage.ts:151:42 lint/complexity/noUselessEscapeInRegex  FIXABLE  ━━━━━━━━━━━━━━━
+
+  i The character doesn't need to be escaped.
+
+    149 │       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
+    150 │       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')
+  > 151 │       .replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi, 'Bearer [已保护]')
+        │                                          ^^
+    152 │       .replace(
+    153 │         /((?:password|passwd|authorization|api[_-]?(?:key|token)|access(?:[_-]?token)?|refresh(?:[_-]?token)?|token|secret|private[_-]?key)\s*["']?\s*[=:]\s*)(?:"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?|[^\s,;"']+)/gi,
+
+  i The character should only be escaped if it is outside a character class or under the `v` flag.
+
+  i Safe fix: Unescape the character.
+
+    151 │ ······.replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi,·'Bearer·[已保护]')
+        │                                          -
+
+tests/skills.test.ts:316:18 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+
+    314 │       {
+    315 │         path: 'skills/echo/SKILL.md',
+  > 316 │         content: (await f.skills.read(a.id, a.latest, 'skills/echo/SKILL.md')).content + '\nUpdated rule.',
+        │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    317 │       },
+    318 │     ]);
+
+  i Unsafe fix: Use a template literal.
+
+    314 314 │         {
+    315 315 │           path: 'skills/echo/SKILL.md',
+    316     │ - ········content:·(await·f.skills.read(a.id,·a.latest,·'skills/echo/SKILL.md')).content·+·'\nUpdated·rule.',
+        316 │ + ········content:·`${(await·f.skills.read(a.id,·a.latest,·'skills/echo/SKILL.md')).content}\nUpdated·rule.`,
+    317 317 │         },
+    318 318 │       ]);
+
+
+tests/skills.test.ts:631:41 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+
+    629 │     assert.equal((await f.publish(a)).status, 'applied');
+    630 │     f.fake.setResponses([fauxAssistantMessage('long first answer')]);
+  > 631 │     await f.host.service.prompt(f.s.id, 'first ' + 'historical context '.repeat(4500));
+        │                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    632 │     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    633 │     const firstLeaf = (
+
+  i Unsafe fix: Use a template literal.
+
+    629 629 │       assert.equal((await f.publish(a)).status, 'applied');
+    630 630 │       f.fake.setResponses([fauxAssistantMessage('long first answer')]);
+    631     │ - ····await·f.host.service.prompt(f.s.id,·'first·'·+·'historical·context·'.repeat(4500));
+        631 │ + ····await·f.host.service.prompt(f.s.id,·`first·${'historical·context·'.repeat(4500)}`);
+    632 632 │       await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    633 633 │       const firstLeaf = (
+
+
+tests/skills.test.ts:638:41 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+
+    636 │     ).sessionManager.getLeafId()!;
+    637 │     f.fake.setResponses([fauxAssistantMessage('second answer')]);
+  > 638 │     await f.host.service.prompt(f.s.id, 'second ' + 'recent context '.repeat(6500));
+        │                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    639 │     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    640 │     await f.host.service.action(f.s.id, 'branch', firstLeaf);
+
+  i Unsafe fix: Use a template literal.
+
+    636 636 │       ).sessionManager.getLeafId()!;
+    637 637 │       f.fake.setResponses([fauxAssistantMessage('second answer')]);
+    638     │ - ····await·f.host.service.prompt(f.s.id,·'second·'·+·'recent·context·'.repeat(6500));
+        638 │ + ····await·f.host.service.prompt(f.s.id,·`second·${'recent·context·'.repeat(6500)}`);
+    639 639 │       await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    640 640 │       await f.host.service.action(f.s.id, 'branch', firstLeaf);
+
+
+apps/host/runtime/session-routes.ts:57:33 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    55 │   const recover = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
+    56 │   if (recover && req.method === 'POST') {
+  > 57 │     await service.recoverSkills(recover[1]!);
+       │                                 ^^^^^^^^^^^
+    58 │     json(res, 200, { ok: true });
+    59 │     return true;
+
+
+apps/host/runtime/session-routes.ts:65:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    63 │   );
+    64 │   if (match) {
+  > 65 │     const id = match[1]!,
+       │                ^^^^^^^^^
+    66 │       action = match[2];
+    67 │     if (!action && req.method === 'GET') {
+
+
+apps/host/skills/skill-loader.ts:9:8 lint/style/useImportType  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Some named imports are only used as types.
+
+     7 │   type SettingsManager,
+     8 │ } from '@earendil-works/pi-coding-agent';
+   > 9 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    10 │
+    11 │ // Only the native loader's approved, materialized local paths may import code.
+
+  i This import is only used as a type.
+
+     7 │   type SettingsManager,
+     8 │ } from '@earendil-works/pi-coding-agent';
+   > 9 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │          ^^^^^^^^^^^^
+    10 │
+    11 │ // Only the native loader's approved, materialized local paths may import code.
+
+  i Importing the types with import type ensures that they are removed by the compilers and avoids loading unnecessary modules.
+
+  i Safe fix: Add inline type keywords.
+
+    9 │ import·{·type·SkillService,·type·SkillLoadout,·type·SkillResourceSource,·SkillError·}·from·'./skills.js';
+      │          +++++
+
+apps/host/skills/skill-routes.ts:41:68 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    39 │   const operation = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
+    40 │   if (operation && req.method === 'GET') {
+  > 41 │     json(res, 200, service.sensitive.copy(service.skills.operation(operation[1]!)));
+       │                                                                    ^^^^^^^^^^^^^
+    42 │     return true;
+    43 │   }
+
+
+apps/host/skills/skill-routes.ts:49:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    47 │     );
+    48 │   if (skillRoute) {
+  > 49 │     const id = skillRoute[1]!,
+       │                ^^^^^^^^^^^^^^
+    50 │       action = skillRoute[2];
+    51 │     if (!action && req.method === 'GET') {
+
+
+apps/host/storage/storage.ts:81:5 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Change to an optional chain.
+
+    79 │ export function restore(saved: Snapshot) {
+    80 │   if (
+  > 81 │     !saved ||
+       │     ^^^^^^^^^
+  > 82 │     !saved.header ||
+       │     ^^^^^^^^^^^^^
+    83 │     !Array.isArray(saved.entries) ||
+    84 │     (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+
+  i Unsafe fix: Change to an optional chain.
+
+     79  79 │   export function restore(saved: Snapshot) {
+     80  80 │     if (
+     81     │ - ····!saved·||
+     82     │ - ····!saved.header·||
+         81 │ + ····!saved?.header·||
+     83  82 │       !Array.isArray(saved.entries) ||
+     84  83 │       (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+
+
+apps/web/src/main.tsx:5:12 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    3 │ import './style.css';
+    4 │
+  > 5 │ createRoot(document.getElementById('root')!).render(<App />);
+      │            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    6 │
+
+
+scripts/browser-smoke.ts:35:5 lint/correctness/noUnusedVariables  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! This variable b is unused.
+
+    33 │   await mkdir(bDir);
+    34 │   const a = await host.service.create(aDir, fake.provider.id, 'browser-model'),
+  > 35 │     b = await host.service.create(bDir, fake.provider.id, 'browser-model');
+       │     ^
+    36 │   const page = await browser.newPage();
+    37 │   await page.goto(`${host.origin}/#token=${token}`);
+
+  i Unused variables are often the result of typos, incomplete refactors, or other sources of bugs.
+
+  i Unsafe fix: If this is intentional, prepend b with an underscore.
+
+    33 33 │     await mkdir(bDir);
+    34 34 │     const a = await host.service.create(aDir, fake.provider.id, 'browser-model'),
+    35    │ - ····b·=·await·host.service.create(bDir,·fake.provider.id,·'browser-model');
+       35 │ + ····_b·=·await·host.service.create(bDir,·fake.provider.id,·'browser-model');
+    36 36 │     const page = await browser.newPage();
+    37 37 │     await page.goto(`${host.origin}/#token=${token}`);
+
+
+tests/skills.test.ts:185:42 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    183 │       f.skills.import({
+    184 │         source,
+  > 185 │         bindings: [...bindings, { skill: bindings[1]!.skill, extensions: bindings[0]!.extensions }],
+        │                                          ^^^^^^^^^^^^
+    186 │       }),
+    187 │       /共享/,
+
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+
+    183 183 │         f.skills.import({
+    184 184 │           source,
+    185     │ - ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]!.extensions·}],
+        185 │ + ········bindings:·[...bindings,·{·skill:·bindings[1]?.skill,·extensions:·bindings[0]!.extensions·}],
+    186 186 │         }),
+    187 187 │         /共享/,
+
+
+tests/skills.test.ts:185:74 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    183 │       f.skills.import({
+    184 │         source,
+  > 185 │         bindings: [...bindings, { skill: bindings[1]!.skill, extensions: bindings[0]!.extensions }],
+        │                                                                          ^^^^^^^^^^^^
+    186 │       }),
+    187 │       /共享/,
+
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+
+    183 183 │         f.skills.import({
+    184 184 │           source,
+    185     │ - ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]!.extensions·}],
+        185 │ + ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]?.extensions·}],
+    186 186 │         }),
+    187 187 │         /共享/,
+
+
+tests/skills.test.ts:354:64 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+
+
+tests/skills.test.ts:354:78 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                              ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+
+
+tests/skills.test.ts:354:92 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                                            ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+
+
+tests/skills.test.ts:412:17 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    410 │       { session: import('@earendil-works/pi-coding-agent').AgentSession; skillFailed?: boolean }
+    411 │     >;
+  > 412 │     const one = live.get(f.s.id)!,
+        │                 ^^^^^^^^^^^^^^^^^
+    413 │       two = live.get(s2.id)!,
+    414 │       original = one.session,
+
+
+tests/skills.test.ts:413:13 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    411 │     >;
+    412 │     const one = live.get(f.s.id)!,
+  > 413 │       two = live.get(s2.id)!,
+        │             ^^^^^^^^^^^^^^^^
+    414 │       original = one.session,
+    415 │       manager = original.sessionManager;
+
+
+tests/skills.test.ts:633:23 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    631 │     await f.host.service.prompt(f.s.id, 'first ' + 'historical context '.repeat(4500));
+    632 │     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+  > 633 │     const firstLeaf = (
+        │                       ^
+  > 634 │       Reflect.get(f.host.service, 'active').get(f.s.id)
+  > 635 │         .session as import('@earendil-works/pi-coding-agent').AgentSession
+  > 636 │     ).sessionManager.getLeafId()!;
+        │     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    637 │     f.fake.setResponses([fauxAssistantMessage('second answer')]);
+    638 │     await f.host.service.prompt(f.s.id, 'second ' + 'recent context '.repeat(6500));
+
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 54.
+Checked 68 files in 67ms. No fixes applied.
+Found 53 warnings.
+Found 21 infos.

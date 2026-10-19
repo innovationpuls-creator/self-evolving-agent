@@ -41,8 +41,10 @@ try {
   assert.deepEqual(contents.sort(), ['README.md', 'dist', 'node_modules', 'package.json']);
   assert.deepEqual((await readdir(join(appDir, 'dist/host'))).sort(), [
     'diagnostics',
+    'evolution',
     'main.js',
     'memory',
+    'reflection',
     'runtime',
     'skills',
     'storage',

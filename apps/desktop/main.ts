@@ -56,7 +56,17 @@ async function start(key: string, dir: string) {
   child.stdout?.resume();
   child.stderr?.resume();
   const current = child;
-  current.once('spawn', () => current.postMessage({ dataDir: dir, key, token, port }));
+  current.once('spawn', () =>
+    current.postMessage({
+      dataDir: dir,
+      key,
+      token,
+      port,
+      reflectionAppBundle: app.isPackaged
+        ? join(process.resourcesPath, '../..')
+        : process.env.AGENT_REFLECTION_APP_BUNDLE,
+    }),
+  );
   let ready = false;
   current.on('message', async (message) => {
     if (message.type === 'ready') {

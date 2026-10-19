@@ -7,6 +7,7 @@ interface Config {
   key: string;
   token: string;
   port?: number;
+  reflectionAppBundle?: string;
 }
 async function run(config: Config) {
   const dataDir = resolve(config.dataDir);
@@ -78,6 +79,7 @@ else {
     key,
     token,
     port: Number(process.env.PORT ?? 4317),
+    reflectionAppBundle: process.env.AGENT_REFLECTION_APP_BUNDLE,
   }).catch(() => {
     console.error('Host 启动失败，请检查密钥、数据目录与端口');
     process.exit(1);

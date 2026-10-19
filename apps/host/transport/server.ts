@@ -14,6 +14,8 @@ import { diagnosticRoutes } from '../diagnostics/diagnostic-routes.js';
 import { memoryRoutes } from '../memory/memory-routes.js';
 import { sessionRoutes } from '../runtime/session-routes.js';
 import { skillRoutes } from '../skills/skill-routes.js';
+import { reflectionRoutes } from '../reflection/reflection-routes.js';
+import { evolutionRoutes } from '../evolution/evolution-routes.js';
 
 function equal(a: string, b: string) {
   const x = Buffer.from(a),
@@ -28,9 +30,12 @@ export async function startHost(options: {
   port?: number;
   webDir?: string;
   service?: AgentService;
+  reflectionAppBundle?: string;
 }) {
   if (options.token.length < 32) throw new Error('连接令牌至少需要 32 个字符');
-  const service = options.service ?? new AgentService(options.dataDir, options.key);
+  const service =
+    options.service ??
+    new AgentService(options.dataDir, options.key, { reflectionAppBundle: options.reflectionAppBundle });
   try {
     await service.init();
   } catch (error) {
@@ -75,6 +80,17 @@ export async function startHost(options: {
           return;
         }
         if (
+          (await reflectionRoutes(service.reflection, req, res, url)) ||
+          (await evolutionRoutes(
+            service.evolution,
+            service.ensureDiscussion.bind(service),
+            req,
+            res,
+            url,
+            async (ctx, input) => {
+              await service.reflection.authorizeEvidence(ctx.project, input.evidence, ctx.actor);
+            },
+          )) ||
           (await diagnosticRoutes(service.diagnosticHistory, req, res, url)) ||
           (await memoryRoutes(service, req, res, url)) ||
           (await sessionRoutes(service, req, res, url)) ||

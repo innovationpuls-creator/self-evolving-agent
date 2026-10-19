@@ -24,12 +24,14 @@ const blank = (project: string): MemoryContent => ({
 export function MemoryPanel({
   api,
   project,
+  initialId,
   onClose,
   onDirtyChange,
   onEvidence,
 }: {
   api: Api;
   project: string;
+  initialId?: string;
   onClose: () => void;
   onDirtyChange: (dirty: boolean) => void;
   onEvidence: (source: EvidenceReference) => void;
@@ -194,6 +196,9 @@ export function MemoryPanel({
     setDetail(undefined);
     void guard(() => loadDetail(id, true));
   };
+  useEffect(() => {
+    if (initialId) open(initialId);
+  }, [initialId, project]);
   const start = () => {
     if (!discard()) return;
     detailEpoch.current++;

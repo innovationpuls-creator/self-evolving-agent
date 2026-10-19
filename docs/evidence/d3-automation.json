@@ -1,0 +1,78 @@
+{
+  "baseline": "cf51143a3ce89e1a3d2ba1a94bc98f4083831895",
+  "recordedAt": "2026-10-19T14:32:28.258900+00:00",
+  "platform": "macOS arm64",
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "d3-typecheck.txt",
+      "sha256": "6d291750f2503d1ebf2d3ef83769fa8d0b5dcc4d6ebbf02a953b26a3554bf6f4"
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "log": "d3-lint.txt",
+      "sha256": "d4d6326bfc3ab8025c945453d85e872fc9562823dad311f584ac1f866821bc73"
+    },
+    {
+      "command": "npm run format:check",
+      "exitCode": 0,
+      "log": "d3-format.txt",
+      "sha256": "64a6d6d24af908d9687c15569e382061215ca768b6b4d9300c7f9df27af9738b"
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "log": "d3-tests.txt",
+      "sha256": "54758c9cd2a6a5e021c8686aa94751f5864fc98eca1047d52783d46e48dbc42c"
+    },
+    {
+      "command": "npm run package:desktop",
+      "exitCode": 0,
+      "log": "d3-package.txt",
+      "sha256": "4f694a4686db64a8dd24b13d9c84994aaf80c24d79d549bdf91cf3f5ace4429a"
+    },
+    {
+      "command": "npm run test:desktop",
+      "exitCode": 0,
+      "log": "d3-desktop.txt",
+      "sha256": "05b1d4111e830bd7b7cf47f17bcee7083ea624bd82b073b71119ae8439c4ab24"
+    }
+  ],
+  "tests": {
+    "total": 126,
+    "passed": 125,
+    "failed": 0,
+    "skipped": 1,
+    "skipReason": "Apple signing identity unavailable; no real sandbox execution substituted"
+  },
+  "lint": {
+    "warnings": 53,
+    "infos": 21,
+    "exitCode": 0
+  },
+  "signingIdentities": "0 valid identities found",
+  "independentReview": {
+    "schedulerFocusedTests": 21,
+    "ipcTests": 9,
+    "remainingCodeBlockers": [],
+    "uuidProtectionReview": "17 assertions and 5 related regressions passed"
+  },
+  "realPackagedReceipt": "d3-packaged-integration.json",
+  "fullReflectionAcceptance": "blocked",
+  "d4FunctionalAdmission": false,
+  "screenshots": [
+    {
+      "path": "release/d3-evidence/suggestions.png",
+      "sha256": "166381d3aaade9133f09356cab29b23dd021db664e8b69e05e127569b1859477",
+      "visuallyInspected": true
+    },
+    {
+      "path": "release/d3-evidence/reflection-unavailable.png",
+      "sha256": "940557726e4d568dbb8a162973bb867b40e75bccdc71c085e3247004f834947d",
+      "visuallyInspected": true
+    }
+  ],
+  "logNormalization": "Trailing whitespace and blank EOF lines stripped; diagnostic content retained"
+}

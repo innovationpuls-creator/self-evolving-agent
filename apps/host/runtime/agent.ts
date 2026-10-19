@@ -10,6 +10,7 @@ import {
   SessionManager,
   SettingsManager,
   type AgentSession,
+  type ToolDefinition,
 } from '@earendil-works/pi-coding-agent';
 import { InMemoryCredentialStore, type Credential, type CredentialStore } from '@earendil-works/pi-ai';
 import { SkillService, SkillError, type SkillLoadout, type SkillOperation } from '../skills/skills.js';
@@ -26,16 +27,16 @@ import {
 import { diagnosticTools, diagnosticToolNames } from '../diagnostics/diagnostic-tools.js';
 import { diagnosticResources } from '../diagnostics/diagnostic-resources.js';
 import { DiagnosticHistory } from '../diagnostics/diagnostic-history.js';
+import {
+  ReflectionService,
+  reflectionMarker,
+  type ReflectionExecutor,
+  type SessionRecord,
+} from '../reflection/reflection-service.js';
+import { EvolutionService, evolutionInput, type EvolutionSuggestion } from '../evolution/evolution.js';
+import { evolutionTools, evolutionToolNames } from '../evolution/evolution-tools.js';
 
-interface RecordData {
-  id: string;
-  cwd: string;
-  provider: string;
-  model: string;
-  title: string;
-  updated: number;
-  interrupted?: boolean;
-}
+type RecordData = SessionRecord;
 interface Saved {
   record: RecordData;
   session: Snapshot;
@@ -106,6 +107,8 @@ export class AgentService extends EventEmitter {
   memory!: MemoryService;
   diagnostics!: DiagnosticService;
   diagnosticHistory!: DiagnosticHistory;
+  reflection!: ReflectionService;
+  evolution!: EvolutionService;
   private gate?: { promise: Promise<void>; release: () => void };
   private queued: Array<{ id: string; text: string }> = [];
   private draining = false;
@@ -128,11 +131,17 @@ export class AgentService extends EventEmitter {
   private db!: DatabaseSync;
   private active = new Map<string, Active>();
   private loading = new Map<string, Promise<Active>>();
-  private creating = new Set<Promise<Active>>();
+  private creating = new Set<Promise<unknown>>();
   private closing = false;
   constructor(
     readonly dataDir: string,
     key: Buffer,
+    private options: {
+      reflectionExecutor?: ReflectionExecutor;
+      reflectionAppBundle?: string;
+      reflectionDelayMs?: number;
+      reflectionModelTimeoutMs?: number;
+    } = {},
   ) {
     super();
     this.store = new EncryptedStore(dataDir, key);
@@ -203,6 +212,49 @@ export class AgentService extends EventEmitter {
     // Dispatch boundary: unlike Extension hooks, an exception here prevents the provider call.
     const send = this.runtime.streamSimple.bind(this.runtime);
     this.runtime.streamSimple = (model, context, options) => send(model, this.sensitive.copy(context), options);
+    this.evolution = new EvolutionService(this.db, this.sensitive, () => this.emit('event', { type: 'evolution' }));
+    this.evolution.init();
+    this.reflection = new ReflectionService({
+      db: this.db,
+      store: this.store,
+      sensitive: this.sensitive,
+      runtime: this.runtime,
+      memory: this.memory,
+      diagnostics: this.diagnostics,
+      history: this.diagnosticHistory,
+      skills: this.skills,
+      evolution: this.evolution,
+      read: (id) => this.loadSaved(id),
+      records: () => this.records(),
+      canRun: () =>
+        !this.closing &&
+        !this.gate &&
+        !this.draining &&
+        !this.queued.length &&
+        !this.loading.size &&
+        !this.creating.size &&
+        ![...this.active.values()].some((i) => i.busy),
+      changed: () => this.emit('event', { type: 'reflection' }),
+      refreshKnowledge: () => this.refreshSkillKnowledge(),
+      executor: this.options.reflectionExecutor,
+      appBundle: this.options.reflectionAppBundle,
+      delayMs: this.options.reflectionDelayMs,
+      modelTimeoutMs: this.options.reflectionModelTimeoutMs,
+    });
+    this.reflection.init();
+    for (const id of ids) {
+      const loaded = await this.loadSaved(id).catch(() => undefined);
+      if (loaded) this.reflection.recover(loaded.saved.record, loaded.saved.session);
+    }
+    this.reflection.wake();
+  }
+  private async records(): Promise<RecordData[]> {
+    const records: RecordData[] = [];
+    for (const row of this.db.prepare('SELECT id FROM sessions ORDER BY updated DESC').all()) {
+      const saved = await this.loadSaved(String(row.id)).catch(() => undefined);
+      if (saved) records.push(saved.saved.record);
+    }
+    return records;
   }
   async models() {
     return {
@@ -245,7 +297,7 @@ export class AgentService extends EventEmitter {
   }
   async list() {
     const rows = this.db.prepare('SELECT id,updated FROM sessions ORDER BY updated DESC').all();
-    return Promise.all(
+    const items = await Promise.all(
       rows.map(async (row) => {
         const id = String(row.id),
           item = this.active.get(id);
@@ -274,6 +326,58 @@ export class AgentService extends EventEmitter {
         }
       }),
     );
+    return items.filter((item) => !('purpose' in item) || item.purpose !== 'reflection');
+  }
+  async ensureDiscussion(id: string, suggestion: EvolutionSuggestion) {
+    await this.waitBarrier();
+    if (this.closing) throw new Error('Host 正在退出');
+    const task = this.createDiscussion(id, suggestion);
+    this.creating.add(task);
+    try {
+      await task;
+    } finally {
+      this.creating.delete(task);
+    }
+  }
+  private async createDiscussion(id: string, suggestion: EvolutionSuggestion) {
+    const existing = await this.loadSaved(id);
+    if (existing) {
+      if (existing.saved.record.purpose !== 'discussion') throw new Error('讨论会话身份冲突');
+      return;
+    }
+    const origin = suggestion.source ? await this.loadSaved(suggestion.source.sessionId) : undefined;
+    const model = origin
+      ? this.runtime.getModel(origin.saved.record.provider, origin.saved.record.model)
+      : (await this.runtime.getAvailable())[0];
+    if (!model) throw new Error('讨论需要可用模型');
+    const cwd = await realpath(suggestion.project ?? origin?.saved.record.cwd ?? this.dataDir);
+    const record: RecordData = {
+      id,
+      cwd,
+      provider: model.provider,
+      model: model.id,
+      title: suggestion.title,
+      updated: Date.now(),
+      purpose: 'discussion',
+    };
+    const item = await this.build(record, SessionManager.inMemory(cwd, { id }));
+    try {
+      await item.session.sendCustomMessage(
+        {
+          customType: 'evolution_discussion',
+          content: `讨论进化建议：${suggestion.title}\n目标：${suggestion.goal}\n形成原因：${suggestion.reason}\n预期价值：${suggestion.value}\n不确定性：${suggestion.uncertainty}\n建议操作：${suggestion.action}\n证据：${JSON.stringify(suggestion.evidence)}\n采纳仅开启讨论，尚未授权开发。`,
+          display: true,
+          details: { suggestionId: suggestion.id },
+        },
+        { triggerTurn: false },
+      );
+      await this.persist(item);
+      this.active.set(id, item);
+      this.changed(item);
+    } catch (error) {
+      item.session.dispose();
+      throw error;
+    }
   }
   async create(cwd: string, provider: string, model: string) {
     await this.waitBarrier();
@@ -306,7 +410,16 @@ export class AgentService extends EventEmitter {
     const settings = SettingsManager.inMemory(
       {
         compaction: { enabled: true },
-        defaultTools: ['read', 'bash', 'edit', 'write', 'tool_search', ...memoryToolNames, ...diagnosticToolNames],
+        defaultTools: [
+          'read',
+          'bash',
+          'edit',
+          'write',
+          'tool_search',
+          ...memoryToolNames,
+          ...diagnosticToolNames,
+          ...evolutionToolNames,
+        ],
       },
       { projectTrusted: false },
     );
@@ -323,6 +436,14 @@ export class AgentService extends EventEmitter {
       customTools: [
         ...memoryTools(this.memory, record.cwd, (callId) => this.memorySource(record.id, callId)),
         ...diagnosticTools(this.diagnosticHistory, record.cwd),
+        ...evolutionTools(this.evolution, (callId) => this.memorySource(record.id, callId)).map((tool) => ({
+          ...tool,
+          execute: (async (callId, args, signal, onUpdate, ctx) => {
+            const input = evolutionInput.parse(args);
+            await this.reflection.authorizeEvidence(record.cwd, input.evidence);
+            return tool.execute(callId, args, signal, onUpdate, ctx);
+          }) as ToolDefinition['execute'],
+        })),
       ],
     });
     const item: Active = {
@@ -343,6 +464,20 @@ export class AgentService extends EventEmitter {
     this.enableMemoryTools(session);
     session.subscribe((event) => {
       item.diagnostic.observe(event);
+      if (event.type === 'agent_settled') {
+        const last = session.messages.at(-1);
+        manager.appendCustomEntry(reflectionMarker, {
+          version: 1,
+          settledAt: Date.now(),
+          status:
+            last?.role === 'assistant' && last.stopReason === 'aborted'
+              ? 'stopped'
+              : last?.role !== 'assistant' || last.stopReason === 'error'
+                ? 'failed'
+                : 'ended',
+          ...(item.diagnostic.traceId ? { traceId: item.diagnostic.traceId } : {}),
+        });
+      }
       try {
         if (
           [
@@ -413,7 +548,7 @@ export class AgentService extends EventEmitter {
   }
   private enableMemoryTools(session: AgentSession) {
     const active = session.getActiveToolNames();
-    const required = [...memoryToolNames, ...diagnosticToolNames];
+    const required = [...memoryToolNames, ...diagnosticToolNames, ...evolutionToolNames];
     if (required.some((name) => !active.includes(name)))
       session.setActiveToolsByName([...new Set([...active, ...required])]);
   }
@@ -429,6 +564,7 @@ export class AgentService extends EventEmitter {
       const loaded = await this.loadSaved(id);
       if (!loaded) throw new Error('会话不存在');
       const { saved, previous } = loaded;
+      if (saved.record.purpose === 'reflection') throw new Error('反思会话只能通过受控历史接口读取');
       const item = await this.build(saved.record, restore(saved.session));
       if (previous) {
         item.recovered = true;
@@ -482,6 +618,12 @@ export class AgentService extends EventEmitter {
       this.db
         .prepare('INSERT INTO sessions VALUES (?,?) ON CONFLICT(id) DO UPDATE SET updated=excluded.updated')
         .run(item.record.id, data.record.updated);
+      try {
+        this.reflection?.recover(data.record, data.session);
+        this.reflection?.wake();
+      } catch {
+        this.diagnostics.system('REFLECTION_REGISTRATION_FAILED', 'error', item.record.id);
+      }
       const committed = restore(data.session);
       try {
         this.memory.reconcileSource(
@@ -643,6 +785,7 @@ export class AgentService extends EventEmitter {
           item.error = '历史保存失败，请检查数据目录';
         }
         item.busy = false;
+        this.reflection.wake();
         dispatched();
         this.changed(item);
       }
@@ -651,6 +794,9 @@ export class AgentService extends EventEmitter {
   async stop(id: string) {
     const item = await this.get(id);
     await item.session.abort();
+    await item.run;
+    this.reflection.jobs.expedite(id);
+    this.reflection.wake();
   }
   async action(id: string, action: 'compact' | 'branch' | 'model' | 'thinking', value?: string, provider?: string) {
     const item = await this.get(id);
@@ -914,6 +1060,7 @@ export class AgentService extends EventEmitter {
   }
   async close() {
     this.closing = true;
+    await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
     await Promise.allSettled(
       [...this.active.values()].map(async (item) => {
         await item.session.abort();
