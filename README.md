@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)。
 
 ## 从源码启动
 
@@ -85,7 +85,7 @@ npm run test:skills:ui
 
 ## 当前边界
 
-当前提供 D1 的本机纵向集成及 D2 首个 Skill 管理纵向功能。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
+当前提供 D1 本机集成，以及通过整体业务验收的 D2 Skill、Memory 和 Diagnostic Log；满足 D3 数据及能力访问准入条件。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
 
 尚未实现自动 Reflection、Evolution 或生成代码隔离。特殊 Skill 经过人工审查仍与 Host 同进程、同权限运行；这不等于代码沙箱。Windows 实机、长期运行与完整安全场景仍待验收。
 
@@ -123,3 +123,9 @@ HTTP 使用现有 Bearer 认证：
 完整 Prompt、Thinking、参数和结果仍只存在于加密 Pi Session。SQLite 诊断仅存指标及引用，单条元数据上限64KiB、队列上限1000，超限或写入失败标识缺失而不阻止正常任务；已存在指标不会因证据故障消失。异常重启不重放，未结束记录标中断；只有原生确实保存的事实能够补齐，未采集耗时保持未知。上线前历史不补造 Trace，仍可按原生 Entry 取证。
 
 Host System Log 只保存固定故障 code、级别和关联 ID，最多5000条且不超过30天；Trace 详情的 `systemLogs` 提供关联工程故障。诊断历史本身随业务数据保留，未新增自动删除政策。真实双端验收可运行 `npx tsx scripts/diagnostic-ui-smoke.ts`（先打包，会使用模型额度）。
+
+## D2 整体集成验收
+
+打包后执行 `npx tsx scripts/d2-integration-ui-smoke.ts`，使用本机 Pi 授权、macOS Desktop、Chrome 和真实模型额度，在同一项目中连续验证 Skill、知识积累/修正/分支适用性、原生诊断、Host 强杀及重启续接。默认只加载普通 Skill；不能把历史特殊版本批准复用于本轮。收据见 [整体验收报告](D2-INTEGRATION-ACCEPTANCE.md)。
+
+`npx tsx scripts/skills-response-browser-smoke.ts` 在已构建 Web 上验证 10 项异步响应、重连和跨项目状态场景，不使用模型。完整自动化回归使用 `npm test`。

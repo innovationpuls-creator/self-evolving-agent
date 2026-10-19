@@ -79,42 +79,92 @@ export function SkillsPanel({
     [notice, setNotice] = useState('');
   const detailRef = useRef<string | undefined>(undefined),
     epoch = useRef(0),
+    detailEpoch = useRef(0),
+    refreshEpoch = useRef(0),
+    generation = useRef(0),
+    context = useRef(project),
+    operations = useRef(0),
     dirty = useRef(false);
+  if (context.current !== project) {
+    context.current = project;
+    generation.current++;
+    operations.current = 0;
+  }
   const refresh = async () => {
+    if (context.current !== project) return;
+    const request = ++refreshEpoch.current,
+      owner = generation.current,
+      selection = epoch.current;
     const list = await api<Catalog>(`/skills${project ? `?project=${encodeURIComponent(project)}` : ''}`);
+    if (request !== refreshEpoch.current || owner !== generation.current) return;
     setCatalog(list);
-    if (detailRef.current && !dirty.current) {
+    if (detailRef.current && !dirty.current && selection === epoch.current) {
       const id = detailRef.current,
+        detailRequest = ++detailEpoch.current,
         data = await api<Detail>(`/skills/${id}`);
-      if (id === detailRef.current) setDetail(data);
+      if (
+        request === refreshEpoch.current &&
+        owner === generation.current &&
+        selection === epoch.current &&
+        detailRequest === detailEpoch.current &&
+        id === detailRef.current &&
+        !dirty.current
+      )
+        setDetail(data);
     }
   };
   const guard = async (fn: () => Promise<unknown>) => {
+    const owner = generation.current;
+    operations.current++;
     setBusy(true);
     setError('');
     try {
       await fn();
     } catch (e) {
-      setError((e as Error).message);
+      if (owner === generation.current) setError((e as Error).message);
     } finally {
-      setBusy(false);
+      if (owner === generation.current) {
+        operations.current--;
+        setBusy(operations.current > 0);
+      }
     }
   };
   useEffect(() => {
+    detailRef.current = undefined;
+    epoch.current++;
+    detailEpoch.current++;
+    dirty.current = false;
+    setCatalog(undefined);
+    setDetail(undefined);
+    setEditing(false);
+    setPath('');
+    setContent('');
+    setLoaded('');
+    setError('');
+    setNotice('');
+    setBusy(false);
     void guard(refresh);
     const handler = () => void refresh().catch(() => {});
     window.addEventListener('agent-skills-changed', handler);
     window.addEventListener('agent-reconnected', handler);
     return () => {
+      generation.current++;
+      refreshEpoch.current++;
+      detailEpoch.current++;
+      epoch.current++;
+      operations.current = 0;
       window.removeEventListener('agent-skills-changed', handler);
       window.removeEventListener('agent-reconnected', handler);
     };
   }, [project]);
   const open = async (id: string) => {
     if (dirty.current && !window.confirm('当前文件有未保存修改，离开并放弃这些修改？')) return;
-    const current = ++epoch.current;
+    const current = ++epoch.current,
+      request = ++detailEpoch.current,
+      owner = generation.current;
     detailRef.current = id;
     dirty.current = false;
+    setDetail(undefined);
     setEditing(false);
     setPath('');
     setContent('');
@@ -122,16 +172,17 @@ export function SkillsPanel({
     setNotes('');
     setReviewChecks([false, false, false]);
     const data = await api<Detail>(`/skills/${id}`);
-    if (epoch.current === current) setDetail(data);
+    if (owner === generation.current && epoch.current === current && request === detailEpoch.current) setDetail(data);
   };
   const read = async (file: string, version?: string) => {
     if (dirty.current && !window.confirm('放弃当前文件未保存的修改？')) return;
-    if (!detail) return;
-    const current = ++epoch.current;
+    if (!detail || detailRef.current !== detail.skill.id) return;
+    const current = ++epoch.current,
+      owner = generation.current;
     const data = await api<{ content: string; baseRevision: number; version: string; latest: string }>(
       `/skills/${detail.skill.id}/files?version=${version ?? detail.skill.latest}&path=${encodeURIComponent(file)}`,
     );
-    if (current !== epoch.current) return;
+    if (owner !== generation.current || current !== epoch.current) return;
     setPath(file);
     setContent(data.content);
     setLoaded(data.content);
@@ -187,10 +238,14 @@ export function SkillsPanel({
   }, []);
   const save = async () => {
     if (!detail) return;
+    const owner = generation.current,
+      selection = epoch.current,
+      id = detail.skill.id;
     const data = await api<Detail>(`/skills/${detail.skill.id}/edit`, 'POST', {
       baseRevision: bufferRevision,
       files: [{ path, content }],
     });
+    if (owner !== generation.current || selection !== epoch.current || id !== detailRef.current) return;
     dirty.current = false;
     setLoaded(content);
     setBufferRevision(data.skill.revision);

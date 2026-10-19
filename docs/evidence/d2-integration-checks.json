@@ -1,0 +1,172 @@
+{
+  "at": "2026-10-19T02:44:07.254Z",
+  "baseline": "e7c301d5ce675c92c904faea3e1104e76a6cf37b",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64",
+    "node": "26.10.0",
+    "pi": "1.3.0",
+    "electron": "44.9.0",
+    "chrome": "155.0.8059.84"
+  },
+  "unit": {
+    "command": "npm test",
+    "total": 81,
+    "passed": 81,
+    "failed": 0,
+    "durationMs": 12563.997083,
+    "deterministicIntegration": "tests/integration.test.ts",
+    "coverage": "Real Pi fauxProvider loop, ordinary Skill, unreviewed executable rejection, sourced Memory, correction, fresh-turn branch withdrawal, independent confirmation, native diagnostics, graceful restart and continuation"
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "desktopPackage": {
+    "status": "passed",
+    "output": "release/Agent-darwin-arm64/Agent.app",
+    "standardCommand": "npm run package:desktop",
+    "standardRetryFailure": "Electron download ETIMEDOUT",
+    "fallback": "Same official @electron/packager options with electronZipDir pointing to cached electron-v44.9.0-darwin-arm64.zip; no packaging configuration changed",
+    "webAsset": "index-DqRoawm7.js",
+    "webAssetSha256": "a70f01956910475a14b03153c0e316d362270ab84e657b9b1b09a45658a295ef",
+    "packagedAssetMatchesBuild": true
+  },
+  "browser": {
+    "responseOrdering": {
+      "command": "npx tsx scripts/skills-response-browser-smoke.ts",
+      "status": "passed",
+      "scenarios": 10,
+      "results": {
+        "reconnectCatalogOrder": true,
+        "reconnectDetailOrder": true,
+        "refreshBeforeOpen": true,
+        "openBeforeRefresh": true,
+        "readAndDirtyDraft": true,
+        "projectRoundTrip": true,
+        "projectInvalidatesRead": true,
+        "unmountInvalidatesResponse": true,
+        "oldMutationRefreshContext": true,
+        "oldSaveDoesNotReplaceProject": true
+      },
+      "redBeforeFix": {
+        "staleCatalogOverwrite": true,
+        "oldMutationRefresh": "0 !== 1",
+        "oldSaveDetail": "SAVED_PROJECT_A replaced current empty selection"
+      }
+    },
+    "existingSkill": {
+      "command": "npm run test:skills:browser",
+      "status": "passed",
+      "twoClientConflict": true,
+      "cleanStaleBufferConflict": true,
+      "unsavedExitGuard": true,
+      "exactReviewReset": true,
+      "asyncImportWebSocket": true,
+      "reconnectAuthoritativeState": true,
+      "ordinaryPublishDisable": true
+    }
+  },
+  "biome": {
+    "changedFilesLint": {
+      "errors": 0,
+      "existingWarnings": 2
+    },
+    "changedFilesFormat": "passed",
+    "baselineRepository": {
+      "errors": 16,
+      "warnings": 45,
+      "infos": 17,
+      "formatErrors": 14
+    },
+    "currentParallelWorkspace": {
+      "errors": 0,
+      "warnings": 45,
+      "infos": 17,
+      "formatErrors": 0,
+      "ownership": "Parallel lint/format changes preserved and excluded from integration commit"
+    },
+    "newErrors": 0
+  },
+  "independentReview": {
+    "contexts": [
+      "integration_review",
+      "recovery_review"
+    ],
+    "dataOwnership": "passed",
+    "skillExactVersionTrust": "passed",
+    "memoryCrossSessionAndBranchApplicability": "passed",
+    "diagnosticIntegrityAndProtection": "passed",
+    "nativeSessionAndCrashRecovery": "passed",
+    "finding": "P2: obsolete Skill refresh/read/save responses can overwrite authoritative state after reconnect or project navigation",
+    "resolution": "Request and selection epochs, project generation, draft checks and guarded response commits; ten browser regressions and independent final review passed",
+    "remainingP1P2": 0
+  },
+  "realModelE2E": {
+    "script": "scripts/d2-integration-ui-smoke.ts",
+    "command": "npx tsx scripts/d2-integration-ui-smoke.ts",
+    "receipt": "docs/evidence/d2-integration-real-ui.json",
+    "status": "passed",
+    "executablePackageReapprovedOrLoaded": false,
+    "startedAt": "2026-10-19T02:42:03.742Z",
+    "completedAt": "2026-10-19T02:43:22.208Z",
+    "sessionA": "b7c9b0e6-0fda-46c1-b0d6-ee185c8b0849",
+    "sessionB": "cfc2db37-1186-487b-bc41-265bcc67abf0",
+    "traceA": "0cc30ae8-4279-47cf-af4f-8f96c4a45089",
+    "memoryId": "2d0df1a6-5531-46f8-9dc0-48e75edaeb66",
+    "toolErrorsInAssertedResults": 0,
+    "interruptedReads": 0,
+    "unexpectedDesktopNavigations": 0,
+    "hostExits": [
+      {
+        "type": "Utility",
+        "name": "Agent Host",
+        "reason": "killed",
+        "exitCode": 9
+      }
+    ]
+  },
+  "d3AdmissionStatus": "passed_D2_data_and_capability_access_available",
+  "notVerified": [
+    "Windows device and AppContainer",
+    "Signing and notarization",
+    "Long duration soak and OAuth rotation",
+    "Large history performance",
+    "Generated code isolation",
+    "Provider unreported-versus-zero raw usage and actual billing"
+  ],
+  "browserAutomationTransport": {
+    "reproducedWithoutModel": true,
+    "objectTreeDepthsPassed": [
+      20,
+      40
+    ],
+    "objectTreeDepthsFailed": [
+      60,
+      80,
+      100,
+      120,
+      150,
+      200,
+      250
+    ],
+    "jsonTextDepthsPassed": [
+      20,
+      40,
+      60,
+      80,
+      100,
+      120,
+      150,
+      200,
+      250
+    ],
+    "resolution": "Return HTTP JSON text from page.evaluate and parse in Node; do not change product Session trees"
+  },
+  "automationCorrections": [
+    "Only inspect ToolResults generated since the current prompt",
+    "Require successful current lookup and exact native output, not a redundant fixed memory_get sequence",
+    "Failed ToolResult cannot satisfy success assertions and is retained if encountered",
+    "Return HTTP JSON text through page.evaluate to avoid Chromium deep-object serialization failure",
+    "Normalize only optional recovered:false; any other diagnostic fact or evidence change still fails",
+    "No historical executable approval reused; default scenario loads ordinary Skill only"
+  ]
+}
