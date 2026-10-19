@@ -1,0 +1,170 @@
+{
+  "at": "2026-10-19T00:27:11.939Z",
+  "client": "packaged Electron + Chrome",
+  "model": "openai-codex/gpt-6-luna",
+  "execution": {
+    "sessionId": "9c8f95b6-f6e6-4516-9a81-41b73efdc1d7",
+    "traceId": "8a6cd220-43be-4034-9dbe-2c4c52000b66",
+    "turns": 5,
+    "calls": 4,
+    "errors": 1,
+    "outputBytes": 51226,
+    "positiveUsage": true,
+    "markerSha256": "125a759103ec11a254f3a29e165eb68c597635f004b6193fa7152837a42bcca8"
+  },
+  "crossSessionAgentEvidence": {
+    "sessionId": "795c95ba-71a3-423d-8f9c-1dffe0ccf798",
+    "search": 1,
+    "get": 1,
+    "evidence": 1,
+    "actualWrittenMarkerMatches": true,
+    "afterCompaction": true
+  },
+  "sharedUI": {
+    "desktopCurrentSession": true,
+    "chromeGlobalFilters": true,
+    "paginatedEvidence": true,
+    "protectedSyntheticSecret": true,
+    "hostRestartReconnect": true,
+    "authoritativeRefetch": true,
+    "noModelReplay": true
+  },
+  "fullAppRestartRetainsEvidence": true,
+  "sqlite": {
+    "noRawToolContent": true,
+    "noSyntheticSecret": true,
+    "hostSystemLogRows": 4
+  },
+  "result": "passed",
+  "associations": {
+    "at": "2026-10-19T00:35:19.181Z",
+    "sessionId": "7c3b61c9-ff3f-430c-acbc-c21d3fc1c146",
+    "traceId": "f13115bc-abfd-4e4f-8801-8967b8d8188e",
+    "usage": [
+      {
+        "ordinal": 1,
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "source": "pi_normalized",
+          "providerReported": "unknown",
+          "input": 6898,
+          "output": 91,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 6989,
+          "cost": {
+            "source": "pi_catalog_calculation",
+            "billed": null,
+            "total": 0.0007353,
+            "availability": "catalog_estimate"
+          }
+        }
+      },
+      {
+        "ordinal": 2,
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "source": "pi_normalized",
+          "providerReported": "unknown",
+          "input": 277,
+          "output": 65,
+          "cacheRead": 6784,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 7126,
+          "cost": {
+            "source": "pi_catalog_calculation",
+            "billed": null,
+            "total": 0.00012804,
+            "availability": "catalog_estimate"
+          }
+        }
+      },
+      {
+        "ordinal": 3,
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "source": "pi_normalized",
+          "providerReported": "unknown",
+          "input": 7158,
+          "output": 78,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 7236,
+          "cost": {
+            "source": "pi_catalog_calculation",
+            "billed": null,
+            "total": 0.0007548,
+            "availability": "catalog_estimate"
+          }
+        }
+      },
+      {
+        "ordinal": 4,
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "source": "pi_normalized",
+          "providerReported": "unknown",
+          "input": 464,
+          "output": 43,
+          "cacheRead": 7040,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 7547,
+          "cost": {
+            "source": "pi_catalog_calculation",
+            "billed": null,
+            "total": 0.0001383,
+            "availability": "catalog_estimate"
+          }
+        }
+      },
+      {
+        "ordinal": 5,
+        "model": "gpt-6-luna",
+        "provider": "openai-codex",
+        "usage": {
+          "source": "pi_normalized",
+          "providerReported": "unknown",
+          "input": 396,
+          "output": 18,
+          "cacheRead": 7424,
+          "cacheWrite": 0,
+          "reasoning": 0,
+          "totalTokens": 7838,
+          "cost": {
+            "source": "pi_catalog_calculation",
+            "billed": null,
+            "total": 0.00012284,
+            "availability": "catalog_estimate"
+          }
+        }
+      }
+    ],
+    "skill": {
+      "id": "efda112d-1071-435a-8a0a-a544245a8b4d",
+      "version": "bef21db9-6afa-4484-8953-eb5c9b6342bc",
+      "digest": "ef4e9e2c8ae0943bacea70d37bfac2e10ef4eb8850909a21b99e26985c0b877b",
+      "observedRead": true
+    },
+    "memory": {
+      "id": "29a9a78e-555f-44f6-b06d-7bda4b66b65d",
+      "revision": 1,
+      "sources": [
+        {
+          "sessionId": "7c3b61c9-ff3f-430c-acbc-c21d3fc1c146",
+          "entryId": "97fbe9ec"
+        }
+      ],
+      "actualSaveAndGetResults": true,
+      "sourceEvidenceAvailable": true,
+      "desktopMemorySourceEvidence": true
+    }
+  }
+}

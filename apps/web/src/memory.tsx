@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { MemoryContent, MemoryView } from '../../host/memory';
+import type { EvidenceReference } from './diagnostics';
 
 type Api = <T>(path: string, method?: string, data?: unknown) => Promise<T>;
 interface Catalog {
@@ -25,11 +26,13 @@ export function MemoryPanel({
   project,
   onClose,
   onDirtyChange,
+  onEvidence,
 }: {
   api: Api;
   project: string;
   onClose: () => void;
   onDirtyChange: (dirty: boolean) => void;
+  onEvidence: (source: EvidenceReference) => void;
 }) {
   const [catalog, setCatalog] = useState<Catalog>({ items: [], total: 0, unavailable: 0 });
   const [detail, setDetail] = useState<Detail>();
@@ -512,6 +515,10 @@ export function MemoryPanel({
                           Session {source.sessionId}
                           <br />
                           Entry {source.entryId}
+                          <br />
+                          <button type="button" onClick={() => onEvidence(source)}>
+                            查看执行证据
+                          </button>
                         </p>
                       ))}
                     </article>

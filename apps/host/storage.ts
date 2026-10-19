@@ -64,13 +64,32 @@ export class SensitiveData {
   }
   text(value: string, partial = false): string {
     let text = value;
-    for (const secret of this.known) {
-      text = text.split(secret).join('[已保护]');
-      // Protect an incomplete credential at the end of an accumulated streaming message.
-      for (let n=partial ? Math.min(secret.length-1,text.length) : 0;n>=1;n--) {
-        if(text.endsWith(secret.slice(0,n))) {text=text.slice(0,-n)+'[已保护]';break;}
+    // Compute matches against the original text so overlapping credentials cannot expose prefixes.
+    const spans:Array<[number,number]>=[];
+    let suffix=0;
+    for(const secret of this.known) {
+      let start=value.indexOf(secret), span: [number,number]|undefined;
+      while(start!==-1) {
+        const end=start+secret.length;
+        if(span && start<=span[1])span[1]=end;
+        else {span=[start,end];spans.push(span);}
+        start=value.indexOf(secret,start+1);
+      }
+      if(partial)for(let n=Math.min(secret.length-1,value.length);n>suffix;n--) {
+        if(value.endsWith(secret.slice(0,n))) {suffix=n;break;}
       }
     }
+    if(suffix)spans.push([value.length-suffix,value.length]);
+    spans.sort((a,b)=>a[0]-b[0]);
+    const merged:Array<[number,number]>=[];
+    for(const span of spans) {
+      const last=merged.at(-1);
+      if(last && span[0]<=last[1])last[1]=Math.max(last[1],span[1]);
+      else merged.push(span);
+    }
+    const chunks:string[]=[];let offset=0;
+    for(const [start,end] of merged){chunks.push(value.slice(offset,start),'[已保护]');offset=end;}
+    chunks.push(value.slice(offset));text=chunks.join('');
     return text
       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')

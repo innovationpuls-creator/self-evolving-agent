@@ -1,0 +1,82 @@
+{
+  "at": "2026-10-19T00:36:43.564998+00:00",
+  "baseline": "cb01295f575e5afb3b79fcbea32f2cde93bcf0e2",
+  "platform": {
+    "os": "macOS",
+    "arch": "arm64",
+    "node": "26.10.0",
+    "pi": "1.3.0"
+  },
+  "typecheck": "passed",
+  "unit": {
+    "command": "npm test",
+    "total": 80,
+    "passed": 80,
+    "failed": 0,
+    "diagnosticTests": 21,
+    "independentReviewAndSecurityTests": 13,
+    "existingRegressionTests": 46
+  },
+  "build": "passed",
+  "packageDesktop": "passed",
+  "packagedDesktopSmoke": "passed",
+  "browser": {
+    "d1": "passed",
+    "skill": "passed",
+    "memory": "passed"
+  },
+  "streamCredentialProtection": {
+    "overlappingFullAndPartialRegression": "passed",
+    "nativeThinkingAndToolArgumentsRepeatedRuns": 20,
+    "result": "passed"
+  },
+  "biome": {
+    "newFilesLint": "passed",
+    "newFilesFormat": "passed",
+    "repositoryLint": {
+      "errors": 16,
+      "warnings": 45,
+      "infos": 17,
+      "newErrors": 0
+    },
+    "repositoryFormat": {
+      "existingErrors": 14,
+      "newErrors": 0
+    }
+  },
+  "diffCheck": "passed",
+  "independentReview": {
+    "remainingP1P2": 0,
+    "scope": [
+      "data ownership",
+      "raw references",
+      "project permissions",
+      "crash recovery",
+      "resource bounds",
+      "credential overlaps",
+      "macOS Skill read path aliases"
+    ]
+  },
+  "realReceipt": "d2-diagnostic-real-ui.json",
+  "realRunBoundary": "Main packaged Electron/Chrome flow and latest-package Skill/Memory associations passed as separate runs; revised high-entropy default full script was not rerun end to end.",
+  "sourceSha256": {
+    "apps/host/diagnostics.ts": "5c87fc0b1f2569632a14dadc4b6d38b2effdea4a668f9c335c8956a81023fb9e",
+    "apps/host/diagnostic-tools.ts": "6a99f1ebbbb0b0efe7ebad2796419ad94ab74ea67d90c81783faf0a4b69119c5",
+    "apps/host/agent.ts": "78e69fff5130f27080cd441e815d5058b428a827b30b43085ff2f495a34f1897",
+    "apps/host/server.ts": "fd64654cff03a7165d61915936109360d4406df3c7b2a1f7a89dacf51778562e",
+    "apps/host/storage.ts": "4d7467976e7ac4e349202d96763bda99485ee5b3d8ed6174d99a348b516ae794",
+    "apps/web/src/diagnostics.tsx": "22643677eab9f6244253ba1cc2051c0b7a8033694855af64ce0c7e6fd2a82317",
+    "apps/web/src/main.tsx": "cb2a102255041b04dcf6590ce11b85def1f023d5988d4d8659e65aca5afc1738",
+    "apps/web/src/memory.tsx": "256676a8458a4b0bb07969ddf79a7966154c45f6bab37e51f68f68154e9e12c1",
+    "apps/web/src/style.css": "2aaba22f7e3218bc83a808621c2a79bb369a804a1f24c6a43b2619d7034f697e"
+  },
+  "notVerified": [
+    "Windows device",
+    "signed distribution",
+    "long-duration soak",
+    "large-history scale",
+    "provider raw unreported-versus-zero usage",
+    "actual billing",
+    "native-unsaved nested output"
+  ]
+}

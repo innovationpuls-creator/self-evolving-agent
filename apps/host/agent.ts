@@ -10,10 +10,12 @@ import {SkillResourceLoader} from './skill-loader.js';
 import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from './storage.js';
 import { MemoryService, MemoryError, type MemoryContext } from './memory.js';
 import { memoryTools, memoryToolNames } from './memory-tools.js';
+import { DiagnosticService, DiagnosticRecorder, DiagnosticError, diagnosticQuery, evidenceQuery, type DiagnosticContext, type DiagnosticResources } from './diagnostics.js';
+import { diagnosticTools, diagnosticToolNames } from './diagnostic-tools.js';
 
 interface RecordData { id: string; cwd: string; provider: string; model: string; title: string; updated: number; interrupted?: boolean }
 interface Saved { record: RecordData; session: Snapshot }
-interface Active { loader:SkillResourceLoader; skillFailed?:boolean; dispatchDone?:Promise<void>; actionDone?:Promise<void>; record: RecordData; session: AgentSession; busy: boolean; error?: string; storageFailed?: boolean; save: Promise<void>; run?: Promise<void>; checkpoint:Promise<void>; recovered?:boolean; blocked?:boolean }
+interface Active { diagnostic:DiagnosticRecorder; loader:SkillResourceLoader; skillFailed?:boolean; dispatchDone?:Promise<void>; actionDone?:Promise<void>; record: RecordData; session: AgentSession; busy: boolean; error?: string; storageFailed?: boolean; save: Promise<void>; run?: Promise<void>; checkpoint:Promise<void>; recovered?:boolean; blocked?:boolean }
 
 class Vault implements CredentialStore {
   private memory = new InMemoryCredentialStore();
@@ -55,6 +57,7 @@ export class AgentService extends EventEmitter {
   runtime!: ModelRuntime;
   skills!:SkillService;
   memory!:MemoryService;
+  diagnostics!:DiagnosticService;
   private gate?:{promise:Promise<void>;release:()=>void};
   private queued:Array<{id:string;text:string}>=[];
   private draining=false;
@@ -80,6 +83,8 @@ export class AgentService extends EventEmitter {
     await chmod(join(this.dataDir,'product.sqlite'),0o600);
     this.memory=new MemoryService(this.db,this.sensitive,()=>this.emit('event',{type:'memory'}));
     this.memory.init();
+    this.diagnostics=new DiagnosticService(this.db,this.sensitive,()=>this.emit('event',{type:'diagnostic'}));
+    this.diagnostics.init();this.diagnostics.system('HOST_STARTED','info');
     this.skills=new SkillService(this.dataDir,this.db,event=>this.emit('event',this.sensitive.copy(event)));
     await this.skills.init();
     this.skills.connect((next,previous,op,commit)=>this.applySkills(next,previous,op,commit));
@@ -94,10 +99,11 @@ export class AgentService extends EventEmitter {
       try {
         const loaded=await this.loadSaved(id);if(!loaded)throw new Error('缺少会话快照');
         const manager=restore(loaded.saved.session);
+        this.diagnostics.reconcile(id,loaded.saved.record.cwd,loaded.saved.session,loaded.previous);
         this.memory.reconcileSource(id,manager.getLeafId(),manager.getBranch().map(entry=>entry.id));
         this.db.prepare('INSERT INTO sessions VALUES (?,?) ON CONFLICT(id) DO UPDATE SET updated=excluded.updated').run(id,loaded.saved.record.updated);valid++;
       } catch {
-        this.memory.sourceFailed(id);
+        this.memory.sourceFailed(id);this.diagnostics.checkpointUnavailable(id);this.diagnostics.system('CHECKPOINT_UNAVAILABLE','error',id);
         this.db.prepare('INSERT OR IGNORE INTO sessions VALUES (?,?)').run(id,0);
       }
     }
@@ -161,18 +167,20 @@ export class AgentService extends EventEmitter {
   }
   private async build(record: RecordData, manager: SessionManager): Promise<Active> {
     const agentDir = join(this.dataDir,'pi');
-    const settings = SettingsManager.inMemory({compaction:{enabled:true},defaultTools:['read','bash','edit','write','tool_search',...memoryToolNames]},{projectTrusted:false});
+    const settings = SettingsManager.inMemory({compaction:{enabled:true},defaultTools:['read','bash','edit','write','tool_search',...memoryToolNames,...diagnosticToolNames]},{projectTrusted:false});
     const loader = new SkillResourceLoader(this.skills,record.cwd,agentDir,settings);
     await loader.reload();
     const {session} = await createAgentSession({cwd:record.cwd,agentDir,modelRuntime:this.runtime,
       model:this.runtime.getModel(record.provider,record.model),sessionManager:manager,settingsManager:settings,resourceLoader:loader,
-      customTools:memoryTools(this.memory,record.cwd,callId=>this.memorySource(record.id,callId))});
-    const item: Active = {record,session,loader,busy:false,save:Promise.resolve(),checkpoint:Promise.resolve()};
+      customTools:[...memoryTools(this.memory,record.cwd,callId=>this.memorySource(record.id,callId)),
+        ...diagnosticTools(this.diagnostics,record.cwd,(ctx,input)=>this.diagnosticSearch(ctx,input),(ctx,input)=>this.diagnosticEvidence(ctx,input))]});
+    const item: Active = {diagnostic:new DiagnosticRecorder(this.diagnostics,record.id,record.cwd,manager),record,session,loader,busy:false,save:Promise.resolve(),checkpoint:Promise.resolve()};
     await session.bindExtensions({onError:()=>{item.skillFailed=true;item.error='Skill 生命周期执行失败，请恢复能力后重试';}});
     this.enableMemoryTools(session);
     session.subscribe(event => {
+      item.diagnostic.observe(event);
       try {
-        if (['message_start','message_update','message_end','tool_execution_start','tool_execution_update','tool_execution_end','auto_compaction_start','auto_compaction_end'].includes(event.type)) {
+        if (['message_start','message_update','message_end','tool_execution_start','tool_execution_update','tool_execution_end','compaction_start','compaction_end'].includes(event.type)) {
           this.emit('event', {sessionId:record.id, type:'update', event:this.clientEvent(event)});
         }
       } catch {this.protectionFailure(item);}
@@ -188,7 +196,7 @@ export class AgentService extends EventEmitter {
     const data = event as {type:string; message?:unknown; toolName?:string; toolCallId?:string; result?:unknown; isError?:boolean};
     // Deltas can contain incomplete credentials; send the protected accumulated message only.
     const copy = this.sensitive.copy({type:data.type,message:data.message,toolName:data.toolName,toolCallId:data.toolCallId,result:data.result,isError:data.isError});
-    if(data.type==='message_update' && data.message && typeof data.message==='object' && 'content' in data.message) {
+    if((data.type==='message_start'||data.type==='message_update') && data.message && typeof data.message==='object' && 'content' in data.message) {
       const content=data.message.content;
       const protectedContent=Array.isArray(content)?content.map((block:unknown)=>{
         if(!block || typeof block!=='object')return this.sensitive.copy(block,true);
@@ -200,7 +208,8 @@ export class AgentService extends EventEmitter {
   }
   private enableMemoryTools(session:AgentSession) {
     const active=session.getActiveToolNames();
-    if(memoryToolNames.some(name=>!active.includes(name)))session.setActiveToolsByName([...new Set([...active,...memoryToolNames])]);
+    const required=[...memoryToolNames,...diagnosticToolNames];
+    if(required.some(name=>!active.includes(name)))session.setActiveToolsByName([...new Set([...active,...required])]);
   }
   private async get(id: string): Promise<Active> {
     const live = this.active.get(id); if (live) return live;
@@ -220,10 +229,12 @@ export class AgentService extends EventEmitter {
   }
   private storageFailure(item:Active) {
     item.storageFailed=true;item.error='历史保存失败，请停止操作并检查数据目录';
+    this.diagnostics.system('CHECKPOINT_WRITE_FAILED','error',item.record.id,item.diagnostic.traceId);
     void item.session.abort().catch(()=>{});this.changed(item);
   }
   private protectionFailure(item:Active) {
     item.blocked=true;item.error='敏感信息检查未完成，本次操作已停止';
+    this.diagnostics.system('PROTECTION_FAILED','error',item.record.id,item.diagnostic.traceId);
     void item.session.abort().catch(()=>{});
     this.emit('event',{type:'blocked',sessionId:item.record.id,error:'敏感信息检查未完成，本次操作已停止'});
   }
@@ -278,6 +289,78 @@ export class AgentService extends EventEmitter {
     await this.persist(item);
     return {actor:'agent',project:item.record.cwd,source:{sessionId:id,entryId:entry.id,project:item.record.cwd}};
   }
+  private diagnosticResources(item:Active):DiagnosticResources {
+    const loadout=item.loader.selected??this.skills.loadout();
+    const loaded:DiagnosticResources['loaded']=[];
+    const tools:DiagnosticResources['tools']=new Map();
+    const discovered=item.loader.getSkills().skills;
+    for(const r of loadout.records.filter(r=>r.enabled&&r.current&&(!r.project||r.project===item.record.cwd))){
+      const v=loadout.versions.find(v=>v.id===r.current);if(!v)continue;
+      const skill=discovered.find(s=>s.filePath===resolve(this.skills.packagePath(v),v.skillFile)||s.filePath.includes(`/skills/views/${v.id}-`));
+      const viewPrefix=`/skills/views/${v.id}-`;
+      const knowledgeRevision=skill?.filePath.includes(viewPrefix)?skill.filePath.split(viewPrefix)[1]?.split('/')[0]:undefined;
+      const ref={skillId:r.id,version:v.id,digest:v.digest,...(knowledgeRevision?{knowledgeRevision}:{})};
+      if(skill){loaded.push({...ref,path:resolve(skill.filePath)});for(const file of v.knowledgeFiles)loaded.push({...ref,path:resolve(skill.filePath.slice(0,-v.skillFile.length),file)});}
+      const paths=new Set(v.extensions.map(p=>resolve(this.skills.packagePath(v),p)));
+      for(const t of item.session.getAllTools())if(paths.has(resolve(t.sourceInfo.path)))tools.set(t.name,ref);
+    }
+    for(const skill of discovered)if(!loaded.some(r=>r.path===resolve(skill.filePath)))loaded.push({path:resolve(skill.filePath)});
+    return {loaded,tools};
+  }
+  private async diagnosticSnapshot(ctx:DiagnosticContext,id:string){
+    if(!/^[a-f0-9-]{36}$/.test(id))throw new DiagnosticError('证据不存在',404,'DIAGNOSTIC_NOT_FOUND');
+    const loaded=await this.loadSaved(id);
+    if(!loaded)throw new DiagnosticError('证据不存在',404,'DIAGNOSTIC_NOT_FOUND');
+    if(ctx.actor==='agent'&&(!ctx.project||ctx.project!==loaded.saved.record.cwd))throw new DiagnosticError('证据不存在',404,'DIAGNOSTIC_NOT_FOUND');
+    return loaded;
+  }
+  async diagnosticSearch(ctx:DiagnosticContext,input:unknown){
+    const q=diagnosticQuery.parse(input);let branch:string[]|undefined;
+    if(q.branchLeafId){
+      if(!q.sessionId)throw new DiagnosticError('分支筛选需要 Session',400,'DIAGNOSTIC_BRANCH_REQUIRED');
+      const loaded=await this.diagnosticSnapshot(ctx,q.sessionId),manager=restore(loaded.saved.session);
+      if(!manager.getEntry(q.branchLeafId))throw new DiagnosticError('分支节点不存在',404,'DIAGNOSTIC_NOT_FOUND');
+      branch=manager.getBranch(q.branchLeafId).map(e=>e.id);
+    }
+    const result=this.diagnostics.search(ctx,q,branch);
+    if(q.sessionId){
+      try {
+        const loaded=await this.diagnosticSnapshot(ctx,q.sessionId);
+        const sessionEvents=this.diagnostics.sessionEvents(ctx,q.sessionId,loaded.saved.record.cwd);
+        return {...result,sessionEvents,sessionEventsTruncated:sessionEvents.length===100};
+      } catch {
+        return {...result,sessionEvents:[],sessionEventsUnavailable:true};
+      }
+    }
+    return result;
+  }
+  async diagnosticEvidence(ctx:DiagnosticContext,input:unknown){
+    const q=evidenceQuery.parse(input);
+    let loaded:Awaited<ReturnType<AgentService['diagnosticSnapshot']>>;
+    try{loaded=await this.diagnosticSnapshot(ctx,q.sessionId);}
+    catch(error){if(error instanceof DiagnosticError)throw error;throw new DiagnosticError('会话证据无法恢复',503,'DIAGNOSTIC_EVIDENCE_UNAVAILABLE');}
+    const entry=loaded.saved.session.entries.find(e=>e.id===q.entryId);
+    const selected=restore(loaded.saved.session).getBranch().some(e=>e.id===q.entryId);
+    const base={onSelectedBranch:selected,sessionId:q.sessionId,entryId:q.entryId,source:loaded.previous?'previous_checkpoint' as const:'checkpoint' as const,
+      recovered:loaded.previous,truncated:false,total:0};
+    if(!entry)return {...base,available:false,reason:'entry_missing_from_checkpoint'};
+    let value:unknown=entry,nested=false;
+    if(q.toolCallId){
+      if(entry.type!=='message'||entry.message.role!=='toolResult')return {...base,available:false,reason:'not_a_tool_result'};
+      if(entry.message.toolCallId!==q.toolCallId){
+        const child=entry.message.nestedCalls?.calls.find(c=>c.id===q.toolCallId);
+        if(!child)return {...base,available:false,reason:'nested_summary_missing'};
+        nested=true;value={sessionId:q.sessionId,entryId:q.entryId,summaryParentToolCallId:entry.message.toolCallId,parentToolCallId:null,parentAvailability:'not_recorded_in_native_summary',
+          call:child,complete:entry.message.nestedCalls?.complete,resultAvailability:'not_persisted_native'};
+      }
+    }
+    // Protection must complete on the entire selected Entry before any text is sliced.
+    let text:string;
+    try{text=JSON.stringify(this.sensitive.copy(value),null,2);}catch{throw new DiagnosticError('证据敏感信息检查未完成',503,'DIAGNOSTIC_PROTECTION_FAILED');}
+    const content=text.slice(q.offset,q.offset+q.limit),next=q.offset+content.length;
+    return {...base,available:!nested,nested,...(nested?{reason:'not_persisted_native'}:{}),content,total:text.length,
+      truncated:q.offset>0||next<text.length,...(next<text.length?{nextOffset:next}:{})};
+  }
   async prompt(id: string, text: string) {
     if(this.closing)throw new Error('Host 正在退出');
     if(this.gate || this.draining){this.queued.push({id,text});const item=this.active.get(id);if(item)this.changed(item);return;}
@@ -292,17 +375,21 @@ export class AgentService extends EventEmitter {
     item.busy=true; item.error=undefined; item.record.interrupted=true;
     item.record.updated=Date.now();
     if (item.record.title === '新会话') item.record.title=this.sensitive.text(text.slice(0,48));
-    try { await this.persist(item); } catch (error) { item.busy=false; item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; dispatched();throw error; }
+    item.diagnostic.start();
+    try { await this.persist(item); } catch (error) { item.diagnostic.finish('failed');item.busy=false; item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; dispatched();throw error; }
     this.changed(item);
-    if(item.blocked){item.busy=false;dispatched();throw new Error('敏感信息检查失败');}
+    if(item.blocked){item.diagnostic.finish('failed');item.busy=false;dispatched();throw new Error('敏感信息检查失败');}
     item.run = (async () => {
-      try { await item.loader.refreshSkills();item.session.setActiveToolsByName(item.session.getActiveToolNames());await item.session.prompt(text); }
-      catch { item.error='模型请求失败，请检查连接与模型凭据后重试'; }
+      try { await item.loader.refreshSkills();item.session.setActiveToolsByName(item.session.getActiveToolNames());
+        try{item.diagnostic.loaded(this.diagnosticResources(item));}catch{this.diagnostics.gap();}
+        await item.session.prompt(text); }
+      catch { item.error='模型请求失败，请检查连接与模型凭据后重试';this.diagnostics.system('PROMPT_FAILED','error',id,item.diagnostic.traceId); }
       finally {
         const last=item.session.messages.at(-1);
         item.record.interrupted=last?.role!=='assistant' || last.stopReason==='aborted'||last.stopReason==='error';
         if(last?.role==='assistant' && last.stopReason==='error') item.error='模型请求失败，请检查连接与模型凭据后重试';
         item.record.updated=Date.now();
+        item.diagnostic.finish(last?.role==='assistant'&&last.stopReason==='aborted'?'stopped':item.error||last?.role==='assistant'&&last.stopReason==='error'?'failed':'ended');
         await item.checkpoint;
         try { await this.persist(item); } catch { item.storageFailed=true; item.error='历史保存失败，请检查数据目录'; }
         item.busy=false;dispatched();this.changed(item);
@@ -435,6 +522,6 @@ export class AgentService extends EventEmitter {
         finally {item.session.dispose();}
       }));
       if(outcomes.some(outcome=>outcome.status==='rejected'))throw new Error('退出时部分会话未能保存，原检查点已保留');
-    } finally {this.memory?.close();this.db.close();}
+    } finally {this.diagnostics?.system('HOST_STOPPED','info');this.diagnostics?.close();this.memory?.close();this.db.close();}
   }
 }

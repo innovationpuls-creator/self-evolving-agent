@@ -1,6 +1,6 @@
 # 当前开发决策索引
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 Skill 与 Memory 纵向功能已交付；Diagnostic Log、D3～D5 尚未实施。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 Skill、Memory 与 Diagnostic Log 纵向功能已实现；交付证据见各验收报告，D3～D5 尚未实施。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。
@@ -20,3 +20,8 @@
 - Memory 的事实/经验/决定/怀疑与当前/撤销/删除分开；同一记录追加不可变修订及前驱引用。Global 跨项目，Project 取规范化路径的 SHA-256 标识；当前头与每个历史版本分别做作用域过滤。用户删除为可追溯逻辑删除，普通检索退出、显式历史保留；作用域扩大不披露原项目历史或来源引用。
 - 项目决定的来源证据与适用依据分离。Agent 写入先保存含对应 Entry 的加密检查点；普通修正继承旧依据并补入修正来源，明确重新确认建立新依据。来源会话切换分支时先阻止相关当前读取及修改，再在快照成功后以短同步事务追加撤销；历史和通用经验保留，切回旧分支不自动复活。启动从有效检查点协调，无法确认的来源不视为有效；不跨 Pi 导航/Hook 持有异步 Memory 锁。
 - Memory 修订、当前引用和索引同事务提交，baseRevision 冲突返回 409，WebSocket 只广播失效通知。敏感正文、标题和依据在写库/建索引前与模型/客户端读取时复用现有保护；Session 与凭据继续加密。恢复旧 Session 或回到旧分支后，通过 Pi 原生活动工具 API 补入 Memory，保留其他活动工具集合。
+
+- D2 Diagnostic Log 入口：[RE-04](docs/03-需求工程/RE-04-Agent运行诊断与历史信息访问.md)、[DM-03](docs/04-领域建模/DM-03-Session-Trace-Log与Reflection的关系.md)、[SA-05](docs/05-系统架构/SA-05-Log-Memory与Reflection的数据协作.md)，证据见 [D2-DIAGNOSTIC-ACCEPTANCE.md](D2-DIAGNOSTIC-ACCEPTANCE.md)。Trace 是一次已准入 `session.prompt()` 的范围，包含原生重试/自动压缩；极简原生 custom Entry 首尾标识不进入模型上下文，不重新实现 Turn 或 Agent Loop。
+- Pi 完整加密 Session 是原始历史权威；产品 SQLite 仅保存结构化观测、指标及引用，Host System Log 仅保存固定 code/级别/关联 ID，保留5000条/30天。诊断队列1000、单记录64KiB；SQLite 锁冲突不等待、不终止正常执行，缺失可识别。模型停止和运行结束不推断任务成功，重复调用不评价浪费；Pi 归一化零值及目录估价明确标未知来源边界。
+- 三种 Pi 原生诊断 Tool 与 HTTP 共用服务；Agent 固定当前规范化项目，不因 Global Memory 来源而扩大原文权限。证据直接解密校验快照并在整体敏感投影后分页，不创建历史 AgentSession，不加载 Extension。旧 Memory 来源无需 Trace；分支回档不删除执行事实或复活已撤销决定。
+- 启动对齐完整原生树与轻量索引：保留已观察终态，补齐原生确实保存的事实；未保存耗时、嵌套完整结果及无法从摘要恢复的直接父关系保持未知。上一检查点、缺失锚点及残余 running 均显式标记，不重放。D3 后续复用查询与证据接口，本轮不实现 Reflection 工作流。

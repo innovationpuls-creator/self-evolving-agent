@@ -8,6 +8,7 @@ import { z } from 'zod';
 import {SkillError} from './skills.js';
 import { AgentService } from './agent.js';
 import { memoryContent, memoryReason, MemoryError } from './memory.js';
+import { DiagnosticError } from './diagnostics.js';
 
 const createInput=z.object({cwd:z.string().min(1).max(4096),provider:z.string().min(1),model:z.string().min(1)}).strict();
 const credentialInput=z.object({provider:z.string().min(1),key:z.string().max(16384).optional(),importExisting:z.boolean().optional()}).strict();
@@ -44,6 +45,16 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       if(url.pathname.startsWith('/api/')) {
         if(!authenticated(req)) {json(res,401,{error:'请连接 Agent Host'});return;}
         const route=url.pathname;
+        if(route==='/api/diagnostics/evidence'&&req.method==='GET'){
+          json(res,200,await service.diagnosticEvidence({actor:'user'},Object.fromEntries(url.searchParams)));return;
+        }
+        if(route==='/api/diagnostics'&&req.method==='GET'){
+          json(res,200,await service.diagnosticSearch({actor:'user'},Object.fromEntries(url.searchParams)));return;
+        }
+        const diagnostic=/^\/api\/diagnostics\/([a-f0-9-]{36})$/.exec(route);
+        if(diagnostic&&req.method==='GET'){
+          json(res,200,service.diagnostics.get({actor:'user'},diagnostic[1]??'',Object.fromEntries(url.searchParams)));return;
+        }
         const memoryRoute=/^\/api\/memory(?:\/([a-f0-9-]{36})(?:\/(revise))?)?$/.exec(route);
         if(memoryRoute){
           const query=z.object({project:z.string().max(4096).optional(),query:z.string().max(1000).optional(),
@@ -119,7 +130,8 @@ export async function startHost(options: {dataDir:string;key:Buffer;token:string
       const data=await readFile(path);
       res.writeHead(200,{'Content-Type':({'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'} as Record<string,string>)[extname(path)] ?? 'application/octet-stream'});res.end(data);
     } catch(error) {
-      if(error instanceof MemoryError) json(res,error.status,{error:error.message,code:error.code});
+      if(error instanceof DiagnosticError) json(res,error.status,{error:error.message,code:error.code});
+      else if(error instanceof MemoryError) json(res,error.status,{error:error.message,code:error.code});
       else if(error instanceof SkillError) json(res,error.status,{error:error.message});
       else if(error instanceof z.ZodError) json(res,400,{error:'请求字段无效'});
       else json(res,409,{error:error instanceof Error && error.message==='Nothing to compact (session too small)'?'当前对话较短，暂时无需压缩':'操作未完成，请检查会话状态、模型凭据或数据目录'});
