@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { signingConfiguration } from './sign-desktop.js';
 import { spawnSync } from 'node:child_process';
 import { cp, mkdir, readFile, readdir, rm, writeFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -172,13 +173,15 @@ export async function buildReflectionNative(appBundle: string, hostDist = join(r
   ];
   run('clang', [...flags, '-DREFLECTION_SERVICE', '-o', serviceBinary]);
   run('clang', [...flags, '-o', clientBinary]);
-  const identity = process.env.AGENT_CODESIGN_IDENTITY ?? '-';
+  const signing = signingConfiguration();
+  const { identity } = signing;
   const sign = (path: string, entitlements?: string) =>
     run('codesign', [
       '--force',
       '--sign',
       identity,
-      ...(identity === '-' ? ['--timestamp=none'] : ['--timestamp']),
+      ...(signing.timestamp === 'none' ? ['--timestamp=none'] : ['--timestamp']),
+      ...(signing.keychain ? ['--keychain', signing.keychain] : []),
       ...(entitlements ? ['--entitlements', join(native, entitlements)] : []),
       path,
     ]);

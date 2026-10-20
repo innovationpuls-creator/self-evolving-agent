@@ -1,0 +1,10 @@
+{
+  "time": "2026-10-20T06:52:38.336Z",
+  "dataScope": "temporary isolated directory",
+  "systemAuthorization": "real Keychain; no mock or automated system approval",
+  "reflectionBusinessChain": "blocked",
+  "firstWindowMs": 467,
+  "initialPhase": "accessing",
+  "result": "blocked",
+  "error": "locator.waitFor: Timeout 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.shell') to be visible\u001b[22m\n"
+}

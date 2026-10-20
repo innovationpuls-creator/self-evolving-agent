@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -20,7 +20,7 @@ npm run desktop
 
 桌面端自动启动独立 Host，以系统安全存储保护数据密钥。首次使用进入“模型设置”，保存 Provider API Key，或导入本机 Pi 已有授权，然后选择工作目录和模型创建会话。凭据导入为加密副本，产品不改写原 Pi 授权文件。
 
-关闭窗口后继续后台运行；从托盘或 Dock 重新打开；选择“退出 Agent”才停止 Host。菜单中的“在浏览器打开”让 Web 连接同一个 Host 和会话。异常中断后的会话保留历史，不自动重放工具操作。
+启动时先显示本地状态页；系统安全存储等待超过 15 秒会显示等待说明，可继续等待或退出。安全存储失败后需重新启动；已解锁后的服务失败可重试启动。首次就绪前关闭窗口退出应用；正常运行后关闭窗口继续后台运行；从托盘或 Dock 重新打开；选择“退出 Agent”才停止 Host。菜单中的“在浏览器打开”让 Web 连接同一个 Host 和会话。异常中断后的会话保留历史，不自动重放工具操作。
 
 ## 独立 Web
 
@@ -33,7 +33,7 @@ export AGENT_DATA_KEY AGENT_TOKEN
 npm start
 ```
 
-浏览器打开 `http://127.0.0.1:4317`，输入同一连接令牌。`PORT` 和 `AGENT_DATA_DIR` 可指定端口和独立数据目录（默认 `.agent-data`）。每次启动必须使用相同数据密钥才能恢复历史；请自行安全保存密钥。不要把密钥或令牌写入项目文件。
+浏览器打开 `http://127.0.0.1:4317`，输入同一连接令牌。`PORT` 和 `AGENT_DATA_DIR` 可指定端口和独立数据目录（默认 `.agent-data`）。每次启动必须使用相同数据密钥才能恢复历史；旧目录若没有可认证的凭据或加密 Session，将保留数据并拒绝启动，需显式迁移；请自行安全保存密钥。不要把密钥或令牌写入项目文件。
 
 Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。网络故障保留令牌；完成 Host 状态同步后恢复写操作。页面位置、对象和修订号在当前 origin 的 sessionStorage 中恢复；正文、草稿和自由文本检索不持久化。草稿按会话保存在当前页面内存。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 保存会话索引、Skill 管理状态及经过敏感信息保护的 Memory 修订、诊断指标与检索索引；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
 
@@ -43,7 +43,7 @@ Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP �
 npm run package:desktop
 ```
 
-应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。
+应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。本地开发签名与正式签名的配置、尚待人工验收的边界见 [钥匙串启动报告](DESKTOP-KEYCHAIN-ACCEPTANCE.md#开发与正式签名)。
 
 ## 开发检查
 

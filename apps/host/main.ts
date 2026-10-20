@@ -1,6 +1,7 @@
 import { mkdir, open, readFile, unlink } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { startHost } from './transport/server.js';
+import { DataKeyError, decodeDataKey } from './storage/data-key.js';
 
 interface Config {
   dataDir: string;
@@ -8,6 +9,7 @@ interface Config {
   token: string;
   port?: number;
   reflectionAppBundle?: string;
+  desktopKeyProof?: string;
 }
 async function run(config: Config) {
   const dataDir = resolve(config.dataDir);
@@ -30,7 +32,7 @@ async function run(config: Config) {
   await handle.close();
   let host: Awaited<ReturnType<typeof startHost>>;
   try {
-    host = await startHost({ ...config, dataDir, key: Buffer.from(config.key, 'base64') });
+    host = await startHost({ ...config, dataDir, key: decodeDataKey(config.key) });
   } catch (error) {
     await unlink(lock);
     throw error;
@@ -61,8 +63,11 @@ async function run(config: Config) {
 }
 if (process.parentPort)
   process.parentPort.once('message', (event) => {
-    void run(event.data as Config).catch(() => {
-      process.parentPort?.postMessage({ type: 'failed' });
+    void run(event.data as Config).catch((error) => {
+      process.parentPort?.postMessage({
+        type: 'failed',
+        code: error instanceof DataKeyError ? error.code : 'host-failed',
+      });
       process.exit(1);
     });
   });
@@ -80,8 +85,12 @@ else {
     token,
     port: Number(process.env.PORT ?? 4317),
     reflectionAppBundle: process.env.AGENT_REFLECTION_APP_BUNDLE,
-  }).catch(() => {
-    console.error('Host 启动失败，请检查密钥、数据目录与端口');
+  }).catch((error) => {
+    console.error(
+      error instanceof DataKeyError && error.code === 'key-unverified'
+        ? '旧数据目录缺少可验证的密钥身份，需要显式迁移；原数据已保留。'
+        : 'Host 启动失败，请检查密钥、数据目录与端口；原数据已保留。',
+    );
     process.exit(1);
   });
 }

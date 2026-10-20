@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events';
+import { ensureKeyIdentity } from '../storage/data-key.js';
 import { mkdir, stat, readdir, chmod, copyFile, realpath } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -141,6 +142,7 @@ export class AgentService extends EventEmitter {
     readonly dataDir: string,
     key: Buffer,
     private options: {
+      desktopKeyProof?: string;
       reflectionExecutor?: ReflectionExecutor;
       reflectionAppBundle?: string;
       reflectionDelayMs?: number;
@@ -153,6 +155,7 @@ export class AgentService extends EventEmitter {
   }
   async init() {
     await mkdir(this.dataDir, { recursive: true, mode: 0o700 });
+    await ensureKeyIdentity(this.store, (id) => this.loadSaved(id), this.options.desktopKeyProof);
     await this.vault.init();
     // node:sqlite is the TD-06 fallback; avoids Electron/standalone native-addon ABI differences.
     this.db = new DatabaseSync(join(this.dataDir, 'product.sqlite'));

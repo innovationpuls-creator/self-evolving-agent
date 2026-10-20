@@ -328,7 +328,7 @@ try {
     const gate = new Promise<void>((ok) => {
       releaseState = ok;
     });
-    await page.route(`**/api/${state.path}**`, async (route) => {
+    await page.route(new RegExp(`/api/${state.path}(?:\\?.*)?$`), async (route) => {
       arrive();
       await gate;
       await route.fulfill({ status: 503, json: { error: '暂时无法读取，请稍后重试。' } });
@@ -348,7 +348,7 @@ try {
       await shot(page, `${state.name}-error-${width}`);
     }
     await page.unrouteAll({ behavior: 'wait' });
-    await page.route(`**/api/${state.path}**`, (route) => route.fulfill({ json: state.empty }));
+    await page.route(new RegExp(`/api/${state.path}(?:\\?.*)?$`), (route) => route.fulfill({ json: state.empty }));
     await page.reload();
     await ready(page);
     await page.waitForTimeout(250);
@@ -391,7 +391,10 @@ try {
   throw error;
 } finally {
   await mkdir('docs/evidence', { recursive: true });
-  await writeFile('docs/evidence/web-product-browser.json', JSON.stringify(receipt, null, 2) + '\n');
+  await writeFile(
+    process.env.AGENT_ACCEPTANCE_EVIDENCE ?? 'docs/evidence/web-product-browser.json',
+    `${JSON.stringify(receipt, null, 2)}\n`,
+  );
   await Promise.race([browser.close(), new Promise<void>((ok) => setTimeout(ok, 5000).unref())]);
   await host.close();
   await rm(root, { recursive: true, force: true });

@@ -1,0 +1,19 @@
+{
+  "time": "2026-10-20T06:55:55.474Z",
+  "identityKind": "ad-hoc",
+  "keychainAuthorization": "not tested; requires an independently named probe and manual system authorization",
+  "validIdentities": "0 valid identities found",
+  "builds": [
+    {
+      "cdhash": "823bcdd8a61ab8e8e89434dd77db6acd10588c33",
+      "requirement": "cdhash H\"823bcdd8a61ab8e8e89434dd77db6acd10588c33\""
+    },
+    {
+      "cdhash": "bd6543a8d24ddc92950cd05b9a12a2812d9cde90",
+      "requirement": "cdhash H\"bd6543a8d24ddc92950cd05b9a12a2812d9cde90\""
+    }
+  ],
+  "designatedRequirementStable": false,
+  "stableIdentityValidation": "blocked: no configured stable signing identity",
+  "result": "passed"
+}

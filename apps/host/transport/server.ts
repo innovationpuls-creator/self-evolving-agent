@@ -31,11 +31,15 @@ export async function startHost(options: {
   webDir?: string;
   service?: AgentService;
   reflectionAppBundle?: string;
+  desktopKeyProof?: string;
 }) {
   if (options.token.length < 32) throw new Error('连接令牌至少需要 32 个字符');
   const service =
     options.service ??
-    new AgentService(options.dataDir, options.key, { reflectionAppBundle: options.reflectionAppBundle });
+    new AgentService(options.dataDir, options.key, {
+      reflectionAppBundle: options.reflectionAppBundle,
+      desktopKeyProof: options.desktopKeyProof,
+    });
   try {
     await service.init();
   } catch (error) {

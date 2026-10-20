@@ -1,0 +1,16 @@
+{
+  "time": "2026-10-20T07:01:37.075Z",
+  "dataScope": "temporary isolated directory",
+  "systemAuthorization": "real Keychain; no mock or automated system approval",
+  "reflectionBusinessChain": "blocked",
+  "mockKeychainSwitch": false,
+  "firstWindowMs": 271,
+  "initialPhase": "accessing",
+  "phaseAfter16Seconds": "accessing",
+  "pendingExit": {
+    "code": null,
+    "signal": "SIGKILL",
+    "elapsedMs": 2044
+  },
+  "result": "passed"
+}

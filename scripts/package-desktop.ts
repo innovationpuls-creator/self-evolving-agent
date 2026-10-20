@@ -1,6 +1,7 @@
 import { packager } from '@electron/packager';
 import { join } from 'node:path';
 import { buildReflectionNative } from './build-reflection-native.js';
+import { signDesktop } from './sign-desktop.js';
 const platform = process.platform,
   arch = process.arch;
 if (platform !== 'darwin' && platform !== 'win32' && platform !== 'linux')
@@ -20,6 +21,10 @@ const paths = await packager({
   ignore: /^\/(?!(?:dist|node_modules)(?:\/|$)|package\.json$|README\.md$)[^/]+/,
 });
 for (const path of paths) {
-  if (platform === 'darwin') await buildReflectionNative(join(path, 'Agent.app'));
+  if (platform === 'darwin') {
+    const app = join(path, 'Agent.app');
+    await buildReflectionNative(app);
+    await signDesktop(app);
+  }
   console.log(path);
 }

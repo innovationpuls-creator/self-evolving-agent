@@ -1,0 +1,123 @@
+{
+  "time": "2026-10-20T07:02:52.788209+00:00",
+  "baseline": "6fbb8a9",
+  "platform": "darwin arm64",
+  "electron": "44.9.0",
+  "automated": {
+    "npm test": {
+      "exitCode": 0,
+      "tests": 155,
+      "pass": 154,
+      "fail": 0,
+      "skipped": 1,
+      "skipReason": "D3 signed Reflection bridge unavailable"
+    },
+    "independent focused tests": {
+      "tests": 22,
+      "pass": 22
+    },
+    "npm run typecheck": {
+      "exitCode": 0
+    },
+    "npm run lint": {
+      "exitCode": 0,
+      "warnings": 52,
+      "infos": 26,
+      "errors": 0
+    },
+    "npm run format:check": {
+      "exitCode": 0
+    },
+    "npm run build": {
+      "exitCode": 0,
+      "warning": "existing minified chunk >500 KB"
+    },
+    "npm run package:desktop": {
+      "exitCode": 0,
+      "identity": "ad-hoc"
+    },
+    "codesign --verify --deep --strict": {
+      "exitCode": 0
+    }
+  },
+  "runtime": {
+    "D1 real API": {
+      "scope": "temporary isolated directory, real provider, no Electron Keychain acceptance",
+      "receipt": {
+        "realModel": {
+          "provider": "openai-codex",
+          "id": "gpt-6-luna"
+        },
+        "nativeTools": [
+          "write",
+          "read"
+        ],
+        "streamEvents": 63,
+        "encryptedRecovery": true,
+        "result": "passed"
+      }
+    },
+    "Web Chrome": {
+      "result": "passed",
+      "provider": "Faux, deterministic mechanism tests",
+      "receipt": "desktop-keychain-web-regression.json"
+    },
+    "native pending exit": {
+      "result": "passed",
+      "receipt": "desktop-keychain-pending-exit.json"
+    },
+    "normal isolated startup": {
+      "result": "blocked",
+      "reason": "real system storage operation did not return within 180 seconds",
+      "receipt": "desktop-keychain-isolated.json"
+    },
+    "normal persistent startup": {
+      "result": "blocked",
+      "reason": "real system storage operation did not return within 180 seconds; original wrapped key hash unchanged",
+      "receipt": "desktop-keychain-persistent.json"
+    },
+    "npm run test:desktop": {
+      "exitCode": 1,
+      "result": "blocked",
+      "reason": "first shell not reached in 30 seconds while awaiting real Keychain"
+    },
+    "npx tsx scripts/ui-smoke.ts": {
+      "exitCode": 1,
+      "result": "blocked",
+      "reason": "first shell not reached in 30 seconds while awaiting real Keychain; D1 UI business steps not executed"
+    },
+    "npx tsx scripts/d2-integration-ui-smoke.ts": {
+      "exitCode": 1,
+      "result": "blocked",
+      "reason": "first shell not reached in 30 seconds while awaiting real Keychain; D2 business steps not executed",
+      "rawReceipt": "desktop-keychain-d2-ui-raw.json"
+    }
+  },
+  "manualNotAccepted": [
+    "first authorization",
+    "deny",
+    "cancel",
+    "same build reopen authorization behavior",
+    "real Host SIGKILL recovery without reauthorization",
+    "original persistent directory decryption and SQLite recovery",
+    "self-signed same-identity builds and cross-build Keychain probe"
+  ],
+  "signing": {
+    "validIdentities": 0,
+    "adHocRequirementChanges": "verified using two different native builds",
+    "stableIdentityCrossBuildAccess": "blocked, no configured identity; no certificate installed and no trust or ACL changed"
+  },
+  "independentReview": {
+    "scope": "startup lifecycle, security boundaries, data compatibility, signing and receipt accuracy",
+    "initialFinding": "bootstrap failure restart state mismatch",
+    "fix": "initialPageFailed and regression test",
+    "finalCodeFindings": 0,
+    "deliveryCorrections": [
+      "clarified signing private-key access",
+      "asserted pending SIGKILL, click and time bound; real rerun passed",
+      "explicitly documented actual blocked acceptance results"
+    ]
+  },
+  "D3": "blocked",
+  "D4": "not implemented"
+}
