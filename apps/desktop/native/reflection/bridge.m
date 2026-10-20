@@ -16,6 +16,7 @@ static pid_t workerPID;
 static int workerInput = -1;
 static BOOL started;
 static _Atomic(BOOL) workerFinished;
+static NSString *workerTerminal;
 static NSLock *writeLock;
 static NSMutableSet<NSString *> *outstanding;
 static NSUInteger idleSeconds;
@@ -147,7 +148,14 @@ static void startWorker(NSString *firstLine) {
         if ([message[@"kind"] isEqual:@"request"] && [message[@"requestId"] isKindOfClass:NSString.class]) {
             @synchronized(outstanding) { [outstanding addObject:message[@"requestId"]]; idleSeconds = 0; }
         }
-        if([message[@"kind"] isEqual:@"finished"])atomic_store(&workerFinished, YES);
+        if (atomic_load(&workerFinished)) { fail(@"worker_protocol_after_terminal"); return; }
+        if ([message[@"kind"] isEqual:@"finished"]) {
+            // Publish completion only after the process has exited and its pipes are drained.
+            // Otherwise Host EOF can cancel a still-exiting worker and produce two terminals.
+            workerTerminal = line;
+            atomic_store(&workerFinished, YES);
+            return;
+        }
         sendLine(connection, line);
     }, ^{ close(outputRead); dispatch_semaphore_signal(stdoutDone); });
     // Diagnostic output is drained but never crosses the sandbox/Host boundary.
@@ -159,10 +167,11 @@ static void startWorker(NSString *firstLine) {
         while(waitid(P_PID,pid,&info,WEXITED | WNOWAIT)<0 && errno==EINTR){}
         kill(-pid, SIGKILL); // The unreaped leader reserves its PID while descendants terminate.
         int status; while (waitpid(pid, &status, 0) < 0 && errno == EINTR) {}
-        dispatch_semaphore_wait(stdoutDone, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
+        long drainResult = dispatch_semaphore_wait(stdoutDone, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
         @synchronized(writeLock) { workerPID = 0; if (workerInput >= 0) { close(workerInput); workerInput = -1; } }
         [NSFileManager.defaultManager removeItemAtPath:workspace error:NULL];
-        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0 || !atomic_load(&workerFinished)) fail(@"reflection_worker_exited");
+        if (drainResult != 0 || !WIFEXITED(status) || WEXITSTATUS(status) != 0 || !atomic_load(&workerFinished)) fail(@"reflection_worker_exited");
+        else sendLine(connection, workerTerminal);
     });
 }
 

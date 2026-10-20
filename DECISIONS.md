@@ -1,6 +1,6 @@
 # 当前开发决策索引
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，满足 D3 的数据及能力访问准入条件，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 产品实现已接入，整体真实验收因缺少 Apple 签名身份 blocked，尚不满足 D4 准入，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)；D4～D5 尚未实施。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 生成代码执行隔离尚未验证，仍不准入；D4～D5 尚未实施。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。
@@ -28,4 +28,4 @@
 - D2 整体验收：依据 [DP-04](docs/08-交付规划/DP-04-D2至D5交付依赖与整体验收规划.md)、[RE-08](docs/03-需求工程/RE-08-需求边界审查与整体验收.md)，81/81 自动化及打包 macOS/Chrome/真实 Pi 连续业务场景通过。来源撤销、独立新依据、原生诊断取证、强杀不重放和冷重启续接均有实际收据；修复 Skill UI 过期响应覆盖，未扩大特殊版本的人工审查权限。
 
 - D3 交付：[D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。原生 settled marker 与加密检查点保证来源恢复；SQLite 管调度，独立 Pi Session 经固定 macOS XPC/Node Worker 和 Native Provider 受控转发执行。知识成果与收据同事务提交，running 中断不自动重放。建议采纳仅创建讨论入口。
-- D3 产品对端认证使用系统 same-team 指定 Bridge 身份约束；当前 ad-hoc 无法满足，明确 unavailable，不降级。缺少 Apple 签名的真实隔离/Provider 完整链路不可算通过；D4 仍须 D3 完整验收及生成代码隔离验证。
+- D3 产品对端认证使用系统 same-team 指定 Bridge 身份约束；ad-hoc 无法满足，明确 unavailable，不降级。2026-10-20 免费 Apple Development 身份已实际满足认证；正式 Provider 完整链路、并发、成果提交后强杀恢复及双端验收通过。本机 development 验收不等于 Developer ID 分发/公证验收，也不代替 D4 生成代码隔离验证。

@@ -1,0 +1,1206 @@
+[
+  {
+    "time": "2026-10-20T12:53:52.438Z",
+    "root": "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz",
+    "passed": false,
+    "checks": [
+      "signed product availability and Host credential import",
+      "real ordinary Provider task and native file/memory tools"
+    ],
+    "error": "{\"records\":[{\"id\":\"0cfc316f-d9d1-4e43-9b87-29f470a11292\",\"jobId\":\"0cfc316f-d9d1-4e43-9b87-29f470a11292\",\"sessionId\":\"b16f1202-ef86-4146-b451-2bb5f5d3ce77\",\"reflectionSessionId\":\"5860a2da-8694-46fb-9aab-7f6cc8835d43\",\"project\":\"/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz\",\"status\":\"failed\",\"created\":1792501140954,\"updated\":1792501316977,\"summary\":\"\",\"findings\":[],\"uncertainties\":[],\"evidence\":[{\"sessionId\":\"b16f1202-ef86-4146-b451-2bb5f5d3ce77\",\"entryId\":\"a9f02966\",\"traceId\":\"dfbfb8a2-c477-42a8-a79e-eb831e42b1dd\"}],\"changes\":[{\"kind\":\"memory\",\"id\":\"d88b8422-2c01-4ac7-9976-0fb8b6a4649c\",\"revision\":2,\"summary\":\"Correct stale descriptive project knowledge using the source task's directly observed POLICY.md content; task history and Diagnostic results corroborate the precise discrepancy, and revision 1 was inspected as current with no prior revisions.\"},{\"kind\":\"suggestion\",\"id\":\"e100d52e-0a7f-404e-a453-78e64bd3e5db\",\"summary\":\"Read-only stale-knowledge comparison aid\"}],\"error\":\"反思未完成，请检查模型、沙箱或受控接口状态\"}],\"jobs\":[{\"id\":\"0cfc316f-d9d1-4e43-9b87-29f470a11292\",\"sessionId\":\"b16f1202-ef86-4146-b451-2bb5f5d3ce77\",\"project\":\"/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz\",\"provider\":\"openai-codex\",\"model\":\"gpt-6-luna\",\"scheduledAt\":1792501135797,\"created\":1792501135704,\"updated\":1792501316977,\"runId\":\"e61d62a5-6f36-42cb-a1fe-6c6ee7c4966d\",\"reflectionSessionId\":\"5860a2da-8694-46fb-9aab-7f6cc8835d43\",\"status\":\"failed\",\"error\":\"反思未完成，请检查模型、沙箱或受控接口状态\",\"sources\":[{\"markerEntryId\":\"a9f02966\",\"settledAt\":1792501135663,\"traceId\":\"dfbfb8a2-c477-42a8-a79e-eb831e42b1dd\",\"status\":\"ended\"}]}],\"availability\":{\"available\":true}}\n+ actual - expected\n\n+ 'failed'\n- 'succeeded'\n",
+    "reflection": {
+      "records": [
+        {
+          "id": "0cfc316f-d9d1-4e43-9b87-29f470a11292",
+          "jobId": "0cfc316f-d9d1-4e43-9b87-29f470a11292",
+          "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+          "reflectionSessionId": "5860a2da-8694-46fb-9aab-7f6cc8835d43",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz",
+          "status": "failed",
+          "created": 1792501140954,
+          "updated": 1792501316977,
+          "summary": "",
+          "findings": [],
+          "uncertainties": [],
+          "evidence": [
+            {
+              "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+              "entryId": "a9f02966",
+              "traceId": "dfbfb8a2-c477-42a8-a79e-eb831e42b1dd"
+            }
+          ],
+          "changes": [
+            {
+              "kind": "memory",
+              "id": "d88b8422-2c01-4ac7-9976-0fb8b6a4649c",
+              "revision": 2,
+              "summary": "Correct stale descriptive project knowledge using the source task's directly observed POLICY.md content; task history and Diagnostic results corroborate the precise discrepancy, and revision 1 was inspected as current with no prior revisions."
+            },
+            {
+              "kind": "suggestion",
+              "id": "e100d52e-0a7f-404e-a453-78e64bd3e5db",
+              "summary": "Read-only stale-knowledge comparison aid"
+            }
+          ],
+          "error": "反思未完成，请检查模型、沙箱或受控接口状态"
+        }
+      ],
+      "jobs": [
+        {
+          "id": "0cfc316f-d9d1-4e43-9b87-29f470a11292",
+          "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz",
+          "provider": "openai-codex",
+          "model": "gpt-6-luna",
+          "scheduledAt": 1792501135797,
+          "created": 1792501135704,
+          "updated": 1792501316977,
+          "runId": "e61d62a5-6f36-42cb-a1fe-6c6ee7c4966d",
+          "reflectionSessionId": "5860a2da-8694-46fb-9aab-7f6cc8835d43",
+          "status": "failed",
+          "error": "反思未完成，请检查模型、沙箱或受控接口状态",
+          "sources": [
+            {
+              "markerEntryId": "a9f02966",
+              "settledAt": 1792501135663,
+              "traceId": "dfbfb8a2-c477-42a8-a79e-eb831e42b1dd",
+              "status": "ended"
+            }
+          ]
+        }
+      ],
+      "availability": {
+        "available": true
+      }
+    },
+    "memory": null,
+    "concurrent": null,
+    "diagnosticTraces": [
+      {
+        "systemLogs": [
+          {
+            "at": 1792501316978,
+            "level": "warn",
+            "code": "REFLECTION_RUN_FAILED",
+            "sessionId": "5860a2da-8694-46fb-9aab-7f6cc8835d43",
+            "traceId": "ac01812d-e637-431b-9b96-05dc9f481171",
+            "callId": null
+          }
+        ],
+        "trace": {
+          "id": "ac01812d-e637-431b-9b96-05dc9f481171",
+          "sessionId": "5860a2da-8694-46fb-9aab-7f6cc8835d43",
+          "started": 1792501146018,
+          "ended": 1792501316717,
+          "status": "failed",
+          "startLeafId": "83ed650e",
+          "endLeafId": "a3e901d8",
+          "userEntryId": "a29649ab",
+          "toolCount": 9,
+          "errorCount": 1,
+          "incomplete": false,
+          "data": {}
+        },
+        "turns": [
+          {
+            "id": "c6c3be72-9674-4c15-8af9-5c6e0564bfd0",
+            "ordinal": 1,
+            "started": 1792501146034,
+            "ended": 1792501150741,
+            "assistantEntryId": "7e8bc0b4",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 4919,
+              "output": 45,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 4964,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0005144,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 4675
+            }
+          },
+          {
+            "id": "05e6e8aa-9975-4882-b7d8-1b2e193cca54",
+            "ordinal": 2,
+            "started": 1792501150742,
+            "ended": 1792501156706,
+            "assistantEntryId": "05ee311b",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 7458,
+              "output": 45,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 7503,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0007683,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 5940
+            }
+          },
+          {
+            "id": "4a7fd1f3-f1d1-426c-a00d-1600b5db9a4b",
+            "ordinal": 3,
+            "started": 1792501156706,
+            "ended": 1792501160335,
+            "assistantEntryId": "fc974499",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 8801,
+              "output": 57,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 8858,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0009086000000000001,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 3600
+            }
+          },
+          {
+            "id": "5142204b-8fd8-4d7e-aa21-b3a326f4badb",
+            "ordinal": 4,
+            "started": 1792501160335,
+            "ended": 1792501165086,
+            "assistantEntryId": "22073936",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 9173,
+              "output": 58,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 9231,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0009463000000000002,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 4722
+            }
+          },
+          {
+            "id": "19577277-df5c-49b8-b165-ec4ad4746678",
+            "ordinal": 5,
+            "started": 1792501165086,
+            "ended": 1792501171682,
+            "assistantEntryId": "18b42c87",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 5054,
+              "output": 48,
+              "cacheRead": 4736,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 9838,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0005767600000000001,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 6563
+            }
+          },
+          {
+            "id": "3c5507ff-75cd-4611-942a-473fb844f0c9",
+            "ordinal": 6,
+            "started": 1792501171682,
+            "ended": 1792501176437,
+            "assistantEntryId": "1a90c449",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 10162,
+              "output": 57,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 10219,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0010447000000000002,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 4721
+            }
+          },
+          {
+            "id": "2000d1a5-efad-4234-95ac-165e31647ac2",
+            "ordinal": 7,
+            "started": 1792501176437,
+            "ended": 1792501181862,
+            "assistantEntryId": "14d00fe6",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 10509,
+              "output": 56,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 10565,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0010789,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 5390
+            }
+          },
+          {
+            "id": "9b5c1da0-e3fa-49cd-914a-2816ea473b4f",
+            "ordinal": 8,
+            "started": 1792501181862,
+            "ended": 1792501187075,
+            "assistantEntryId": "d68f6ead",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 12066,
+              "output": 256,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 12322,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0013346000000000002,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 5177
+            }
+          },
+          {
+            "id": "2e1119e2-919a-4677-b4a2-f6f36aeac015",
+            "ordinal": 9,
+            "started": 1792501187075,
+            "ended": 1792501196729,
+            "assistantEntryId": "9de98075",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "toolUse",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 12846,
+              "output": 354,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": 0,
+              "totalTokens": 13200,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0.0014616000000000002,
+                "availability": "catalog_estimate"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 9615
+            }
+          },
+          {
+            "id": "99cfdf73-36a6-457a-a3e4-546ec238c5b4",
+            "ordinal": 10,
+            "started": 1792501196730,
+            "ended": 1792501316715,
+            "assistantEntryId": "50a2f3d6",
+            "model": "reflection-host-approved",
+            "provider": "reflection-host",
+            "stopReason": "error",
+            "usage": {
+              "source": "pi_normalized",
+              "providerReported": "unknown",
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "reasoning": null,
+              "totalTokens": 0,
+              "cost": {
+                "source": "pi_catalog_calculation",
+                "billed": null,
+                "total": 0,
+                "availability": "unknown"
+              }
+            },
+            "data": {
+              "indexSource": "observed_native_turn",
+              "durationMs": 120022
+            }
+          }
+        ],
+        "calls": [
+          {
+            "id": "d9e93934-f906-4b5f-9915-f3a6f4f55edf",
+            "toolCallId": "call_08917c7d66af49e5b7d8bc8e42ce0691|fc_0749881f4c84193b016ad7659e21e081979c89e138ba17f02b",
+            "parentToolCallId": null,
+            "toolName": "history_entries",
+            "sequence": 1,
+            "started": 1792501150714,
+            "ended": 1792501150741,
+            "status": "ok",
+            "durationMs": 25,
+            "outputBytes": 7743,
+            "assistantEntryId": "7e8bc0b4",
+            "resultEntryId": "c4a577e9",
+            "data": {
+              "turnOrdinal": 1,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "02e1b7f1-c5cb-48e1-a963-e1d10568622c",
+            "toolCallId": "call_f6c8f2bb03864e2bb4ed2b35394e0c4d|fc_019b6308b618b02c016ad765a4409c81969143d3fcdef03995",
+            "parentToolCallId": null,
+            "toolName": "diagnostic_get",
+            "sequence": 2,
+            "started": 1792501156686,
+            "ended": 1792501156706,
+            "status": "ok",
+            "durationMs": 19,
+            "outputBytes": 3724,
+            "assistantEntryId": "05ee311b",
+            "resultEntryId": "e1ab9727",
+            "data": {
+              "turnOrdinal": 2,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "af282b9a-9c99-4fec-88b8-13d2d477b8f0",
+            "toolCallId": "call_d7ccf111f03a495886a9961c307a4d96|fc_0cefbf2785306cd2016ad765a79ec48195adb559988d6f2ec5",
+            "parentToolCallId": null,
+            "toolName": "diagnostic_evidence",
+            "sequence": 3,
+            "started": 1792501160312,
+            "ended": 1792501160335,
+            "status": "ok",
+            "durationMs": 22,
+            "outputBytes": 851,
+            "assistantEntryId": "fc974499",
+            "resultEntryId": "47859af3",
+            "data": {
+              "turnOrdinal": 3,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "1d421772-3ab5-466c-b923-da61bfed79cd",
+            "toolCallId": "call_db04ed7daa0d406dbac83942fcce8dd9|fc_045bb3b32472f1f0016ad765ac70c08195ae507009cce95eed",
+            "parentToolCallId": null,
+            "toolName": "diagnostic_evidence",
+            "sequence": 4,
+            "started": 1792501165062,
+            "ended": 1792501165086,
+            "status": "ok",
+            "durationMs": 24,
+            "outputBytes": 1482,
+            "assistantEntryId": "22073936",
+            "resultEntryId": "78adb716",
+            "data": {
+              "turnOrdinal": 4,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "077923d4-055d-4545-a8ee-be49c56aa564",
+            "toolCallId": "call_8d9621476bcc45829c90da72ae09441c|fc_08d70786edee45a7016ad765b2876c8195b75427e7f1261416",
+            "parentToolCallId": null,
+            "toolName": "memory_get",
+            "sequence": 5,
+            "started": 1792501171657,
+            "ended": 1792501171681,
+            "status": "ok",
+            "durationMs": 24,
+            "outputBytes": 1019,
+            "assistantEntryId": "18b42c87",
+            "resultEntryId": "1da23d29",
+            "data": {
+              "turnOrdinal": 5,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "memory": {
+                "references": [
+                  {
+                    "id": "d88b8422-2c01-4ac7-9976-0fb8b6a4649c",
+                    "revision": 1,
+                    "sources": []
+                  }
+                ],
+                "complete": true
+              },
+              "recovered": false
+            }
+          },
+          {
+            "id": "13746789-b762-41cd-8b8c-aa92b6409af8",
+            "toolCallId": "call_6f7237bf35c04f65a81447f44f79fd11|fc_0615bafa73d76287016ad765b767a08193a393fff71808169d",
+            "parentToolCallId": null,
+            "toolName": "diagnostic_evidence",
+            "sequence": 6,
+            "started": 1792501176411,
+            "ended": 1792501176437,
+            "status": "ok",
+            "durationMs": 26,
+            "outputBytes": 1072,
+            "assistantEntryId": "1a90c449",
+            "resultEntryId": "9a1df10d",
+            "data": {
+              "turnOrdinal": 6,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "7e1e0656-7c3b-45e5-8858-3a4bf6227ec5",
+            "toolCallId": "call_3e21f59749f444038e04de4e11af6c9d|fc_029a26a851c9f24f016ad765bba8b08193846eb1143a5f9deb",
+            "parentToolCallId": null,
+            "toolName": "history_entries",
+            "sequence": 7,
+            "started": 1792501181834,
+            "ended": 1792501181862,
+            "status": "ok",
+            "durationMs": 27,
+            "outputBytes": 4228,
+            "assistantEntryId": "14d00fe6",
+            "resultEntryId": "e3aeb1e8",
+            "data": {
+              "turnOrdinal": 7,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          },
+          {
+            "id": "aafde80e-3995-4d42-a5b0-63a1a3a4776a",
+            "toolCallId": "call_c17b858b287f498888f92db96915b837|fc_05811ce4d8360b1e016ad765c03718819591c8a71eef54cc69",
+            "parentToolCallId": null,
+            "toolName": "memory_revise",
+            "sequence": 8,
+            "started": 1792501187047,
+            "ended": 1792501187074,
+            "status": "ok",
+            "durationMs": 25,
+            "outputBytes": 1365,
+            "assistantEntryId": "d68f6ead",
+            "resultEntryId": "c005869e",
+            "data": {
+              "turnOrdinal": 8,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "memory": {
+                "references": [
+                  {
+                    "id": "d88b8422-2c01-4ac7-9976-0fb8b6a4649c",
+                    "revision": 2,
+                    "sources": [
+                      {
+                        "sessionId": "5860a2da-8694-46fb-9aab-7f6cc8835d43",
+                        "entryId": "d68f6ead"
+                      },
+                      {
+                        "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+                        "entryId": "e361c29b"
+                      },
+                      {
+                        "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+                        "entryId": "3e1219a2"
+                      },
+                      {
+                        "sessionId": "b16f1202-ef86-4146-b451-2bb5f5d3ce77",
+                        "entryId": "93c9302d"
+                      }
+                    ]
+                  }
+                ],
+                "complete": true
+              },
+              "recovered": false
+            }
+          },
+          {
+            "id": "e78f5a40-3e2b-434a-a74c-2ed420f32ff7",
+            "toolCallId": "call_cd2ce3a2a12d45388defbb534cf09df7|fc_0fa2812f6051c6d4016ad765c8c8f88195b5bb4aa991238986",
+            "parentToolCallId": null,
+            "toolName": "suggestion_submit",
+            "sequence": 9,
+            "started": 1792501196700,
+            "ended": 1792501196729,
+            "status": "ok",
+            "durationMs": 28,
+            "outputBytes": 2061,
+            "assistantEntryId": "9de98075",
+            "resultEntryId": "e733df9a",
+            "data": {
+              "turnOrdinal": 9,
+              "skill": null,
+              "resultAvailability": "reference_requires_lookup",
+              "outputMeasure": "content_text_utf8_and_image_base64_bytes",
+              "recovered": false
+            }
+          }
+        ],
+        "events": [
+          {
+            "id": "98d07d0b-a722-48a3-8a4d-a74af6fb3f8b",
+            "traceId": "ac01812d-e637-431b-9b96-05dc9f481171",
+            "kind": "settled",
+            "at": 1792501316717,
+            "entryId": null,
+            "data": {
+              "aborted": false
+            }
+          }
+        ],
+        "sameToolOccurrences": [
+          {
+            "name": "diagnostic_evidence",
+            "count": 3
+          },
+          {
+            "name": "history_entries",
+            "count": 2
+          },
+          {
+            "name": "suggestion_submit",
+            "count": 1
+          },
+          {
+            "name": "memory_revise",
+            "count": 1
+          },
+          {
+            "name": "memory_get",
+            "count": 1
+          },
+          {
+            "name": "diagnostic_get",
+            "count": 1
+          }
+        ],
+        "totals": {
+          "turns": 10,
+          "calls": 9,
+          "events": 1
+        },
+        "health": {
+          "available": true,
+          "dropped": 0
+        }
+      }
+    ]
+  },
+  {
+    "time": "2026-10-20T13:07:22.086Z",
+    "root": "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-BBkV26",
+    "passed": false,
+    "checks": [
+      "signed product availability and Host credential import",
+      "real ordinary Provider task and native file/memory tools"
+    ],
+    "error": "Reflection must submit a justified suggestion",
+    "reflection": {
+      "records": [
+        {
+          "id": "758339e1-0d2b-47c9-bbcf-4a809e71efa8",
+          "jobId": "758339e1-0d2b-47c9-bbcf-4a809e71efa8",
+          "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+          "reflectionSessionId": "d279e705-73ff-439d-a78b-01f2bc64544c",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-BBkV26",
+          "status": "succeeded",
+          "created": 1792501678253,
+          "updated": 1792501800431,
+          "summary": "Reviewed the completed task in Session 8a5d1bde-2785-4246-a577-0fc897d84e3a, including its native trace, actual tool-result entries, and Retry budget Memory revision history. The user requested direct POLICY.md versus Memory comparison and reserved historical/evidence review plus stale-knowledge aid assessment for background review. The trace ended normally with two successful calls and no errors. The task's Memory lookup returned revision 1 claiming 7 attempts; the actual read result for POLICY.md reports policy is 3 attempts. The task accurately reported a 4-attempt discrepancy and made no changes or suggestion. I corrected the descriptive Memory fact to say the project policy states 3 attempts, with the task's read and lookup entries as evidence, then confirmed revision 2 is current and revision 1 is superseded. I reviewed the available history-session index; it contains the completed task and this Reflection session, but no additional independent task evidence was available at review time. I did not submit a stale-knowledge comparison-aid suggestion: one isolated mismatch/correction does not establish that a new capability is warranted.",
+          "findings": [
+            "Direct completed-task evidence supports the discrepancy: POLICY.md read result says retry budget is 3; Memory lookup returned 7 (revision 1).",
+            "The task's report of a 4-attempt discrepancy is arithmetically consistent, and it appropriately deferred Memory changes and suggestions.",
+            "Updated project descriptive Memory entry c928d0f0-ceb0-4831-8018-6c9abdfb9b2b from revision 1 to revision 2, stating that project policy says 3 attempts. History preserves the former value.",
+            "No stale-knowledge comparison aid suggestion submitted; current evidence is insufficient to establish a recurring problem or useful feature."
+          ],
+          "uncertainties": [
+            "The available task evidence contains the read tool's reported POLICY.md contents, not an independently preserved full file; the policy statement is therefore grounded in the successful read result.",
+            "A stale-knowledge comparison aid's broader utility and design remain unassessed beyond this single example."
+          ],
+          "evidence": [
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "8e53ca06"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "b5c2d7cd"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "3cea5cfd"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "fd5accca"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "traceId": "454e0982-a1f9-4868-b12c-57e81a30e1f7"
+            },
+            {
+              "memoryId": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+              "revision": 1
+            },
+            {
+              "memoryId": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+              "revision": 2
+            }
+          ],
+          "changes": [
+            {
+              "kind": "memory",
+              "id": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+              "revision": 2,
+              "summary": "Correct the stale 7-attempt descriptive fact using the completed task's direct POLICY.md read evidence; preserve that the correction is grounded in the reported project policy."
+            }
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "758339e1-0d2b-47c9-bbcf-4a809e71efa8",
+          "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-BBkV26",
+          "provider": "openai-codex",
+          "model": "gpt-6-luna",
+          "scheduledAt": 1792501673223,
+          "created": 1792501673034,
+          "updated": 1792501800687,
+          "runId": "47281100-ba89-433b-89c9-9d5f113f0e50",
+          "reflectionSessionId": "d279e705-73ff-439d-a78b-01f2bc64544c",
+          "status": "succeeded",
+          "sources": [
+            {
+              "markerEntryId": "de84987a",
+              "settledAt": 1792501672983,
+              "traceId": "454e0982-a1f9-4868-b12c-57e81a30e1f7",
+              "status": "ended"
+            }
+          ]
+        }
+      ],
+      "availability": {
+        "available": true
+      }
+    },
+    "memory": {
+      "current": {
+        "title": "Retry budget",
+        "content": "The project policy states that the retry budget is 3 attempts.",
+        "kind": "fact",
+        "scope": "project",
+        "id": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+        "revision": 2,
+        "previousRevision": 1,
+        "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5",
+        "status": "current",
+        "operation": "revise",
+        "reason": "Correct the stale 7-attempt descriptive fact using the completed task's direct POLICY.md read evidence; preserve that the correction is grounded in the reported project policy.",
+        "actor": "agent",
+        "created": 1792501728496,
+        "sources": [
+          {
+            "sessionId": "d279e705-73ff-439d-a78b-01f2bc64544c",
+            "entryId": "d6e0fff3",
+            "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+          },
+          {
+            "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+            "entryId": "3cea5cfd",
+            "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+          },
+          {
+            "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+            "entryId": "b5c2d7cd",
+            "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+          }
+        ],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Retry budget",
+          "content": "The project policy states that the retry budget is 3 attempts.",
+          "kind": "fact",
+          "scope": "project",
+          "id": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+          "revision": 2,
+          "previousRevision": 1,
+          "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5",
+          "status": "current",
+          "operation": "revise",
+          "reason": "Correct the stale 7-attempt descriptive fact using the completed task's direct POLICY.md read evidence; preserve that the correction is grounded in the reported project policy.",
+          "actor": "agent",
+          "created": 1792501728496,
+          "sources": [
+            {
+              "sessionId": "d279e705-73ff-439d-a78b-01f2bc64544c",
+              "entryId": "d6e0fff3",
+              "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "3cea5cfd",
+              "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+            },
+            {
+              "sessionId": "8a5d1bde-2785-4246-a577-0fc897d84e3a",
+              "entryId": "b5c2d7cd",
+              "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5"
+            }
+          ],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        },
+        {
+          "title": "Retry budget",
+          "content": "The retry budget is 7 attempts.",
+          "kind": "fact",
+          "scope": "project",
+          "id": "c928d0f0-ceb0-4831-8018-6c9abdfb9b2b",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "a551f23b8737850278d25894467c9479a604518356a549e2ce5d7db1aeeaaef5",
+          "status": "current",
+          "operation": "create",
+          "reason": "Seed stale descriptive knowledge for evidence based correction acceptance",
+          "actor": "user",
+          "created": 1792501649378,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        }
+      ]
+    },
+    "concurrent": null
+  },
+  {
+    "time": "2026-10-20T13:12:40.464Z",
+    "root": "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+    "passed": false,
+    "checks": [
+      "signed product availability and Host credential import",
+      "real ordinary Provider task and native file/memory tools",
+      "unchanged restricted product Worker completes real Provider evidence, Memory correction, review and suggestion",
+      "Desktop and Chrome show the completed Reflection"
+    ],
+    "error": "Second Reflection ended before observing its committed-effect crash window",
+    "reflection": {
+      "records": [
+        {
+          "id": "e541636a-04a0-40e0-a632-ad04ccc9f7a0",
+          "jobId": "e541636a-04a0-40e0-a632-ad04ccc9f7a0",
+          "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+          "reflectionSessionId": "14a05d64-277e-459b-b2c0-91e982b363ea",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+          "status": "succeeded",
+          "created": 1792502101968,
+          "updated": 1792502205755,
+          "summary": "Reviewed both completed task traces in Session b56e9203-e93a-4467-8967-0aa9f7fa149c, their actual historical entries, Diagnostic records, and the complete history of project Memory item “Retry budget.” The earlier task observed policy at 3 attempts against Memory revision 1 (7 attempts), correctly reported a 4-attempt difference, and left correction/proposal for background review. The earlier Reflection then revised Memory to describe 3 attempts based on that task evidence and submitted a read-only comparison-aid proposal. The current task reread policy, which now says 4 attempts and supersedes 3; it retrieved Memory revision 2, accurately reported that Memory is one attempt behind, and made no change. Updated descriptive Memory to reflect the newest directly observed policy statement while preserving the previous policy context. This review also records that the previously submitted suggestion addressed a user-stated workflow pain, and makes no duplicate suggestion.",
+          "findings": [
+            "Observed task evidence shows the policy changed from 3 attempts in the first task read to 4 attempts in the second; the latter explicitly says it supersedes 3.",
+            "The initial Memory revision said 7 attempts. Revision 2, grounded in the first task, correctly described 3 as then-current policy and retained the historical 7-attempt discrepancy, but became outdated when policy changed again.",
+            "The second task's reported discrepancy was accurate: current observed policy is 4 attempts versus Memory revision 2's 3, a one-attempt difference.",
+            "The second ordinary task did not revise Memory, consistent with its user instruction to defer correction to background Reflection.",
+            "A prior Reflection submitted the explicitly requested read-only policy-versus-Memory comparison aid. No duplicate proposal is needed here."
+          ],
+          "uncertainties": [
+            "The policy statements are evidenced by task read-tool results, not an independently reread current filesystem; conclusions are limited to the observed task outputs and their ordering.",
+            "The proposal’s usefulness beyond this acceptance scenario remains unvalidated; no implementation or user adoption is implied.",
+            "The task evidence does not establish any policy authority beyond the observed POLICY.md statements."
+          ],
+          "evidence": [
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "bd4bd868"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "212c38c9"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "779c9306"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "ad38209b"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "84288518"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "46a165de"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "371c49fb"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "450e4cf1"
+            },
+            {
+              "sessionId": "0900428a-a7bb-4937-bad5-3d61bf8b89e2",
+              "entryId": "201eca56"
+            },
+            {
+              "memoryId": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 1
+            },
+            {
+              "memoryId": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 2
+            }
+          ],
+          "changes": [
+            {
+              "kind": "memory",
+              "id": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 3,
+              "summary": "Update descriptive Memory to the latest directly observed POLICY.md result from the completed task, preserving prior revision history and explicitly qualifying this as latest observed evidence."
+            }
+          ]
+        },
+        {
+          "id": "13fcc67e-4130-4246-b5a2-c8c1acbe46ce",
+          "jobId": "13fcc67e-4130-4246-b5a2-c8c1acbe46ce",
+          "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+          "reflectionSessionId": "0900428a-a7bb-4937-bad5-3d61bf8b89e2",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+          "status": "succeeded",
+          "created": 1792501983952,
+          "updated": 1792502061012,
+          "summary": "Reviewed the completed task's Diagnostic trace, actual historical entries and the Retry budget Memory history. The task read POLICY.md, retrieved Memory revision 1, accurately reported their four-attempt difference, and did not edit Memory or submit a proposal in the ordinary task. The user explicitly requested that background review independently reconcile the descriptive record and propose a read-only comparison aid. I confirmed the stale Memory note against the task's observed POLICY.md read result, revised the Memory to reflect the policy statement while retaining the historical discrepancy, and submitted a proposal with uncertainty and no implementation authorization.",
+          "findings": [
+            "Diagnostic trace b3b79f9c-c279-4bc0-b50f-255b87685332 ended normally, with two successful tool calls (read and memory_search), no errors, and an accurate final discrepancy statement.",
+            "The actual read result at entry 212c38c9 reports POLICY.md's retry budget as 3 attempts. Memory search result at 779c9306 and Memory revision 1 both say 7 attempts; the reported arithmetic discrepancy of 4 is correct.",
+            "The task explicitly instructed that the ordinary interaction make no Memory edit or suggestion, while reserving reconciliation and proposal for background review. The ordinary task complied; this review made the requested Memory correction and submitted a read-only aid proposal.",
+            "Memory revision 2 now describes the 3-attempt policy statement and notes that historical revision 1's 7-attempt statement is superseded. A normal-priority proposal for a read-only policy-versus-Memory comparison aid was submitted; it is a discussion proposal, not implementation permission."
+          ],
+          "uncertainties": [
+            "The file contents are evidenced through the actual historical tool result, not a separate current filesystem read; the policy's continued currentness beyond that task is not independently verified.",
+            "The proposal is motivated by one explicit workflow pain instance. Frequency, preferred form, supported inputs, and expected maintenance cost remain unknown.",
+            "The discrepancy is resolved for descriptive Memory based on the policy statement supplied in task evidence; whether the project has any higher-order source-of-truth convention is not independently established."
+          ],
+          "evidence": [
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "bd4bd868"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "212c38c9"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "779c9306"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "ad38209b"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "traceId": "b3b79f9c-c279-4bc0-b50f-255b87685332"
+            },
+            {
+              "memoryId": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 1
+            },
+            {
+              "memoryId": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 2
+            }
+          ],
+          "changes": [
+            {
+              "kind": "memory",
+              "id": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+              "revision": 2,
+              "summary": "Correct stale project descriptive memory using current-session policy evidence and preserve the historical discrepancy."
+            },
+            {
+              "kind": "suggestion",
+              "id": "607b5eef-ec3a-4e4f-a63c-4871b6053ff4",
+              "summary": "Read-only policy-versus-Memory comparison aid"
+            }
+          ]
+        }
+      ],
+      "jobs": [
+        {
+          "id": "13fcc67e-4130-4246-b5a2-c8c1acbe46ce",
+          "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+          "provider": "openai-codex",
+          "model": "gpt-6-luna",
+          "scheduledAt": 1792501978371,
+          "created": 1792501978320,
+          "updated": 1792502061268,
+          "runId": "d22db239-edcd-4435-88d1-cd82862166ca",
+          "reflectionSessionId": "0900428a-a7bb-4937-bad5-3d61bf8b89e2",
+          "status": "succeeded",
+          "sources": [
+            {
+              "markerEntryId": "9203955d",
+              "settledAt": 1792501978273,
+              "traceId": "b3b79f9c-c279-4bc0-b50f-255b87685332",
+              "status": "ended"
+            }
+          ]
+        },
+        {
+          "id": "e541636a-04a0-40e0-a632-ad04ccc9f7a0",
+          "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+          "provider": "openai-codex",
+          "model": "gpt-6-luna",
+          "scheduledAt": 1792502091791,
+          "created": 1792502091607,
+          "updated": 1792502206006,
+          "runId": "d2eb78cf-326d-42ad-b0e4-218a95db84de",
+          "reflectionSessionId": "14a05d64-277e-459b-b2c0-91e982b363ea",
+          "status": "succeeded",
+          "sources": [
+            {
+              "markerEntryId": "5917472b",
+              "settledAt": 1792502091562,
+              "traceId": "25b06b11-ddba-42e5-85e6-77f1b1196781",
+              "status": "ended"
+            }
+          ]
+        },
+        {
+          "id": "47e7f7f7-de3c-43f1-9c33-5c17b8cb62ff",
+          "sessionId": "21309bd5-41a7-47e9-83e2-7c775e9af201",
+          "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-ijUUCr",
+          "provider": "openai-codex",
+          "model": "gpt-6-luna",
+          "scheduledAt": 1792502146496,
+          "created": 1792502116536,
+          "updated": 1792502116536,
+          "runId": null,
+          "status": "pending",
+          "sources": [
+            {
+              "markerEntryId": "5f71d464",
+              "settledAt": 1792502116496,
+              "traceId": "6661ffbc-ac06-4a15-ac79-ac4e3a77fb47",
+              "status": "ended"
+            }
+          ]
+        }
+      ],
+      "availability": {
+        "available": true
+      }
+    },
+    "memory": {
+      "current": {
+        "title": "Retry budget",
+        "content": "The project policy file POLICY.md states that the retry budget is 3 attempts. Historical descriptive Memory revision 1 said 7 attempts and is superseded by that policy statement.",
+        "kind": "fact",
+        "scope": "project",
+        "id": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+        "revision": 2,
+        "previousRevision": 1,
+        "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074",
+        "status": "current",
+        "operation": "confirm",
+        "reason": "Correct stale project descriptive memory using current-session policy evidence and preserve the historical discrepancy.",
+        "actor": "agent",
+        "created": 1792502038934,
+        "sources": [
+          {
+            "sessionId": "0900428a-a7bb-4937-bad5-3d61bf8b89e2",
+            "entryId": "201eca56",
+            "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+          },
+          {
+            "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+            "entryId": "212c38c9",
+            "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+          },
+          {
+            "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+            "entryId": "779c9306",
+            "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+          }
+        ],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Retry budget",
+          "content": "The project policy file POLICY.md states that the retry budget is 3 attempts. Historical descriptive Memory revision 1 said 7 attempts and is superseded by that policy statement.",
+          "kind": "fact",
+          "scope": "project",
+          "id": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+          "revision": 2,
+          "previousRevision": 1,
+          "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074",
+          "status": "current",
+          "operation": "confirm",
+          "reason": "Correct stale project descriptive memory using current-session policy evidence and preserve the historical discrepancy.",
+          "actor": "agent",
+          "created": 1792502038934,
+          "sources": [
+            {
+              "sessionId": "0900428a-a7bb-4937-bad5-3d61bf8b89e2",
+              "entryId": "201eca56",
+              "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "212c38c9",
+              "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+            },
+            {
+              "sessionId": "b56e9203-e93a-4467-8967-0aa9f7fa149c",
+              "entryId": "779c9306",
+              "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074"
+            }
+          ],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        },
+        {
+          "title": "Retry budget",
+          "content": "The retry budget is 7 attempts.",
+          "kind": "fact",
+          "scope": "project",
+          "id": "3e6fc1ed-10af-4c65-8a4e-69f858036977",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "ece5884f173c3cb785c0eb1bfc6ed2d56185d544b15c7cb6b128a5c412fe3074",
+          "status": "current",
+          "operation": "create",
+          "reason": "Seed stale descriptive knowledge for evidence based correction acceptance",
+          "actor": "user",
+          "created": 1792501967163,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        }
+      ]
+    },
+    "concurrent": {
+      "reflectionJobId": "e541636a-04a0-40e0-a632-ad04ccc9f7a0",
+      "foregroundSessionId": "21309bd5-41a7-47e9-83e2-7c775e9af201",
+      "elapsedMs": 6186
+    }
+  }
+]

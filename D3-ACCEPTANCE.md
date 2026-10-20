@@ -2,9 +2,19 @@
 
 ## 结论
 
-D3 产品实现已接入模块化 Host 和 Web/Desktop；**整体业务验收 blocked，尚不满足 D4 功能准入**。
+D3 产品实现已接入模块化 Host 和 Web/Desktop；**2026-10-20 本机 macOS 完整补验收通过，解除 D3 blocked**。D4 所需生成代码执行隔离尚未验证，仍不满足 D4 功能准入。
 
-当前机器没有 Apple Development / Developer ID 有效签名身份。正式 XPC 对端认证要求 Apple 签名的同团队指定 Bridge；ad-hoc 包明确报告不可用，任务保持 `waiting_user`，不启动高权限替代 Worker。因而本轮不能将完整受限 Reflection 的真实 Provider 链路、OS 拒绝探测写成通过。签名、真实隔离及完整链路补验收后才能改变该结论。
+免费 Apple Development 身份在独立产品包中通过同团队 XPC 认证及真实 OS Sandbox 拒绝测试，实际 TeamIdentifier 为 `7UK53LNNF8`。未替换的正式受限 Worker 使用真实 Provider 完成历史取证、Memory 修正、反思记录与建议生成；双端详情/采纳、后台并发及成果提交后 Host SIGKILL 恢复均有实际收据。详见 [免费开发签名补验收](docs/D3-DEVELOPMENT-SIGNING-ACCEPTANCE.md)及[独立安全审查](docs/D3-DEVELOPMENT-SECURITY-REVIEW.md)。本机 development 验收不等同于 Developer ID 分发或任意生成代码的隔离验收。下文原验收数据保留为历史记录。
+
+| 补验收项 | 最终证据 |
+| --- | --- |
+| 签名及实际 OS 拒绝 | [sandbox 收据](docs/evidence/d3-development-sandbox.json)，12 层签名；真实 XPC Worker/子孙进程的文件、网络拒绝及负向身份测试。 |
+| 正式 Provider 完整业务 | [产品收据](docs/evidence/d3-signed-integration.json)，同一正式 Worker SHA256；实际历史/Diagnostic/Memory ToolCall、知识修正及建议。 |
+| 并发与强杀恢复 | [共同时间点](docs/evidence/d3-concurrency-observation.json)，前台实际响应 3.545 秒；同一产品收据核对实际 Memory、建议、run 效果快照，35 秒后仍 interrupted 且不变。 |
+| Desktop/Web | [客户端收据](docs/evidence/d3-signed-client.json)，历史修订跳转、建议详情及采纳讨论；未自动发出模型请求。 |
+| 回归 | [自动化收据](docs/evidence/d3-development-automation.json)，157/157、0 skipped，typecheck/build/lint/format 及签名产品 Desktop 回归通过。 |
+
+## 原始验收记录（历史）
 
 基线：`cf51143a3ce89e1a3d2ba1a94bc98f4083831895`。历史实验保持原样。D4 自主代码开发、生成代码验证和自动发布未实现。
 

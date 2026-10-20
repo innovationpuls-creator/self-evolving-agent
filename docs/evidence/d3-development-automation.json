@@ -1,0 +1,68 @@
+{
+  "time": "2026-10-20T13:24:43.997432+00:00",
+  "commands": {
+    "fullTests": {
+      "command": "AGENT_CODESIGN_IDENTITY=<existing Apple Development identity> AGENT_CODESIGN_MODE=development npm test",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-all-tests.log",
+      "sha256": "2dfb91b542cc6f922adc229d6e86aa47d61c09f024d59d1567edbaf4fd54b270"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-typecheck.log",
+      "sha256": "7a94d08118cbbecac2c5699f96bf9389c5d298ffa3deda22f020c3df84b57d30"
+    },
+    "lint": {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-lint.log",
+      "sha256": "29e43ae58d9c3100506d512d27ef1708d7ad19ee13e9fc4c5d0c67eff3ffc6e5"
+    },
+    "format": {
+      "command": "npm run format:check",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-formatcheck.log",
+      "sha256": "a3624338c316c68a4d1a2f7faa4d92fd2e5bdbad4f9245fe5275566ef075e386"
+    },
+    "package": {
+      "command": "AGENT_CODESIGN_IDENTITY=<existing Apple Development identity> AGENT_CODESIGN_MODE=development AGENT_PACKAGE_OUT=release/d3-development-20261020 npm run package:desktop",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-development-build.log",
+      "sha256": "1eb6dd2d32416f46c3a5248b99bc63d9739b3b4cfd644c88b2b4298701851690"
+    },
+    "desktopRegression": {
+      "command": "AGENT_APP_PATH=<independent signed product executable> npx tsx scripts/desktop-smoke.ts",
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-desktop-regression.log",
+      "sha256": "f7b8652aca44944690693e524c1e3974ee76659be7bccb78cf06bc1f5920c01b"
+    },
+    "signedBusiness": {
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-signed-integration.log",
+      "sha256": "76992a41943945f6949ec3ed463a6b1ba8287197ab81f901419c5f3edb7df3dd"
+    },
+    "signedClient": {
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-client.log",
+      "sha256": "360765870e125721c989c6e7c5070e1fc83585a36c39397fb3aee3f2c5317165"
+    },
+    "sandbox": {
+      "exitCode": 0,
+      "log": "release/d3-development-evidence/agent-d3-sandbox.log",
+      "sha256": "1ea63e7fda68e7ce49b013af8410102e9228f7591e79ef602dd23d95556d03bc"
+    }
+  },
+  "tests": {
+    "total": 157,
+    "pass": 157,
+    "fail": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "warnings": 52,
+    "infos": 30,
+    "errors": 0
+  },
+  "limits": "Faux Provider tests remain unit scope; actual signed native tests ran without skip. Real product business receipts are separate."
+}

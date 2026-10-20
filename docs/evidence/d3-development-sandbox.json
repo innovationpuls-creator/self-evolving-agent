@@ -1,0 +1,209 @@
+{
+  "time": "2026-10-20T13:11:00.051Z",
+  "product": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app",
+  "scope": "Real XPC adversarial fixture; separate from unchanged product Worker business acceptance",
+  "signatures": [
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.cs.allow-jit</key><true/><key>com.apple.security.device.audio-input</key><true/><key>com.apple.security.device.bluetooth</key><true/><key>com.apple.security.device.camera</key><true/><key>com.apple.security.device.print</key><true/><key>com.apple.security.device.usb</key><true/><key>com.apple.security.personal-information.location</key><true/><key>com.apple.security.personal-information.photos-library</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent\nIdentifier=dev.personal.agent\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=438 flags=0x0(none) hashes=3+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=19142250899d83c67ea16f6a8e2f501cc4a1ce38\nCandidateCDHashFull sha256=19142250899d83c67ea16f6a8e2f501cc4a1ce38dba4ea57dc5414e7785d3468\nHash choices=sha256\nCMSDigest=19142250899d83c67ea16f6a8e2f501cc4a1ce38dba4ea57dc5414e7785d3468\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=19142250899d83c67ea16f6a8e2f501cc4a1ce38\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:14\nInfo.plist entries=30\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=15766\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.reflection-bridge\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app/Contents/MacOS/reflection-bridge\nIdentifier=dev.personal.agent.reflection-bridge\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=360 flags=0x0(none) hashes=4+3 location=embedded\nVersionPlatform=1\nVersionMin=983040\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=8755dad71185d2c75b2bdd474cea797ef3abed33\nCandidateCDHashFull sha256=8755dad71185d2c75b2bdd474cea797ef3abed33aeb56fd929acc946d893b400\nHash choices=sha256\nCMSDigest=8755dad71185d2c75b2bdd474cea797ef3abed33aeb56fd929acc946d893b400\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=8755dad71185d2c75b2bdd474cea797ef3abed33\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:01\nInfo.plist entries=7\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=2\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/dev.personal.agent.reflection.xpc",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.reflection\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.app-sandbox</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/dev.personal.agent.reflection.xpc/Contents/MacOS/reflection-service\nIdentifier=dev.personal.agent.reflection\nFormat=bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=481 flags=0x0(none) hashes=4+7 location=embedded\nVersionPlatform=1\nVersionMin=983040\nVersionSDK=1769472\nHash type=sha256 size=32\nCandidateCDHash sha256=55f26dbcf84f4ba475f2f5e545bafb09cc1dee78\nCandidateCDHashFull sha256=55f26dbcf84f4ba475f2f5e545bafb09cc1dee785a5c291651afaf5476c20c1e\nHash choices=sha256\nCMSDigest=55f26dbcf84f4ba475f2f5e545bafb09cc1dee785a5c291651afaf5476c20c1e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=16384\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=55f26dbcf84f4ba475f2f5e545bafb09cc1dee78\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:48:57\nInfo.plist entries=7\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=17132\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/dev.personal.agent.reflection.xpc/Contents/MacOS/ReflectionNode",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier ReflectionNode and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.app-sandbox</key><true/><key>com.apple.security.inherit</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Helpers/ReflectionBridge.app/Contents/XPCServices/dev.personal.agent.reflection.xpc/Contents/MacOS/ReflectionNode\nIdentifier=ReflectionNode\nFormat=Mach-O thin (arm64)\nCodeDirectory v=20400 size=237714 flags=0x0(none) hashes=7418+7 location=embedded\nVersionPlatform=1\nVersionMin=853248\nVersionSDK=983040\nHash type=sha256 size=32\nCandidateCDHash sha256=c94c5f308f382aa90a79827a65fe80b39adba3a6\nCandidateCDHashFull sha256=c94c5f308f382aa90a79827a65fe80b39adba3a693ec279167ec1b66c6b807b6\nHash choices=sha256\nCMSDigest=c94c5f308f382aa90a79827a65fe80b39adba3a693ec279167ec1b66c6b807b6\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=91684864\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=c94c5f308f382aa90a79827a65fe80b39adba3a6\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:48:56\nInfo.plist=not bound\nTeamIdentifier=7UK53LNNF8\nSealed Resources=none\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (GPU).app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.helper\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.cs.allow-jit</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (GPU).app/Contents/MacOS/Agent Helper (GPU)\nIdentifier=dev.personal.agent.helper\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=765 flags=0x0(none) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=4d70199ed5607cb82508897b4da8e5c56254d1bb\nCandidateCDHashFull sha256=4d70199ed5607cb82508897b4da8e5c56254d1bbefc70130d3c4b22f3a384d81\nHash choices=sha256\nCMSDigest=4d70199ed5607cb82508897b4da8e5c56254d1bbefc70130d3c4b22f3a384d81\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=163840\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=4d70199ed5607cb82508897b4da8e5c56254d1bb\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:12\nInfo.plist entries=15\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=0\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (Plugin).app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.helper\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.cs.allow-jit</key><true/><key>com.apple.security.cs.allow-unsigned-executable-memory</key><true/><key>com.apple.security.cs.disable-library-validation</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (Plugin).app/Contents/MacOS/Agent Helper (Plugin)\nIdentifier=dev.personal.agent.helper\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=765 flags=0x0(none) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=38cdf6c6ff667f0920b7135be8f16102a8b40109\nCandidateCDHashFull sha256=38cdf6c6ff667f0920b7135be8f16102a8b40109250b76972ee164c2dd1af654\nHash choices=sha256\nCMSDigest=38cdf6c6ff667f0920b7135be8f16102a8b40109250b76972ee164c2dd1af654\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=163840\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=38cdf6c6ff667f0920b7135be8f16102a8b40109\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:12\nInfo.plist entries=15\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=0\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (Renderer).app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.helper\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.cs.allow-jit</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper (Renderer).app/Contents/MacOS/Agent Helper (Renderer)\nIdentifier=dev.personal.agent.helper\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=765 flags=0x0(none) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=6e71dc2b00a36383101b544afc8aee08fec057db\nCandidateCDHashFull sha256=6e71dc2b00a36383101b544afc8aee08fec057db91f50208831b0446d1d52d75\nHash choices=sha256\nCMSDigest=6e71dc2b00a36383101b544afc8aee08fec057db91f50208831b0446d1d52d75\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=163840\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=6e71dc2b00a36383101b544afc8aee08fec057db\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:12\nInfo.plist entries=15\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=0\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper.app",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"dev.personal.agent.helper\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\n<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict><key>com.apple.security.cs.allow-jit</key><true/><key>com.apple.security.device.audio-input</key><true/><key>com.apple.security.device.bluetooth</key><true/><key>com.apple.security.device.camera</key><true/><key>com.apple.security.device.print</key><true/><key>com.apple.security.device.usb</key><true/><key>com.apple.security.personal-information.location</key><true/><key>com.apple.security.personal-information.photos-library</key><true/></dict></plist>\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Agent Helper.app/Contents/MacOS/Agent Helper\nIdentifier=dev.personal.agent.helper\nFormat=app bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=765 flags=0x0(none) hashes=13+7 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=e60b88a088c3c09f31fcc133f61bcf3aea0acb58\nCandidateCDHashFull sha256=e60b88a088c3c09f31fcc133f61bcf3aea0acb580b7384bf74acf66f8186b44e\nHash choices=sha256\nCMSDigest=e60b88a088c3c09f31fcc133f61bcf3aea0acb580b7384bf74acf66f8186b44e\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=163840\nExecutable Segment flags=0x1\nPage size=16384\nCDHash=e60b88a088c3c09f31fcc133f61bcf3aea0acb58\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:12\nInfo.plist entries=15\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=0\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Electron Framework.framework",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"com.github.Electron.framework\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Electron Framework.framework/Versions/Current/Electron Framework\nIdentifier=com.github.Electron.framework\nFormat=bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=395009 flags=0x0(none) hashes=12337+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=18232551625cd84c9d43e7c5f3c993f283555210\nCandidateCDHashFull sha256=18232551625cd84c9d43e7c5f3c993f2835552102a08391e5fdde6ef5bafafe8\nHash choices=sha256\nCMSDigest=18232551625cd84c9d43e7c5f3c993f2835552102a08391e5fdde6ef5bafafe8\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=191905792\nExecutable Segment flags=0x0\nPage size=16384\nCDHash=18232551625cd84c9d43e7c5f3c993f283555210\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:13\nInfo.plist entries=12\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=232\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Mantle.framework",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"com.electron.mantle\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Mantle.framework/Versions/Current/Mantle\nIdentifier=com.electron.mantle\nFormat=bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=471 flags=0x0(none) hashes=8+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=6e808794f8c732026f946ea5640a3150d992d661\nCandidateCDHashFull sha256=6e808794f8c732026f946ea5640a3150d992d6617548c3833b6f3368b8accc77\nHash choices=sha256\nCMSDigest=6e808794f8c732026f946ea5640a3150d992d6617548c3833b6f3368b8accc77\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=81920\nExecutable Segment flags=0x0\nPage size=16384\nCDHash=6e808794f8c732026f946ea5640a3150d992d661\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:13\nInfo.plist entries=15\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=1\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/ReactiveObjC.framework",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"com.electron.reactive\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/ReactiveObjC.framework/Versions/Current/ReactiveObjC\nIdentifier=com.electron.reactive\nFormat=bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=921 flags=0x0(none) hashes=22+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=df97e74cfa274d0d6b6f7858109384fdad8beb06\nCandidateCDHashFull sha256=df97e74cfa274d0d6b6f7858109384fdad8beb0651ed97d23e6e2703c839f6ce\nHash choices=sha256\nCMSDigest=df97e74cfa274d0d6b6f7858109384fdad8beb0651ed97d23e6e2703c839f6ce\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=262144\nExecutable Segment flags=0x0\nPage size=16384\nCDHash=df97e74cfa274d0d6b6f7858109384fdad8beb06\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:13\nInfo.plist entries=16\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=1\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    },
+    {
+      "path": "/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Squirrel.framework",
+      "team": "7UK53LNNF8",
+      "details": "designated => identifier \"com.github.Squirrel\" and anchor apple generic and certificate leaf[subject.CN] = \"Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */\nExecutable=/Users/torch/Documents/ChatGPT/agent/release/d3-development-20261020/Agent-darwin-arm64/Agent.app/Contents/Frameworks/Squirrel.framework/Versions/Current/Squirrel\nIdentifier=com.github.Squirrel\nFormat=bundle with Mach-O thin (arm64)\nCodeDirectory v=20400 size=663 flags=0x0(none) hashes=14+3 location=embedded\nVersionPlatform=1\nVersionMin=851968\nVersionSDK=1705216\nHash type=sha256 size=32\nCandidateCDHash sha256=89759f7e3fb5593a82f23c644514bfd4d2881548\nCandidateCDHashFull sha256=89759f7e3fb5593a82f23c644514bfd4d28815486ac9fce61f1ae50ba7aefcae\nHash choices=sha256\nCMSDigest=89759f7e3fb5593a82f23c644514bfd4d28815486ac9fce61f1ae50ba7aefcae\nCMSDigestType=2\nExecutable Segment base=0\nExecutable Segment limit=163840\nExecutable Segment flags=0x0\nPage size=16384\nCDHash=89759f7e3fb5593a82f23c644514bfd4d2881548\nSignature size=4796\nAuthority=Apple Development: innovationpuls@gmail.com (UT2R76DBP6)\nAuthority=Apple Worldwide Developer Relations Certification Authority\nAuthority=Apple Root CA\nSigned Time=20 Oct 2026 at 20:49:13\nInfo.plist entries=17\nTeamIdentifier=7UK53LNNF8\nSealed Resources version=2 rules=13 files=2\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\nTotal signatures=1\nChosen signature=1\n"
+    }
+  ],
+  "productWorkerSha256": "dfb5cd1f2206146f19e10c22afbbf6bd19f33800d7122c18a073d2de39cd2863",
+  "externalPositiveControl": {
+    "host": "example.com",
+    "address": "198.18.1.42",
+    "port": 443,
+    "connected": true
+  },
+  "probe": {
+    "direct": {
+      "files": [
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/host/credentials.enc",
+          "read": "EPERM",
+          "write": "EPERM"
+        },
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/protected/history.enc",
+          "read": "EPERM",
+          "write": "EPERM"
+        },
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/skills/official/SKILL.md",
+          "read": "EPERM",
+          "write": "EPERM"
+        },
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/tools/tool.js",
+          "read": "EPERM",
+          "write": "EPERM"
+        },
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/hooks/hook.js",
+          "read": "EPERM",
+          "write": "EPERM"
+        },
+        {
+          "path": "/Users/torch/.d3-protected-ZZ5e4h/rules/AGENTS.md",
+          "read": "EPERM",
+          "write": "EPERM"
+        }
+      ],
+      "actualFiles": [
+        {
+          "path": "/Users/torch/Documents/ChatGPT/agent/AGENTS.md",
+          "read": "EPERM",
+          "writeOpen": "EPERM"
+        },
+        {
+          "path": "/Users/torch/Documents/ChatGPT/agent/apps/host/skills/skills.ts",
+          "read": "EPERM",
+          "writeOpen": "EPERM"
+        },
+        {
+          "path": "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz/data/credentials.enc",
+          "read": "EPERM",
+          "writeOpen": "EPERM"
+        }
+      ],
+      "tcp": "EPERM",
+      "http": "EPERM",
+      "externalTcp": "EPERM"
+    },
+    "node": {
+      "status": 0,
+      "result": "{\"files\":[{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/host/credentials.enc\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/protected/history.enc\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/skills/official/SKILL.md\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/tools/tool.js\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/hooks/hook.js\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/rules/AGENTS.md\",\"read\":\"EPERM\",\"write\":\"EPERM\"}],\"actualFiles\":[{\"path\":\"/Users/torch/Documents/ChatGPT/agent/AGENTS.md\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"},{\"path\":\"/Users/torch/Documents/ChatGPT/agent/apps/host/skills/skills.ts\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"},{\"path\":\"/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz/data/credentials.enc\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"}],\"tcp\":\"EPERM\",\"http\":\"EPERM\",\"externalTcp\":\"EPERM\"}",
+      "error": ""
+    },
+    "shell": {
+      "status": 0,
+      "result": "{\"files\":[{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/host/credentials.enc\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/protected/history.enc\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/skills/official/SKILL.md\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/tools/tool.js\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/hooks/hook.js\",\"read\":\"EPERM\",\"write\":\"EPERM\"},{\"path\":\"/Users/torch/.d3-protected-ZZ5e4h/rules/AGENTS.md\",\"read\":\"EPERM\",\"write\":\"EPERM\"}],\"actualFiles\":[{\"path\":\"/Users/torch/Documents/ChatGPT/agent/AGENTS.md\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"},{\"path\":\"/Users/torch/Documents/ChatGPT/agent/apps/host/skills/skills.ts\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"},{\"path\":\"/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz/data/credentials.enc\",\"read\":\"EPERM\",\"writeOpen\":\"EPERM\"}],\"tcp\":\"EPERM\",\"http\":\"EPERM\",\"externalTcp\":\"EPERM\"}",
+      "error": ""
+    },
+    "cat": {
+      "status": 1,
+      "outputEmpty": true,
+      "error": "cat: /Users/torch/.d3-protected-ZZ5e4h/host/credentials.enc: Operation not permitted"
+    },
+    "envKeys": [
+      "PATH",
+      "PI_OFFLINE",
+      "PI_SKIP_VERSION_CHECK",
+      "PI_TELEMETRY",
+      "TMPDIR",
+      "HOME",
+      "AGENT_REFLECTION_AGENT_DIR",
+      "__CF_USER_TEXT_ENCODING"
+    ],
+    "pid": 12526,
+    "cwd": "/Users/torch/Library/Containers/dev.personal.agent.reflection/Data/tmp/reflection-D706055C-72FF-43E7-AFDF-7FF576C7DBBF"
+  },
+  "realFileOpenControls": {
+    "actualPaths": [
+      "/Users/torch/Documents/ChatGPT/agent/AGENTS.md",
+      "/Users/torch/Documents/ChatGPT/agent/apps/host/skills/skills.ts",
+      "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-VoDGPz/data/credentials.enc"
+    ],
+    "hostReadWriteOpen": true,
+    "noRealFileContentsReadOrWritten": true
+  },
+  "hostPositiveControls": {
+    "existingReadableWritableFiles": [
+      "/Users/torch/.d3-protected-ZZ5e4h/host/credentials.enc",
+      "/Users/torch/.d3-protected-ZZ5e4h/protected/history.enc",
+      "/Users/torch/.d3-protected-ZZ5e4h/skills/official/SKILL.md",
+      "/Users/torch/.d3-protected-ZZ5e4h/tools/tool.js",
+      "/Users/torch/.d3-protected-ZZ5e4h/hooks/hook.js",
+      "/Users/torch/.d3-protected-ZZ5e4h/rules/AGENTS.md"
+    ],
+    "loopbackTcp": true,
+    "contentsUnchanged": true
+  },
+  "wrongBridgeIdentifier": {
+    "code": 1,
+    "messages": [
+      {
+        "kind": "finished",
+        "error": "xpc_service_interrupted",
+        "ok": false
+      }
+    ]
+  },
+  "adHocBridge": {
+    "code": 1,
+    "messages": [
+      {
+        "kind": "finished",
+        "error": "xpc_service_interrupted",
+        "ok": false
+      }
+    ]
+  },
+  "tamperedService": {
+    "code": 1,
+    "messages": [
+      {
+        "kind": "finished",
+        "error": "xpc_service_identity_invalid",
+        "ok": false
+      }
+    ]
+  },
+  "passed": true
+}

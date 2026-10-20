@@ -1,0 +1,19 @@
+{
+  "observedAt": 1792502622.144129,
+  "root": "/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d3-signed-3ooPuI",
+  "scope": "same SQLite read transaction observes real foreground Diagnostic running while restricted Reflection job running",
+  "reflection": {
+    "id": "afe9b8d8-98a1-49ec-8b61-167ee6bef9c8",
+    "session_id": "deb9e36f-dd53-4fc5-8840-38c3d528585d",
+    "reflection_session_id": "c7bb2958-ca63-4c93-880d-4cf160f6d82a",
+    "status": "running"
+  },
+  "foregroundTraces": [
+    {
+      "id": "fdce9056-9a92-4403-859e-7dc9c7cd8668",
+      "session_id": "782d1145-ab93-44a0-8d8e-db1cfa2b16be",
+      "status": "running",
+      "started": 1792502619894
+    }
+  ]
+}

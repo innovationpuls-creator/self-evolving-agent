@@ -54,7 +54,8 @@ test('packaged XPC isolates Node and shell while Host handles bounded IPC', {
           console.log(JSON.stringify({ kind: 'request', requestId: 'probe-1', operation: 'probe', input: { denied, shellDenied, cwd: process.cwd(), agentDir: process.env.AGENT_REFLECTION_AGENT_DIR, envKeys: Object.keys(process.env) } }));
         } else if (message.kind === 'response') {
           console.log(JSON.stringify({ kind: 'finished', ok: message.ok }));
-          process.exit(0);
+          // A terminal message is not proof that the process has already exited.
+          setTimeout(() => process.exit(0), 50);
         }
       });
     `,
