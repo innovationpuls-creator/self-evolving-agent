@@ -57,10 +57,11 @@ try {
   await page.getByRole('button', { name: '模型设置', exact: true }).click();
   await page.getByLabel('模型提供方').selectOption('openai-codex');
   await page.getByRole('button', { name: '导入 Pi 授权' }).click();
+  await page.getByRole('status').filter({ hasText: '已导入 Pi 授权' }).waitFor();
+  await page.getByRole('button', { name: '返回工作区', exact: true }).click();
   await page
     .locator('.start select option[value="openai-codex/gpt-6-luna"]')
     .waitFor({ state: 'attached', timeout: 30000 });
-  await page.getByRole('button', { name: '模型设置', exact: true }).click();
   await page.getByPlaceholder('工作目录的绝对路径').fill(root);
   await page.locator('.start select').selectOption('openai-codex/gpt-6-luna');
   await page.getByRole('button', { name: '创建会话 →' }).click();
@@ -96,10 +97,13 @@ try {
   await web.getByRole('button', { name: '发送 ↑' }).waitFor({ timeout: 180000 });
   assert.ok((await web.locator('.assistant').last().innerText()).includes('UI real model success'));
   assert.ok(!(await web.locator('main').innerText()).includes('mac acceptance phrase'));
-  const download = web.waitForEvent('download');
-  await web.getByRole('button', { name: '导出', exact: true }).click();
+  await web.locator('summary').filter({ hasText: '会话操作' }).click();
+  const [download] = await Promise.all([
+    web.waitForEvent('download'),
+    web.getByRole('button', { name: '导出', exact: true }).click(),
+  ]);
   const exportPath = join(root, 'export.json');
-  await (await download).saveAs(exportPath);
+  await download.saveAs(exportPath);
   const exported = await readFile(exportPath, 'utf8');
   assert.ok(!exported.includes('mac acceptance phrase'));
   assert.equal(JSON.parse(exported).resumable, false);

@@ -1,13 +1,13 @@
 {
-  "time": "2026-10-20T07:02:52.788209+00:00",
+  "time": "2026-10-20T09:32:07.924273+00:00",
   "baseline": "6fbb8a9",
   "platform": "darwin arm64",
   "electron": "44.9.0",
   "automated": {
     "npm test": {
       "exitCode": 0,
-      "tests": 155,
-      "pass": 154,
+      "tests": 157,
+      "pass": 156,
       "fail": 0,
       "skipped": 1,
       "skipReason": "D3 signed Reflection bridge unavailable"
@@ -38,6 +38,10 @@
     },
     "codesign --verify --deep --strict": {
       "exitCode": 0
+    },
+    "independent diagnostic tests": {
+      "tests": 23,
+      "pass": 23
     }
   },
   "runtime": {
@@ -67,45 +71,49 @@
       "receipt": "desktop-keychain-pending-exit.json"
     },
     "normal isolated startup": {
-      "result": "blocked",
-      "reason": "real system storage operation did not return within 180 seconds",
+      "result": "blocked on final artifact pending normal system authorization; first artifact passed",
       "receipt": "desktop-keychain-isolated.json"
     },
     "normal persistent startup": {
-      "result": "blocked",
-      "reason": "real system storage operation did not return within 180 seconds; original wrapped key hash unchanged",
-      "receipt": "desktop-keychain-persistent.json"
+      "result": "passed on first artifact",
+      "receipt": "desktop-keychain-persistent.json",
+      "originalWrappedKeyUnchanged": true
     },
     "npm run test:desktop": {
-      "exitCode": 1,
-      "result": "blocked",
-      "reason": "first shell not reached in 30 seconds while awaiting real Keychain"
+      "exitCode": 0,
+      "result": "passed on first artifact; final artifact pending authorization"
     },
     "npx tsx scripts/ui-smoke.ts": {
-      "exitCode": 1,
-      "result": "blocked",
-      "reason": "first shell not reached in 30 seconds while awaiting real Keychain; D1 UI business steps not executed"
+      "exitCode": 0,
+      "result": "passed on first artifact after script navigation corrections; final artifact pending authorization"
     },
     "npx tsx scripts/d2-integration-ui-smoke.ts": {
       "exitCode": 1,
-      "result": "blocked",
-      "reason": "first shell not reached in 30 seconds while awaiting real Keychain; D2 business steps not executed",
+      "result": "failed Step 10 on first artifact; recovery fix passed 23 diagnostics tests; final artifact pending authorization",
       "rawReceipt": "desktop-keychain-d2-ui-raw.json"
+    },
+    "authorized first artifact": {
+      "result": "passed startup, persistent compatibility, Desktop, D1; D2 exposed subsequently fixed recovery defect",
+      "receipt": "desktop-keychain-authorized-initial.json"
     }
   },
   "manualNotAccepted": [
-    "first authorization",
     "deny",
     "cancel",
-    "same build reopen authorization behavior",
-    "real Host SIGKILL recovery without reauthorization",
-    "original persistent directory decryption and SQLite recovery",
-    "self-signed same-identity builds and cross-build Keychain probe"
+    "self-signed same-identity builds and cross-build Keychain probe",
+    "final diagnostic-fix packaged client rerun while awaiting authorization"
   ],
   "signing": {
     "validIdentities": 0,
     "adHocRequirementChanges": "verified using two different native builds",
-    "stableIdentityCrossBuildAccess": "blocked, no configured identity; no certificate installed and no trust or ACL changed"
+    "stableIdentityCrossBuildAccess": "blocked, no configured identity; no certificate installed and no trust or ACL changed",
+    "finalArtifact": {
+      "bundleId": "dev.personal.agent",
+      "cdhash": "f53dec6f7ead4b12d5886d04926502dd1e5f22bb",
+      "signature": "ad-hoc",
+      "teamIdentifier": null,
+      "deepStrictVerification": "passed"
+    }
   },
   "independentReview": {
     "scope": "startup lifecycle, security boundaries, data compatibility, signing and receipt accuracy",
@@ -115,8 +123,19 @@
     "deliveryCorrections": [
       "clarified signing private-key access",
       "asserted pending SIGKILL, click and time bound; real rerun passed",
-      "explicitly documented actual blocked acceptance results"
-    ]
+      "explicitly documented actual blocked acceptance results",
+      "separated authorized initial artifact receipts from final artifact pending authorization; corrected historical links"
+    ],
+    "diagnosticFollowup": {
+      "finding": "lossy projection can collide across native IDs",
+      "fix": "entry eligibility, unique projection and one-to-one matching; ambiguity preserves observations and marks incomplete",
+      "independentTests": 23,
+      "additionalProbes": [
+        "colliding nested left/right repeated restart",
+        "one unfinished candidate facing two colliding native IDs"
+      ],
+      "finalCodeFindings": 0
+    }
   },
   "D3": "blocked",
   "D4": "not implemented"

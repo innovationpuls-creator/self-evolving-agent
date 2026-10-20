@@ -612,6 +612,76 @@ test('restart reconciliation recovers only marked native tasks and is idempotent
   }
 });
 
+test('restart preserves observed calls when privacy projection changes native correlation IDs', async () => {
+  const f = await nativeFixture();
+  try {
+    const nativeId = 'call-13800138000';
+    f.recorder.start();
+    const traceId = f.recorder.traceId;
+    assert.ok(traceId);
+    f.fake.setResponses([
+      fauxAssistantMessage(fauxToolCall('outer', {}, { id: nativeId }), { stopReason: 'toolUse' }),
+      fauxAssistantMessage('Finished.'),
+    ]);
+    await f.session.prompt('Run the native nested fixture once.');
+    f.recorder.finish('ended');
+    const before = f.service.get(agent, traceId);
+    assert.equal(before.calls.length, 4);
+    assert.ok(before.calls.some((call) => call.toolCallId.includes('[身份信息已保护]')));
+    assert.ok(!sqliteMetadata(f.db).includes('13800138000'));
+    const saved = snapshot(f.manager);
+    assert.ok(JSON.stringify(saved).includes(nativeId), 'authoritative native IDs remain untouched');
+    for (let restart = 0; restart < 2; restart++) {
+      f.service.reconcile(f.sessionId, project, saved, false);
+      const after = f.service.get(agent, traceId);
+      assert.deepEqual(
+        after.calls.map((call) => call.id),
+        before.calls.map((call) => call.id),
+      );
+      assert.ok(after.calls.every((call) => call.data.recovered === false));
+      assert.ok(!sqliteMetadata(f.db).includes('13800138000'));
+    }
+  } finally {
+    f.close();
+  }
+});
+
+test('colliding protected native IDs preserve observed nested calls instead of merging their facts', async () => {
+  const f = await nativeFixture();
+  try {
+    const detail = await f.run();
+    const aliases = new Map([
+      ['outer-call/1', 'call-13800138000'],
+      ['outer-call/2', 'call-13900139000'],
+    ]);
+    const saved = snapshot(f.manager);
+    for (const entry of saved.entries) {
+      if (entry.type !== 'message' || entry.message.role !== 'toolResult') continue;
+      for (const child of entry.message.nestedCalls?.calls ?? []) child.id = aliases.get(child.id) ?? child.id;
+    }
+    for (const call of detail.calls)
+      f.service.call(detail.trace, {
+        ...call,
+        toolCallId: aliases.get(call.toolCallId) ?? call.toolCallId,
+        parentToolCallId: call.parentToolCallId ? (aliases.get(call.parentToolCallId) ?? call.parentToolCallId) : null,
+      });
+    const before = f.service.get(agent, detail.trace.id);
+    for (let restart = 0; restart < 2; restart++) {
+      f.service.reconcile(f.sessionId, project, saved, false);
+      const after = f.service.get(agent, detail.trace.id);
+      assert.equal(after.trace.incomplete, true, 'lossy correlation remains explicitly incomplete');
+      assert.deepEqual(
+        after.calls.map(({ id, toolName, status, parentToolCallId }) => ({ id, toolName, status, parentToolCallId })),
+        before.calls.map(({ id, toolName, status, parentToolCallId }) => ({ id, toolName, status, parentToolCallId })),
+      );
+      assert.ok(!sqliteMetadata(f.db).includes('13800138000'));
+      assert.ok(!sqliteMetadata(f.db).includes('13900139000'));
+    }
+  } finally {
+    f.close();
+  }
+});
+
 test('an unfinished native marker becomes interrupted without replay and previous checkpoint recovery is explicit', () => {
   const f = indexFixture();
   try {

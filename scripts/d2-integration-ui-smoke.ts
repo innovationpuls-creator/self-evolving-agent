@@ -275,10 +275,11 @@ try {
   await page.getByRole('button', { name: '模型设置', exact: true }).click();
   await page.getByLabel('模型提供方').selectOption(model.provider);
   await page.getByRole('button', { name: '导入 Pi 授权' }).click();
+  await page.getByRole('status').filter({ hasText: '已导入 Pi 授权' }).waitFor();
+  await page.getByRole('button', { name: '返回工作区', exact: true }).click();
   await page
     .locator(`.start select option[value="${model.provider}/${model.model}"]`)
     .waitFor({ state: 'attached', timeout: 30000 });
-  await page.getByRole('button', { name: '模型设置', exact: true }).click();
 
   console.log('=== Step 2: Skill Setup (Ordinary discovery & Special review approval check) ===');
   const ordinarySkillDir = join(root, '.agents/skills/d2-deploy-helper');

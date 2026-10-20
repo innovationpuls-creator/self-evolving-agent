@@ -1,0 +1,75 @@
+{
+  "artifact": "dea5eb7 packaged before diagnostic recovery follow-up",
+  "systemAuthorization": "User confirmed manual macOS authorization; no automated approval or mock",
+  "isolated": {
+    "time": "2026-10-20T09:14:18.342Z",
+    "dataScope": "temporary isolated directory",
+    "systemAuthorization": "real Keychain; no mock or automated system approval",
+    "reflectionBusinessChain": "blocked",
+    "mockKeychainSwitch": false,
+    "firstWindowMs": 721,
+    "initialPhase": "accessing",
+    "wrappedKeyAfter": "26bc169c221677152627d2ae1909fb51176a60ad612605a5070193ea56b85ac4",
+    "initialSessionCount": 0,
+    "hostRecoveryKeychainCalls": {
+      "availability": 0,
+      "decrypt": 0,
+      "encrypt": 0
+    },
+    "sameBuildReopen": "passed",
+    "result": "passed"
+  },
+  "persistent": {
+    "time": "2026-10-20T09:14:50.192Z",
+    "dataScope": "real persistent user directory",
+    "systemAuthorization": "real Keychain; no mock or automated system approval",
+    "reflectionBusinessChain": "blocked",
+    "wrappedKeyBefore": "902642fe15cb855aed6d1aefb4a13de7a1f07c83e5c2883f41f9b4c9ce243ac8",
+    "mockKeychainSwitch": false,
+    "firstWindowMs": 271,
+    "initialPhase": "starting",
+    "wrappedKeyAfter": "902642fe15cb855aed6d1aefb4a13de7a1f07c83e5c2883f41f9b4c9ce243ac8",
+    "initialSessionCount": 0,
+    "hostRecoveryKeychainCalls": {
+      "availability": 0,
+      "decrypt": 0,
+      "encrypt": 0
+    },
+    "sameBuildReopen": "passed",
+    "result": "passed"
+  },
+  "desktop": {
+    "packagedDesktop": "passed",
+    "platform": "darwin",
+    "arch": "arm64",
+    "independentHost": true,
+    "bundledRuntime": true,
+    "windowCloseKeepsHost": true,
+    "hostRestartReconnect": true,
+    "emptySessionAppReopen": true,
+    "packageContents": "allowlisted",
+    "compiledAcquisition": true,
+    "acquiredLockedDependencyTree": true,
+    "installScriptsSkipped": true
+  },
+  "D1": {
+    "result": "passed",
+    "packagedDesktop": true,
+    "webBrowser": "Chrome",
+    "realModel": "openai-codex/gpt-6-luna",
+    "nativeTools": true,
+    "windowCloseKeepsHost": true,
+    "sharedSessionMultiTurn": true,
+    "activeHostCrashRecovery": true,
+    "appReopen": true,
+    "noSideEffectReplay": true,
+    "protectedExport": true,
+    "rendererNode": false
+  },
+  "D2": {
+    "result": "failed",
+    "phase": "Step 10 cold restart diagnostic equality",
+    "cause": "privacy-projected native Tool Call ID duplicated diagnostic records on restore",
+    "fix": "follow-up source and 23 diagnostic tests passed; final packaged retest pending"
+  }
+}

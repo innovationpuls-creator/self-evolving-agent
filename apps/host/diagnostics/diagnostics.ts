@@ -595,6 +595,42 @@ export class DiagnosticService {
       .prepare('SELECT data FROM diagnostic_calls WHERE trace_id=?')
       .all(trace.id)
       .map((r) => JSON.parse(String(r.data)) as DiagnosticCall);
+    // Metadata stores protected IDs. Recover only unambiguous correlations; the
+    // complete native transcript remains authoritative when projection loses identity.
+    const nativeIds = new Map<string, Set<string>>();
+    for (const entry of entries) {
+      if (entry.type !== 'message' || entry.message.role !== 'toolResult') continue;
+      for (const id of [entry.message.toolCallId, ...(entry.message.nestedCalls?.calls.map((c) => c.id) ?? [])]) {
+        const projected = this.sensitive.text(id);
+        const group = nativeIds.get(projected) ?? new Set<string>();
+        group.add(id);
+        nativeIds.set(projected, group);
+      }
+    }
+    const usedCalls = new Set<string>();
+    const findCall = (nativeId: string, resultEntryId: string, assistantEntryId: string | undefined) => {
+      const eligible = calls.filter(
+        (call) =>
+          call.resultEntryId === resultEntryId ||
+          (!call.resultEntryId && (!call.assistantEntryId || call.assistantEntryId === assistantEntryId)),
+      );
+      let matches = eligible.filter((call) => call.toolCallId === nativeId);
+      if (!matches.length) {
+        const projected = this.sensitive.text(nativeId);
+        if ((nativeIds.get(projected)?.size ?? 0) > 1) {
+          trace.incomplete = true;
+          return null;
+        }
+        matches = eligible.filter((call) => this.sensitive.text(call.toolCallId) === projected);
+      }
+      if (matches.length > 1 || (matches[0] && usedCalls.has(matches[0].id))) {
+        trace.incomplete = true;
+        return null;
+      }
+      const match = matches[0];
+      if (match) usedCalls.add(match.id);
+      return match;
+    };
     const assistant = new Map<string, string>();
     for (const e of entries) {
       if (
@@ -647,12 +683,8 @@ export class DiagnosticService {
       }
       if (e.message.role === 'toolResult') {
         const m = e.message;
-        const known = calls.find(
-          (c) =>
-            c.toolCallId === m.toolCallId &&
-            (c.resultEntryId === e.id ||
-              (!c.resultEntryId && (!c.assistantEntryId || c.assistantEntryId === assistant.get(m.toolCallId)))),
-        );
+        const known = findCall(m.toolCallId, e.id, assistant.get(m.toolCallId));
+        if (known === null) continue;
         sequence++;
         this.call(trace, {
           ...(known ?? {}),
@@ -676,12 +708,8 @@ export class DiagnosticService {
           },
         });
         for (const child of m.nestedCalls?.calls ?? []) {
-          const existing = calls.find(
-            (c) =>
-              c.toolCallId === child.id &&
-              (c.resultEntryId === e.id ||
-                (!c.resultEntryId && (!c.assistantEntryId || c.assistantEntryId === assistant.get(m.toolCallId)))),
-          );
+          const existing = findCall(child.id, e.id, assistant.get(m.toolCallId));
+          if (existing === null) continue;
           sequence++;
           this.call(trace, {
             id: existing?.id ?? randomUUID(),
