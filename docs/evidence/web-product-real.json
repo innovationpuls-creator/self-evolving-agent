@@ -1,0 +1,48 @@
+{
+  "time": "2026-10-20T03:12:56.896Z",
+  "reflectionIsolationAcceptance": "blocked",
+  "reflection": {
+    "availability": {
+      "available": false,
+      "reason": "Reflection 需要 Apple Development 或 Developer ID 签名以验证 XPC 对端；当前应用为 ad-hoc 签名"
+    },
+    "job": {
+      "id": "ca61fc86-2cc9-442b-aa38-7f1faba3f369",
+      "sessionId": "434a82ff-6003-4c17-b980-5282914c59e8",
+      "project": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/agent-real-DQyeLp",
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "scheduledAt": 1792465985042,
+      "created": 1792465984578,
+      "updated": 1792465989411,
+      "runId": null,
+      "status": "waiting_user",
+      "error": "Reflection 需要 Apple Development 或 Developer ID 签名以验证 XPC 对端；当前应用为 ad-hoc 签名",
+      "sources": [
+        {
+          "markerEntryId": "67935ab7",
+          "settledAt": 1792465984539,
+          "traceId": "e3711f5e-4199-4fb2-bd69-af9d0210e0e0",
+          "status": "ended"
+        }
+      ]
+    }
+  },
+  "diagnostic": {
+    "traceId": "e3711f5e-4199-4fb2-bd69-af9d0210e0e0",
+    "toolCallId": "call_d6f48e48e5f4400184ff6b5ac4da2c9d|fc_039d0141e8c73ab3016ad6dc3ee02c81938e920f42d68d3e7a",
+    "resultEntryId": "bde6b5b5",
+    "source": "checkpoint"
+  },
+  "result": "passed",
+  "realModel": {
+    "provider": "openai-codex",
+    "id": "gpt-6-luna"
+  },
+  "nativeTools": [
+    "write",
+    "read"
+  ],
+  "streamEvents": 77,
+  "encryptedRecovery": true
+}

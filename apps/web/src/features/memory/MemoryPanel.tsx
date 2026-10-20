@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { Markdown } from '../../components/Markdown';
+import { readPosition, savePosition } from '../../app/view-state';
 import type { MemoryContent, MemoryView } from '../../../../host/memory/memory';
 import type { EvidenceReference } from '../diagnostics/DiagnosticsPanel';
 
@@ -25,6 +27,7 @@ export function MemoryPanel({
   api,
   project,
   initialId,
+  initialRevision,
   onClose,
   onDirtyChange,
   onEvidence,
@@ -32,6 +35,7 @@ export function MemoryPanel({
   api: Api;
   project: string;
   initialId?: string;
+  initialRevision?: number;
   onClose: () => void;
   onDirtyChange: (dirty: boolean) => void;
   onEvidence: (source: EvidenceReference) => void;
@@ -41,14 +45,17 @@ export function MemoryPanel({
   const [form, setForm] = useState<MemoryContent>(blank(project));
   const [reason, setReason] = useState(''),
     [query, setQuery] = useState(''),
-    [scope, setScope] = useState('');
-  const [history, setHistory] = useState(false),
-    [offset, setOffset] = useState(0);
+    [scope, setScope] = useState(readPosition('memory').scope ?? '');
+  const [history, setHistory] = useState(readPosition('memory').history ?? false),
+    [offset, setOffset] = useState(readPosition('memory').offset ?? 0);
   const [editing, setEditing] = useState(false),
     [dirty, setDirty] = useState(false),
     [busy, setBusy] = useState(false);
   const [error, setError] = useState(''),
     [notice, setNotice] = useState('');
+  const [selectedRevision, setSelectedRevision] = useState<number | undefined>(
+    initialRevision ?? readPosition('memory').revision,
+  );
   const [lostAccess, setLostAccess] = useState(false);
   const dirtyRef = useRef(false),
     selected = useRef<string | undefined>(undefined),
@@ -138,7 +145,10 @@ export function MemoryPanel({
       }
     }
   };
+  const mountedProject = useRef(project);
   useEffect(() => {
+    const changedProject = mountedProject.current !== project;
+    mountedProject.current = project;
     selected.current = undefined;
     detailEpoch.current++;
     listEpoch.current++;
@@ -151,7 +161,7 @@ export function MemoryPanel({
     setError('');
     setNotice('');
     setLostAccess(false);
-    setOffset(0);
+    if (changedProject) setOffset(0);
     setBusy(false);
   }, [project]);
   useEffect(() => {
@@ -185,8 +195,9 @@ export function MemoryPanel({
       generation.current++;
     };
   }, []);
-  const open = (id: string) => {
-    if (!discard()) return;
+  const open = (id: string, revision?: number) => {
+    if (dirtyRef.current && !discard()) return;
+    setSelectedRevision(revision);
     markDirty(false);
     setEditing(false);
     setError('');
@@ -197,10 +208,15 @@ export function MemoryPanel({
     void guard(() => loadDetail(id, true));
   };
   useEffect(() => {
-    if (initialId) open(initialId);
-  }, [initialId, project]);
+    const id = initialId ?? readPosition('memory').id;
+    if (id) open(id, initialRevision ?? (initialId ? undefined : readPosition('memory').revision));
+  }, [initialId, initialRevision, project]);
+  useEffect(() => {
+    savePosition('memory', { id: selected.current, revision: selectedRevision, offset, scope, history });
+  }, [detail, selectedRevision, offset, scope, history]);
   const start = () => {
     if (!discard()) return;
+    setSelectedRevision(undefined);
     detailEpoch.current++;
     selected.current = undefined;
     setDetail(undefined);
@@ -258,6 +274,11 @@ export function MemoryPanel({
       await refresh();
     });
   };
+  const viewed =
+    selectedRevision === undefined
+      ? detail?.current
+      : detail?.history.find((item) => item.revision === selectedRevision);
+  const historical = viewed && detail && viewed.revision !== detail.current.revision;
   return (
     <section className="memory-panel">
       <header>
@@ -327,7 +348,7 @@ export function MemoryPanel({
           有 {catalog.unavailable} 项决定的来源正在切换或无法确认，暂不作为当前认识提供。
         </p>
       )}
-      <div className="memory-layout">
+      <div className="memory-layout" data-detail={!!detail || editing}>
         <div className="memory-list">
           {!catalog.items.length && <p className="memory-empty">{busy ? '正在读取…' : '没有符合条件的记忆'}</p>}
           {catalog.items.map((item) => (
@@ -336,7 +357,7 @@ export function MemoryPanel({
               disabled={busy}
               className={`memory-item ${selected.current === item.id ? 'selected' : ''}`}
               key={`${item.id}:${item.revision}`}
-              onClick={() => open(item.id)}
+              onClick={() => open(item.id, history ? item.revision : undefined)}
             >
               <small>
                 {item.scope === 'global' ? '全局' : '项目'} · {kinds[item.kind]}
@@ -363,6 +384,22 @@ export function MemoryPanel({
           </div>
         </div>
         <div className="memory-detail">
+          {(detail || editing) && (
+            <button
+              type="button"
+              className="back-to-list"
+              onClick={() => {
+                if (discard()) {
+                  selected.current = undefined;
+                  setDetail(undefined);
+                  setEditing(false);
+                  markDirty(false);
+                }
+              }}
+            >
+              ← 记忆列表
+            </button>
+          )}
           {!detail && !editing && <p className="memory-empty">选择一条记忆，查看认识与依据。</p>}
           {editing ? (
             <form
@@ -479,18 +516,27 @@ export function MemoryPanel({
             detail && (
               <>
                 <small>
-                  {detail.current.scope === 'global' ? 'Global · 全局' : 'Project · 当前项目'} ·{' '}
-                  {kinds[detail.current.kind]}
+                  {viewed?.scope === 'global' ? 'Global · 全局' : 'Project · 当前项目'} ·{' '}
+                  {viewed ? kinds[viewed.kind] : ''}
                 </small>
-                <h2>{detail.current.title}</h2>
+                <h2>{viewed?.title ?? '指定修订不可访问'}</h2>
                 <p className="memory-state">
-                  {statuses[detail.current.status]} · 修订 #{detail.current.revision}
-                  {detail.current.unavailable && ' · 来源暂不可确认'}
+                  {viewed ? (historical ? '历史认识' : statuses[viewed.status]) : '未找到授权范围内的修订'} · 修订 #
+                  {viewed?.revision ?? selectedRevision}
+                  {viewed?.unavailable && ' · 来源暂不可确认'}
                 </p>
-                <pre>{detail.current.content}</pre>
-                {detail.current.status !== 'deleted' ? (
+                {viewed && <Markdown>{viewed.content}</Markdown>}
+                {selectedRevision !== undefined && (
+                  <div className="revision-reference" role="status">
+                    正在查看引用修订 #{selectedRevision}，当前修订为 #{detail.current.revision}。
+                    <button type="button" onClick={() => setSelectedRevision(undefined)}>
+                      查看当前版本
+                    </button>
+                  </div>
+                )}
+                {!historical && viewed && detail.current.status !== 'deleted' ? (
                   <div className="memory-controls">
-                    <button type="button" disabled={busy || detail.current.unavailable} onClick={edit}>
+                    <button type="button" disabled={busy || viewed?.unavailable} onClick={edit}>
                       {detail.current.status === 'withdrawn' ? '重新确认认识' : '编辑与调整作用域'}
                     </button>
                     <button type="button" disabled={busy} onClick={remove}>
@@ -498,9 +544,13 @@ export function MemoryPanel({
                     </button>
                   </div>
                 ) : (
-                  <p>已从当前检索移除；下方保留来源与修订历史。</p>
+                  <p>
+                    {historical
+                      ? '历史修订仅供查看；编辑请先切换到当前版本。'
+                      : '下方保留当前授权范围内的来源与修订历史。'}
+                  </p>
                 )}
-                <details>
+                <details open={selectedRevision !== undefined}>
                   <summary>来源与修改历史 · {detail.history.length} 个修订</summary>
                   {detail.history.map((rev) => (
                     <article className="memory-revision" key={rev.revision}>
@@ -513,7 +563,7 @@ export function MemoryPanel({
                         {rev.previousRevision && ` · 替代 #${rev.previousRevision}`}
                       </p>
                       <b>{rev.title}</b>
-                      <pre>{rev.content}</pre>
+                      <Markdown>{rev.content}</Markdown>
                       <p>依据：{rev.reason}</p>
                       {rev.sources.map((source) => (
                         <p className="memory-source" key={`${source.sessionId}:${source.entryId}`}>

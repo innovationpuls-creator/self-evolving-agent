@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { Markdown } from '../../components/Markdown';
+import { readPosition, savePosition } from '../../app/view-state';
+import { useEffect, useRef, useState } from 'react';
 interface Skill {
   id: string;
   name: string;
@@ -74,6 +76,7 @@ export function SkillsPanel({
     [content, setContent] = useState(''),
     [loaded, setLoaded] = useState(''),
     [editing, setEditing] = useState(false);
+  const [reading, setReading] = useState(true);
   const [bufferRevision, setBufferRevision] = useState(0);
   const [pendingImport, setPendingImport] = useState<string>();
   const [snapshotContent, setSnapshotContent] = useState('');
@@ -179,10 +182,15 @@ export function SkillsPanel({
     if (owner === generation.current && epoch.current === current && request === detailEpoch.current) setDetail(data);
   };
   useEffect(() => {
-    if (initialId) void guard(() => open(initialId));
+    const id = initialId ?? readPosition('skills').id;
+    if (id) void guard(() => open(id));
   }, [initialId, project]);
+  useEffect(() => {
+    if (detail) savePosition('skills', { id: detail.skill.id });
+  }, [detail]);
   const read = async (file: string, version?: string) => {
     if (dirty.current && !window.confirm('放弃当前文件未保存的修改？')) return;
+    setReading(true);
     if (!detail || detailRef.current !== detail.skill.id) return;
     const current = ++epoch.current,
       owner = generation.current;
@@ -291,8 +299,16 @@ export function SkillsPanel({
             </p>
           ))}
       </div>
-      <div className="skill-layout">
-        <div className="skill-list">
+      <div className="skill-layout" data-detail={!!detail}>
+        <div className="skill-list" aria-busy={busy}>
+          {!catalog && !error && (
+            <p className="list-placeholder" role="status">
+              正在读取能力列表…
+            </p>
+          )}
+          {catalog && !catalog.skills.length && (
+            <p className="empty-action">尚未添加 Skill。可添加已有来源，或展开已发现的普通 Skill。</p>
+          )}
           <details>
             <summary>添加 Skill</summary>
             <label>
@@ -364,6 +380,21 @@ export function SkillsPanel({
           </details>
         </div>
         <div className="skill-detail">
+          {detail && (
+            <button
+              type="button"
+              className="back-to-list"
+              onClick={() => {
+                if (dirty.current && !window.confirm('放弃未保存修改？')) return;
+                dirty.current = false;
+                onDirtyChange(false);
+                detailRef.current = undefined;
+                setDetail(undefined);
+              }}
+            >
+              ← 能力列表
+            </button>
+          )}
           {!detail ? (
             <div className="skill-empty">
               <h2>选择一项能力</h2>
@@ -401,7 +432,7 @@ export function SkillsPanel({
                 <button
                   type="button"
                   disabled={busy || !latest}
-                  onClick={() => void guard(() => read(latest!.skillFile))}
+                  onClick={() => latest && void guard(() => read(latest.skillFile))}
                 >
                   查看说明
                 </button>
@@ -429,43 +460,58 @@ export function SkillsPanel({
                       {path}
                       {content !== loaded ? ' · 未保存' : ''}
                     </p>
-                    <textarea
-                      className="skill-editor"
-                      aria-label="Skill 内容"
-                      value={content}
-                      readOnly={!editing}
-                      onChange={(e) => {
-                        setContent(e.target.value);
-                        dirty.current = true;
-                      }}
-                    />
-                    <div className="skill-controls">
-                      <button
-                        type="button"
-                        disabled={busy || !editing || content === loaded}
-                        onClick={() => void guard(save)}
-                      >
-                        保存修改为候选
-                      </button>
-                      {latest?.knowledgeFiles.includes(path) && (
+                    {reading ? (
+                      <div className="skill-reading">
+                        {path.endsWith('.md') ? (
+                          <Markdown>{content.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, '')}</Markdown>
+                        ) : (
+                          <pre>{content}</pre>
+                        )}
+                        <button type="button" disabled={!editing} onClick={() => setReading(false)}>
+                          编辑文件
+                        </button>
+                      </div>
+                    ) : (
+                      <textarea
+                        className="skill-editor"
+                        aria-label="Skill 内容"
+                        value={content}
+                        readOnly={!editing}
+                        onChange={(e) => {
+                          setContent(e.target.value);
+                          dirty.current = true;
+                        }}
+                      />
+                    )}
+                    {!reading && (
+                      <div className="skill-controls">
                         <button
                           type="button"
-                          disabled={busy || !detail.skill.current || content === loaded}
-                          onClick={() =>
-                            void guard(async () => {
-                              await post('knowledge', { baseRevision: bufferRevision, path, content });
-                              dirty.current = false;
-                              setLoaded(content);
-                              setBufferRevision(bufferRevision + 1);
-                              await refresh();
-                              setNotice('知识修订已保存，无需重新加载执行能力。');
-                            })
-                          }
+                          disabled={busy || !editing || content === loaded}
+                          onClick={() => void guard(save)}
                         >
-                          仅更新知识
+                          保存修改为候选
                         </button>
-                      )}
-                    </div>
+                        {latest?.knowledgeFiles.includes(path) && (
+                          <button
+                            type="button"
+                            disabled={busy || !detail.skill.current || content === loaded}
+                            onClick={() =>
+                              void guard(async () => {
+                                await post('knowledge', { baseRevision: bufferRevision, path, content });
+                                dirty.current = false;
+                                setLoaded(content);
+                                setBufferRevision(bufferRevision + 1);
+                                await refresh();
+                                setNotice('知识修订已保存，无需重新加载执行能力。');
+                              })
+                            }
+                          >
+                            仅更新知识
+                          </button>
+                        )}
+                      </div>
+                    )}
                   </>
                 )}
                 <details>
@@ -617,7 +663,12 @@ export function SkillsPanel({
                   )}
                 </details>
               )}
-              <details>
+              {initialKnowledgeRevision && !detail.knowledge.some((item) => item.id === initialKnowledgeRevision) && (
+                <p className="notice" role="status">
+                  指定知识修订不可访问，请查看当前版本与可用历史。
+                </p>
+              )}
+              <details open={!!initialKnowledgeRevision}>
                 <summary>版本与修订历史</summary>
                 <details>
                   <summary>操作记录</summary>
@@ -656,7 +707,7 @@ export function SkillsPanel({
                       知识修订 · {k.file} · {new Date(k.created).toLocaleString()}
                     </summary>
                     <p>关联能力版本：{k.version.slice(0, 8)}</p>
-                    <pre>{k.content}</pre>
+                    <Markdown>{k.content}</Markdown>
                     <button
                       type="button"
                       disabled={busy || !detail.skill.current}

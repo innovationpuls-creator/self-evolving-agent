@@ -109,8 +109,11 @@ try {
       authoritativeReload: true,
     }),
   );
+} catch (error) {
+  console.error(error);
+  throw error;
 } finally {
-  await browser.close();
+  await Promise.race([browser.close(), new Promise<void>((done) => setTimeout(done, 5000).unref())]);
   await host.close();
   await rm(root, { recursive: true, force: true });
 }

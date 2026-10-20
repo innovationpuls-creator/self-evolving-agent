@@ -1,3 +1,4 @@
+import { readPosition, savePosition } from '../../app/view-state';
 import { useEffect, useRef, useState } from 'react';
 import type { EvolutionCatalog, EvolutionEvidence, EvolutionSuggestion } from '../../../../host/evolution/evolution';
 import './evolution.css';
@@ -18,8 +19,14 @@ const date = (value: number) => new Date(value).toLocaleString('zh-CN');
 function Evidence({
   value,
   onEvidence,
+  onMemory,
+  onSkill,
+  onReflection,
 }: {
   value: EvolutionEvidence;
+  onMemory?: (id: string, revision?: number) => void;
+  onSkill?: (id: string, revision?: string) => void;
+  onReflection?: (id: string) => void;
   onEvidence?: (reference: EvidenceReference) => void;
 }) {
   return (
@@ -57,17 +64,47 @@ function Evidence({
         <div>
           记忆 <code>{value.memoryId}</code>
           {value.revision ? ` · 修订 ${value.revision}` : ''}
+          {onMemory && (
+            <button
+              type="button"
+              onClick={() => {
+                if (value.memoryId) onMemory(value.memoryId, value.revision);
+              }}
+            >
+              查看记忆修订
+            </button>
+          )}
         </div>
       )}
       {value.skillId && (
         <div>
           能力 <code>{value.skillId}</code>
           {value.knowledgeRevision ? ` · 知识修订 ${value.knowledgeRevision}` : ''}
+          {onSkill && (
+            <button
+              type="button"
+              onClick={() => {
+                if (value.skillId) onSkill(value.skillId, value.knowledgeRevision);
+              }}
+            >
+              查看能力知识
+            </button>
+          )}
         </div>
       )}
       {value.reflectionId && (
         <div>
           反思 <code>{value.reflectionId}</code>
+          {onReflection && (
+            <button
+              type="button"
+              onClick={() => {
+                if (value.reflectionId) onReflection(value.reflectionId);
+              }}
+            >
+              查看反思
+            </button>
+          )}
         </div>
       )}
     </li>
@@ -76,19 +113,32 @@ function Evidence({
 
 export function SuggestionsPanel({
   api,
+  initialId,
+  session,
+  onMemory,
+  onSkill,
+  onReflection,
   onClose,
   onDiscuss,
   onEvidence,
 }: {
   api: Api;
+  initialId?: string;
+  session?: { id: string; cwd: string };
+  onMemory?: (id: string, revision?: number, project?: string) => void;
+  onSkill?: (id: string, revision?: string, project?: string) => void;
+  onReflection?: (id: string) => void;
   onClose: () => void;
   onDiscuss: (sessionId: string) => void | Promise<void>;
   onEvidence?: (reference: EvidenceReference) => void;
 }) {
-  const [status, setStatus] = useState<Status | ''>('pending');
-  const [offset, setOffset] = useState(0);
+  const [status, setStatus] = useState<Status | ''>(
+    initialId ? '' : (statusValues.find((value) => value === readPosition('suggestions').filter) ?? 'pending'),
+  );
+  const [offset, setOffset] = useState(initialId ? 0 : (readPosition('suggestions').offset ?? 0));
+  const [scope, setScope] = useState(readPosition('suggestions').scope ?? 'all');
   const [catalog, setCatalog] = useState<EvolutionCatalog>();
-  const [selectedId, setSelectedId] = useState<string>();
+  const [selectedId, setSelectedId] = useState<string | undefined>(initialId ?? readPosition('suggestions').id);
   const [detail, setDetail] = useState<EvolutionSuggestion>();
   const [selection, setSelection] = useState<Array<{ id: string; baseRevision: number }>>([]);
   const [listBusy, setListBusy] = useState(false);
@@ -102,6 +152,16 @@ export function SuggestionsPanel({
     selected = useRef<string | undefined>(undefined),
     mounted = useRef(true);
   selected.current = selectedId;
+  useEffect(() => {
+    if (initialId) {
+      setSelectedId(initialId);
+      setStatus('');
+      setOffset(0);
+    }
+  }, [initialId]);
+  useEffect(() => {
+    savePosition('suggestions', { id: selectedId, offset, filter: status, scope });
+  }, [selectedId, offset, status, scope]);
 
   useEffect(() => {
     mounted.current = true;
@@ -123,6 +183,8 @@ export function SuggestionsPanel({
     setListBusy(true);
     const query = new URLSearchParams({ limit: String(pageSize), offset: String(offset) });
     if (status) query.set('status', status);
+    if (scope === 'project' && session) query.set('project', session.cwd);
+    if (scope === 'session' && session) query.set('sessionId', session.id);
     void api<EvolutionCatalog>(`/suggestions?${query}`, 'GET', undefined, controller.signal)
       .then((value) => {
         if (epoch !== listEpoch.current) return;
@@ -144,7 +206,7 @@ export function SuggestionsPanel({
       listEpoch.current++;
       controller.abort();
     };
-  }, [api, status, offset, refresh]);
+  }, [api, status, offset, refresh, scope, session?.id, session?.cwd]);
 
   useEffect(() => {
     const epoch = ++detailEpoch.current;
@@ -154,6 +216,7 @@ export function SuggestionsPanel({
       setDetailBusy(false);
       return;
     }
+    setDetail((current) => (current?.id === selectedId ? current : undefined));
     setDetailBusy(true);
     void api<EvolutionSuggestion>(`/suggestions/${selectedId}`, 'GET', undefined, controller.signal)
       .then((value) => {
@@ -251,12 +314,32 @@ export function SuggestionsPanel({
             ))}
           </select>
         </label>
+        <label>
+          范围
+          <select
+            aria-label="建议范围"
+            value={session ? scope : 'all'}
+            onChange={(event) => {
+              setScope(event.target.value);
+              setOffset(0);
+              setSelection([]);
+            }}
+          >
+            <option value="all">全部建议</option>
+            {session && (
+              <>
+                <option value="project">当前项目</option>
+                <option value="session">当前会话</option>
+              </>
+            )}
+          </select>
+        </label>
         <button type="button" disabled={listBusy} onClick={() => setRefresh((value) => value + 1)}>
           刷新
         </button>
         <span>{catalog ? `${catalog.total} 条建议` : '读取建议'}</span>
       </div>
-      <div className="evolution-workspace">
+      <div className="evolution-workspace" data-detail={!!detail || detailBusy}>
         <div className="evolution-catalog" aria-busy={listBusy}>
           <div className="evolution-batch">
             <label>
@@ -342,6 +425,11 @@ export function SuggestionsPanel({
           </div>
         </div>
         <article className="evolution-detail" aria-busy={detailBusy}>
+          {selectedId && (
+            <button type="button" className="back-to-list" onClick={() => setSelectedId(undefined)}>
+              ← 建议列表
+            </button>
+          )}
           {detailBusy && !detail ? (
             <p>正在读取建议…</p>
           ) : detail ? (
@@ -393,7 +481,14 @@ export function SuggestionsPanel({
                 {detail.evidence.length ? (
                   <ul>
                     {detail.evidence.map((value) => (
-                      <Evidence key={JSON.stringify(value)} value={value} onEvidence={onEvidence} />
+                      <Evidence
+                        key={JSON.stringify(value)}
+                        value={value}
+                        onEvidence={onEvidence}
+                        onMemory={(id, revision) => onMemory?.(id, revision, detail.project ?? undefined)}
+                        onSkill={(id, revision) => onSkill?.(id, revision, detail.project ?? undefined)}
+                        onReflection={onReflection}
+                      />
                     ))}
                   </ul>
                 ) : (

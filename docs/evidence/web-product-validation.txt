@@ -1,0 +1,231 @@
+=== tests: exit 0 ===
+
+> self-evolving-agent@0.1.0 test
+> tsx --test tests/*.test.ts
+
+✔ independent review: an Assistant Entry without Tool calls finds its existing Trace (4.57075ms)
+✔ independent review: a locked metadata writer drops bounded work promptly and restores the Host timeout (112.050458ms)
+✔ independent review: knowledge overlays on one package version retain distinct diagnostic revisions (4.80775ms)
+✔ independent review: unavailable raw checkpoints do not hide scoped Session metrics (1.47225ms)
+✔ independent review: native results repair an existing partial Trace without replacing observed facts (28.865667ms)
+✔ independent review: partial nested records merge with native summaries without counting a call twice (56.238959ms)
+✔ independent review: an unfinished native nested summary does not erase a later observed completion (5.149667ms)
+✔ independent review: oversized diagnostic records are omitted with a visible collection gap (3.47975ms)
+✔ independent review: one Memory result retains at most 100 source references across all records (12.394792ms)
+✔ independent review: an indexed run absent from the valid checkpoint has unavailable evidence and unknown end time (1.271792ms)
+✔ stream protection chooses the longest credential prefix independently of registration order (1.510791ms)
+✔ stream protection merges full and partial overlapping credentials before projection (0.627334ms)
+✔ independent review: published native Skill reads keep version references through filesystem aliases (829.803875ms)
+✔ historical evidence is independently readable with whole-entry protection and fixed project access (0.739209ms)
+✔ diagnostic migration is repeatable and unknown versions remain unavailable without schema replacement (3.873542ms)
+✔ normalized zero usage does not assert provider reporting, zero cache use, or a confirmed free bill (0.934375ms)
+✔ cross-session queries preserve project access, filters, literal Tool names and pagination (4.148959ms)
+✔ native multilevel nested calls, repeated tools, durations, Skill and Memory references remain metadata only (255.528833ms)
+✔ manual native compaction stays session-level and preserves pre-compaction and historical branch evidence (38.384458ms)
+✔ native automatic retry remains in one task Trace and preserves omitted failed-attempt evidence (68.616458ms)
+✔ native threshold compaction is associated with its active Trace and keeps pre-compaction Entries (140.122667ms)
+✔ collection SQL failures leave native execution working, mark a gap and recover on a later query (34.133959ms)
+✔ the metadata queue is bounded at 1000 and excess writes produce visible gaps (17.337959ms)
+✔ restart reconciliation recovers only marked native tasks and is idempotent (37.458625ms)
+✔ an unfinished native marker becomes interrupted without replay and previous checkpoint recovery is explicit (0.83125ms)
+✔ system logging accepts fixed codes and bounded correlation IDs, with finite age and count retention (197.179458ms)
+✔ metadata protection failures reject unverified data while preserving the native transcript (0.385042ms)
+✔ Host HTTP and all three native diagnostic tools query another Session and read exact protected evidence (2347.96275ms)
+✔ raw Entry access works without a Trace, protects before pagination and refuses failed mandatory protection (304.12325ms)
+✔ an accumulated message_start protects partial known credentials in thinking, text and nested Tool arguments (215.986291ms)
+✔ Host compaction and branch navigation retain evidence without reactivating withdrawn Memory decisions (1317.352584ms)
+✔ old Session tool selections gain diagnostics on restore and after returning to their historical branch (1195.475083ms)
+✔ Host stop records a stopped Trace and collection failure does not stop a later normal task (1037.415ms)
+✔ checkpoint fallback and missing evidence remain explicit while other Sessions stay readable (514.25475ms)
+✔ SIGKILL reconciles a running Trace with its last durable native Tool result and never replays it (706.011792ms)
+✔ suggestion migration is repeatable, transactional and rejects unknown schema versions (4.984416ms)
+✔ suggestions preserve provenance, paginate and scope Agent reads without widening project access (7.096667ms)
+✔ sensitive protection runs before persistence and on read; protection failure does not save a suggestion (1.0785ms)
+✔ suggestion creation and a caller receipt commit or roll back in one SQLite transaction (0.403208ms)
+✔ batch ignore and archive are atomic, reject stale revisions and preserve evidence (2.523541ms)
+✔ concurrent adoption creates one discussion and stays separate from development (29.983667ms)
+✔ failed discussion persistence reserves a stable ID and survives reopening the database (50.471042ms)
+✔ an adoption final-state write failure can resume with the same discussion ID (8.162208ms)
+✔ HTTP suggestions share authoritative state and reject caller-controlled source fields (88.789958ms)
+✔ encrypted snapshot preserves non-last selected leaf; wrong key and tamper fail closed (68.824583ms)
+✔ boundary redaction protects nested credentials without mutating tool arguments (1.494917ms)
+✔ HTTP and WebSocket reject unauthenticated, cross-origin and rebinding requests (128.319ms)
+✔ native tool execution, stream events, independent sessions, branching and encrypted restart (770.855167ms)
+✔ running request rejects overlap; stop does not replay work (514.50825ms)
+✔ model dispatch refuses unchecked context instead of falling through an Extension hook (177.497084ms)
+✔ parallel sessions keep their conversation separate and native compaction survives recovery (1114.737ms)
+✔ a model error can be retried without restarting the Host (810.615875ms)
+✔ all streaming fields and common nested secret formats are protected (0.261708ms)
+✔ browser authentication does not issue a cross-port cookie (167.353083ms)
+✔ WebSocket first-frame authentication gates every event and rejects invalid credentials (180.588958ms)
+✔ model, view, events and export protect copies while native history keeps exact values (545.372875ms)
+✔ damaged current checkpoint falls back visibly; a wholly broken session cannot hide a healthy session (779.851958ms)
+✔ no valid checkpoint or a wrong vault key cannot start a replacement empty product (144.861334ms)
+✔ completed native tool result is checkpointed while the next model response is still pending (527.529209ms)
+✔ failed action checkpoint blocks subsequent mutation and still releases every resource (166.894583ms)
+✔ SIGKILL during an active run preserves the last completed tool without replay (1070.591958ms)
+✔ every native thinking and tool-argument streaming frame protects credential prefixes (422.635167ms)
+✔ oversize and unauthenticated WebSocket handshakes close without crashing the Host (5059.940167ms)
+✔ the shared HTTP boundary authenticates before invoking an extracted business route (15.303334ms)
+✔ PII protection preserves UUID correlation identities but still protects phone numbers and UUID credentials (0.165792ms)
+✔ empty sessions broadcast and delayed Pi extension cannot expose unpublished message state (154.357625ms)
+✔ D2 unified Pi integration: ordinary Skill, Memory correction/withdrawal/reconfirmation, diagnostic evidence and graceful restart (4776.075459ms)
+✔ Memory migrations are transactional, repeatable, and reject unknown versions (1.563875ms)
+✔ Memory revisions preserve evidence, distinguish hypotheses, scope history and reject stale edits (28.112ms)
+✔ FTS and revision changes roll back together when the current-reference update fails (1.242625ms)
+✔ history search obeys current scope; new decision evidence depends on the correcting Session (2.776417ms)
+✔ cross-Session branch withdrawal is shared, recoverable, preserves experience and never silently revives (2.991166ms)
+✔ protection precedes SQLite and FTS persistence; protection failure commits nothing (2.086625ms)
+✔ native Memory tools persist sources, share across Sessions, revise, isolate projects, withdraw on branch and survive restart (2495.03775ms)
+✔ existing encrypted transcripts and old branches acquire native Memory tools without replacing other tools (1519.869834ms)
+✔ Memory native tools survive Skill reload and Agent retirement preserves history (1156.355833ms)
+✔ SIGKILL between branch snapshot and Memory commit recovers withdrawal without replay (875.797292ms)
+✔ a committed branch snapshot recovers a failed Memory transaction; corrupt sources fail closed (1200.894875ms)
+✔ authenticated Memory API enforces concurrent revisions, global visibility and scope changes (128.994417ms)
+✔ malformed Worker protocol null fails locally (218.394041ms)
+✔ malformed Worker protocol [] fails locally (190.7295ms)
+✔ malformed Worker protocol "text" fails locally (217.557791ms)
+✔ malformed Worker protocol { fails locally (298.476125ms)
+✔ unserializable Host response ends only the Reflection run (243.859167ms)
+✔ synchronous Host handler failure returns a bounded operation error (172.607083ms)
+✔ terminal message with outstanding operation revokes and settles it before rejecting (170.795ms)
+✔ failure revokes synchronously before queued operations can commit (190.29725ms)
+✔ requests buffered after terminal success are rejected without dispatch (167.33175ms)
+✔ Reflection is not claimable before 30 seconds and claim allocates independent run and Session IDs (2.501166ms)
+✔ same native branch merges every source and restarts 30-second waiting (0.691ms)
+✔ siblings in a native Session and separate Sessions retain independent jobs (27.423042ms)
+✔ duplicate settled markers are idempotent before and after task completion (4.650834ms)
+✔ running sources stay frozen while new work merges into one follow-up (2.501292ms)
+✔ foreground priority can defer a Session without losing another due Session (0.890625ms)
+✔ explicit Session departure advances pending work without advancing other Sessions or running jobs (0.950083ms)
+✔ unavailable isolation keeps merged work waiting for explicit capability recheck (0.516292ms)
+✔ startup interrupts prior running attempts and rejects their late results while preserving pending follow-up (1.197709ms)
+✔ job and source writes roll back together and notification follows commit (0.696583ms)
+✔ failed claim predicates leave task state intact and do not leave an open transaction (0.368292ms)
+✔ pending tasks and original plan survive closing and reopening the SQLite file (17.505667ms)
+✔ notification failure cannot report a committed registration as rolled back (1.03875ms)
+✔ Reflection fails closed without a packaged runtime (13.393125ms)
+﹣ packaged XPC isolates Node and shell while Host handles bounded IPC (22219.511375ms) # Real XPC isolation requires an Apple signing identity; ad-hoc identity is correctly unavailable
+✔ stable encrypted marker schedules independent native Pi reflection, controlled history/Memory and suggestion writes, with no recursive run (2280.580709ms)
+✔ no findings is a legal result; restart scans committed markers idempotently and does not replay successful effects (1410.900125ms)
+✔ unavailable sandbox keeps tasks visible, never invokes a privileged fallback and does not block ordinary Agent (775.593166ms)
+✔ Host rejects forged IPC operations, foreign diagnostics and unauthorized ToolCalls without damaging ordinary sessions (484.228583ms)
+✔ a failed first Reflection record does not strand the running claim or skip ordinary Host cleanup (399.387375ms)
+✔ model timeout cancels the dispatched request without damaging foreground Agent (681.65025ms)
+✔ background registration failure preserves ordinary saved Session and marker recovery (763.807ms)
+✔ Host close waits for an in-progress sandbox availability check before closing SQLite (106.419917ms)
+✔ ordinary native discovery, management, edit conflict, disable, rollback and restart (1567.570167ms)
+✔ unreviewed factories never load; reviewed deferred tool, hooks and sibling isolation block indirect bypass (2308.588834ms)
+✔ content tampering, escaping links, shared bindings, unknown project extensions and review mismatch fail closed (381.866709ms)
+✔ updates preserve the original Session, drain old execution and FIFO, failed candidate retains last good (2507.029625ms)
+✔ knowledge revisions refresh documents without reloading executable runtime and remain independent of rollback (139.058666ms)
+✔ draft deletions, stale revision recovery, frontmatter and knowledge editor show authoritative content (93.479541ms)
+✔ declared dependency closure requires included locked bytes and keeps internal relative links (72.232791ms)
+✔ SQL commit and partial reload failures restore all original Sessions; failed restoration blocks until explicit recovery (300.452042ms)
+✔ publication waits for the entire admitted dispatch including its first encrypted save (184.2435ms)
+✔ native .agents discovery includes ancestors without instantiating project Extensions (55.617458ms)
+✔ a damaged formal snapshot can still be disabled to restore operation (168.8835ms)
+✔ Host shutdown waits for admitted recovery before disposing Runtime (70.3065ms)
+✔ native npm acquisition prepares a locked tree without executing installation scripts (2213.81625ms)
+✔ native compaction, selected history branch, model configuration and subscriptions survive a Skill switch (659.247959ms)
+✔ disabled special Skill stays absent across restart and upgrade while its package sibling remains enabled (150.840333ms)
+✔ resource provenance follows successful native loads and knowledge refresh; failed candidates retain the loaded snapshot (91.019ms)
+✔ snapshot baseline replays newer stream events exactly once and ignores delayed old state (0.609583ms)
+✔ reconnect snapshot retains unfinished message without adding it to completed history (0.04775ms)
+✔ Markdown renders GFM without HTML, active URLs or automatic image requests (10.548417ms)
+✔ Tool execution events retain the active stage without fabricating a completed message (0.063542ms)
+✔ reconnect derives all unfinished native Tools and removes only matching results (0.099084ms)
+✔ an interrupted historical Tool never becomes the current turn stage (0.039167ms)
+ℹ tests 133
+ℹ suites 0
+ℹ pass 132
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 22390.781666
+
+=== typecheck: exit 0 ===
+
+> self-evolving-agent@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.check.json
+
+
+=== format: exit 0 ===
+
+> self-evolving-agent@0.1.0 format:check
+> biome format
+
+Checked 78 files in 25ms. No fixes applied.
+
+=== build: exit 0 ===
+
+> self-evolving-agent@0.1.0 build
+> tsc -p tsconfig.json && vite build --config apps/web/vite.config.ts
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 359 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                   0.35 kB │ gzip:   0.26 kB
+dist/web/assets/index-VO8JLFp-.css   25.75 kB │ gzip:   5.75 kB
+dist/web/assets/index--QvUvG8j.js   530.09 kB │ gzip: 157.20 kB
+
+✓ built in 95ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+=== package: exit 0 ===
+
+> self-evolving-agent@0.1.0 package:desktop
+> npm run build && tsx scripts/package-desktop.ts
+
+
+> self-evolving-agent@0.1.0 build
+> tsc -p tsconfig.json && vite build --config apps/web/vite.config.ts
+
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 359 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/web/index.html                   0.35 kB │ gzip:   0.26 kB
+dist/web/assets/index-VO8JLFp-.css   25.75 kB │ gzip:   5.75 kB
+dist/web/assets/index--QvUvG8j.js   530.09 kB │ gzip: 157.20 kB
+
+✓ built in 91ms
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Packaging app for platform darwin arm64 using electron v44.9.0
+release/Agent-darwin-arm64
+
+=== chrome: exit 0 ===
+
+> self-evolving-agent@0.1.0 test:browser
+> tsx scripts/browser-smoke.ts
+
+{"browserRegression":"passed","crossPortCredentialIsolation":true,"refreshAuthentication":true,"sessionSelectionRace":true,"invalidAuthenticationReturnsToConnect":true}
+
+=== skills: exit 0 ===
+
+> self-evolving-agent@0.1.0 test:skills:browser
+> tsx scripts/skills-browser-smoke.ts
+
+{"result":"passed","twoClientConflict":true,"cleanStaleBufferConflict":true,"unsavedExitGuard":true,"exactReviewReset":true,"asyncImportWebSocket":true,"reconnectAuthoritativeState":true,"ordinaryPublishDisable":true}
+
+=== memory: exit 0 ===
+{"result":"passed","uiCreate":true,"delayedMutationFreeze":true,"scopeLossClearsDetail":true,"accessLossPreservesDraft":true,"accessRecovery":true,"authoritativeReload":true}
+
+=== responses: exit 0 ===
+{"result":"passed","reconnectCatalogOrder":true,"reconnectDetailOrder":true,"refreshBeforeOpen":true,"openBeforeRefresh":true,"readAndDirtyDraft":true,"projectRoundTrip":true,"projectInvalidatesRead":true,"unmountInvalidatesResponse":true,"oldMutationRefreshContext":true,"oldSaveDoesNotReplaceProject":true}
+
+=== lint: exit 0 ===
+Found 52 warnings.
+Found 27 infos.

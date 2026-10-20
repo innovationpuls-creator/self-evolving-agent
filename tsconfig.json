@@ -1,4 +1,4 @@
 {
-  "compilerOptions": {"target": "ES2023", "module": "NodeNext", "moduleResolution": "NodeNext", "strict": true, "noUncheckedIndexedAccess": true, "esModuleInterop": true, "skipLibCheck": true, "rootDir": "apps", "outDir": "dist", "types": ["node"]},
+  "compilerOptions": {"target": "ES2023", "jsx": "react-jsx", "module": "NodeNext", "moduleResolution": "NodeNext", "strict": true, "noUncheckedIndexedAccess": true, "esModuleInterop": true, "skipLibCheck": true, "rootDir": "apps", "outDir": "dist", "types": ["node"]},
   "include": ["apps/host/**/*.ts", "apps/desktop/**/*.ts"]
 }

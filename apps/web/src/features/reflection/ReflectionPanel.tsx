@@ -1,3 +1,4 @@
+import { readPosition, savePosition } from '../../app/view-state';
 import { useEffect, useRef, useState } from 'react';
 import type { EvolutionEvidence } from '../../../../host/evolution/evolution';
 import type { ReflectionJob } from '../../../../host/reflection/reflection-jobs';
@@ -19,10 +20,12 @@ function Evidence({
   onEvidence,
   onMemory,
   onSkill,
+  onReflection,
 }: {
   value: EvolutionEvidence;
   onEvidence?: (source: EvidenceReference) => void;
   onMemory?: (id: string, revision?: number, project?: string) => void;
+  onReflection?: (id: string) => void;
   onSkill?: (id: string, revision?: number, project?: string, knowledgeRevision?: string) => void;
 }) {
   return (
@@ -56,7 +59,15 @@ function Evidence({
       )}
       {value.reflectionId && (
         <p>
-          历史反思 <code>{value.reflectionId}</code>
+          历史反思{' '}
+          <button
+            type="button"
+            onClick={() => {
+              if (value.reflectionId) onReflection?.(value.reflectionId);
+            }}
+          >
+            {value.reflectionId}
+          </button>
         </p>
       )}
       <div className="reflection-inline-actions">
@@ -99,8 +110,10 @@ function KnowledgeChange({
   change,
   onMemory,
   onSkill,
+  onSuggestion,
 }: {
   change: Change;
+  onSuggestion?: (id: string) => void;
   onMemory?: (id: string, revision?: number, project?: string) => void;
   onSkill?: (id: string, revision?: number, project?: string, knowledgeRevision?: string) => void;
 }) {
@@ -118,6 +131,11 @@ function KnowledgeChange({
       )}
       {change.summary && <p>{change.summary}</p>}
       <code>{change.id}</code>
+      {change.kind === 'suggestion' && onSuggestion && (
+        <button type="button" onClick={() => onSuggestion(change.id)}>
+          查看建议
+        </button>
+      )}
       {change.kind === 'memory' && onMemory && (
         <button type="button" onClick={() => onMemory(change.id, change.revision)}>
           查看记忆修订
@@ -135,28 +153,36 @@ function KnowledgeChange({
 export function ReflectionPanel({
   api,
   session,
+  initialId,
+  onSuggestion,
   onClose,
   onEvidence,
   onMemory,
   onSkill,
+  onReflection,
 }: {
   api: ReflectionApi;
   session?: { id: string; title: string };
+  initialId?: string;
+  onSuggestion?: (id: string) => void;
   onClose: () => void;
   onEvidence?: (source: EvidenceReference) => void;
   onMemory?: (id: string, revision?: number, project?: string) => void;
+  onReflection?: (id: string) => void;
   onSkill?: (id: string, revision?: number, project?: string, knowledgeRevision?: string) => void;
 }) {
-  const [scope, setScope] = useState<'session' | 'all'>(session ? 'session' : 'all');
+  const [scope, setScope] = useState<'session' | 'all'>(
+    initialId || readPosition('reflection').scope === 'all' ? 'all' : session ? 'session' : 'all',
+  );
   const sessionId = scope === 'session' ? session?.id : undefined;
   const { catalog, loading, error, revision, refresh } = useReflectionCatalog(api, sessionId);
-  const [selectedId, setSelectedId] = useState<string>();
+  const [selectedId, setSelectedId] = useState<string | undefined>(initialId ?? readPosition('reflection').id);
   const [detail, setDetail] = useState<Detail & { context: string }>();
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState('');
   const [operationError, setOperationError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [offset, setOffset] = useState(readPosition('reflection').offset ?? 0);
   const detailEpoch = useRef(0);
   const operationEpoch = useRef(0);
   const context = `${scope}:${session?.id ?? ''}:${selectedId ?? ''}`;
@@ -171,12 +197,15 @@ export function ReflectionPanel({
   const recordId = selectedJob?.reflectionSessionId ? selectedJob.id : undefined;
 
   useEffect(() => {
-    setSelectedId(undefined);
+    setSelectedId(initialId ?? readPosition('reflection').id);
     setDetail(undefined);
-    setOffset(0);
+    setOffset(readPosition('reflection').offset ?? 0);
     setBusy(false);
     setOperationError('');
-  }, [scope, session?.id]);
+  }, [scope, session?.id, initialId]);
+  useEffect(() => {
+    savePosition('reflection', { id: selectedId, offset, scope });
+  }, [selectedId, offset, scope]);
 
   useEffect(() => {
     const generation = ++detailEpoch.current;
@@ -277,7 +306,7 @@ export function ReflectionPanel({
           </button>
         </div>
       )}
-      <div className="reflection-layout">
+      <div className="reflection-layout" data-detail={!!selectedId}>
         <section className="reflection-list" aria-label="反思列表">
           {!jobs.length && (
             <p className="reflection-empty">
@@ -338,6 +367,16 @@ export function ReflectionPanel({
           )}
         </section>
         <div className="reflection-detail" aria-busy={detailLoading}>
+          {selectedId && (
+            <button type="button" className="back-to-list" onClick={() => setSelectedId(undefined)}>
+              ← 反思列表
+            </button>
+          )}
+          {selectedId && !selectedJob && !loading && (
+            <p className="notice" role="status">
+              指定反思不在当前范围内，或来源已不可用。可切换到全部会话查看。
+            </p>
+          )}
           {!currentJob && <p className="reflection-empty">选择一项反思，查看判断、依据与知识变化。</p>}
           {detailError && (
             <p className="reflection-error" role="alert">
@@ -403,6 +442,7 @@ export function ReflectionPanel({
                           <KnowledgeChange
                             key={`${change.kind}:${change.id}:${change.revision ?? index}`}
                             change={change}
+                            onSuggestion={onSuggestion}
                             onMemory={(id, revision) => onMemory?.(id, revision, detail?.record.project)}
                             onSkill={(id, revision, _project, knowledgeRevision) =>
                               onSkill?.(id, revision, detail?.record.project, knowledgeRevision)
@@ -423,6 +463,7 @@ export function ReflectionPanel({
                             key={`${index}:${JSON.stringify(value)}`}
                             value={value}
                             onEvidence={onEvidence}
+                            onReflection={onReflection}
                             onMemory={(id, revision) => onMemory?.(id, revision, detail?.record.project)}
                             onSkill={(id, revision, _project, knowledgeRevision) =>
                               onSkill?.(id, revision, detail?.record.project, knowledgeRevision)

@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-20T02:59:17.852Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "executable": "/Users/torch/Documents/ChatGPT/agent/release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent",
+  "scope": "Packaged Desktop/Web integration; unavailable Reflection is never substituted",
+  "checks": [],
+  "reflectionBusinessChain": "blocked",
+  "error": "electronApplication.firstWindow: Timeout 60000ms exceeded while waiting for event \"window\"",
+  "result": "blocked",
+  "diagnosis": {
+    "phase": "before firstWindow",
+    "stack": [
+      "SecItemCopyMatching",
+      "Security::KeychainCore::ItemImpl::getContent"
+    ],
+    "availableSigningIdentities": 0,
+    "systemInteraction": "SecurityAgent automation prohibited; credentials protection unchanged"
+  }
+}

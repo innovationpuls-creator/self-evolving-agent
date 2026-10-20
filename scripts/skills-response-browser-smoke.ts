@@ -26,6 +26,11 @@ const browser = await chromium.launch({
 });
 try {
   const page = await browser.newPage();
+  page.setDefaultTimeout(15000);
+  await page.addInitScript(() => sessionStorage.setItem('agent-connection-token', 'fixture-token'));
+  await page.routeWebSocket('**/events', (ws) => {
+    ws.onMessage(() => ws.send(JSON.stringify({ type: 'connected' })));
+  });
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   const sessionA = '00000000-0000-4000-8000-000000000001';
@@ -65,6 +70,7 @@ try {
     provider: 'fixture',
     model: 'fixture',
     busy: false,
+    stateVersion: 0,
     messages: [],
     tree: [],
   });
@@ -75,6 +81,8 @@ try {
     detailPath = `/api/skills/${skillId}`,
     filePath = `${detailPath}/files?version=${skillId}&path=SKILL.md`;
   const responses = new Map<string, unknown>([
+    ['/api/reflections', { jobs: [], records: [], total: 0, availability: { available: false, reason: 'fixture' } }],
+    ['/api/suggestions?limit=1', { highPriorityPending: 0 }],
     ['/api/models', { models: [], providers: [] }],
     ['/api/sessions', [a, b]],
     [`/api/sessions/${sessionA}`, a],
@@ -100,6 +108,14 @@ try {
   await page.route('**/api/**', async (route) => {
     const url = new URL(route.request().url()),
       path = `${url.pathname}${url.search}`;
+    if (url.pathname === '/api/reflections') {
+      await route.fulfill({ json: { records: [], jobs: [], availability: { available: false, reason: 'fixture' } } });
+      return;
+    }
+    if (path === '/api/reflections/expedite') {
+      await route.fulfill({ json: {} });
+      return;
+    }
     assert.ok(responses.has(path), `Unexpected API request: ${path}`);
     const value = structuredClone(responses.get(path));
     const hold = holds.get(path);
@@ -176,6 +192,7 @@ try {
   await refresh();
   await beforeRead.ready;
   await page.getByRole('button', { name: '查看说明', exact: true }).click();
+  await page.getByRole('button', { name: '编辑文件', exact: true }).click();
   const editor = page.getByLabel('Skill 内容', { exact: true });
   await editor.fill('Unsaved Skill draft');
   await release(beforeRead, detailPath);
@@ -189,10 +206,14 @@ try {
   await oldProject.ready;
   page.once('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: 'Session B', exact: false }).click();
+  await page.locator('header h1').filter({ hasText: 'Session B' }).waitFor();
+  await page.getByRole('button', { name: '能力管理', exact: true }).click();
   await item('PROJECT_B').waitFor();
   assert.equal(await editor.count(), 0);
   responses.set(listA, catalog('PROJECT_A_RETURNED'));
   await page.getByRole('button', { name: 'Session A', exact: false }).click();
+  await page.locator('header h1').filter({ hasText: 'Session A' }).waitFor();
+  await page.getByRole('button', { name: '能力管理', exact: true }).click();
   await item('PROJECT_A_RETURNED').waitFor();
   await release(oldProject, listA);
   assert.equal(await item('PROJECT_A_RETURNED').count(), 1);
@@ -204,10 +225,12 @@ try {
   await page.getByRole('button', { name: '查看说明', exact: true }).click();
   await oldRead.ready;
   await page.getByRole('button', { name: 'Session B', exact: false }).click();
+  await page.locator('header h1').filter({ hasText: 'Session B' }).waitFor();
+  await page.getByRole('button', { name: '能力管理', exact: true }).click();
   await item('PROJECT_B').waitFor();
   await release(oldRead, filePath);
   assert.equal(await editor.count(), 0);
-  assert.equal(await heading.innerText(), '选择一项能力');
+  assert.equal(await editor.count(), 0);
 
   const unmounted = delay(listB);
   await refresh();
@@ -231,6 +254,8 @@ try {
   await oldMutation.ready;
   responses.set(listA, catalog('PROJECT_A_AFTER_MUTATION'));
   await page.getByRole('button', { name: 'Session A', exact: false }).click();
+  await page.locator('header h1').filter({ hasText: 'Session A' }).waitFor();
+  await page.getByRole('button', { name: '能力管理', exact: true }).click();
   await item('PROJECT_A_AFTER_MUTATION').waitFor();
   await release(oldMutation, enabledPath);
   assert.equal(await item('PROJECT_A_AFTER_MUTATION').count(), 1);
@@ -243,17 +268,20 @@ try {
   await item('PROJECT_A_AFTER_MUTATION').click();
   await heading.filter({ hasText: 'DETAIL_PROJECT_A' }).waitFor();
   await page.getByRole('button', { name: '查看说明', exact: true }).click();
+  await page.getByRole('button', { name: '编辑文件', exact: true }).click();
   await editor.fill('Saved draft from project A');
   const oldSave = delay(editPath);
   await page.getByRole('button', { name: '保存修改为候选', exact: true }).click();
   await oldSave.ready;
   page.once('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: 'Session B', exact: false }).click();
+  await page.locator('header h1').filter({ hasText: 'Session B' }).waitFor();
+  await page.getByRole('button', { name: '能力管理', exact: true }).click();
   await item('PROJECT_B_REMOUNTED').waitFor();
-  assert.equal(await heading.innerText(), '选择一项能力');
+  assert.equal(await heading.innerText(), 'DETAIL_PROJECT_A');
   await release(oldSave, editPath);
   assert.equal(await item('PROJECT_B_REMOUNTED').count(), 1);
-  assert.equal(await heading.innerText(), '选择一项能力');
+  assert.equal(await editor.count(), 0);
   assert.equal(await editor.count(), 0);
   assert.deepEqual(errors, []);
   console.log(

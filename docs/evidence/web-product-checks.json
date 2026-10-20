@@ -1,0 +1,173 @@
+{
+  "time": "2026-10-20T03:28:40.419951+00:00",
+  "baseline": "f07e432",
+  "implementation": "complete",
+  "webAcceptance": "passed",
+  "desktopAcceptance": "blocked",
+  "reflectionRestrictedXpcAcceptance": "blocked",
+  "tests": {
+    "total": 133,
+    "passed": 132,
+    "skipped": 1,
+    "failed": 0
+  },
+  "commands": {
+    "npm test": {
+      "exitCode": 0,
+      "logSha256": "71d4a7c1efe8efd3d45178763a81909eed1e11a2d1d8c9b6d1ae4c89cad39a25",
+      "tail": [
+        "✔ reconnect derives all unfinished native Tools and removes only matching results (0.099084ms)",
+        "✔ an interrupted historical Tool never becomes the current turn stage (0.039167ms)",
+        "ℹ tests 133",
+        "ℹ suites 0",
+        "ℹ pass 132",
+        "ℹ fail 0",
+        "ℹ cancelled 0",
+        "ℹ skipped 1",
+        "ℹ todo 0",
+        "ℹ duration_ms 22390.781666"
+      ]
+    },
+    "npm run typecheck": {
+      "exitCode": 0,
+      "logSha256": "7a94d08118cbbecac2c5699f96bf9389c5d298ffa3deda22f020c3df84b57d30",
+      "tail": [
+        "",
+        "> self-evolving-agent@0.1.0 typecheck",
+        "> tsc -p tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.check.json",
+        ""
+      ]
+    },
+    "npm run lint": {
+      "exitCode": 0,
+      "logSha256": "11a98f333d2b9dd8458deaa096fe48017335fabc07dc169226cf9ef2be495051",
+      "tail": [
+        "Found 52 warnings.",
+        "Found 27 infos."
+      ]
+    },
+    "npm run format:check": {
+      "exitCode": 0,
+      "logSha256": "5840e6d06c66b608617ad32a49c046f66df5dfee68b1e37fdd150ea2a2f568dd",
+      "tail": [
+        "",
+        "> self-evolving-agent@0.1.0 format:check",
+        "> biome format",
+        "",
+        "Checked 78 files in 23ms. No fixes applied."
+      ]
+    },
+    "npm run build": {
+      "exitCode": 0,
+      "logSha256": "f3ecdf3e4f3f50ce42de3c5bfb2bbd4851a682fa457376b1111cedd83db3b85c",
+      "tail": [
+        "dist/web/index.html                   0.35 kB │ gzip:   0.26 kB",
+        "dist/web/assets/index-VO8JLFp-.css   25.75 kB │ gzip:   5.75 kB",
+        "dist/web/assets/index--QvUvG8j.js   530.09 kB │ gzip: 157.20 kB",
+        "",
+        "✓ built in 95ms",
+        "[plugin builtin:vite-reporter] ",
+        "(!) Some chunks are larger than 500 kB after minification. Consider:",
+        "- Using dynamic import() to code-split the application",
+        "- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting",
+        "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+      ]
+    },
+    "npm run package:desktop": {
+      "exitCode": 0,
+      "logSha256": "7dc010babceeafad78ecc5e1ca8c59e7c343817e70909dc3560283e6646f8551",
+      "tail": [
+        "dist/web/assets/index--QvUvG8j.js   530.09 kB │ gzip: 157.20 kB",
+        "",
+        "✓ built in 91ms",
+        "[plugin builtin:vite-reporter] ",
+        "(!) Some chunks are larger than 500 kB after minification. Consider:",
+        "- Using dynamic import() to code-split the application",
+        "- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting",
+        "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.",
+        "Packaging app for platform darwin arm64 using electron v44.9.0",
+        "release/Agent-darwin-arm64"
+      ]
+    },
+    "npm run test:browser": {
+      "exitCode": 0,
+      "logSha256": "c6cd84a0985deb167e8f6867afa9da5a1fd202b342443878497c9252b9bf94ad",
+      "tail": [
+        "",
+        "> self-evolving-agent@0.1.0 test:browser",
+        "> tsx scripts/browser-smoke.ts",
+        "",
+        "{\"browserRegression\":\"passed\",\"crossPortCredentialIsolation\":true,\"refreshAuthentication\":true,\"sessionSelectionRace\":true,\"invalidAuthenticationReturnsToConnect\":true}"
+      ]
+    },
+    "npm run test:skills:browser": {
+      "exitCode": 0,
+      "logSha256": "83dff41e436d359a1766891b67d36bcfb4279f05b405f31f52be3fde571cbae3",
+      "tail": [
+        "",
+        "> self-evolving-agent@0.1.0 test:skills:browser",
+        "> tsx scripts/skills-browser-smoke.ts",
+        "",
+        "{\"result\":\"passed\",\"twoClientConflict\":true,\"cleanStaleBufferConflict\":true,\"unsavedExitGuard\":true,\"exactReviewReset\":true,\"asyncImportWebSocket\":true,\"reconnectAuthoritativeState\":true,\"ordinaryPublishDisable\":true}"
+      ]
+    },
+    "npx tsx scripts/memory-browser-smoke.ts": {
+      "exitCode": 0,
+      "logSha256": "544a6bfeb5f562aaafa440b91c390559b3c4d817eb67ab05c9a99a4c0865d1b9",
+      "tail": [
+        "{\"result\":\"passed\",\"uiCreate\":true,\"delayedMutationFreeze\":true,\"scopeLossClearsDetail\":true,\"accessLossPreservesDraft\":true,\"accessRecovery\":true,\"authoritativeReload\":true}"
+      ]
+    },
+    "npx tsx scripts/skills-response-browser-smoke.ts": {
+      "exitCode": 0,
+      "logSha256": "4fb39e6685db72144aa3bb35d28966ec058d4a782dabb394cb79cb217edb6374",
+      "tail": [
+        "{\"result\":\"passed\",\"reconnectCatalogOrder\":true,\"reconnectDetailOrder\":true,\"refreshBeforeOpen\":true,\"openBeforeRefresh\":true,\"readAndDirtyDraft\":true,\"projectRoundTrip\":true,\"projectInvalidatesRead\":true,\"unmountInvalidatesResponse\":true,\"oldMutationRefreshContext\":true,\"oldSaveDoesNotReplaceProject\":true}"
+      ]
+    },
+    "npx tsx scripts/web-product-browser-smoke.ts": {
+      "exitCode": 0,
+      "logSha256": "6b44f6bf59b6320a288235e1e800f83c5e87e00bee2fcbcf3bf852a71880b4ac",
+      "receipt": "web-product-browser.json"
+    }
+  },
+  "realProvider": {
+    "ordinaryHostSmoke": "passed",
+    "webSmoke": "passed",
+    "receipt": "web-product-real.json",
+    "provider": "openai-codex",
+    "model": "gpt-6-luna",
+    "reflection": "waiting_user persisted after cold restart"
+  },
+  "desktopBlocker": {
+    "phase": "before firstWindow",
+    "stack": [
+      "SecItemCopyMatching",
+      "Security::KeychainCore::ItemImpl::getContent"
+    ],
+    "availableSigningIdentities": 0,
+    "systemInteraction": "SecurityAgent automation prohibited; credentials protection unchanged",
+    "receipt": "web-product-desktop.json"
+  },
+  "ui": {
+    "widths": [
+      1440,
+      1024,
+      768,
+      390
+    ],
+    "screenshots": 89,
+    "manifest": "web-product-ui-manifest.json",
+    "states": [
+      "normal and long content",
+      "loading",
+      "error",
+      "empty"
+    ]
+  },
+  "independentReview": {
+    "result": "findings resolved",
+    "finalFollowup": "current-turn pending Tool derivation clears interrupted historical calls; regression test passed",
+    "boundaries": "no Reflection execution fallback; no schema or authentication permission change"
+  }
+}

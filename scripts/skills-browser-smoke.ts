@@ -24,6 +24,7 @@ async function open(page: Page, id: string) {
     .filter({ hasText: host.service.skills.record(id).name })
     .click();
   await page.getByRole('button', { name: '查看说明', exact: true }).first().click();
+  await page.getByRole('button', { name: '编辑文件', exact: true }).click();
 }
 try {
   const pkg = await skillPackage(join(root, 'pkg'));

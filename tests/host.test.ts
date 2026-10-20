@@ -670,3 +670,53 @@ test('PII protection preserves UUID correlation identities but still protects ph
   sensitive.add(id);
   assert.equal(sensitive.text(id), '[已保护]');
 });
+
+test('empty sessions broadcast and delayed Pi extension cannot expose unpublished message state', async () => {
+  const f = await fixture();
+  let release = () => {};
+  try {
+    const events: Array<{ type: string; sessionId: string; state?: { stateVersion: number } }> = [];
+    f.host.service.on('event', (event) => events.push(event));
+    const session = await f.create();
+    assert.ok(events.some((e) => e.type === 'state' && e.sessionId === session.id));
+    const active = Reflect.get(f.host.service, 'active').get(session.id);
+    const native = active.session;
+    const original = Reflect.get(native, '_emitExtensionEvent').bind(native);
+    let entered = () => {};
+    const waiting = new Promise<void>((ok) => {
+      entered = ok;
+    });
+    const gate = new Promise<void>((ok) => {
+      release = ok;
+    });
+    Reflect.set(native, '_emitExtensionEvent', async (event: { type: string; message?: { role: string } }) => {
+      if (event.type === 'message_end' && event.message?.role === 'assistant') {
+        entered();
+        await gate;
+      }
+      return original(event);
+    });
+    f.fake.setResponses([fauxAssistantMessage('published exactly once')]);
+    await f.request(`/sessions/${session.id}/prompt`, 'POST', { text: 'work' });
+    await Promise.race([
+      waiting,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Pi event did not arrive')), 5000).unref()),
+    ]);
+    const view = await f.host.service.viewSession(session.id);
+    assert.ok(native.messages.some((m: { role: string }) => m.role === 'assistant'));
+    assert.equal(
+      view.messages.some((m) => m.role === 'assistant'),
+      false,
+    );
+    assert.ok(view.streamingMessage);
+    const version = view.stateVersion;
+    release();
+    const final = await f.settle(session.id);
+    assert.ok(final.stateVersion > version);
+    assert.equal(final.messages.filter((m: { role: string }) => m.role === 'assistant').length, 1);
+    assert.equal(final.streamingMessage, undefined);
+  } finally {
+    release();
+    await f.close();
+  }
+});

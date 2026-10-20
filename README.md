@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -35,7 +35,7 @@ npm start
 
 浏览器打开 `http://127.0.0.1:4317`，输入同一连接令牌。`PORT` 和 `AGENT_DATA_DIR` 可指定端口和独立数据目录（默认 `.agent-data`）。每次启动必须使用相同数据密钥才能恢复历史；请自行安全保存密钥。不要把密钥或令牌写入项目文件。
 
-Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 保存会话索引、Skill 管理状态及经过敏感信息保护的 Memory 修订、诊断指标与检索索引；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
+Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP 使用 Bearer，浏览器 WebSocket 在首帧完成认证后才接收业务事件。连接令牌保存在当前 Host origin 的 sessionStorage，页面刷新和同端口重连可继续使用，不写入 Cookie 或 localStorage；认证失效时清除令牌并返回连接界面。网络故障保留令牌；完成 Host 状态同步后恢复写操作。页面位置、对象和修订号在当前 origin 的 sessionStorage 中恢复；正文、草稿和自由文本检索不持久化。草稿按会话保存在当前页面内存。浏览器断开不停止已提交任务。完整 Session 和凭据使用 AES-256-GCM 加密，SQLite 保存会话索引、Skill 管理状态及经过敏感信息保护的 Memory 修订、诊断指标与检索索引；导出为经过保护的查看副本，不能作为恢复文件。Session 保留当前和上一有效加密检查点；最新检查点损坏时恢复上一份并提示可能丢失进度及副作用不确定性，不自动重放。不可恢复的单个会话会被隔离；所有检查点均不可用或凭据库无法解密时拒绝启动，保留原始文件。
 
 ## 桌面应用
 
@@ -43,7 +43,7 @@ Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP �
 npm run package:desktop
 ```
 
-应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；签名、公证和自动更新属于后续交付。
+应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。
 
 ## 开发检查
 
@@ -89,7 +89,7 @@ npm run test:skills:ui
 
 当前提供 D1 本机集成，以及通过整体业务验收的 D2 Skill、Memory 和 Diagnostic Log；满足 D3 数据及能力访问准入条件。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
 
-尚未实现自动 Reflection、Evolution 或生成代码隔离。特殊 Skill 经过人工审查仍与 Host 同进程、同权限运行；这不等于代码沙箱。Windows 实机、长期运行与完整安全场景仍待验收。
+D3 已实现 Reflection 调度、来源记录与进化建议中心。真实受限 XPC 执行验收仍 blocked：当前 ad-hoc 签名无法验证 XPC 对端，任务保留 waiting_user 和具体原因；不会改用 Host 内执行。D4 自主代码生成、执行和发布尚未实现。特殊 Skill 经过人工审查仍与 Host 同进程、同权限运行；这不等于代码沙箱。Windows 实机、长期运行与完整安全场景仍待验收。
 
 ## 长期记忆
 
@@ -131,3 +131,19 @@ Host System Log 只保存固定故障 code、级别和关联 ID，最多5000条�
 打包后执行 `npx tsx scripts/d2-integration-ui-smoke.ts`，使用本机 Pi 授权、macOS Desktop、Chrome 和真实模型额度，在同一项目中连续验证 Skill、知识积累/修正/分支适用性、原生诊断、Host 强杀及重启续接。默认只加载普通 Skill；不能把历史特殊版本批准复用于本轮。收据见 [整体验收报告](D2-INTEGRATION-ACCEPTANCE.md)。
 
 `npx tsx scripts/skills-response-browser-smoke.ts` 在已构建 Web 上验证 10 项异步响应、重连和跨项目状态场景，不使用模型。完整自动化回归使用 `npm test`。
+
+## Web 产品回归
+
+先 build，再执行浏览器机制回归（临时项目、真实 Host、确定性 Faux Provider，不作为 Reflection 正式验收）：
+
+```sh
+npx tsx scripts/web-product-browser-smoke.ts
+```
+
+真实 Provider、原生工具、Diagnostic 来源和 Reflection 阻塞持久化：
+
+```sh
+npx tsx scripts/web-product-real-smoke.ts
+```
+
+该命令使用本机 Pi 授权和模型额度，Reflection 环境检查使用已打包应用。打包后可执行 `npx tsx scripts/web-product-desktop-smoke.ts`；macOS 钥匙串授权未完成时，Desktop 检查会阻塞，不能视为通过。各命令生成独立的 `docs/evidence/web-product-*.json` 收据；历史 D3 收据保持原样。

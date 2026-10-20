@@ -42,6 +42,10 @@ interface Saved {
   session: Snapshot;
 }
 interface Active {
+  // HTTP and events share a projection: Pi can advance raw state before an awaited Extension releases its event.
+  clientMessages: AgentSession['messages'];
+  streamingMessage?: unknown;
+  stateVersion: number;
   diagnostic: DiagnosticRecorder;
   loader: SkillResourceLoader;
   skillFailed?: boolean;
@@ -302,12 +306,19 @@ export class AgentService extends EventEmitter {
         const id = String(row.id),
           item = this.active.get(id);
         if (item)
-          return this.sensitive.copy({ ...item.record, busy: item.busy, error: item.error, unavailable: false });
+          return this.sensitive.copy({
+            ...item.record,
+            busy: item.busy,
+            error: item.error,
+            unavailable: false,
+            stateVersion: item.stateVersion,
+          });
         try {
           const loaded = await this.loadSaved(id);
           if (!loaded) throw new Error('历史缺失');
           return this.sensitive.copy({
             ...loaded.saved.record,
+            stateVersion: 0,
             busy: false,
             unavailable: false,
             ...(loaded.previous
@@ -319,6 +330,7 @@ export class AgentService extends EventEmitter {
             id,
             updated: Number(row.updated),
             title: '无法恢复的会话',
+            stateVersion: 0,
             busy: false,
             unavailable: true,
             error: '检查点无法解密或已损坏，原文件已保留',
@@ -396,6 +408,7 @@ export class AgentService extends EventEmitter {
         throw error;
       }
       this.active.set(record.id, item);
+      this.changed(item);
       return item;
     })();
     this.creating.add(task);
@@ -447,6 +460,8 @@ export class AgentService extends EventEmitter {
       ],
     });
     const item: Active = {
+      clientMessages: session.messages.slice(),
+      stateVersion: 0,
       diagnostic: new DiagnosticRecorder(this.diagnostics, record.id, record.cwd, manager),
       record,
       session,
@@ -491,7 +506,18 @@ export class AgentService extends EventEmitter {
             'compaction_end',
           ].includes(event.type)
         ) {
-          this.emit('event', { sessionId: record.id, type: 'update', event: this.clientEvent(event) });
+          const client = this.clientEvent(event);
+          if (event.type === 'message_start' || event.type === 'message_update') item.streamingMessage = client.message;
+          if (event.type === 'message_end' || event.type === 'compaction_end') {
+            item.clientMessages = session.messages.slice();
+            item.streamingMessage = undefined;
+          }
+          this.emit('event', {
+            sessionId: record.id,
+            type: 'update',
+            stateVersion: ++item.stateVersion,
+            event: client,
+          });
         }
       } catch {
         this.protectionFailure(item);
@@ -504,6 +530,7 @@ export class AgentService extends EventEmitter {
         item.checkpoint = Promise.all([item.checkpoint, pending]).then(() => {});
       }
     });
+    item.clientMessages = session.messages.slice();
     return item;
   }
   private clientEvent(event: unknown) {
@@ -649,13 +676,20 @@ export class AgentService extends EventEmitter {
       queued: this.queued.filter((q) => q.id === item.record.id).length,
       thinkingLevel: item.session.thinkingLevel,
       thinkingLevels: item.session.getAvailableThinkingLevels(),
-      messages: item.session.messages,
+      stateVersion: item.stateVersion,
+      messages: item.clientMessages,
+      streamingMessage: item.streamingMessage,
       tree: item.session.sessionManager.getTree(),
       leafId: item.session.sessionManager.getLeafId(),
     });
   }
   private changed(item: Active) {
     try {
+      if (!item.busy && !item.session.isStreaming) {
+        item.clientMessages = item.session.messages.slice();
+        item.streamingMessage = undefined;
+      }
+      item.stateVersion++;
       this.emit('event', { sessionId: item.record.id, type: 'state', state: this.view(item) });
     } catch {
       this.protectionFailure(item);

@@ -1,3 +1,4 @@
+import { readPosition, savePosition } from '../../app/view-state';
 import { useEffect, useRef, useState } from 'react';
 import type {
   DiagnosticCall as Call,
@@ -114,13 +115,18 @@ export function DiagnosticsPanel({
   initialEvidence?: EvidenceReference;
   onClose: () => void;
 }) {
-  const initial = emptyFilters(session?.id ?? initialEvidence?.sessionId, initialEvidence?.entryId);
+  const initial = {
+    ...emptyFilters(session?.id ?? initialEvidence?.sessionId, initialEvidence?.entryId),
+    status: readPosition('diagnostics').filter ?? '',
+  };
   const [filters, setFilters] = useState(initial);
   const [applied, setApplied] = useState(initial);
   const [catalog, setCatalog] = useState<Catalog>();
   const [detail, setDetail] = useState<Detail>();
-  const [selectedId, setSelectedId] = useState<string>();
-  const [offset, setOffset] = useState(0);
+  const [selectedId, setSelectedId] = useState<string | undefined>(
+    initialEvidence ? undefined : readPosition('diagnostics').id,
+  );
+  const [offset, setOffset] = useState(readPosition('diagnostics').offset ?? 0);
   const [detailOffset, setDetailOffset] = useState(0);
   const [reference, setReference] = useState<EvidenceReference | undefined>(initialEvidence);
   const [evidence, setEvidence] = useState<Evidence>();
@@ -131,6 +137,9 @@ export function DiagnosticsPanel({
   const [error, setError] = useState('');
   const [evidenceError, setEvidenceError] = useState('');
   const [refresh, setRefresh] = useState(0);
+  useEffect(() => {
+    savePosition('diagnostics', { id: selectedId, offset, filter: applied.status });
+  }, [selectedId, offset, applied.status]);
   const listEpoch = useRef(0);
   const detailEpoch = useRef(0);
   const evidenceEpoch = useRef(0);
@@ -402,7 +411,7 @@ export function DiagnosticsPanel({
           </div>
         </details>
       </form>
-      <div className="diagnostics-layout">
+      <div className="diagnostics-layout" data-detail={!!selectedId || !!reference}>
         <div className="diagnostics-list" aria-busy={listBusy}>
           {listBusy && (
             <p className="diagnostics-muted" role="status">
@@ -421,6 +430,7 @@ export function DiagnosticsPanel({
                 detailEpoch.current++;
                 evidenceEpoch.current++;
                 setSelectedId(item.id);
+                setRefresh((value) => value + 1);
                 setDetailOffset(0);
                 setDetail(undefined);
                 setReference(undefined);
@@ -457,6 +467,18 @@ export function DiagnosticsPanel({
           </div>
         </div>
         <div className="diagnostics-detail" aria-busy={detailBusy}>
+          {(selectedId || reference) && (
+            <button
+              type="button"
+              className="back-to-list"
+              onClick={() => {
+                setSelectedId(undefined);
+                setReference(undefined);
+              }}
+            >
+              ← 日志列表
+            </button>
+          )}
           {applied.sessionId && catalog?.sessionEvents && (
             <details>
               <summary>会话级事件 · {catalog.sessionEventTotal ?? catalog.sessionEvents.length} 项</summary>

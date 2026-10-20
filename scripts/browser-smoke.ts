@@ -34,6 +34,7 @@ try {
   const a = await host.service.create(aDir, fake.provider.id, 'browser-model'),
     b = await host.service.create(bDir, fake.provider.id, 'browser-model');
   const page = await browser.newPage();
+  page.setDefaultTimeout(15000);
   await page.goto(`${host.origin}/#token=${token}`);
   await page.locator('.shell').waitFor();
   await page.waitForFunction(() => document.querySelector('.connection')?.textContent?.includes('已连接'));
