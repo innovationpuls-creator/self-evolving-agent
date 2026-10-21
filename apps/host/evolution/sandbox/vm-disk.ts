@@ -3,6 +3,7 @@ import { copyFile, mkdir, readFile, rename, rm, stat, statfs, writeFile } from '
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+import { DatabaseSync } from 'node:sqlite';
 
 export type VMProcessIdentity = { pid: number; startAbsolute: number };
 type Manifest = {
@@ -17,28 +18,42 @@ export const VM_DISK_BYTES = 2 * 1024 ** 3;
 export const VM_FREE_RESERVE = 16 * 1024 ** 3;
 const budgetRoot = join(homedir(), 'Library/Caches/dev.personal.agent/d4-vm-leases');
 
-async function locked<T>(root: string, action: () => Promise<T>): Promise<T> {
+export async function withVMDiskBudgetLock<T>(root: string, action: () => Promise<T>): Promise<T> {
   await mkdir(root, { recursive: true, mode: 0o700 });
-  const lock = join(root, 'lock');
+  // Preserve the previous implementation's unproven crash state on upgrade.
+  if (
+    await stat(join(root, 'lock')).catch((error: NodeJS.ErrnoException) => {
+      if (error.code !== 'ENOENT') throw error;
+      return undefined;
+    })
+  )
+    throw new Error('isolated_disk_legacy_lock_retained');
+  const database = new DatabaseSync(join(root, 'budget.sqlite'));
   let acquired = false;
-  for (let n = 0; n < 100; n++) {
-    try {
-      await mkdir(lock);
-      acquired = true;
-      break;
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
-    }
-    await delay(50);
-  }
-  // A dead owner during allocation retains this lock. No speculative stale-lock deletion.
-  if (!acquired) throw new Error('isolated_disk_budget_locked');
   try {
+    // SQLite's OS file lock is released on process death, including SIGKILL.
+    // Keep the transaction across the asynchronous filesystem operation.
+    for (let n = 0; n < 100; n++) {
+      try {
+        database.exec('BEGIN IMMEDIATE');
+        acquired = true;
+        break;
+      } catch (error) {
+        if ((error as { errcode?: number }).errcode !== 5) throw error;
+      }
+      await delay(50);
+    }
+    if (!acquired) throw new Error('isolated_disk_budget_locked');
     return await action();
   } finally {
-    await rm(lock, { recursive: true });
+    try {
+      if (acquired) database.exec('ROLLBACK');
+    } finally {
+      database.close();
+    }
   }
 }
+const locked = withVMDiskBudgetLock;
 
 /** Two persistent slots bound disposable disks across all experimental Host processes. */
 export class VMDisk {

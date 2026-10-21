@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { copyFile, cp, mkdir, readFile, writeFile, rename } from 'node:fs/promises';
+import { chmod, copyFile, cp, mkdir, readFile, writeFile, rename, readdir, lstat, stat } from 'node:fs/promises';
+import { hashFile } from '../apps/host/evolution/sandbox/vm-assets.js';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 const command = promisify(execFile);
@@ -17,14 +17,33 @@ const runtime = join(stage, 'runtime');
 await mkdir(runtime, { recursive: true });
 await cp(dependencies, join(runtime, 'node_modules'), { recursive: true });
 await copyFile(resolve('apps/desktop/native/evolution/vm/skill-worker.mjs'), join(runtime, 'worker.mjs'));
+await cp(join(work, 'node-v24.22.0-linux-arm64/lib/node_modules/npm'), join(runtime, 'npm'), { recursive: true });
+await mkdir(join(runtime, 'toolchains/bin'), { recursive: true });
+await writeFile(
+  join(runtime, 'toolchains/bin/npm'),
+  '#!/bin/sh\nexec /usr/local/bin/node /opt/runtime/npm/bin/npm-cli.js "$@"\n',
+  { mode: 0o755 },
+);
 await writeFile(join(runtime, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
+// The Host staging area is private. The copied Guest runtime must also be
+// traversable by workload uid 1000; never change permissions on its sources.
+async function guestReadable(path: string): Promise<void> {
+  const info = await lstat(path);
+  if (info.isSymbolicLink()) return;
+  if (info.isDirectory()) {
+    await chmod(path, 0o755);
+    for (const name of await readdir(path)) await guestReadable(join(path, name));
+  } else if (info.isFile()) await chmod(path, info.mode & 0o111 ? 0o755 : 0o644);
+}
+await guestReadable(runtime);
 const archive = join(work, 'runtime.tar.next');
 await command('tar', ['--no-xattrs', '-cf', archive, '-C', stage, 'runtime'], {
   env: { ...process.env, COPYFILE_DISABLE: '1' },
 });
-const bytes = await readFile(archive);
-if (bytes.length > 256 * 1024 * 1024) throw new Error('D4 runtime image budget exceeded');
+const bytes = (await stat(archive)).size;
+if (bytes > 256 * 1024 * 1024) throw new Error('D4 runtime image budget exceeded');
+const sha256 = await hashFile(archive);
 await rename(archive, join(work, 'runtime.tar'));
-const manifest = { sdk: '1.3.0', sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.length };
+const manifest = { sdk: '1.3.0', sha256, bytes };
 await writeFile(join(work, 'runtime.json'), JSON.stringify(manifest, null, 2) + '\n');
 console.log(JSON.stringify(manifest));

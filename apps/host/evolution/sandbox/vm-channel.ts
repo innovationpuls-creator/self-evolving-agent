@@ -96,7 +96,7 @@ export class VMChannel {
       arguments: [
         '/usr/local/bin/python3',
         '-c',
-        "import os,time\nwhile not os.path.exists('/opt/runtime/ready'): time.sleep(.02)\nos.execv('/usr/local/bin/node',['node','/opt/runtime/worker.mjs'])",
+        "import os,time\nfor _ in range(1500):\n try:\n  if os.path.exists('/opt/runtime/ready'): break\n except PermissionError: pass\n time.sleep(.02)\nelse: raise RuntimeError('runtime_not_ready')\nos.execv('/usr/local/bin/node',['node','/opt/runtime/worker.mjs'])",
       ],
     };
     const path = this.disk.config;

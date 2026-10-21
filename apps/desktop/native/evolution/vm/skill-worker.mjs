@@ -42,8 +42,7 @@ async function load(request) {
     const factory = await jiti.import(resolve('/tmp/skill', path), { default: true });
     await factory(new Proxy({}, { get(_target, key) {
       if (key === 'registerTool') return (tool) => {
-        const allowed = ['name', 'label', 'description', 'parameters', 'execute', 'exposure', 'defaultActive',
-          'promptSnippet', 'promptGuidelines', 'outputSchema', 'executionMode', 'annotations'];
+        const allowed = ['name', 'label', 'description', 'parameters', 'execute', 'exposure', 'defaultActive'];
         for (const k of Object.keys(tool)) if (!allowed.includes(k)) deny('tool.' + k);
         if (!/^d4_[a-z0-9_]{1,60}$/.test(tool.name) || ownTools.has(tool.name)) deny('tool.name');
         ownTools.add(tool.name);

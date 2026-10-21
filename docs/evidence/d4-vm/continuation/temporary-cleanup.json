@@ -1,0 +1,40 @@
+{
+  "time": "2026-10-21T08:41:17.983939+00:00",
+  "admission": false,
+  "actualVMProcesses": [],
+  "leaseSlotsRemaining": 0,
+  "before": "Filesystem   1024-blocks      Used Available Capacity iused      ifree %iused  Mounted on\n/dev/disk3s5   482746452 234741276 191846888    56% 2565109 1918468880    0%   /System/Volumes/Data\n",
+  "removed": [
+    {
+      "path": "release/d4-execution-work/kata.tar.zst.reclaim",
+      "duKiB": 680248,
+      "sha256": "8736c054d9223974735394f822000823baef509e1c33405ec798240fa9b6e4b5",
+      "bytes": 696573576
+    },
+    {
+      "path": "release/d4-system-input/container-1.6.0.pkg",
+      "duKiB": 152228,
+      "sha256": "a084d66df2fb573172d7f923fa83c9229d17f6c1ab61f09c8a90c43dab66ba02",
+      "bytes": 155879446
+    },
+    {
+      "path": "release/d4-execution-work/stage",
+      "duKiB": 177864
+    },
+    {
+      "path": "release/d4-current-vm-client",
+      "duKiB": 645604
+    },
+    {
+      "path": "apps/desktop/native/evolution/vm/.build",
+      "duKiB": 1676744
+    }
+  ],
+  "retained": [
+    "Existing release/Agent-darwin-arm64 unchanged",
+    "Fixed VM image/kernel/Node/runtime and signed helper retained for bounded reprovisioning",
+    "All failed candidates, historical receipts and temporary product databases retained",
+    "Installed official container service unchanged"
+  ],
+  "after": "Filesystem   1024-blocks      Used Available Capacity iused      ifree %iused  Mounted on\n/dev/disk3s5   482746452 231789304 194798860    55% 2501374 1947988600    0%   /System/Volumes/Data\n"
+}

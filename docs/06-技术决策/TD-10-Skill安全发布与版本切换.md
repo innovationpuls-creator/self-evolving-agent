@@ -1,5 +1,6 @@
 # TD-10：Skill 安全发布与版本切换
 
+新增隔离 Skill 的受限契约已获用户批准：仅公开应用生成的 Skill/Tool/Hook 使用说明，源码与执行保留 Guest；旧版本不迁移。当前实测 Host 原生 read/bash 能读取并导入原始版本源码，同 UID 可读写 live VM backing，故仍不满足该契约；不得仅隐藏路径、修改 Prompt 或回退 Host import。详见执行环境复审的源码边界反例和最小 native broker 方案。
 2026-10-21 [D4 受限执行契约实验](../D4-VM-EXECUTION-REVIEW.md)在既有 SkillVersion 中增加可选 execution 字段，绑定版本摘要、权限 profile 与 Guest runtimeDigest；候选、加载、reload、rollback、重启均按契约分流。适配器仅由可信应用注入，普通客户端未启用；旧版本保留人工审查语义，不新增 Tool 版本库，不把实验安全复审写成 D2 review，D4 仍不准入。
 
 ## 最终方案

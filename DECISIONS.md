@@ -1,5 +1,7 @@
 # 当前开发决策索引
 
+新增隔离 Skill 的受限契约已获用户批准：仅公开应用生成的 Skill/Tool/Hook 使用说明，源码与执行保留 Guest；旧版本不迁移。当前实测 Host 原生 read/bash 能读取并导入原始版本源码，同 UID 可读写 live VM backing，故仍不满足该契约；不得仅隐藏路径、修改 Prompt 或回退 Host import。详见执行环境复审的源码边界反例和最小 native broker 方案。
+
 - 2026-10-21 D4 独立 VM 验证与存储回收修复见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)。Containerization 0.52.1 签名 helper 与受限 Skill 契约仅供实验；控制面预算、完整恢复与六项矩阵仍缺证，**D4 不准入**，正常客户端不启用，不将测试通过转为高权限加载资格。
 
 - D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 已实施代码执行隔离准入原型，同容器活动隔离、后代清理、活动资源限制与高权限自动发布仍有阻断，**不准入**，详见 [D4-SANDBOX-ACCEPTANCE.md](D4-SANDBOX-ACCEPTANCE.md)；D4 产品流程与 D5 尚未实施。

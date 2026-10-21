@@ -4,11 +4,15 @@ import { randomUUID, randomBytes } from 'node:crypto';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { startHost } from '../apps/host/transport/server.js';
-import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile, open } from 'node:fs/promises';
 import { VMDisk } from '../apps/host/evolution/sandbox/vm-disk.js';
 import { join, resolve } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { promisify } from 'node:util';
+import { createServer, connect, type Server } from 'node:net';
+import { createSocket } from 'node:dgram';
+import { lookup } from 'node:dns/promises';
+import { networkInterfaces } from 'node:os';
 
 // This exercises an experimental SDK helper. It does not grant publication.
 const command = promisify(execFile);
@@ -20,6 +24,10 @@ await mkdir(output, { recursive: true });
 const prepared = JSON.parse(await readFile(join(work, 'prepared.json'), 'utf8')) as { rootfs: string; initfs: string };
 const base = JSON.parse(await readFile(join(work, 'config.json'), 'utf8')) as Record<string, unknown>;
 const probe = await readFile(resolve('scripts/d4-vm-guest-probe.py'), 'utf8');
+const dependencyProbe = await readFile(resolve('scripts/d4-vm-dependency-probe.py'), 'utf8');
+const dependencyFixtures = JSON.parse(
+  (await command('python3', ['scripts/d4-vm-dependency-probe.py', '--fixtures'], { maxBuffer: 65536 })).stdout,
+) as Array<{ name: string; sha256: string; base64: string }>;
 const host = await startHost({
   dataDir: join(work, `host-probe-${randomUUID()}`),
   key: randomBytes(32),
@@ -32,19 +40,28 @@ const fake = fauxProvider({
 host.service.runtime.registerNativeProvider(fake.provider);
 const hostSession = await host.service.create(work, fake.provider.id, 'resource-observer');
 const hostBusiness = async () => {
+  const marker = 'host-resource-service-' + randomUUID();
+  const startedAt = Date.now();
   fake.setResponses([
-    fauxAssistantMessage(fauxToolCall('bash', { command: 'printf host-resource-service-ok' }), {
+    fauxAssistantMessage(fauxToolCall('bash', { command: 'printf ' + marker }), {
       stopReason: 'toolUse',
     }),
     fauxAssistantMessage('host-done'),
   ]);
   await host.service.prompt(hostSession.id, 'Run the fixed Host service probe.');
-  while ((await host.service.viewSession(hostSession.id)).busy) await delay(10);
+  while ((await host.service.viewSession(hostSession.id)).busy) {
+    if (Date.now() - startedAt > 15000) throw new Error('host_business_probe_timeout');
+    await delay(10);
+  }
   const state = await host.service.viewSession(hostSession.id);
   assert.ok(
-    state.messages.some((m) => m.role === 'toolResult' && JSON.stringify(m).includes('host-resource-service-ok')),
+    state.messages.some(
+      (m) =>
+        m.role === 'toolResult' && !m.isError && m.content.some((part) => part.type === 'text' && part.text === marker),
+    ),
   );
-  return { completed: true, at: Date.now() };
+  // This proves a fresh concurrent Host call, not overlap with enforcement.
+  return { completed: true, marker, startedAt, completedAt: Date.now(), pressureOverlapProven: false };
 };
 type Identity = { pid: number; startAbsolute: number; physicalFootprint: number };
 const inspect = async (pid: number): Promise<Identity | { pid: number; absent: true }> => {
@@ -59,11 +76,73 @@ const receipt = {
   sdk: '0.52.1',
   admission: false,
   helper: JSON.parse(await readFile(resolve('release/d4-execution/bin/owner.json'), 'utf8')) as unknown,
+  dependencyFixtures: dependencyFixtures.map(({ name, sha256 }) => ({ name, sha256 })),
   scope: 'experimental VM probes; formal path has separate receipt; no D4 admission',
   cases: [] as Record<string, unknown>[],
   blockers: ['host_preparation_and_ipc_aggregate_limits_unproven', 'full_six_item_acceptance_incomplete'],
 };
 const receiptId = randomUUID();
+const networkServers: Server[] = [];
+const udp = createSocket('udp4');
+const address = Object.values(networkInterfaces())
+  .flat()
+  .find((a) => a && !a.internal && a.family === 'IPv4')?.address;
+assert.ok(address, 'Host non-loopback IPv4 required for paired network probes');
+const listen = async (hostname?: string, path?: string) => {
+  const server = createServer((socket) => {
+    socket.on('error', () => {});
+    socket.end();
+  });
+  networkServers.push(server);
+  await new Promise<void>((ok, fail) => {
+    server.once('error', fail);
+    if (path) server.listen(path, ok);
+    else server.listen(0, hostname, ok);
+  });
+  return server;
+};
+const positive = async (hostname: string, port?: number) =>
+  new Promise<void>((ok, fail) => {
+    const socket = port ? connect(port, hostname) : connect(hostname);
+    socket.once('connect', () => {
+      socket.destroy();
+      ok();
+    });
+    socket.once('error', fail);
+    socket.setTimeout(3000, () => {
+      socket.destroy();
+      fail(Error('Host network positive timeout'));
+    });
+  });
+let networkTargets: Record<string, string | number> = {};
+const setupNetwork = async () => {
+  const tcp = await listen(address),
+    tcp6 = await listen('::1');
+  const port = (server: Server) => {
+    const bound = server.address();
+    assert.ok(bound && typeof bound !== 'string');
+    return bound.port;
+  };
+  const unixPath = join(work, 'network-probe.sock');
+  await listen(undefined, unixPath);
+  await positive(address, port(tcp));
+  await positive('::1', port(tcp6));
+  await positive(unixPath);
+  await new Promise<void>((ok) => udp.bind(0, address, ok));
+  await new Promise<void>((ok, fail) => {
+    udp.once('message', () => ok());
+    const client = createSocket('udp4');
+    client.send('positive', udp.address().port, address, (error) => {
+      client.close();
+      if (error) fail(error);
+    });
+  });
+  const dnsAddress = (await lookup('example.com', { family: 4 })).address;
+  networkTargets = { address, tcp: port(tcp), tcp6: port(tcp6), udp: udp.address().port, unix: unixPath, dnsAddress };
+  Object.assign(receipt, {
+    networkPositiveControls: { ...networkTargets, tcp: true, tcp6: true, udp: true, unix: true, dns: true },
+  });
+};
 const persist = async () => {
   const bytes = JSON.stringify(receipt, null, 2) + '\n';
   await writeFile(join(output, `receipt-${receiptId}.json`), bytes);
@@ -76,9 +155,14 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
   const lease = await VMDisk.allocate(id, work, prepared.rootfs);
   const disk = lease.disk;
   let stopped = false;
+  let inherited: Awaited<ReturnType<typeof open>> | undefined;
   try {
-    const hostCanary = join(work, 'host-canary');
-    await writeFile(hostCanary, 'host-private');
+    const hostCanary = join(work, `host-canary-${role}`);
+    const hostToken = 'host-private-' + randomBytes(16).toString('hex');
+    await writeFile(hostCanary, hostToken);
+    inherited = await open(hostCanary, 'r');
+    const positiveFD = Buffer.alloc(128);
+    assert.equal((await inherited.read(positiveFD, 0, 128, 0)).bytesRead, hostToken.length);
     const other = role === 'A' ? 'B' : 'A';
     const denied = ['workspace', 'cache', 'build', 'tmp'].flatMap((p) => [
       `/tmp/${other}/${p}/canary`,
@@ -91,14 +175,23 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       rootfs: disk,
       initfs: prepared.initfs,
       nodeExecutable: join(work, 'node-linux'),
-      arguments: ['/usr/local/bin/python3', '-c', probe, mode, role, JSON.stringify(denied)],
-      deadlineSeconds: mode === 'detached' ? 6 : 30,
+      ...(mode === 'dependencies' ? { runtimeArchive: join(work, 'runtime.tar') } : {}),
+      arguments: [
+        '/usr/local/bin/python3',
+        '-c',
+        mode === 'dependencies' ? dependencyProbe : probe,
+        mode,
+        role,
+        JSON.stringify(denied),
+        JSON.stringify(mode === 'network' ? networkTargets : dependencyFixtures),
+      ],
+      deadlineSeconds: mode === 'detached' ? 6 : mode === 'dependencies' ? 90 : 30,
     };
     const configPath = lease.config;
     await writeFile(configPath, JSON.stringify(config));
     const begin = performance.now();
     await lease.launch();
-    const child = spawn(helper, ['--probe', configPath], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn(helper, ['--probe', configPath], { stdio: ['pipe', 'pipe', 'pipe', inherited.fd] });
     const events: Record<string, unknown>[] = [];
     let pending = '',
       stderr = '',
@@ -107,8 +200,8 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       canceled = false;
     let stdout = '',
       overflow = false;
-    let hostProgress: Promise<{ completed: boolean; at: number }> | undefined;
-    child.stdout.on('data', (chunk: Buffer) => {
+    let hostProgress: ReturnType<typeof hostBusiness> | undefined;
+    child.stdout!.on('data', (chunk: Buffer) => {
       outputBytes += chunk.length;
       if (outputBytes > 8 * 1024 * 1024) {
         overflow = true;
@@ -132,7 +225,7 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
         }
       }
     });
-    child.stderr.on('data', (chunk: Buffer) => {
+    child.stderr!.on('data', (chunk: Buffer) => {
       if (stderr.length < 65536) stderr += chunk.toString('utf8');
     });
     let finished = false;
@@ -169,17 +262,17 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
         }
         if (cancellation && !canceled && events.some((e) => e.kind === 'output') && bound.size) {
           canceled = true;
-          if (cancellation === 'eof') child.stdin.end();
+          if (cancellation === 'eof') child.stdin!.end();
           else child.kill('SIGKILL');
         }
         if (
           role === 'A' &&
-          ['cpu', 'pids', 'memory', 'output', 'storage'].includes(mode) &&
+          ['cpu', 'pids', 'threads', 'memory', 'output', 'storage'].includes(mode) &&
           readyMs !== undefined &&
           !hostProgress
         )
           hostProgress = hostBusiness();
-        if (performance.now() - begin > 45000) child.kill('SIGKILL');
+        if (performance.now() - begin > (mode === 'dependencies' ? 100000 : 45000)) child.kill('SIGKILL');
         await delay(150);
       }
     })();
@@ -217,6 +310,11 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       disk: { path: disk, bytes: diskInfo.size, allocatedBytes: diskInfo.blocks * 512 },
       // Self-reported business/assertions and supervisor/OS observations stay separate.
       workloadReportOnly: true,
+      hostFDInjected: {
+        descriptor: 3,
+        readableInHost: positiveFD.toString('utf8', 0, hostToken.length) === hostToken,
+        leakedToGuest: stdout.includes(Buffer.from(hostToken).toString('base64')),
+      },
       hostBusiness: await hostProgress,
     };
     receipt.cases.push(result);
@@ -235,13 +333,14 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       }),
     );
     assert.equal(overflow, false, 'owner IPC exceeded observer budget');
+    assert.equal(result.hostFDInjected.leakedToGuest, false, 'inherited Host FD crossed the VM boundary');
     assert.ok(gone, 'actual VZ process exit must be confirmed');
-    if (mode === 'boundary')
+    if (mode === 'boundary' || mode === 'dependencies' || mode === 'network')
       assert.ok(
         events.some((e) => e.kind === 'workloadExited' && e.exitCode === 0),
         'positive and negative boundary workload must succeed',
       );
-    if (mode === 'pids')
+    if (mode === 'pids' || mode === 'threads')
       assert.ok(
         events.some((e) => e.kind === 'statistics' && e.tasks === 128),
         'aggregate task limit observed',
@@ -250,6 +349,11 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       assert.ok(
         events.some((e) => e.kind === 'workloadExited' && e.exitCode === 137),
         'aggregate OOM kills workload',
+      );
+    if (mode === 'memory')
+      assert.ok(
+        events.some((e) => Number(e.oomKill) > 0),
+        'trusted supervisor observed cgroup OOM counter',
       );
     if (mode === 'cpu')
       assert.ok(
@@ -265,13 +369,30 @@ async function run(mode: string, role: 'A' | 'B', cancellation?: 'eof' | 'kill')
       assert.equal(stdout.split('"errno": 28').length - 1, 2, 'both writers hit aggregate filesystem limit');
     return result;
   } finally {
-    await lease.dispose(stopped);
+    try {
+      await lease.dispose(stopped);
+    } finally {
+      await inherited?.close();
+    }
   }
 }
 
+async function paired<T>(activities: Promise<T>[]): Promise<T[]> {
+  // A failed assertion must not abandon another Activity's VM/disk cleanup.
+  const settled = await Promise.allSettled(activities);
+  const failures = settled.filter((result) => result.status === 'rejected');
+  if (failures.length)
+    throw new AggregateError(
+      failures.map((result) => result.reason),
+      'D4 paired probes failed',
+    );
+  return settled.map((result) => (result as PromiseFulfilledResult<T>).value);
+}
+
 try {
+  await setupNetwork();
   await persist();
-  const pair = await Promise.all([run('boundary', 'A'), run('boundary', 'B')]);
+  const pair = await paired([run('boundary', 'A'), run('boundary', 'B')]);
   if (
     pair.some(
       (r) => r.exit.code !== 0 || !r.gone || !r.events.some((e) => e.kind === 'workloadExited' && e.exitCode === 0),
@@ -281,12 +402,28 @@ try {
     await persist();
     process.exitCode = 1;
   } else {
-    for (const mode of ['cpu', 'pids', 'memory', 'output', 'storage'])
-      await Promise.all([run(mode, 'A'), run('boundary', 'B')]);
+    await paired([run('dependencies', 'A'), run('dependencies', 'B')]);
+    await paired([run('network', 'A'), run('network', 'B')]);
+    for (const mode of ['cpu', 'pids', 'threads', 'memory', 'output', 'storage'])
+      await paired([run(mode, 'A'), run('boundary', 'B')]);
     await run('detached', 'A', 'eof');
     await run('detached', 'A', 'kill');
     await run('detached', 'A');
   }
 } finally {
-  await host.close();
+  try {
+    await host.close();
+  } finally {
+    await Promise.allSettled([
+      new Promise<void>((ok, fail) => {
+        try {
+          udp.close(ok);
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code === 'ERR_SOCKET_DGRAM_NOT_RUNNING') ok();
+          else fail(error);
+        }
+      }),
+      ...networkServers.map((server) => new Promise<void>((ok) => server.close(() => ok()))),
+    ]);
+  }
 }

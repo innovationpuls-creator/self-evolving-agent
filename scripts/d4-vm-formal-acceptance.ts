@@ -48,7 +48,13 @@ await writeFile(
 await writeFile(join(source, 'extension.mjs'), isolatedCode('v1', canary));
 const session = await host.service.create(project, fake.provider.id, 'd4-formal');
 const skills = host.service.skills;
-const receipt: Record<string, unknown> = { admission: false, root, runtimeDigest: adapter.runtimeDigest, checks: [] };
+const receipt: Record<string, unknown> = {
+  admission: false,
+  executionCompleted: false,
+  root,
+  runtimeDigest: adapter.runtimeDigest,
+  checks: [],
+};
 const checks = receipt.checks as unknown[];
 const wait = async (check: () => boolean | Promise<boolean>) => {
   const deadline = Date.now() + 90000;
@@ -99,10 +105,22 @@ try {
   const nested = state.messages.find((m) => m.role === 'toolResult' && m.toolName === 'd4_nested');
   assert.ok(direct);
   assert.ok(nested);
+  assert.deepEqual(direct.content, [{ type: 'text', text: 'v1:direct|hook' }]);
   assert.deepEqual(direct.details, { version: 'v1', starts: 1, calls: 1, results: 0 });
   assert.deepEqual(nested.details, { version: 'v1', starts: 1, calls: 3, results: 1 });
   assert.equal((globalThis as Record<string, unknown>).__d4UnknownInHost, undefined);
   assert.equal(await readFile(canary, 'utf8'), 'private-unchanged');
+  state = await prompt([['d4_echo', { text: 'hook-block' }]]);
+  assert.match(JSON.stringify(state.messages.at(-1)), /D4_HOOK_BLOCKED/);
+  assert.doesNotMatch(JSON.stringify(state.messages.at(-1)), /D4_BLOCKED_EXECUTE_RAN/);
+  checks.push({ hookBlockedExecution: true });
+  for (const [text, api] of [
+    ['deny-model', 'modelRegistry'],
+    ['deny-prompt', 'getSystemPrompt'],
+  ] as const) {
+    state = await prompt([['d4_echo', { text }]]);
+    assert.match(JSON.stringify(state.messages.at(-1)), new RegExp('isolated_api_unsupported:' + api));
+  }
   state = await prompt([['d4_echo', { text: 'deny-bash' }]]);
   checks.push({ deniedBash: state });
   assert.match(JSON.stringify(state.messages), /isolated_api_unsupported:executeTool:bash/);
@@ -120,6 +138,9 @@ try {
   assert.match(JSON.stringify(state.messages.at(-1)), /ENOENT/);
   await prompt([['d4_echo', { text: 'detached' }]]);
   const detached = adapter.observations.at(-1)!;
+  assert.ok(
+    detached.events.some((e) => String((e as { stderr?: string }).stderr).includes('D4_DETACHED_HEARTBEAT_CONFIRMED')),
+  );
   await host.service.stop(session.id);
   assert.ok(detached.events.some((e) => (e as { kind?: string }).kind === 'externalVMGone'));
   checks.push({ detachedAfterToolReturnDestroyed: detached.activity });
@@ -131,7 +152,13 @@ try {
     fauxAssistantMessage('done'),
   ]);
   await host.service.prompt(session.id, 'Call slow echo.');
-  await wait(async () => (await host.service.viewSession(session.id)).busy);
+  await wait(
+    () =>
+      adapter.observations
+        .at(-1)
+        ?.events.some((e) => String((e as { stderr?: string }).stderr).includes('D4_FIXTURE_TOOL_ENTERED:v1:slow')) ??
+      false,
+  );
   assert.equal((await publish(record.id, v2.skill.latest)).status, 'applied');
   assert.match(JSON.stringify((await host.service.viewSession(session.id)).messages), /v1:slow/);
   checks.push({ inflightV1DrainedBeforeV2: true });
@@ -149,12 +176,34 @@ try {
   assert.equal((await publish(record.id, v2.skill.latest)).status, 'failed');
   db.exec('DROP TRIGGER reject_d4_commit');
   assert.equal(skills.record(record.id).current, record.latest);
+  state = await prompt([['d4_echo', { text: 'commit-restored' }]]);
+  assert.match(JSON.stringify(state.messages.at(-1)), /v1:commit-restored\|hook/);
   checks.push({ commitFailureRestoredV1: true });
   const bad = await skills.edit(record.id, skills.record(record.id).revision, [
     { path: 'extension.mjs', content: 'export default pi=>pi.registerProvider("forbidden",{});' },
   ]);
   assert.equal((await publish(record.id, bad.skill.latest)).status, 'failed');
   assert.equal(skills.record(record.id).current, record.latest);
+  state = await prompt([['d4_echo', { text: 'initialization-restored' }]]);
+  assert.match(JSON.stringify(state.messages.at(-1)), /v1:initialization-restored\|hook/);
+  fake.setResponses([
+    fauxAssistantMessage(fauxToolCall('d4_echo', { text: 'hang' }), { stopReason: 'toolUse' }),
+    fauxAssistantMessage('done'),
+  ]);
+  await host.service.prompt(session.id, 'Start the hanging Tool.');
+  await wait(
+    () =>
+      adapter.observations
+        .at(-1)
+        ?.events.some((e) => String((e as { stderr?: string }).stderr).includes('D4_FIXTURE_TOOL_ENTERED:v1:hang')) ??
+      false,
+  );
+  const toolOwner = adapter.observations.at(-1)!;
+  const toolCancelStart = performance.now();
+  await host.service.stop(session.id);
+  assert.ok(performance.now() - toolCancelStart < 10000);
+  assert.ok(toolOwner.events.some((e) => (e as { kind?: string }).kind === 'externalVMGone'));
+  checks.push({ hangingToolCancelledMs: performance.now() - toolCancelStart });
   const hanging = await skills.edit(record.id, skills.record(record.id).revision, [
     {
       path: 'extension.mjs',
@@ -183,11 +232,50 @@ try {
   assert.match(JSON.stringify(state.messages), /v1:restart\|hook/);
   assert.equal((await publish(record.id, record.latest, false)).status, 'applied');
   checks.push({ disabled: await host.service.viewSession(session.id) });
+  state = await prompt([['d4_echo', { text: 'disabled' }]]);
+  assert.doesNotMatch(JSON.stringify(state.messages.at(-1)), /v1:disabled/);
+  await host.close();
+  host = await startHost({ dataDir: join(root, 'data'), key, token });
+  configure();
+  state = await prompt([['d4_echo', { text: 'disabled-restart' }]]);
+  assert.doesNotMatch(JSON.stringify(state.messages.at(-1)), /v1:disabled-restart/);
+  checks.push({ disabledAfterRestart: true });
+  // Fixed, owned adversarial fixture: demonstrate the normal Session bypass,
+  // without ever importing unknown code into the Host application's process.
+  const restartedSkills = host.service.skills;
+  const originalPath = join(restartedSkills.packagePath(restartedSkills.version(record.latest)), 'extension.mjs');
+  state = await prompt([['read', { path: originalPath }]]);
+  assert.match(JSON.stringify(state.messages.at(-1)), /__d4UnknownInHost/);
+  const shellQuote = (value: string) => "'" + value.replaceAll("'", "'\\''") + "'";
+  const attack = `import(${JSON.stringify(originalPath)}).catch(e=>console.log(e.message))`;
+  state = await prompt([['bash', { command: 'node --input-type=module -e ' + shellQuote(attack) }]]);
+  assert.equal(await readFile(canary, 'utf8'), 'unauthorized');
+  checks.push({
+    sourceBoundary: {
+      passed: false,
+      normalSessionReadSucceeded: true,
+      normalSessionRawImportSucceeded: true,
+      outsideGuestWriteSucceeded: true,
+      originalPath,
+      result: state.messages.at(-1),
+    },
+  });
+  await writeFile(canary, 'private-unchanged');
+  receipt.sourceBoundaryPassed = false;
+  receipt.blockers = ['normal_session_can_read_and_execute_plaintext_isolated_snapshot'];
+  receipt.executionCompleted = true;
+  process.exitCode = 1;
 } catch (error) {
   receipt.error = String(error);
   process.exitCode = 1;
 } finally {
-  await host.close();
+  try {
+    await host.close();
+  } catch (error) {
+    receipt.cleanupError = String(error);
+    receipt.executionCompleted = false;
+    process.exitCode = 1;
+  }
   receipt.observations = adapter.observations;
   await writeFile(
     resolve('release/d4-vm-evidence', `formal-${randomUUID()}.json`),

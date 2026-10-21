@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PassThrough, Readable } from 'node:stream';
 import test from 'node:test';
-import { VMDisk } from '../apps/host/evolution/sandbox/vm-disk.js';
+import { VMDisk, withVMDiskBudgetLock } from '../apps/host/evolution/sandbox/vm-disk.js';
 import { desktopPackagePolicy } from '../scripts/desktop-package-policy.js';
 import { trimDependencyMetadata } from '../scripts/desktop-package-resources.js';
 import { writeNewDownload } from '../scripts/d4-download.js';
@@ -28,7 +28,7 @@ test('VM disk lifecycle removes files and reuses slots across repeated runs', as
       await assert.rejects(stat(lease.disk), { code: 'ENOENT' });
       await assert.rejects(stat(lease.config), { code: 'ENOENT' });
     }
-    assert.deepEqual(await readdir(root), []);
+    assert.deepEqual(await readdir(root), ['budget.sqlite']);
     assert.equal(await readFile(source, 'utf8'), 'fixed base disk');
   } finally {
     await rm(work, { recursive: true, force: true });
@@ -45,7 +45,7 @@ test('VM disk budget counts retained failures and refuses low space before copyi
       VMDisk.allocate(randomUUID(), work, source, { root, available: async () => 1024 }),
       /free_space_floor/,
     );
-    assert.deepEqual(await readdir(root), []);
+    assert.deepEqual(await readdir(root), ['budget.sqlite']);
     const a = await VMDisk.allocate(randomUUID(), work, source, { root });
     const b = await VMDisk.allocate(randomUUID(), work, source, { root });
     await a.launch();
@@ -227,6 +227,44 @@ test('failed download removes only its own partial file', async () => {
     await writeNewDownload(path, Readable.from(['complete']), new PassThrough());
     assert.equal(await readFile(path, 'utf8'), 'complete');
   } finally {
+    await rm(work, { recursive: true, force: true });
+  }
+});
+
+test('OS disk budget lock survives competing Hosts and releases after SIGKILL', { timeout: 15000 }, async () => {
+  const work = await mkdtemp(join(tmpdir(), 'd4-lock-crash-'));
+  const child = spawn(
+    process.execPath,
+    [
+      '--import',
+      import.meta.resolve('tsx'),
+      fileURLToPath(new URL('./fixtures/d4-disk-child.ts', import.meta.url)),
+      work,
+      'hold-lock',
+    ],
+    { stdio: ['pipe', 'pipe', 'pipe'] },
+  );
+  const ended = new Promise<void>((ok) => child.once('close', () => ok()));
+  try {
+    await new Promise<void>((ok, fail) => {
+      child.once('error', fail);
+      child.stdout.once('data', () => ok());
+      child.once('close', () => fail(Error('lock holder closed early')));
+    });
+    let entered = false;
+    const contender = withVMDiskBudgetLock(join(work, 'leases'), async () => {
+      entered = true;
+    });
+    await new Promise((ok) => setTimeout(ok, 150));
+    assert.equal(entered, false, 'live Host owns the OS lock');
+    child.kill('SIGKILL');
+    await ended;
+    await contender;
+    assert.equal(entered, true, 'kernel released the dead Host lock');
+    await withVMDiskBudgetLock(join(work, 'leases'), async () => {});
+  } finally {
+    child.kill('SIGKILL');
+    await ended;
     await rm(work, { recursive: true, force: true });
   }
 });

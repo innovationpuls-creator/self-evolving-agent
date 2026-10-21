@@ -1119,7 +1119,7 @@ export class AgentService extends EventEmitter {
     await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
     await Promise.allSettled(
       [...this.active.values()].map(async (item) => {
-        await item.session.abort();
+        await Promise.all([item.loader.revoke(), item.session.abort()]);
         item.session.abortCompaction();
       }),
     );

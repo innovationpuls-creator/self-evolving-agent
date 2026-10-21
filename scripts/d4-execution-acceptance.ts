@@ -6,6 +6,7 @@ const command = promisify(execFile);
 const probes = [
   'd4-vm-acceptance',
   'd4-vm-formal-acceptance',
+  'd4-vm-backing-boundary',
   'd4-vm-failure-acceptance',
   'd4-vm-host-crash',
   'd4-vm-overhead',
@@ -17,9 +18,15 @@ const receipt = {
   executionCompleted: false,
   probes: [] as Array<{ name: string; completed: boolean; output: string }>,
   blockers: [
+    'formal_source_readable_and_executable_by_host_native_tools',
+    'live_vm_backing_readable_and_writable_by_same_uid',
+    'native_boot_chain_and_source_storage_authorization_not_established',
     'host_provisioning_and_control_plane_aggregate_budget_unproven',
-    'full_filesystem_lifecycle_network_dependency_matrix_incomplete',
+    'host_service_availability_during_resource_enforcement_unproven',
+    'unbound_vm_startup_recovery_and_full_fault_matrix_incomplete',
+    'explicit_filesystem_sharing_policy_not_verified',
     'vm_real_model_development_and_independent_retest_not_established',
+    'final_independent_security_review_not_approved',
   ],
 };
 await mkdir(resolve('release/d4-vm-evidence'), { recursive: true });

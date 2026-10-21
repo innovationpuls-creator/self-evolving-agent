@@ -129,6 +129,7 @@ private actor Lifetime {
                         if let p = stats.process { values["tasks"] = p.current; values["tasksLimit"] = p.limit }
                         if let m = stats.memory { values["memoryBytes"] = m.usageBytes; values["memoryLimit"] = m.limitBytes }
                         if let c = stats.cpu { values["cpuUsec"] = c.usageUsec; values["throttledUsec"] = c.throttledTimeUsec }
+                        if let e = stats.memoryEvents { values["oomKill"] = e.oomKill; values["oom"] = e.oom }
                         Wire.send(values)
                     }
                     do { try await Task.sleep(for: .milliseconds(250)) } catch { return }
@@ -136,6 +137,9 @@ private actor Lifetime {
             }
             defer { sampler.cancel() }
             let status = try await vm.wait()
+            if let final = try? await vm.statistics(categories: .memoryEvents), let e = final.memoryEvents {
+                Wire.send(["kind": "finalMemoryEvents", "activityId": id, "oomKill": e.oomKill, "oom": e.oom])
+            }
             Wire.send(["kind": "workloadExited", "activityId": id, "exitCode": status.exitCode])
             await stop("workload_exit")
             if cleanupFailed { throw ProbeError.cleanupFailed }

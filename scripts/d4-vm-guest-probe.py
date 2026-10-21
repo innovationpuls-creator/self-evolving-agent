@@ -1,5 +1,6 @@
 """Experimental adversarial workload. Its JSON is NOT trusted attestation."""
 import ctypes
+import base64
 import errno
 import json
 import os
@@ -8,6 +9,7 @@ import socket
 import subprocess
 import sys
 import time
+import threading
 
 mode = sys.argv[1]
 own = pathlib.Path('/tmp') / sys.argv[2]
@@ -79,6 +81,41 @@ if mode == 'boundary':
             s.close()
     print(json.dumps({'workloadReport': mode, 'denied': denied, 'cgroup': controls,
                       'fds': os.listdir('/proc/self/fd')}), flush=True)
+    inherited = []
+    for fd in range(3, 32):
+        try:
+            inherited.append({'fd': fd, 'bytes': base64.b64encode(os.pread(fd, 128, 0)).decode()})
+        except OSError:
+            pass
+    print(json.dumps({'inheritedFDProbe': inherited}), flush=True)
+elif mode == 'network':
+    targets = json.loads(sys.argv[4])
+    failures = {}
+    for name, family, kind, target in (
+            ('tcp4', socket.AF_INET, socket.SOCK_STREAM, (targets['address'], targets['tcp'])),
+            ('tcp6', socket.AF_INET6, socket.SOCK_STREAM, ('::1', targets['tcp6'])),
+            ('udp', socket.AF_INET, socket.SOCK_DGRAM, (targets['address'], targets['udp'])),
+            ('dns-transport', socket.AF_INET, socket.SOCK_DGRAM, (targets['address'], 53)),
+            ('unix', socket.AF_UNIX, socket.SOCK_STREAM, targets['unix'])):
+        s = socket.socket(family, kind)
+        s.settimeout(1)
+        try:
+            if kind == socket.SOCK_DGRAM:
+                s.sendto(b'non-authorized-probe', target)
+            else:
+                s.connect(target)
+            raise AssertionError('Guest reached Host endpoint: ' + name)
+        except OSError as error:
+            failures[name] = error.errno
+        finally:
+            s.close()
+    try:
+        socket.getaddrinfo('example.com', 443)
+        raise AssertionError('Guest DNS unexpectedly resolved')
+    except socket.gaierror as error:
+        failures['system-dns'] = error.errno
+    assert set(os.listdir('/sys/class/net')) == {'lo'}
+    print(json.dumps({'workloadReport':mode,'denied':failures,'interfaces':['lo']}),flush=True)
 elif mode == 'cpu':
     for _ in range(4):
         if os.fork() == 0:
@@ -115,6 +152,22 @@ elif mode == 'memory':
             time.sleep(5)
             os._exit(0)
     time.sleep(8)
+elif mode == 'threads':
+    threads = []
+    try:
+        for _ in range(160):
+            thread = threading.Thread(target=lambda: time.sleep(6))
+            thread.start()
+            threads.append(thread)
+        raise AssertionError('aggregate TID limit not enforced')
+    except RuntimeError as error:
+        assert 'thread' in str(error), error
+        assert 100 <= len(threads) < 128, len(threads)
+        print(json.dumps({'workloadReport': mode, 'threads': len(threads)}), flush=True)
+        time.sleep(2)
+    finally:
+        for thread in threads:
+            thread.join()
 elif mode == 'output':
     for _ in range(3):
         if os.fork() == 0:

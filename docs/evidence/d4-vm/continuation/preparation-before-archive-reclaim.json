@@ -1,0 +1,25 @@
+{
+  "admission": false,
+  "inputs": [
+    {
+      "name": "kata.tar.zst",
+      "url": "https://github.com/kata-containers/kata-containers/releases/download/3.32.0/kata-static-3.32.0-arm64.tar.zst",
+      "sha256": "8736c054d9223974735394f822000823baef509e1c33405ec798240fa9b6e4b5",
+      "max": 838860800,
+      "member": "opt/kata/share/kata-containers/vmlinux-6.18.35-197-debug",
+      "output": "vmlinux",
+      "outputSha256": "fb2cfb79eb1ae19447a85d75682d7fa5cfec97e24beb2609a492b806e8072c8d"
+    },
+    {
+      "name": "node.tar.xz",
+      "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-arm64.tar.xz",
+      "sha256": "fef00bb4d36e1c50104a9775a10359beee98f162b4104dd12472c75065c6a143",
+      "max": 67108864,
+      "member": "node-v24.22.0-linux-arm64/bin/node",
+      "output": "node-linux",
+      "outputSha256": "719a43d185f3b6a59d8fcbba1ff06b93c75f76fb0bb9916f81d33921615d4cb5"
+    }
+  ],
+  "elapsedMs": 1593.0711669999998,
+  "provisioningHostAggregateBudgetProven": false
+}
