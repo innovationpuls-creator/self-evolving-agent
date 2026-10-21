@@ -24,7 +24,10 @@ export function signingConfiguration(env: NodeJS.ProcessEnv = process.env): {
 }
 export async function signDesktop(appBundle: string) {
   const config = signingConfiguration();
-  const bridges = ['ReflectionBridge', 'D4Bridge'].map((name) => resolve(appBundle, `Contents/Helpers/${name}.app`));
+  const bridges = ['ReflectionBridge.app', 'D4Bridge.app', 'D4Execution'].map((name) =>
+    resolve(appBundle, `Contents/Helpers/${name}`),
+  );
+  bridges.push(resolve(appBundle, 'Contents/Resources/D4Execution'));
   // Reflection is signed inside-out with its existing sandbox entitlements by its builder.
   // osx-sign handles Electron frameworks/helpers and seals the final outer application.
   await sign({

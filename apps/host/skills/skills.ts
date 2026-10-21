@@ -1,4 +1,6 @@
 import { discoverSkillText } from './skill-discovery.js';
+import type { IsolatedExecutionContract, IsolatedSkillAdapter } from './isolated-execution.js';
+import { isolatedSourcePath } from './isolated-execution.js';
 import { dependencyIdentity, hostIdentity } from './skill-dependencies.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { cp, mkdir, readFile, writeFile, readdir, lstat, realpath, rm, rename, readlink } from 'node:fs/promises';
@@ -33,6 +35,7 @@ export interface ImportSkill {
   source: string;
   project?: string;
   bindings?: Binding[];
+  execution?: IsolatedExecutionContract;
 }
 export interface SkillRecord {
   id: string;
@@ -57,6 +60,7 @@ export interface SkillVersion {
   created: number;
   review?: { digest: string; notes: string; at: number };
   error?: string;
+  execution?: IsolatedExecutionContract;
 }
 export interface SkillOperation {
   id: string;
@@ -138,7 +142,11 @@ async function versionDigest(root: string, version: SkillVersion) {
     extensions: version.extensions,
     knowledgeFiles: version.knowledgeFiles,
   };
-  const runtime = meta.extensions.length ? await hostIdentity() : '';
+  const runtime = version.execution
+    ? JSON.stringify(version.execution)
+    : meta.extensions.length
+      ? await hostIdentity()
+      : '';
   const hash = createHash('sha256').update(JSON.stringify(meta)).update(runtime);
   for (const path of await files(root)) {
     const p = join(root, path),
@@ -160,6 +168,16 @@ async function copyTree(source: string, target: string) {
 }
 
 export class SkillService {
+  private isolatedAdapter?: IsolatedSkillAdapter;
+  setIsolatedAdapter(adapter: IsolatedSkillAdapter) {
+    if (this.isolatedAdapter) throw new SkillError('隔离执行器已经配置');
+    this.isolatedAdapter = adapter;
+  }
+  async isolatedRuntime(version: SkillVersion) {
+    await this.verify(version);
+    if (!version.execution || !this.isolatedAdapter) throw new SkillError('隔离执行器不可用');
+    return this.isolatedAdapter.open(version, this.packagePath(version));
+  }
   private apply?: ApplySkills;
   private tail = Promise.resolve();
   private pending = new Set<Promise<unknown>>();
@@ -271,7 +289,15 @@ export class SkillService {
     await this.verifyDependencies(v);
     const current = await versionDigest(this.root(v), v);
     if (current !== v.digest) throw new SkillError('版本内容或依赖已改变，需要重新审查');
-    if (v.extensions.length && v.review?.digest !== v.digest)
+    if (v.execution) {
+      if (
+        v.execution.kind !== 'd4-vm-v1' ||
+        v.execution.permissionProfile !== 'd4-data-only-v1' ||
+        !/^[a-f0-9]{64}$/.test(v.execution.runtimeDigest) ||
+        !this.isolatedAdapter?.supports(v.execution)
+      )
+        throw new SkillError('该版本要求的隔离执行契约尚不可用');
+    } else if (v.extensions.length && v.review?.digest !== v.digest)
       throw new SkillError('可执行版本尚未完成人工代码、依赖及权限审查');
   }
   private assertRevision(r: SkillRecord, revision: number) {
@@ -465,6 +491,7 @@ export class SkillService {
               knowledgeFiles: binding?.knowledgeFiles ?? [],
               digest: '',
               created: Date.now(),
+              ...(input.execution ? { execution: structuredClone(input.execution) } : {}),
             };
           v.digest = await versionDigest(destination, v);
           const record: SkillRecord = {
@@ -751,6 +778,7 @@ export class SkillService {
     const skillPaths: string[] = [],
       extensionPaths: string[] = [];
     const sources: SkillResourceSource[] = [];
+    const isolatedVersions: SkillVersion[] = [];
     for (const r of loadout.records.filter((r) => r.enabled && r.current && (!r.project || r.project === cwd))) {
       const v = loadout.versions.find((v) => v.id === r.current);
       if (!v) throw new SkillError('正式版本引用缺失');
@@ -775,18 +803,19 @@ export class SkillService {
       const skillPath = child(root, v.skillFile);
       const extensions = v.extensions.map((p) => child(this.packagePath(v), p));
       skillPaths.push(skillPath);
-      extensionPaths.push(...extensions);
+      if (v.execution) isolatedVersions.push(v);
+      else extensionPaths.push(...extensions);
       sources.push({
         skillPath,
         knowledgePaths: v.knowledgeFiles.map((file) => child(root, file)),
-        extensionPaths: extensions,
+        extensionPaths: v.execution ? [isolatedSourcePath(v.id)] : extensions,
         skillId: r.id,
         version: v.id,
         digest: v.digest,
         ...(latestKnowledge ? { knowledgeRevision: latestKnowledge.id } : {}),
       });
     }
-    return { skillPaths, extensionPaths, sources };
+    return { skillPaths, extensionPaths, sources, isolatedVersions };
   }
   filterNative(skills: Skill[], cwd: string, loadout = this.loadout()) {
     const relevant = loadout.records.filter((r) => !r.project || r.project === cwd);

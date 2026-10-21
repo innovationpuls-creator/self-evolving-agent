@@ -1,8 +1,10 @@
 import { discoverSkillText } from './skill-discovery.js';
+import type { IsolatedSkillRuntime } from './isolated-execution.js';
 import {
   DefaultResourceLoader,
   loadSkills,
   createToolSearchExtension,
+  createCodemodeExtension,
   type ResourceLoader,
   type SettingsManager,
 } from '@earendil-works/pi-coding-agent';
@@ -14,6 +16,15 @@ export class SkillResourceLoader implements ResourceLoader {
   private selected?: SkillLoadout;
   private skillPaths: string[] = [];
   private sources: readonly SkillResourceSource[] = [];
+  private isolated: IsolatedSkillRuntime[] = [];
+  async revoke() {
+    await Promise.all(this.isolated.map((runtime) => runtime.revoke()));
+  }
+  async close() {
+    const current = this.isolated;
+    await Promise.all(current.map((runtime) => runtime.close()));
+    this.isolated = [];
+  }
   constructor(
     private service: SkillService,
     private cwd: string,
@@ -30,6 +41,13 @@ export class SkillResourceLoader implements ResourceLoader {
     const loadout = this.selected ?? this.service.loadout();
     const paths = await this.service.resourcePaths(this.cwd, loadout);
     const native = await discoverSkillText(this.cwd);
+    const isolated: IsolatedSkillRuntime[] = [];
+    try {
+      for (const version of paths.isolatedVersions) isolated.push(await this.service.isolatedRuntime(version));
+    } catch (error) {
+      await Promise.allSettled(isolated.map((runtime) => runtime.close()));
+      throw error;
+    }
     const base = new DefaultResourceLoader({
       cwd: this.cwd,
       agentDir: this.agentDir,
@@ -38,7 +56,11 @@ export class SkillResourceLoader implements ResourceLoader {
       noSkills: true,
       additionalExtensionPaths: paths.extensionPaths,
       additionalSkillPaths: paths.skillPaths,
-      extensionFactories: [createToolSearchExtension()],
+      extensionFactories: [
+        createToolSearchExtension(),
+        ...(isolated.length ? [createCodemodeExtension({ mode: 'on' })] : []),
+        ...isolated.map((runtime) => ({ name: runtime.name, factory: runtime.factory })),
+      ],
       skillsOverride: (base) => {
         const text = this.service.filterNative(native.skills, this.cwd, loadout);
         const combined = loadSkills({
@@ -61,9 +83,12 @@ export class SkillResourceLoader implements ResourceLoader {
     try {
       await base.reload();
       if (base.getExtensions().errors.length) throw new SkillError('Extension 加载失败，正式版本未改变');
+      await this.close();
+      this.isolated = isolated;
       this.base = base;
       this.sources = paths.sources;
     } catch (error) {
+      await Promise.allSettled(isolated.map((runtime) => runtime.close()));
       this.skillPaths = previousPaths;
       throw error;
     }

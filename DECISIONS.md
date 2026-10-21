@@ -1,5 +1,7 @@
 # 当前开发决策索引
 
+- 2026-10-21 D4 独立 VM 验证与存储回收修复见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)。Containerization 0.52.1 签名 helper 与受限 Skill 契约仅供实验；控制面预算、完整恢复与六项矩阵仍缺证，**D4 不准入**，正常客户端不启用，不将测试通过转为高权限加载资格。
+
 - D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 已实施代码执行隔离准入原型，同容器活动隔离、后代清理、活动资源限制与高权限自动发布仍有阻断，**不准入**，详见 [D4-SANDBOX-ACCEPTANCE.md](D4-SANDBOX-ACCEPTANCE.md)；D4 产品流程与 D5 尚未实施。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。

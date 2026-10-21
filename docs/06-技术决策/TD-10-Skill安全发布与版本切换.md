@@ -1,5 +1,7 @@
 # TD-10：Skill 安全发布与版本切换
 
+2026-10-21 [D4 受限执行契约实验](../D4-VM-EXECUTION-REVIEW.md)在既有 SkillVersion 中增加可选 execution 字段，绑定版本摘要、权限 profile 与 Guest runtimeDigest；候选、加载、reload、rollback、重启均按契约分流。适配器仅由可信应用注入，普通客户端未启用；旧版本保留人工审查语义，不新增 Tool 版本库，不把实验安全复审写成 D2 review，D4 仍不准入。
+
 ## 最终方案
 
 采用 **不可变版本 + 独立验证 + 空闲切换 + 失败回退**。Pi Package 负责分发与资源加载，原生 Extension 执行 Tool/Hooks，宿主只补必要的发布控制。

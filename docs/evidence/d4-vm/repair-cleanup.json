@@ -1,0 +1,23 @@
+{
+  "scope": "Only assets recreated for bounded disk/package repair verification; no VM launched after repair",
+  "deleted": [
+    {
+      "path": "release/d4-execution-work",
+      "allocatedBytes": 429449216
+    },
+    {
+      "path": "release/d4-execution",
+      "allocatedBytes": 55017472
+    },
+    {
+      "path": "release/d4-package-recovery-test",
+      "allocatedBytes": 623591424
+    },
+    {
+      "path": "apps/desktop/native/evolution/vm/.build",
+      "allocatedBytes": 1713500160
+    }
+  ],
+  "preserved": "source, fixed candidate databases, historical release builds, frozen receipts",
+  "dfAfter": "Filesystem      Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk3s5    494G    234G    201G    54%    2.5M  2.0G    0%   /System/Volumes/Data\n"
+}

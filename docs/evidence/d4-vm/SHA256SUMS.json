@@ -1,0 +1,210 @@
+{
+  "admission": false,
+  "files": [
+    {
+      "file": "agent-d4-build-final.log.gz",
+      "bytes": 501,
+      "sha256": "5261e19ac6b85987467fc936108dbce1c00d39b6953b247a1ace31953c50cd96"
+    },
+    {
+      "file": "agent-d4-cleanup-focused.log.gz",
+      "bytes": 491,
+      "sha256": "a3bf435e53daf4531326893e2d2bd1abff8105072fda5d61115b4d9758f7be24"
+    },
+    {
+      "file": "agent-d4-disk-before-download-fix.log.gz",
+      "bytes": 440,
+      "sha256": "b11853f5635be5c896af094ba70f421e6b7d604dff34a63b9cb726e180436756"
+    },
+    {
+      "file": "agent-d4-disk-final.log.gz",
+      "bytes": 472,
+      "sha256": "83238199c31eae01a56b1b5b51ae00104d94422f49be110abc6fee9cbe5e978c"
+    },
+    {
+      "file": "agent-d4-format-check-last.log.gz",
+      "bytes": 111,
+      "sha256": "be01deccc6610c22e77408c62f72993dcb15de543e874f08e418e36923c1778e"
+    },
+    {
+      "file": "agent-d4-lint-last.log.gz",
+      "bytes": 3425,
+      "sha256": "dfb13d3b9f34acccb5b3c983654b5a73d86e2ae05d1ef02f472f51bf3d1242fb"
+    },
+    {
+      "file": "agent-d4-package-recovery.log.gz",
+      "bytes": 255,
+      "sha256": "1fb862decfd9756ebe477a1ab808db38254919b145a212bc7bb46140149a4551"
+    },
+    {
+      "file": "agent-d4-recovery-browser.log.gz",
+      "bytes": 182,
+      "sha256": "88486c59ec163305c83bb4850216ac8af5fd6a3e16197efb0c9e255de56f362c"
+    },
+    {
+      "file": "agent-d4-recovery-desktop.log.gz",
+      "bytes": 273,
+      "sha256": "33c1161c1ee487874b2cd654d039359a7df2f7f657e0fe7c04b69eb3534295bd"
+    },
+    {
+      "file": "agent-d4-recovery-owner-build.log.gz",
+      "bytes": 350,
+      "sha256": "d547138e2fcdd6222c027aa444c67b9b305210d82394b114118321a6b3130307"
+    },
+    {
+      "file": "agent-d4-regression-before-download-fix.log.gz",
+      "bytes": 6833,
+      "sha256": "e9013ef3b7e465711ac932ccd6e1c24df6e7404603c32ddc86c62af19d92a2d0"
+    },
+    {
+      "file": "agent-d4-regression-final.log.gz",
+      "bytes": 6880,
+      "sha256": "73042b1532f68d9b65694ef01af995fcf99c53ce8a4af59688612b8b2a4a406c"
+    },
+    {
+      "file": "agent-d4-shared-xpc.log.gz",
+      "bytes": 555,
+      "sha256": "ff77b1360455bd782df824f9127ef5f83d0ff1575340e3d59df6d23c26d3ad8e"
+    },
+    {
+      "file": "agent-d4-typecheck-last.log.gz",
+      "bytes": 113,
+      "sha256": "14b641ebf368918ba55a1457cee5ad5454e5eaf9598ad59c2d99c7f1a704e853"
+    },
+    {
+      "file": "boundary-resource-before-cleanup.json.gz",
+      "bytes": 9271,
+      "sha256": "ff4c4352afddcef32c1971c3ce44d053e7564c8053cc9d0a519e894ad744aa40"
+    },
+    {
+      "file": "desktop-vm-before-cleanup.json.gz",
+      "bytes": 456,
+      "sha256": "b7904a3730bcf382ef31cd38a2b9671f208d192fca4a00af7daaa814e57ab96c"
+    },
+    {
+      "file": "failed-final-aggregate.json.gz",
+      "bytes": 814,
+      "sha256": "4bdf78341b311fb780717a4e158f30d493669da437f71b40e8d382719c22bb02"
+    },
+    {
+      "file": "failed-final-formal.json.gz",
+      "bytes": 67389,
+      "sha256": "4927afa0be32804403ceb09304b8405ef1f26ac28e603e978759e2a8cff502e4"
+    },
+    {
+      "file": "faults-before-cleanup.json.gz",
+      "bytes": 828,
+      "sha256": "ea5e90a63968fe64b1267ad34b37a7ea385cd7032381f9934ba7a3608ef843f8"
+    },
+    {
+      "file": "formal-before-cleanup.json.gz",
+      "bytes": 174239,
+      "sha256": "c53283e6da1838c24ed658b41d4776221d2913d82d8c14edd3888d6b1e21301f"
+    },
+    {
+      "file": "host-crash-before-cleanup.json.gz",
+      "bytes": 944,
+      "sha256": "ff98b481768d8ace5ff74f5a98251fb3a5f2c658610458fb043c5185946201cf"
+    },
+    {
+      "file": "input-preparation-timeout.log.gz",
+      "bytes": 296,
+      "sha256": "eb5d7cf26947be3ac9661545d3cecacad2a7e536bd22c7cd333f8fd1650a0f3a"
+    },
+    {
+      "file": "overhead-before-cleanup.json.gz",
+      "bytes": 2516,
+      "sha256": "d3b27bfbf4b8d2efd8d9137ea7772d7430a1e4e256a8e4e11dbadb79d95cbfe2"
+    },
+    {
+      "file": "prior-config.json",
+      "bytes": 743,
+      "sha256": "f334ea7604c592f18e71f6ffd70c3939c1d51ad4a72a426fc16f7acbcaeafd00"
+    },
+    {
+      "file": "prior-index.json",
+      "bytes": 3336,
+      "sha256": "cbd3b13cdf7cf3f05ccfc4cb26f845f1b4cffe6d9ee73376e5d56e840151643c"
+    },
+    {
+      "file": "prior-owner.json",
+      "bytes": 365,
+      "sha256": "ceb3d9b4dbb777a276d207a85990b29d2ac8245874d0c5de8ba83488b25f789d"
+    },
+    {
+      "file": "prior-prepared.json",
+      "bytes": 412,
+      "sha256": "81cd180691f9a9e686a65d422ce56781390f8667a2b547add2455f2fb0462b01"
+    },
+    {
+      "file": "prior-runtime.json",
+      "bytes": 123,
+      "sha256": "c1c86f4a97b5aab48f06fd4f07022b6b4353623b9a43ec029c915c847a73d793"
+    },
+    {
+      "file": "repair-cleanup.json",
+      "bytes": 787,
+      "sha256": "7bf580b56396a79f542ef990ca576c79cde4701c57a59c164614e56408e24ee3"
+    },
+    {
+      "file": "repair-log-index.json",
+      "bytes": 3549,
+      "sha256": "2b403edf5706e04ea0304172f58a57c3a7903368a119436cfaabb7456ada5755"
+    },
+    {
+      "file": "repair-verification.json",
+      "bytes": 1802,
+      "sha256": "1f8a77a7227c6bc78099fe322feb49cd48bacde7cef083aa9587e40ebcc9ced7"
+    },
+    {
+      "file": "temporary-artifact-cleanup.json.gz",
+      "bytes": 288,
+      "sha256": "3f18708d25f66c1ea841c4451f8f3d4ca3030ae535c6eb16f3e3230bdc86cc0d"
+    },
+    {
+      "file": "urgent-cleanup.json.gz",
+      "bytes": 2466,
+      "sha256": "cd04512a5bf0a3953332e0c774c5e4bc81887ce90230d8ad2086d66d82699a63"
+    }
+  ],
+  "sourceSha256": {
+    "apps/desktop/native/evolution/vm/Package.swift": "2316586e559c41fa5f82bd75c140f13c1923cfff6b20aa38557e3a63c73c030d",
+    "apps/desktop/native/evolution/vm/Sources/D4VMOwner/Owner.swift": "57778683f53333c7c9aa59cf5ba1cb4473cebad650733050fe3fc1d1289a722c",
+    "apps/desktop/native/evolution/vm/Sources/D4VMOwner/guest-launcher.py": "7617cd8697b8b2a211a55370191efa2a45cb8660c55ac68110cf61ba7ff6f8dc",
+    "apps/desktop/native/evolution/vm/observer.c": "cb5baa73f2902bc20fd622d0521be0adba7506f35169ce56dcda70867218e68e",
+    "apps/desktop/native/evolution/vm/owner.entitlements": "915e2b39357ecf8d211dc7fac43195c9cdcf55a0a1ecdbf931c116a4eac421f3",
+    "apps/desktop/native/evolution/vm/skill-worker.mjs": "7b10b91f4359d3af6d84dafdc5a1b9b8abeba84043ac8ce54ce62812d182c01e",
+    "apps/host/evolution/sandbox/candidate.ts": "c1eaf69e36e25a1ebd3d0731a418eea7ef3fb0cde8d26dc960a2b23de1b9fcea",
+    "apps/host/evolution/sandbox/isolated-skill-adapter.ts": "01db363507b6f94778d512795b529a1ca842b798ddb7d58808a5ab33eccc5824",
+    "apps/host/evolution/sandbox/vm-assets.ts": "5e09273d3775cb8a28f12955d2199f901d23cc4337b0816c52575df6641eaba2",
+    "apps/host/evolution/sandbox/vm-channel.ts": "7eeb8889180285cc472737501626d8b7f52554417f1e0b81f677baee540cc467",
+    "apps/host/evolution/sandbox/vm-disk.ts": "66a4704678436225ca677d7c93da576f184cde2975d979f8d79d9117542fc68c",
+    "apps/host/runtime/agent.ts": "56a504266f2e3ca5b0254ca99953c30c50392de016b436ebcd5a8c7986e0dde6",
+    "apps/host/skills/isolated-execution.ts": "7d985251d8045431baecb98f447b1984bb69ca8c4242b966e1016766f42a5477",
+    "apps/host/skills/skill-loader.ts": "18312c5279082e8eb3fc1578a81a4ba232179f48c8901281c10db3d46f00c683",
+    "apps/host/skills/skills.ts": "cb065dffcaad7640710341de618d9e1fbfeea747d67a3469eb725591682310bc",
+    "scripts/build-d4-vm.ts": "d826eadbe981ed02d271f3320628e1f6ca1369191a02f4e7a0aedd897552ddb7",
+    "scripts/build-reflection-native.ts": "a3cab17c3e8abab787fd593baa53de82edc6147055c9ad0635e5db8fb7537837",
+    "scripts/d4-download.ts": "1a837f7aa7623bc536500c526a4885972fbf6d305ad0627c2b5a6b4fb06be310",
+    "scripts/d4-execution-acceptance.ts": "36e1d0a1db4c03db565dfc3962fdac6dec1057dff0dc400af4fe23421fa635cc",
+    "scripts/d4-vm-acceptance.ts": "8f93b4ff31feca935429c08962706f120c93726d2464c7dfec76eca64ebe2fd1",
+    "scripts/d4-vm-desktop-acceptance.ts": "2b95bcdd4deec01a53111ec4f149bf5db762e15ec8838aceee8be079ed9e5fb2",
+    "scripts/d4-vm-failure-acceptance.ts": "852c7ec5457860b8689cf5db8737a1f20170f95de3d35ffaf7866abc3ae326c8",
+    "scripts/d4-vm-formal-acceptance.ts": "ac8dad4b633d61899e73921c14e5ab01b343f6af9025858a4d1c202f2902e95d",
+    "scripts/d4-vm-guest-probe.py": "c254d368ab2bf2c786ac62e66c52a9e781767e7cee75b2e57bb327265040442f",
+    "scripts/d4-vm-host-crash.ts": "9dd9a8b0025dae37a7f23d9732a01e79db23ec399e0ef1ce4e048fccdeae8413",
+    "scripts/d4-vm-overhead.ts": "ef232d205e85024e9d81025b35dc512b65a61e60cba347e8b22c51fbabab4199",
+    "scripts/d4-vm-skill-acceptance.ts": "eddc7bb1fabd779c3266c0d104e35ae87aa2bcee5136974dd05fa8e7a101dd6f",
+    "scripts/desktop-package-policy.ts": "4ec68c60de0efc8ddd5f77577d85c12c7624a1d8d4a15000b9470a8b5ea31952",
+    "scripts/desktop-package-resources.ts": "d8c5a65b192bfc2fd9cf1acb3c9dc74297ddb2c39ead85a9bea52feeb5682c45",
+    "scripts/fixtures/d4-vm-host-controller.ts": "d77f20388052a0f25d7d64394a94422749c26f9d181e84529243bef069024202",
+    "scripts/package-desktop.ts": "f14315e66065cf3b9239931d9dca72dd804732527df8fdc21923e4309a9bc47b",
+    "scripts/prepare-d4-vm-inputs.ts": "c2ebebe9646a834f4d8584730e2af7d936db89ed834f6f0604cdb94a07a8a9b5",
+    "scripts/prepare-d4-vm-runtime.ts": "426d1e9e19a03657618e54df60882fb854a21a2f617ca0ee894d4fe0febdfda0",
+    "scripts/sign-desktop.ts": "55733b8988275d2d918313b56c815e7c1ce63a267360af8c9496a00c54f78e8b",
+    "tests/d4-disk.test.ts": "506f78821ac5d680f31a47d0b23feb375a10bfbac876f4887baf47b1c0d13de8",
+    "tests/d4-sandbox.test.ts": "98eedbefecb31c2b25002bfce34ddca5f3d9bcb4bd04a778501265b5828db658",
+    "tests/fixtures/d4-disk-child.ts": "86e8690489ea2b7afa611f7c53e6af322a9120b7bc7ff71504aff8a5469064c3",
+    "tests/fixtures/d4-isolated-skill.ts": "ae889e42763d82edc518b9a4556be31d29b2567dbbbc39bfef6b151966fd4874"
+  }
+}

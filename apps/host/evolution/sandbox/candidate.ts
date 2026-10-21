@@ -80,8 +80,8 @@ export class CandidateStaging {
       throw error;
     }
   }
-  async verify(executionClosed: boolean, descendantsStopped: boolean) {
-    if (this.revoked || !this.accepted || !this.digest || !executionClosed || !descendantsStopped)
+  async verify(closure: unknown) {
+    if (this.revoked || !this.accepted || !this.digest || !isVerifiedVMClosure(closure, this.runId))
       throw new Error('candidate_not_frozen');
     return this.inspect();
   }
@@ -114,3 +114,4 @@ export class CandidateStaging {
     await rm(this.directory, { recursive: true, force: true });
   }
 }
+import { isVerifiedVMClosure } from './vm-channel.js';

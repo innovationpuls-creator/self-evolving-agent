@@ -1,0 +1,13 @@
+{
+  "protocol": 1,
+  "sdk": "0.52.1",
+  "team": "7UK53LNNF8",
+  "sha256": "eaf91d6239ce4f7236ba154ebd91f359595715b91eaca203171857e80667fd6a",
+  "observerSha256": "a66763f98d00e219e34e2bf8c690fc1c8579b6b265e8500506cd2b3c028a45a2",
+  "capabilities": {
+    "executionAdmission": false,
+    "protocol": 1,
+    "sdk": "0.52.1",
+    "virtualizationSupported": true
+  }
+}

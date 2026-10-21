@@ -1,0 +1,76 @@
+{
+  "admission": false,
+  "scope": "Disk/package repair and current normal product regression; shared-xpc log is the rejected symlink attempt",
+  "logs": [
+    {
+      "file": "agent-d4-regression-final.log.gz",
+      "sha256": "73042b1532f68d9b65694ef01af995fcf99c53ce8a4af59688612b8b2a4a406c",
+      "uncompressedSha256": "99453836fa4b645dfe5f18d13c18d126a55f532f8fce3aecc28e9c43a048e8c9"
+    },
+    {
+      "file": "agent-d4-disk-final.log.gz",
+      "sha256": "83238199c31eae01a56b1b5b51ae00104d94422f49be110abc6fee9cbe5e978c",
+      "uncompressedSha256": "c4570c91561bd069d8b78c06db24cb3cb34e4ebc0a87ef1a8671ec64dfa708eb"
+    },
+    {
+      "file": "agent-d4-cleanup-focused.log.gz",
+      "sha256": "a3bf435e53daf4531326893e2d2bd1abff8105072fda5d61115b4d9758f7be24",
+      "uncompressedSha256": "e3733ec5c15a34525312ab85c53c29fc6d0d7f9db90c2c4c0fe39e8592d4939c"
+    },
+    {
+      "file": "agent-d4-package-recovery.log.gz",
+      "sha256": "1fb862decfd9756ebe477a1ab808db38254919b145a212bc7bb46140149a4551",
+      "uncompressedSha256": "3dbb6d3a2c6f718a4a1bcc813600e3a1744fd4357bde67908100eee30f01c0d9"
+    },
+    {
+      "file": "agent-d4-recovery-desktop.log.gz",
+      "sha256": "33c1161c1ee487874b2cd654d039359a7df2f7f657e0fe7c04b69eb3534295bd",
+      "uncompressedSha256": "05b1d4111e830bd7b7cf47f17bcee7083ea624bd82b073b71119ae8439c4ab24"
+    },
+    {
+      "file": "agent-d4-recovery-browser.log.gz",
+      "sha256": "88486c59ec163305c83bb4850216ac8af5fd6a3e16197efb0c9e255de56f362c",
+      "uncompressedSha256": "c6cd84a0985deb167e8f6867afa9da5a1fd202b342443878497c9252b9bf94ad"
+    },
+    {
+      "file": "agent-d4-typecheck-last.log.gz",
+      "sha256": "14b641ebf368918ba55a1457cee5ad5454e5eaf9598ad59c2d99c7f1a704e853",
+      "uncompressedSha256": "7a94d08118cbbecac2c5699f96bf9389c5d298ffa3deda22f020c3df84b57d30"
+    },
+    {
+      "file": "agent-d4-build-final.log.gz",
+      "sha256": "5261e19ac6b85987467fc936108dbce1c00d39b6953b247a1ace31953c50cd96",
+      "uncompressedSha256": "8d5831d87dc7a40cff4e2f10f4dd3894aab64d9234c0ad877337df7f742b0d67"
+    },
+    {
+      "file": "agent-d4-lint-last.log.gz",
+      "sha256": "dfb13d3b9f34acccb5b3c983654b5a73d86e2ae05d1ef02f472f51bf3d1242fb",
+      "uncompressedSha256": "2e138817263b0fdc7c1216033cd457567da0baa91b76eddf2b9fe65cd3d33559"
+    },
+    {
+      "file": "agent-d4-format-check-last.log.gz",
+      "sha256": "be01deccc6610c22e77408c62f72993dcb15de543e874f08e418e36923c1778e",
+      "uncompressedSha256": "d29afc68c0afa916971361f9264ecb6f972b0f965b5393e26c7e965045c5b5ee"
+    },
+    {
+      "file": "agent-d4-recovery-owner-build.log.gz",
+      "sha256": "d547138e2fcdd6222c027aa444c67b9b305210d82394b114118321a6b3130307",
+      "uncompressedSha256": "6d603fa3a90674eb041ddb4be630efc2037f96e4e6ce37f426d582da1f994bae"
+    },
+    {
+      "file": "agent-d4-shared-xpc.log.gz",
+      "sha256": "ff77b1360455bd782df824f9127ef5f83d0ff1575340e3d59df6d23c26d3ad8e",
+      "uncompressedSha256": "02e560b55a87c1d33abed0cd8647f290fc5ab81e6a601701928276a1dfabf476"
+    },
+    {
+      "file": "agent-d4-regression-before-download-fix.log.gz",
+      "sha256": "e9013ef3b7e465711ac932ccd6e1c24df6e7404603c32ddc86c62af19d92a2d0",
+      "uncompressedSha256": "b5d4d6b2454cf70289d6e37bc452afb9137e1099dc107239732c674c1c470711"
+    },
+    {
+      "file": "agent-d4-disk-before-download-fix.log.gz",
+      "sha256": "b11853f5635be5c896af094ba70f421e6b7d604dff34a63b9cb726e180436756",
+      "uncompressedSha256": "241f3f6a15eac041a873eea7a9c09619157dfc33f67ea8ff35640f13e07ad340"
+    }
+  ]
+}

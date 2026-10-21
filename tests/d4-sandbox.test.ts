@@ -55,13 +55,14 @@ test('D4 staging rejects wrong authorization, duplicate export, missing cleanup 
     const result = await staging.accept(raw);
     assert.equal(result.digest, candidateFiles(raw).digest);
     await assert.rejects(staging.accept(raw));
-    await assert.rejects(staging.verify(false, true));
-    await assert.rejects(staging.verify(true, false));
-    assert.equal((await staging.verify(true, true)).digest, result.digest);
+    await assert.rejects(staging.verify(false));
+    await assert.rejects(staging.verify(true));
+    await assert.rejects(staging.verify({ activityId: raw.runId, stoppedAt: Date.now(), identities: [] }));
+    assert.equal((await staging.inspect()).digest, result.digest);
     await writeFile(join(staging.directory, 'extensions/tool.js'), 'changed');
-    await assert.rejects(staging.verify(true, true));
+    await assert.rejects(staging.inspect());
     await staging.revoke();
-    await assert.rejects(staging.verify(true, true));
+    await assert.rejects(staging.verify(undefined));
   } finally {
     await rm(root, { recursive: true, force: true });
   }
@@ -73,12 +74,12 @@ test('D4 extra files and symlinks cannot enter frozen candidate', async () => {
   try {
     await staging.accept(raw);
     await writeFile(join(staging.directory, 'extra.js'), 'injected');
-    await assert.rejects(staging.verify(true, true));
+    await assert.rejects(staging.inspect());
     await rm(join(staging.directory, 'extra.js'));
     await rm(join(staging.directory, 'extensions/tool.js'));
     await writeFile(join(root, 'outside'), 'export default()=>{}');
     await symlink(join(root, 'outside'), join(staging.directory, 'extensions/tool.js'));
-    await assert.rejects(staging.verify(true, true));
+    await assert.rejects(staging.inspect());
   } finally {
     await rm(root, { recursive: true, force: true });
   }

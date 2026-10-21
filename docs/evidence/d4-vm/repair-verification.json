@@ -1,0 +1,61 @@
+{
+  "admission": false,
+  "profile": {
+    "profile": "desktop",
+    "totalKiB": 602468,
+    "frameworksKiB": 294788,
+    "helpersKiB": 215504,
+    "resourcesKiB": 89860,
+    "maxKiB": 786432
+  },
+  "verification": {
+    "appleDevelopmentDeepStrict": true,
+    "signedXPCRegression": "passed",
+    "allTests": {
+      "passed": 169,
+      "failed": 0,
+      "skipped": 0
+    },
+    "desktop": "passed",
+    "browser": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "lint": "passed with warnings",
+    "format": "passed"
+  },
+  "vmCleanupAfterRepair": "NOT VERIFIED: fixed kernel archive fetch timed out after 600 seconds; no new VM started",
+  "independentReview": {
+    "scope": "read-only code, report and frozen prior receipts; no VM rerun; no D2 review record",
+    "findingsClosed": [
+      "concurrent recovery/allocate race",
+      "cwd-dependent disk budget",
+      "unproven file ownership on recovery",
+      "package output symlink alias bypass",
+      "download failure cleanup without exclusive file ownership"
+    ],
+    "remaining": [
+      "crash while budget lock is held",
+      "launched VM without bound identity",
+      "Host provisioning/control-plane aggregate limits",
+      "full six-item acceptance matrix"
+    ]
+  },
+  "inputPreparation": {
+    "status": "failed",
+    "reason": "TimeoutError after 600 seconds",
+    "partialBytes": 274710491
+  },
+  "rebuiltHelper": {
+    "protocol": 1,
+    "sdk": "0.52.1",
+    "team": "7UK53LNNF8",
+    "sha256": "a3553ac58b843f0396d349ea9d3541c243a0c16e44afd2572ecfb2762f0e15ef",
+    "observerSha256": "f158f5a73a43b5408df161a65a1c41237210e6c5661435382561e7d1f0cb23e8",
+    "capabilities": {
+      "executionAdmission": false,
+      "protocol": 1,
+      "sdk": "0.52.1",
+      "virtualizationSupported": true
+    }
+  }
+}

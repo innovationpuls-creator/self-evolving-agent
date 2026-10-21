@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { signingConfiguration } from './sign-desktop.js';
+import { trimDependencyMetadata } from './desktop-package-resources.js';
 import { spawnSync } from 'node:child_process';
 import { cp, mkdir, readFile, readdir, rm, writeFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -164,6 +165,7 @@ export async function buildReflectionNative(
     recursive: true,
     filter: (path) => !path.split('/').some((part) => part === '.bin' || part === '@agent'),
   });
+  await trimDependencyMetadata(join(runtime, 'node_modules'));
   if (d4) {
     await cp(join(node.executable, '../../lib/node_modules/npm'), join(runtime, 'toolchains/npm'), { recursive: true });
     await mkdir(join(runtime, 'toolchains/bin'), { recursive: true });
