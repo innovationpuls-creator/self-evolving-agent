@@ -1,6 +1,6 @@
 # 当前开发决策索引
 
-2026-10-21 D5/D6 交付范围修订：不再将整套自进化核心移植为原生 Pi Package；改为遵循官方 Extension 规范的独立诊断模块，供 Agent 按需查询 RE-04 定义的高价值会话日志与证据。D5 聚焦 macOS 个人自用的数据备份、迁移/恢复、凭证与远程认证、长期稳定、手动更新，不要求付费 Developer ID 公证、Windows 实机或自动更新器；Windows 未经验证的受限 Reflection 不得降级执行。D5 验收后另设 D6 最终 UI/UX 设计与改造，重点是日常使用的理解性、信息架构、渐进披露和审美，优先复用成熟开源组件与素材。
+2026-10-21 D5/D6 交付范围修订：不再将整套自进化核心移植为原生 Pi Package；改为遵循官方 Extension 规范的独立诊断模块，供 Agent 按需查询 RE-04 定义的高价值会话日志与证据。D5 聚焦 macOS 个人自用的数据备份、迁移/恢复、凭证与远程认证、长期稳定、手动更新，不要求付费 Developer ID 公证、Windows 实机或自动更新器；Windows 未经验证的受限 Reflection 不得降级执行。D5 验收后另设 D6 最终 UI/UX 设计与改造：Codex 调研并制作可交互 Demo、解释方案差异；用户对信息架构、模块显隐、交互与视觉方向拥有最终决定权。用户明确确认方案后才能改造正式前端，先前不得以 Codex 的偏好或 Demo 自动替换生产 UI。优先复用成熟开源组件与素材。
 
 2026-10-21 用户纠偏：D4 不以沙箱、VM、Native Broker 或 Host 无法读取候选源码作为产品需求与准入条件。按 Pi SDK 原生 AgentSession、Tool Calling、Skill/Extension 和既有 SkillVersion 实施授权开发、测试、生效和回退。D4 沙箱原型源码退出当前产品，历史失败报告仅供追溯；D3 已验收 Reflection 实现不受此决定影响。D4 首版业务闭环已实现并通过本机真实 Pi/Web 场景及 Desktop 交互验收，详见 [D4-ACCEPTANCE.md](D4-ACCEPTANCE.md)。
 
