@@ -24,10 +24,7 @@ export function signingConfiguration(env: NodeJS.ProcessEnv = process.env): {
 }
 export async function signDesktop(appBundle: string) {
   const config = signingConfiguration();
-  const bridges = ['ReflectionBridge.app', 'D4Bridge.app', 'D4Execution'].map((name) =>
-    resolve(appBundle, `Contents/Helpers/${name}`),
-  );
-  bridges.push(resolve(appBundle, 'Contents/Resources/D4Execution'));
+  const bridge = resolve(appBundle, 'Contents/Helpers/ReflectionBridge.app');
   // Reflection is signed inside-out with its existing sandbox entitlements by its builder.
   // osx-sign handles Electron frameworks/helpers and seals the final outer application.
   await sign({
@@ -39,7 +36,7 @@ export async function signDesktop(appBundle: string) {
     type: config.mode,
     preAutoEntitlements: false,
     preEmbedProvisioningProfile: false,
-    ignore: (path) => bridges.some((bridge) => resolve(path) === bridge || resolve(path).startsWith(bridge + sep)),
+    ignore: (path) => resolve(path) === bridge || resolve(path).startsWith(bridge + sep),
     optionsForFile: () => ({ hardenedRuntime: config.mode === 'distribution', timestamp: config.timestamp }),
   });
   execFileSync('codesign', ['--verify', '--deep', '--strict', appBundle], { stdio: 'pipe' });

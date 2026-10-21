@@ -21,14 +21,7 @@
     "test:desktop": "tsx scripts/desktop-smoke.ts",
     "test:browser": "tsx scripts/browser-smoke.ts",
     "test:skills:browser": "tsx scripts/skills-browser-smoke.ts",
-    "test:skills:ui": "tsx scripts/skills-ui-smoke.ts",
-    "test:d4:sandbox": "tsx scripts/d4-sandbox-acceptance.ts",
-    "build:d4:vm": "tsx scripts/build-d4-vm.ts",
-    "prepare:d4:vm": "tsx scripts/prepare-d4-vm-inputs.ts",
-    "prepare:d4:runtime": "tsx scripts/prepare-d4-vm-runtime.ts",
-    "test:d4:vm": "tsx scripts/d4-vm-acceptance.ts",
-    "test:d4:formal": "tsx scripts/d4-vm-formal-acceptance.ts",
-    "test:d4:execution": "tsx scripts/d4-execution-acceptance.ts"
+    "test:skills:ui": "tsx scripts/skills-ui-smoke.ts"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.3.0",

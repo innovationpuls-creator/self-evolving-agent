@@ -1,10 +1,10 @@
 # 当前开发决策索引
 
-新增隔离 Skill 的受限契约已获用户批准：仅公开应用生成的 Skill/Tool/Hook 使用说明，源码与执行保留 Guest；旧版本不迁移。当前实测 Host 原生 read/bash 能读取并导入原始版本源码，同 UID 可读写 live VM backing，故仍不满足该契约；不得仅隐藏路径、修改 Prompt 或回退 Host import。详见执行环境复审的源码边界反例和最小 native broker 方案。
+2026-10-21 用户纠偏：D4 不以沙箱、VM、Native Broker 或 Host 无法读取候选源码作为产品需求与准入条件。按 Pi SDK 原生 AgentSession、Tool Calling、Skill/Extension 和既有 SkillVersion 实施授权开发、测试、生效和回退。D4 沙箱原型源码退出当前产品，历史失败报告仅供追溯；D3 已验收 Reflection 实现不受此决定影响。独立 D4 功能仍待开发验收。
 
-- 2026-10-21 D4 独立 VM 验证与存储回收修复见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)。Containerization 0.52.1 签名 helper 与受限 Skill 契约仅供实验；控制面预算、完整恢复与六项矩阵仍缺证，**D4 不准入**，正常客户端不启用，不将测试通过转为高权限加载资格。
+- D4 历史探索及其未通过项见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)，不再作为现行需求；不恢复或继续开发自建 VM、Broker、隔离 Skill adapter。
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 已实施代码执行隔离准入原型，同容器活动隔离、后代清理、活动资源限制与高权限自动发布仍有阻断，**不准入**，详见 [D4-SANDBOX-ACCEPTANCE.md](D4-SANDBOX-ACCEPTANCE.md)；D4 产品流程与 D5 尚未实施。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 早期沙箱原型已撤出当前源码；D4 产品功能与 D5 尚未实施，功能验收前不宣称完成。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。
@@ -18,7 +18,7 @@
 - D2 每个 Skill 独立引用不可变 Package 快照，明确绑定独占 Extension 路径；归属不明、重复或共享时拒绝。原生资源过滤移除禁用 Skill 的定义及 Hooks，间接原生调用不能凭旧激活名单恢复定义。审查必须同时检查跨资源引用；同进程可信代码可使用 Host 权限，人工审查和 Project Trust 都不是沙箱。
 - D2 获取过程与加载过程分开：原生 PackageManager 使用独立准备目录、固定本机 npm/Git、强制 --ignore-scripts 和可信 Git 执行入口，避免包内 npm 配置改写执行命令。不执行包入口、自检或构建。缺少依赖或锁文件的候选不得批准和加载。
 - D2 发布沿用 [TD-10](docs/06-技术决策/TD-10-Skill安全发布与版本切换.md)、[TD-11](docs/06-技术决策/TD-11-Skill更新与AgentSession连续性.md)：先独立无用户凭据 Session 检查，再建立全局协调屏障，等待已准入 dispatch/action/native idle，在原 AgentSession reload；全部成功后 SQLite 事务提交正式引用，失败恢复旧配置，恢复失败拒绝执行并提供重试。发布意图及结果持久保存，FIFO 消息仅在内存中等待；Host 重启不重放未完成请求。
-- D2 知识轻量修改只适用于明确声明的独立 Markdown 文件，修订独立留史；SKILL.md 和未分离内容走正式版本。D4 对不可信生成代码的隔离和自动发布目标不变，本轮不实现 OS 隔离。
+- D2 知识轻量修改只适用于明确声明的独立 Markdown 文件，修订独立留史；SKILL.md 和未分离内容走正式版本。D4 不要求沙箱。一次目标授权后，Agent 采用 Pi 原生执行在授权范围内开发和测试；发布沿用既有不可变版本、必要检查、生效与回退。
 
 - D2 Memory 入口：[TD-07](docs/06-技术决策/TD-07-Memory实现与检索方案.md)、[DM-04](docs/04-领域建模/DM-04-Memory-Knowledge与Reflection的关系.md)、[Memory 管理与作用域](docs/02-用户体验设计/08-Memory管理与作用域.md)，交付证据见 [D2-MEMORY-ACCEPTANCE.md](D2-MEMORY-ACCEPTANCE.md)。复用产品 SQLite、FTS5 trigram 与五个 Pi 原生 Tool；短查询参数化字面匹配。Memory 不加载为执行规则、不自动全文注入、不复制 Session 历史，也不等待 D3 才能由普通 Agent 维护。
 - Memory 的事实/经验/决定/怀疑与当前/撤销/删除分开；同一记录追加不可变修订及前驱引用。Global 跨项目，Project 取规范化路径的 SHA-256 标识；当前头与每个历史版本分别做作用域过滤。用户删除为可追溯逻辑删除，普通检索退出、显式历史保留；作用域扩大不披露原项目历史或来源引用。
@@ -32,4 +32,4 @@
 - D2 整体验收：依据 [DP-04](docs/08-交付规划/DP-04-D2至D5交付依赖与整体验收规划.md)、[RE-08](docs/03-需求工程/RE-08-需求边界审查与整体验收.md)，81/81 自动化及打包 macOS/Chrome/真实 Pi 连续业务场景通过。来源撤销、独立新依据、原生诊断取证、强杀不重放和冷重启续接均有实际收据；修复 Skill UI 过期响应覆盖，未扩大特殊版本的人工审查权限。
 
 - D3 交付：[D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。原生 settled marker 与加密检查点保证来源恢复；SQLite 管调度，独立 Pi Session 经固定 macOS XPC/Node Worker 和 Native Provider 受控转发执行。知识成果与收据同事务提交，running 中断不自动重放。建议采纳仅创建讨论入口。
-- D3 产品对端认证使用系统 same-team 指定 Bridge 身份约束；ad-hoc 无法满足，明确 unavailable，不降级。2026-10-20 免费 Apple Development 身份已实际满足认证；正式 Provider 完整链路、并发、成果提交后强杀恢复及双端验收通过。本机 development 验收不等于 Developer ID 分发/公证验收，也不代替 D4 生成代码隔离验证。
+- D3 产品对端认证使用系统 same-team 指定 Bridge 身份约束；ad-hoc 无法满足，明确 unavailable，不降级。2026-10-20 免费 Apple Development 身份已实际满足认证；正式 Provider 完整链路、并发、成果提交后强杀恢复及双端验收通过。本机 development 验收不等于 Developer ID 分发/公证验收；D4 不再以生成代码沙箱验收作为准入条件。

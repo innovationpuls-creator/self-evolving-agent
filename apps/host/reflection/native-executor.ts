@@ -18,9 +18,6 @@ interface ProtocolMessage {
 
 export class NativeReflectionExecutor {
   constructor(private readonly appBundle?: string) {}
-  protected get executionProfile(): 'reflection' | 'd4' {
-    return 'reflection';
-  }
   private bundle() {
     const supplied = this.appBundle ?? process.env.AGENT_REFLECTION_APP_BUNDLE;
     if (supplied) return resolve(supplied);
@@ -29,19 +26,15 @@ export class NativeReflectionExecutor {
     return marker >= 0 ? executable.slice(0, marker + 4) : undefined;
   }
   private paths(bundle: string) {
-    const d4 = this.executionProfile === 'd4';
-    const bridge = join(bundle, `Contents/Helpers/${d4 ? 'D4Bridge' : 'ReflectionBridge'}.app`);
-    const service = join(bridge, `Contents/XPCServices/${d4 ? 'dev.personal.agent.d4-sandbox' : serviceId}.xpc`);
+    const bridge = join(bundle, 'Contents/Helpers/ReflectionBridge.app');
+    const service = join(bridge, `Contents/XPCServices/${serviceId}.xpc`);
     return {
       bridge,
       service,
       helper: join(bridge, 'Contents/MacOS/reflection-bridge'),
-      node: join(service, `Contents/MacOS/${d4 ? 'D4Node' : 'ReflectionNode'}`),
+      node: join(service, 'Contents/MacOS/ReflectionNode'),
       manifest: join(bridge, 'Contents/Resources/reflection-runtime.json'),
-      worker: join(
-        service,
-        `Contents/Resources/runtime/dist/host/${d4 ? 'evolution/sandbox' : 'reflection'}/worker.js`,
-      ),
+      worker: join(service, 'Contents/Resources/runtime/dist/host/reflection/worker.js'),
     };
   }
   async available(): Promise<{ available: boolean; reason?: string }> {

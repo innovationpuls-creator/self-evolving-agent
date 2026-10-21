@@ -16,7 +16,6 @@ import {
 import { InMemoryCredentialStore, type Credential, type CredentialStore } from '@earendil-works/pi-ai';
 import { SkillService, SkillError, type SkillLoadout, type SkillOperation } from '../skills/skills.js';
 import { SkillResourceLoader } from '../skills/skill-loader.js';
-import { isolatedSourcePath } from '../skills/isolated-execution.js';
 import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from '../storage/storage.js';
 import { MemoryService, MemoryError, type MemoryContext } from '../memory/memory.js';
 import { memoryTools, memoryToolNames } from '../memory/memory-tools.js';
@@ -392,7 +391,6 @@ export class AgentService extends EventEmitter {
       this.changed(item);
     } catch (error) {
       item.session.dispose();
-      await item.loader.close();
       throw error;
     }
   }
@@ -410,7 +408,6 @@ export class AgentService extends EventEmitter {
         await this.persist(item);
       } catch (error) {
         item.session.dispose();
-        await item.loader.close();
         throw error;
       }
       this.active.set(record.id, item);
@@ -443,110 +440,101 @@ export class AgentService extends EventEmitter {
       { projectTrusted: false },
     );
     const loader = new SkillResourceLoader(this.skills, record.cwd, agentDir, settings);
-    let constructed: AgentSession | undefined;
-    try {
-      await loader.reload();
-      const { session } = await createAgentSession({
-        cwd: record.cwd,
-        agentDir,
-        modelRuntime: this.runtime,
-        model: this.runtime.getModel(record.provider, record.model),
-        sessionManager: manager,
-        settingsManager: settings,
-        resourceLoader: loader,
-        customTools: [
-          ...memoryTools(this.memory, record.cwd, (callId) => this.memorySource(record.id, callId)),
-          ...diagnosticTools(this.diagnosticHistory, record.cwd),
-          ...evolutionTools(this.evolution, (callId) => this.memorySource(record.id, callId)).map((tool) => ({
-            ...tool,
-            execute: (async (callId, args, signal, onUpdate, ctx) => {
-              const input = evolutionInput.parse(args);
-              await this.reflection.authorizeEvidence(record.cwd, input.evidence);
-              return tool.execute(callId, args, signal, onUpdate, ctx);
-            }) as ToolDefinition['execute'],
-          })),
-        ],
-      });
-      constructed = session;
-      const item: Active = {
-        clientMessages: session.messages.slice(),
-        stateVersion: 0,
-        diagnostic: new DiagnosticRecorder(this.diagnostics, record.id, record.cwd, manager),
-        record,
-        session,
-        loader,
-        busy: false,
-        save: Promise.resolve(),
-        checkpoint: Promise.resolve(),
-      };
-      await session.bindExtensions({
-        onError: () => {
-          item.skillFailed = true;
-          item.error = 'Skill 生命周期执行失败，请恢复能力后重试';
-        },
-      });
-      this.enableMemoryTools(session);
-      session.subscribe((event) => {
-        item.diagnostic.observe(event);
-        if (event.type === 'agent_settled') {
-          const last = session.messages.at(-1);
-          manager.appendCustomEntry(reflectionMarker, {
-            version: 1,
-            settledAt: Date.now(),
-            status:
-              last?.role === 'assistant' && last.stopReason === 'aborted'
-                ? 'stopped'
-                : last?.role !== 'assistant' || last.stopReason === 'error'
-                  ? 'failed'
-                  : 'ended',
-            ...(item.diagnostic.traceId ? { traceId: item.diagnostic.traceId } : {}),
+    await loader.reload();
+    const { session } = await createAgentSession({
+      cwd: record.cwd,
+      agentDir,
+      modelRuntime: this.runtime,
+      model: this.runtime.getModel(record.provider, record.model),
+      sessionManager: manager,
+      settingsManager: settings,
+      resourceLoader: loader,
+      customTools: [
+        ...memoryTools(this.memory, record.cwd, (callId) => this.memorySource(record.id, callId)),
+        ...diagnosticTools(this.diagnosticHistory, record.cwd),
+        ...evolutionTools(this.evolution, (callId) => this.memorySource(record.id, callId)).map((tool) => ({
+          ...tool,
+          execute: (async (callId, args, signal, onUpdate, ctx) => {
+            const input = evolutionInput.parse(args);
+            await this.reflection.authorizeEvidence(record.cwd, input.evidence);
+            return tool.execute(callId, args, signal, onUpdate, ctx);
+          }) as ToolDefinition['execute'],
+        })),
+      ],
+    });
+    const item: Active = {
+      clientMessages: session.messages.slice(),
+      stateVersion: 0,
+      diagnostic: new DiagnosticRecorder(this.diagnostics, record.id, record.cwd, manager),
+      record,
+      session,
+      loader,
+      busy: false,
+      save: Promise.resolve(),
+      checkpoint: Promise.resolve(),
+    };
+    await session.bindExtensions({
+      onError: () => {
+        item.skillFailed = true;
+        item.error = 'Skill 生命周期执行失败，请恢复能力后重试';
+      },
+    });
+    this.enableMemoryTools(session);
+    session.subscribe((event) => {
+      item.diagnostic.observe(event);
+      if (event.type === 'agent_settled') {
+        const last = session.messages.at(-1);
+        manager.appendCustomEntry(reflectionMarker, {
+          version: 1,
+          settledAt: Date.now(),
+          status:
+            last?.role === 'assistant' && last.stopReason === 'aborted'
+              ? 'stopped'
+              : last?.role !== 'assistant' || last.stopReason === 'error'
+                ? 'failed'
+                : 'ended',
+          ...(item.diagnostic.traceId ? { traceId: item.diagnostic.traceId } : {}),
+        });
+      }
+      try {
+        if (
+          [
+            'message_start',
+            'message_update',
+            'message_end',
+            'tool_execution_start',
+            'tool_execution_update',
+            'tool_execution_end',
+            'compaction_start',
+            'compaction_end',
+          ].includes(event.type)
+        ) {
+          const client = this.clientEvent(event);
+          if (event.type === 'message_start' || event.type === 'message_update') item.streamingMessage = client.message;
+          if (event.type === 'message_end' || event.type === 'compaction_end') {
+            item.clientMessages = session.messages.slice();
+            item.streamingMessage = undefined;
+          }
+          this.emit('event', {
+            sessionId: record.id,
+            type: 'update',
+            stateVersion: ++item.stateVersion,
+            event: client,
           });
         }
-        try {
-          if (
-            [
-              'message_start',
-              'message_update',
-              'message_end',
-              'tool_execution_start',
-              'tool_execution_update',
-              'tool_execution_end',
-              'compaction_start',
-              'compaction_end',
-            ].includes(event.type)
-          ) {
-            const client = this.clientEvent(event);
-            if (event.type === 'message_start' || event.type === 'message_update')
-              item.streamingMessage = client.message;
-            if (event.type === 'message_end' || event.type === 'compaction_end') {
-              item.clientMessages = session.messages.slice();
-              item.streamingMessage = undefined;
-            }
-            this.emit('event', {
-              sessionId: record.id,
-              type: 'update',
-              stateVersion: ++item.stateVersion,
-              event: client,
-            });
-          }
-        } catch {
-          this.protectionFailure(item);
-        }
-        if (event.type === 'message_end') {
-          // Pi 1.3 appends the native entry after notifying public listeners.
-          const pending = Promise.resolve()
-            .then(() => this.persist(item))
-            .catch(() => this.storageFailure(item));
-          item.checkpoint = Promise.all([item.checkpoint, pending]).then(() => {});
-        }
-      });
-      item.clientMessages = session.messages.slice();
-      return item;
-    } catch (error) {
-      constructed?.dispose();
-      await loader.close();
-      throw error;
-    }
+      } catch {
+        this.protectionFailure(item);
+      }
+      if (event.type === 'message_end') {
+        // Pi 1.3 appends the native entry after notifying public listeners.
+        const pending = Promise.resolve()
+          .then(() => this.persist(item))
+          .catch(() => this.storageFailure(item));
+        item.checkpoint = Promise.all([item.checkpoint, pending]).then(() => {});
+      }
+    });
+    item.clientMessages = session.messages.slice();
+    return item;
   }
   private clientEvent(event: unknown) {
     const data = event as {
@@ -842,7 +830,7 @@ export class AgentService extends EventEmitter {
   }
   async stop(id: string) {
     const item = await this.get(id);
-    await Promise.all([item.loader.revoke(), item.session.abort()]);
+    await item.session.abort();
     await item.run;
     this.reflection.jobs.expedite(id);
     this.reflection.wake();
@@ -949,7 +937,6 @@ export class AgentService extends EventEmitter {
       if (failed) throw new SkillError('候选生命周期检查失败');
     } finally {
       candidate?.dispose();
-      await loader.close();
     }
     this.skills.waiting(op);
     const release = await this.acquireBarrier();
@@ -1083,13 +1070,7 @@ export class AgentService extends EventEmitter {
     const detail = await this.skills.detail(id),
       record = detail.skill;
     const v = record.current ? this.skills.version(record.current) : undefined;
-    const paths = new Set(
-      v
-        ? v.execution
-          ? [resolve(isolatedSourcePath(v.id))]
-          : v.extensions.map((p) => resolve(this.skills.packagePath(v), p))
-        : [],
-    );
+    const paths = new Set(v ? v.extensions.map((p) => resolve(this.skills.packagePath(v), p)) : []);
     const tools = new Map<string, { name: string; description: string; exposure: string; parameters: unknown }>(),
       hooks = new Set<string>();
     let loaded = false;
@@ -1119,7 +1100,7 @@ export class AgentService extends EventEmitter {
     await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
     await Promise.allSettled(
       [...this.active.values()].map(async (item) => {
-        await Promise.all([item.loader.revoke(), item.session.abort()]);
+        await item.session.abort();
         item.session.abortCompaction();
       }),
     );
@@ -1137,7 +1118,6 @@ export class AgentService extends EventEmitter {
             await item.save;
           } finally {
             item.session.dispose();
-            await item.loader.close();
           }
         }),
       );

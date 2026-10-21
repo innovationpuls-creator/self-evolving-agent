@@ -1,6 +1,5 @@
 import { createHash } from 'node:crypto';
 import { signingConfiguration } from './sign-desktop.js';
-import { trimDependencyMetadata } from './desktop-package-resources.js';
 import { spawnSync } from 'node:child_process';
 import { cp, mkdir, readFile, readdir, rm, writeFile, access } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
@@ -9,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const native = join(root, 'apps/desktop/native/reflection');
 const nodeVersion = '24.22.0';
+const serviceId = 'dev.personal.agent.reflection';
+const bridgeId = 'dev.personal.agent.reflection-bridge';
 function run(command: string, args: string[], cwd?: string) {
   const result = spawnSync(command, args, {
     encoding: 'utf8',
@@ -85,15 +86,8 @@ async function officialNode(arch: string) {
 function info(id: string, executable: string, type: string, version: string, service = false) {
   return `<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>CFBundleIdentifier</key><string>${id}</string><key>CFBundleExecutable</key><string>${executable}</string><key>CFBundlePackageType</key><string>${type}</string><key>CFBundleVersion</key><string>${version}</string><key>CFBundleShortVersionString</key><string>${version}</string><key>LSMinimumSystemVersion</key><string>15.0</string>${service ? '<key>XPCService</key><dict><key>ServiceType</key><string>Application</string></dict>' : '<key>LSUIElement</key><true/>'}</dict></plist>`;
 }
-export async function buildReflectionNative(
-  appBundle: string,
-  hostDist = join(root, 'dist/host'),
-  profile: 'reflection' | 'd4' = 'reflection',
-) {
+export async function buildReflectionNative(appBundle: string, hostDist = join(root, 'dist/host')) {
   if (process.platform !== 'darwin') return;
-  const d4 = profile === 'd4';
-  const serviceId = d4 ? 'dev.personal.agent.d4-sandbox' : 'dev.personal.agent.reflection';
-  const bridgeId = d4 ? 'dev.personal.agent.d4-bridge' : 'dev.personal.agent.reflection-bridge';
   const arch = process.arch;
   if (arch !== 'arm64' && arch !== 'x64') throw new Error('Unsupported macOS Reflection architecture');
   const node = await officialNode(arch);
@@ -101,12 +95,12 @@ export async function buildReflectionNative(
     version: string;
     workspaces?: string[];
   };
-  const bridge = join(appBundle, `Contents/Helpers/${d4 ? 'D4Bridge' : 'ReflectionBridge'}.app`);
+  const bridge = join(appBundle, 'Contents/Helpers/ReflectionBridge.app');
   const service = join(bridge, `Contents/XPCServices/${serviceId}.xpc`);
   const serviceContents = join(service, 'Contents');
   const runtime = join(serviceContents, 'Resources/runtime');
   const serviceBinary = join(serviceContents, 'MacOS/reflection-service');
-  const nodeBinary = join(serviceContents, `MacOS/${d4 ? 'D4Node' : 'ReflectionNode'}`);
+  const nodeBinary = join(serviceContents, 'MacOS/ReflectionNode');
   const clientBinary = join(bridge, 'Contents/MacOS/reflection-bridge');
   await Promise.all([
     mkdir(dirname(serviceBinary), { recursive: true }),
@@ -123,7 +117,7 @@ export async function buildReflectionNative(
     cp(hostDist, join(runtime, 'dist/host'), { recursive: true }),
     writeFile(join(runtime, 'package.json'), JSON.stringify({ type: 'module', private: true })),
   ]);
-  await access(join(runtime, `dist/host/${d4 ? 'evolution/sandbox' : 'reflection'}/worker.js`));
+  await access(join(runtime, 'dist/host/reflection/worker.js'));
   const lock = await readFile(join(root, 'package-lock.json'));
   const digest = createHash('sha256').update(lock).digest('hex').slice(0, 16);
   const dependencies = join(root, 'release/reflection-native-cache', `dependencies-${digest}`);
@@ -165,20 +159,8 @@ export async function buildReflectionNative(
     recursive: true,
     filter: (path) => !path.split('/').some((part) => part === '.bin' || part === '@agent'),
   });
-  await trimDependencyMetadata(join(runtime, 'node_modules'));
-  if (d4) {
-    await cp(join(node.executable, '../../lib/node_modules/npm'), join(runtime, 'toolchains/npm'), { recursive: true });
-    await mkdir(join(runtime, 'toolchains/bin'), { recursive: true });
-    const { symlink } = await import('node:fs/promises');
-    await symlink('../../../../MacOS/D4Node', join(runtime, 'toolchains/bin/node')).catch(
-      (e: NodeJS.ErrnoException) => {
-        if (e.code !== 'EEXIST') throw e;
-      },
-    );
-  }
   const target = arch === 'arm64' ? 'arm64-apple-macosx15.0' : 'x86_64-apple-macosx15.0';
   const flags = [
-    ...(d4 ? ['-DD4_SANDBOX'] : []),
     '-fobjc-arc',
     '-fblocks',
     '-target',
@@ -203,19 +185,6 @@ export async function buildReflectionNative(
       ...(entitlements ? ['--entitlements', join(native, entitlements)] : []),
       path,
     ]);
-  if (d4) {
-    for (const [name, extra] of [
-      ['D4Launcher', []],
-      ['D4LimitProbe', ['-DD4_LIMIT_PROBE']],
-    ] as const) {
-      const path = join(serviceContents, 'MacOS', name);
-      run('clang', ['-target', target, ...extra, join(root, 'apps/desktop/native/evolution/limit.c'), '-o', path]);
-      sign(path, 'node.entitlements');
-    }
-    const fdProbe = join(serviceContents, 'MacOS/D4FDProbe');
-    run('clang', ['-target', target, join(root, 'apps/desktop/native/evolution/fd-probe.c'), '-o', fdProbe]);
-    sign(fdProbe, 'node.entitlements');
-  }
   sign(nodeBinary, 'node.entitlements');
   sign(service, 'service.entitlements');
   sign(bridge);
