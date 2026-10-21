@@ -1,0 +1,4 @@
+
+> self-evolving-agent@0.1.0 typecheck
+> tsc -p tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.check.json
+

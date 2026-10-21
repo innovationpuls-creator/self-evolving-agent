@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHost } from './use-host';
 import { readNavigation, saveNavigation, type View } from './view-state';
 import { ChatView } from '../features/chat/ChatView';
@@ -78,7 +78,7 @@ export function App() {
       setView(target);
     });
   const back = () => navigate({ kind: 'chat' });
-  const report = (message: string) => setLocalError(message);
+  const report = useCallback((message: string) => setLocalError(message), []);
   const expedite = (id?: string) => {
     if (id && ready)
       void api('/reflections/expedite', 'POST', { sessionId: id }).catch(() =>
@@ -321,6 +321,11 @@ export function App() {
             initialKnowledgeRevision={view.knowledgeRevision}
             project={view.project ?? project}
             onClose={back}
+            onActivity={(id) => {
+              void api<{ sessionId: string }>(`/activities/${id}`)
+                .then((a) => selectSession(a.sessionId))
+                .catch((e) => report(e.message));
+            }}
             onDirtyChange={(value) => {
               skillsDirty.current = value;
             }}
@@ -409,6 +414,8 @@ export function App() {
             onDiagnostics={() => {
               if (selected) navigate({ kind: 'diagnostics', session: { id: selected.id, title: selected.title } });
             }}
+            onOpen={selectSession}
+            onSkill={(id) => navigate({ kind: 'skills', id })}
             onReflection={() => navigate({ kind: 'reflection' })}
             onError={report}
           />

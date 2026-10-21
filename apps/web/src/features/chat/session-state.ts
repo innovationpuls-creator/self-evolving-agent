@@ -1,3 +1,4 @@
+import type { EvolutionActivity } from '../../../../host/evolution/activities.js';
 export interface Model {
   provider: string;
   id: string;
@@ -18,6 +19,7 @@ export interface Tree {
   children: Tree[];
 }
 export interface Session {
+  activity?: EvolutionActivity;
   id: string;
   title: string;
   cwd: string;

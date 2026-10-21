@@ -21,7 +21,9 @@
     "test:desktop": "tsx scripts/desktop-smoke.ts",
     "test:browser": "tsx scripts/browser-smoke.ts",
     "test:skills:browser": "tsx scripts/skills-browser-smoke.ts",
-    "test:skills:ui": "tsx scripts/skills-ui-smoke.ts"
+    "test:skills:ui": "tsx scripts/skills-ui-smoke.ts",
+    "test:d4:real": "tsx scripts/d4-real-acceptance.ts",
+    "test:d4:desktop": "tsx scripts/d4-desktop-acceptance.ts"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "1.3.0",

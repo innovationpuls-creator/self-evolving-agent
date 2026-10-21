@@ -20,6 +20,7 @@ interface Version {
   digest: string;
   created: number;
   review?: { notes: string; at: number };
+  evolution?: { activityId: string; checkedAt: number };
 }
 interface Operation {
   id: string;
@@ -56,6 +57,7 @@ export function SkillsPanel({
   onClose,
   onAssist,
   onDirtyChange,
+  onActivity,
 }: {
   api: Api;
   project: string;
@@ -64,6 +66,7 @@ export function SkillsPanel({
   onClose: () => void;
   onAssist: (prompt: string) => void;
   onDirtyChange: (dirty: boolean) => void;
+  onActivity?: (id: string) => void;
 }) {
   const [catalog, setCatalog] = useState<Catalog>(),
     [detail, setDetail] = useState<Detail>(),
@@ -420,7 +423,7 @@ export function SkillsPanel({
                 </button>
                 <button
                   type="button"
-                  disabled={busy || !latest || (latest.extensions.length > 0 && !latest.review)}
+                  disabled={busy || !latest || (latest.extensions.length > 0 && !latest.review && !latest.evolution)}
                   onClick={() =>
                     void guard(() =>
                       post('publish', { version: detail.skill.latest, baseRevision: detail.skill.revision }),
@@ -591,7 +594,9 @@ export function SkillsPanel({
                     </select>
                     <pre>{snapshotContent}</pre>
                   </details>
-                  {latest.review ? (
+                  {latest.evolution ? (
+                    <p>此版本来自已授权的能力开发活动，通过候选检查后生效。</p>
+                  ) : latest.review ? (
                     <p>此内容已记录人工审查：{latest.review.notes}</p>
                   ) : (
                     <>
@@ -686,12 +691,21 @@ export function SkillsPanel({
                       {v.id === detail.skill.latest ? '· 最新候选' : ''}
                     </p>
                     <div className="skill-controls">
+                      {v.evolution && onActivity && (
+                        <button type="button" onClick={() => onActivity(v.evolution!.activityId)}>
+                          查看开发活动
+                        </button>
+                      )}
                       <button type="button" disabled={busy} onClick={() => void guard(() => read(v.skillFile, v.id))}>
                         查看说明
                       </button>
                       <button
                         type="button"
-                        disabled={busy || v.id === detail.skill.current || (v.extensions.length > 0 && !v.review)}
+                        disabled={
+                          busy ||
+                          v.id === detail.skill.current ||
+                          (v.extensions.length > 0 && !v.review && !v.evolution)
+                        }
                         onClick={() =>
                           void guard(() => post('rollback', { version: v.id, baseRevision: detail.skill.revision }))
                         }

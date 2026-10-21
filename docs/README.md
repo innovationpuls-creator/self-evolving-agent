@@ -12,7 +12,7 @@
 
 前五阶段保留各阶段的设计语境，其中候选方案和验证问题的后续结论见第六阶段。技术决策记录已确定的方案，合并后续修订，并以原会话及本地实验报告说明依据、取舍和适用范围。原型证据注明实际版本、运行环境与覆盖范围，第七阶段承接产品工程质量及正式发行验收要求，第八阶段明确 D1～D5 的交付顺序、依赖、开发交接与完成标准。设计收口不代表产品开发完成或验收通过。
 
-当前实现入口为根目录 [DECISIONS.md](../DECISIONS.md)。D1 macOS 用户验收已归档至 [D1-ACCEPTANCE.md](../D1-ACCEPTANCE.md)；D2 首个 Skill 管理纵向功能已交付，结果见 [D2-ACCEPTANCE.md](../D2-ACCEPTANCE.md)；Memory 长期知识系统已交付，结果见 [D2-MEMORY-ACCEPTANCE.md](../D2-MEMORY-ACCEPTANCE.md)；Diagnostic Log 已实现，结果见 [D2-DIAGNOSTIC-ACCEPTANCE.md](../D2-DIAGNOSTIC-ACCEPTANCE.md)；D2 的连续业务整体验收已通过，结果见 [D2-INTEGRATION-ACCEPTANCE.md](../D2-INTEGRATION-ACCEPTANCE.md)，满足 D3 数据及能力访问准入条件；D3～D5 尚未实施。精确版本人工审查准入、同进程代码风险和后续隔离目标继续保留。
+当前实现入口为根目录 [DECISIONS.md](../DECISIONS.md)。D1 macOS 用户验收已归档至 [D1-ACCEPTANCE.md](../D1-ACCEPTANCE.md)；D2 Skill、Memory、Diagnostic Log 及连续业务整体验收见 [D2-INTEGRATION-ACCEPTANCE.md](../D2-INTEGRATION-ACCEPTANCE.md)；D3 受限 Reflection 与真实签名补验收见 [D3-ACCEPTANCE.md](../D3-ACCEPTANCE.md)。D4 原生目标授权、开发、检查、自动生效及回退的首版闭环已实现，本机验证见 [D4-ACCEPTANCE.md](../D4-ACCEPTANCE.md)，等待用户验收；D5 未实施。D2 手工审查与 D4 授权检查分别留证；开发 Shell 和同进程 Extension 的权限限制见当前决策，历史沙箱实验不再作为 D4 准入条件。
 
 ## 八阶段与阅读顺序
 

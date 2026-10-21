@@ -1,0 +1,9 @@
+
+> self-evolving-agent@0.1.0 lint
+> biome lint
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 104.
+Checked 100 files in 78ms. No fixes applied.
+Found 87 warnings.
+Found 37 infos.

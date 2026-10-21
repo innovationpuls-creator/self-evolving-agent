@@ -1,0 +1,344 @@
+
+> self-evolving-agent@0.1.0 lint
+> biome lint
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 110.
+Checked 100 files in 132ms. No fixes applied.
+Found 93 warnings.
+Found 37 infos.
+
+apps/host/storage/storage.ts:86:42 lint/complexity/noUselessEscapeInRegex  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  i The character doesn't need to be escaped.
+  
+    84 │       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
+    85 │       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')
+  > 86 │       .replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi, 'Bearer [已保护]')
+       │                                          ^^
+    87 │       .replace(
+    88 │         /((?:password|passwd|authorization|api[_-]?(?:key|token)|access(?:[_-]?token)?|refresh(?:[_-]?token)?|token|secret|private[_-]?key)\s*["']?\s*[=:]\s*)(?:"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?|[^\s,;"']+)/gi,
+  
+  i The character should only be escaped if it is outside a character class or under the `v` flag.
+  
+  i Safe fix: Unescape the character.
+  
+    86 │ ······.replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi,·'Bearer·[已保护]')
+       │                                          -                             
+
+tests/skills.test.ts:316:18 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    314 │       {
+    315 │         path: 'skills/echo/SKILL.md',
+  > 316 │         content: (await f.skills.read(a.id, a.latest, 'skills/echo/SKILL.md')).content + '\nUpdated rule.',
+        │                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    317 │       },
+    318 │     ]);
+  
+  i Unsafe fix: Use a template literal.
+  
+    314 314 │         {
+    315 315 │           path: 'skills/echo/SKILL.md',
+    316     │ - ········content:·(await·f.skills.read(a.id,·a.latest,·'skills/echo/SKILL.md')).content·+·'\nUpdated·rule.',
+        316 │ + ········content:·`${(await·f.skills.read(a.id,·a.latest,·'skills/echo/SKILL.md')).content}\nUpdated·rule.`,
+    317 317 │         },
+    318 318 │       ]);
+  
+
+tests/skills.test.ts:631:41 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+  
+    629 │     assert.equal((await f.publish(a)).status, 'applied');
+    630 │     f.fake.setResponses([fauxAssistantMessage('long first answer')]);
+  > 631 │     await f.host.service.prompt(f.s.id, 'first ' + 'historical context '.repeat(4500));
+        │                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    632 │     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    633 │     const firstLeaf = (
+  
+  i Unsafe fix: Use a template literal.
+  
+    629 629 │       assert.equal((await f.publish(a)).status, 'applied');
+    630 630 │       f.fake.setResponses([fauxAssistantMessage('long first answer')]);
+    631     │ - ····await·f.host.service.prompt(f.s.id,·'first·'·+·'historical·context·'.repeat(4500));
+        631 │ + ····await·f.host.service.prompt(f.s.id,·`first·${'historical·context·'.repeat(4500)}`);
+    632 632 │       await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
+    633 633 │       const firstLeaf = (
+  
+
+apps/host/evolution/activities.ts:139:9 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━━━━━━━━
+
+  ! Change to an optional chain.
+  
+    137 │       const operation = release ? this.skills.operation(release.operationId) : undefined;
+    138 │       if (
+  > 139 │         !operation ||
+        │         ^^^^^^^^^^^^^
+  > 140 │         operation.status !== 'applied' ||
+        │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    141 │         operation.evolution?.activityId !== activityId ||
+    142 │         operation.checks?.some((c) => !c.passed)
+  
+  i Unsafe fix: Change to an optional chain.
+  
+    137 137 │         const operation = release ? this.skills.operation(release.operationId) : undefined;
+    138 138 │         if (
+    139     │ - ········!operation·||
+    140     │ - ········operation.status·!==·'applied'·||
+        139 │ + ········operation?.status·!==·'applied'·||
+    141 140 │           operation.evolution?.activityId !== activityId ||
+    142 141 │           operation.checks?.some((c) => !c.passed)
+  
+
+apps/host/evolution/activity-routes.ts:21:14 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    19 │   const match = /^\/api\/activities\/([a-f0-9-]{36})(?:\/(authorize|cancel))?$/.exec(url.pathname);
+    20 │   if (!match) return false;
+  > 21 │   const id = match[1]!;
+       │              ^^^^^^^^^
+    22 │   if (!match[2] && req.method === 'GET') json(res, 200, service.activities.get(id));
+    23 │   else if (match[2] === 'authorize' && req.method === 'POST')
+  
+
+apps/host/runtime/session-routes.ts:57:33 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    55 │   const recover = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
+    56 │   if (recover && req.method === 'POST') {
+  > 57 │     await service.recoverSkills(recover[1]!);
+       │                                 ^^^^^^^^^^^
+    58 │     json(res, 200, { ok: true });
+    59 │     return true;
+  
+
+apps/host/runtime/session-routes.ts:65:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    63 │   );
+    64 │   if (match) {
+  > 65 │     const id = match[1]!,
+       │                ^^^^^^^^^
+    66 │       action = match[2];
+    67 │     if (!action && req.method === 'GET') {
+  
+
+apps/host/skills/skill-loader.ts:11:8 lint/style/useImportType  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Some named imports are only used as types.
+  
+     9 │   type SettingsManager,
+    10 │ } from '@earendil-works/pi-coding-agent';
+  > 11 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    12 │ 
+    13 │ // Only the native loader's approved, materialized local paths may import code.
+  
+  i This import is only used as a type.
+  
+     9 │   type SettingsManager,
+    10 │ } from '@earendil-works/pi-coding-agent';
+  > 11 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │          ^^^^^^^^^^^^
+    12 │ 
+    13 │ // Only the native loader's approved, materialized local paths may import code.
+  
+  i Importing the types with import type ensures that they are removed by the compilers and avoids loading unnecessary modules.
+  
+  i Safe fix: Add inline type keywords.
+  
+    11 │ import·{·type·SkillService,·type·SkillLoadout,·type·SkillResourceSource,·SkillError·}·from·'./skills.js';
+       │          +++++                                                                                           
+
+apps/host/skills/skill-routes.ts:41:68 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    39 │   const operation = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
+    40 │   if (operation && req.method === 'GET') {
+  > 41 │     json(res, 200, service.sensitive.copy(service.skills.operation(operation[1]!)));
+       │                                                                    ^^^^^^^^^^^^^
+    42 │     return true;
+    43 │   }
+  
+
+apps/host/skills/skill-routes.ts:49:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    47 │     );
+    48 │   if (skillRoute) {
+  > 49 │     const id = skillRoute[1]!,
+       │                ^^^^^^^^^^^^^^
+    50 │       action = skillRoute[2];
+    51 │     if (!action && req.method === 'GET') {
+  
+
+apps/host/storage/storage.ts:16:5 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Change to an optional chain.
+  
+    14 │ export function restore(saved: Snapshot) {
+    15 │   if (
+  > 16 │     !saved ||
+       │     ^^^^^^^^^
+  > 17 │     !saved.header ||
+       │     ^^^^^^^^^^^^^
+    18 │     !Array.isArray(saved.entries) ||
+    19 │     (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+  
+  i Unsafe fix: Change to an optional chain.
+  
+     14  14 │   export function restore(saved: Snapshot) {
+     15  15 │     if (
+     16     │ - ····!saved·||
+     17     │ - ····!saved.header·||
+         16 │ + ····!saved?.header·||
+     18  17 │       !Array.isArray(saved.entries) ||
+     19  18 │       (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+  
+
+apps/web/src/components/Markdown.tsx:1:8 lint/correctness/noUnusedImports  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  ! This import is unused.
+  
+  > 1 │ import React from 'react';
+      │        ^^^^^
+    2 │ import ReactMarkdown from 'react-markdown';
+    3 │ import remarkGfm from 'remark-gfm';
+  
+  i Unused imports might be the result of an incomplete refactoring.
+  
+  i Unsafe fix: Remove the unused imports.
+  
+    1 │ import·React·from·'react';
+      │ --------------------------
+
+apps/web/src/features/evolution/ActivityPanel.tsx:66:9 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━
+
+  ! Change to an optional chain.
+  
+    64 │   }, [api, session.id, session.cwd, onError]);
+    65 │   useEffect(() => {
+  > 66 │     if (!activity || activity.status !== 'discussion') return;
+       │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    67 │     let alive = true;
+    68 │     void api<{ skills: SkillRecord[] }>(`/skills?project=${encodeURIComponent(session.cwd)}`)
+  
+  i Unsafe fix: Change to an optional chain.
+  
+     64  64 │     }, [api, session.id, session.cwd, onError]);
+     65  65 │     useEffect(() => {
+     66     │ - ····if·(!activity·||·activity.status·!==·'discussion')·return;
+         66 │ + ····if·(activity?.status·!==·'discussion')·return;
+     67  67 │       let alive = true;
+     68  68 │       void api<{ skills: SkillRecord[] }>(`/skills?project=${encodeURIComponent(session.cwd)}`)
+  
+
+tests/skills.test.ts:185:42 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    183 │       f.skills.import({
+    184 │         source,
+  > 185 │         bindings: [...bindings, { skill: bindings[1]!.skill, extensions: bindings[0]!.extensions }],
+        │                                          ^^^^^^^^^^^^
+    186 │       }),
+    187 │       /共享/,
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+    183 183 │         f.skills.import({
+    184 184 │           source,
+    185     │ - ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]!.extensions·}],
+        185 │ + ········bindings:·[...bindings,·{·skill:·bindings[1]?.skill,·extensions:·bindings[0]!.extensions·}],
+    186 186 │         }),
+    187 187 │         /共享/,
+  
+
+tests/skills.test.ts:185:74 lint/style/noNonNullAssertion  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    183 │       f.skills.import({
+    184 │         source,
+  > 185 │         bindings: [...bindings, { skill: bindings[1]!.skill, extensions: bindings[0]!.extensions }],
+        │                                                                          ^^^^^^^^^^^^
+    186 │       }),
+    187 │       /共享/,
+  
+  i Unsafe fix: Replace with optional chain operator ?. This operator includes runtime checks, so it is safer than the compile-only non-null assertion operator
+  
+    183 183 │         f.skills.import({
+    184 184 │           source,
+    185     │ - ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]!.extensions·}],
+        185 │ + ········bindings:·[...bindings,·{·skill:·bindings[1]!.skill,·extensions:·bindings[0]?.extensions·}],
+    186 186 │         }),
+    187 187 │         /共享/,
+  
+
+tests/skills.test.ts:354:64 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+  
+
+tests/skills.test.ts:354:78 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                              ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+  
+
+tests/skills.test.ts:354:92 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    352 │     assert.ok(!updated.files.includes('remove.md'));
+    353 │     await assert.rejects(
+  > 354 │       f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+        │                                                                                            ^^^^^^^^^^^^
+    355 │       /重复/,
+    356 │     );
+  
+
+tests/skills.test.ts:412:17 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    410 │       { session: import('@earendil-works/pi-coding-agent').AgentSession; skillFailed?: boolean }
+    411 │     >;
+  > 412 │     const one = live.get(f.s.id)!,
+        │                 ^^^^^^^^^^^^^^^^^
+    413 │       two = live.get(s2.id)!,
+    414 │       original = one.session,
+  
+
+tests/skills.test.ts:413:13 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+  
+    411 │     >;
+    412 │     const one = live.get(f.s.id)!,
+  > 413 │       two = live.get(s2.id)!,
+        │             ^^^^^^^^^^^^^^^^
+    414 │       original = one.session,
+    415 │       manager = original.sessionManager;
+  
+

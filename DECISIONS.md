@@ -1,10 +1,10 @@
 # 当前开发决策索引
 
-2026-10-21 用户纠偏：D4 不以沙箱、VM、Native Broker 或 Host 无法读取候选源码作为产品需求与准入条件。按 Pi SDK 原生 AgentSession、Tool Calling、Skill/Extension 和既有 SkillVersion 实施授权开发、测试、生效和回退。D4 沙箱原型源码退出当前产品，历史失败报告仅供追溯；D3 已验收 Reflection 实现不受此决定影响。独立 D4 功能仍待开发验收。
+2026-10-21 用户纠偏：D4 不以沙箱、VM、Native Broker 或 Host 无法读取候选源码作为产品需求与准入条件。按 Pi SDK 原生 AgentSession、Tool Calling、Skill/Extension 和既有 SkillVersion 实施授权开发、测试、生效和回退。D4 沙箱原型源码退出当前产品，历史失败报告仅供追溯；D3 已验收 Reflection 实现不受此决定影响。D4 首版业务闭环已实现并通过本机真实 Pi/Web 场景及 Desktop 交互验收，详见 [D4-ACCEPTANCE.md](D4-ACCEPTANCE.md)。
 
 - D4 历史探索及其未通过项见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)，不再作为现行需求；不恢复或继续开发自建 VM、Broker、隔离 Skill adapter。
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 早期沙箱原型已撤出当前源码；D4 产品功能与 D5 尚未实施，功能验收前不宣称完成。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 早期沙箱原型已撤出当前源码；当前 D4 原生授权开发闭环见本轮验收记录，等待用户验收；D5 尚未实施。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。
@@ -14,7 +14,7 @@
 - 模型通道检查放在 ModelRuntime 实际发送边界；普通 Extension 的异常会被 Pi 捕获，不能作为必要检查失败时的唯一拒绝边界。
 
 - D2 Skill 入口：[DP-04](docs/08-交付规划/DP-04-D2至D5交付依赖与整体验收规划.md)、[RE-03](docs/03-需求工程/RE-03-Skill能力体系.md)、[Skill 管理与编辑](docs/02-用户体验设计/04-Skill管理与编辑.md)。普通 Skill 使用原生文本发现、解析与按需读取；特殊 Skill 使用原生 Package/Extension 与 tool_search，不新增 Tool Calling 或 Bridge。
-- D2 执行信任采用本轮明确确认的**精确内容人工审查准入**：安装、保存、启用、开发授权不授予信任。审查记录绑定完整不可变快照、锁定依赖闭包和应用 SDK alias 身份；候选检查、正式加载、重启加载均复核。未经审查的 AI Tool/Hooks/Extension 只保存候选。普通文本发现与项目 Extension 执行信任分开，运行 Session 的 projectTrusted 明确为 false，并关闭自动 Extension 加载。
+- D2 手工导入/编辑的执行信任继续采用**精确内容人工审查准入**：安装、保存、启用不授予信任。审查记录绑定完整不可变快照、锁定依赖闭包和应用 SDK alias 身份；候选检查、正式加载、重启加载均复核。D4 另以真实用户的具体目标授权加必要检查作为发布依据，保存独立 evolution 证明，不写入或伪造 D2 review。授权本身不代表检查已通过。普通文本发现与项目 Extension 执行信任分开，运行 Session 的 projectTrusted 明确为 false，并关闭自动 Extension 加载。
 - D2 每个 Skill 独立引用不可变 Package 快照，明确绑定独占 Extension 路径；归属不明、重复或共享时拒绝。原生资源过滤移除禁用 Skill 的定义及 Hooks，间接原生调用不能凭旧激活名单恢复定义。审查必须同时检查跨资源引用；同进程可信代码可使用 Host 权限，人工审查和 Project Trust 都不是沙箱。
 - D2 获取过程与加载过程分开：原生 PackageManager 使用独立准备目录、固定本机 npm/Git、强制 --ignore-scripts 和可信 Git 执行入口，避免包内 npm 配置改写执行命令。不执行包入口、自检或构建。缺少依赖或锁文件的候选不得批准和加载。
 - D2 发布沿用 [TD-10](docs/06-技术决策/TD-10-Skill安全发布与版本切换.md)、[TD-11](docs/06-技术决策/TD-11-Skill更新与AgentSession连续性.md)：先独立无用户凭据 Session 检查，再建立全局协调屏障，等待已准入 dispatch/action/native idle，在原 AgentSession reload；全部成功后 SQLite 事务提交正式引用，失败恢复旧配置，恢复失败拒绝执行并提供重试。发布意图及结果持久保存，FIFO 消息仅在内存中等待；Host 重启不重放未完成请求。
@@ -33,3 +33,6 @@
 
 - D3 交付：[D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。原生 settled marker 与加密检查点保证来源恢复；SQLite 管调度，独立 Pi Session 经固定 macOS XPC/Node Worker 和 Native Provider 受控转发执行。知识成果与收据同事务提交，running 中断不自动重放。建议采纳仅创建讨论入口。
 - D3 产品对端认证使用系统 same-team 指定 Bridge 身份约束；ad-hoc 无法满足，明确 unavailable，不降级。2026-10-20 免费 Apple Development 身份已实际满足认证；正式 Provider 完整链路、并发、成果提交后强杀恢复及双端验收通过。本机 development 验收不等于 Developer ID 分发/公证验收；D4 不再以生成代码沙箱验收作为准入条件。
+
+- D4 用户目标或建议进入只读讨论；用户通过认证产品接口冻结目标及允许修改/创建的 Skill。原生讨论 AgentSession 在授权后启用 Pi 开发工具，自主调查、开发、依赖管理及测试；无固定思考步骤，允许无代码成果。Host 校验成果归属、基础修订、依赖/摘要、Extension 加载、Tool 冲突及原生实际调用后，复用 D2 发布屏障、原 Session reload、事务提交和回退；不要求重复批准。
+- D4 活动、授权、检查与 SkillVersion 可追溯；取消/失败不提交未完成候选，重启不重放。普通会话通过原生 Skill/tool_search 发现新 Tool。开发 Shell 及被加载的 Extension 具有当前用户/Host 权限；独立检查 Session、文件范围检查及版本摘要都不是 OS 沙箱。D3 受限 Reflection 路径保持原样。

@@ -1,0 +1,6 @@
+
+> self-evolving-agent@0.1.0 format:check
+> biome format apps/host/runtime/agent.ts apps/host/skills/skills.ts apps/host/skills/skill-loader.ts apps/host/transport/server.ts apps/host/evolution/activities.ts apps/host/evolution/activity-routes.ts apps/host/evolution/development-tools.ts apps/host/evolution/guidance.ts apps/web/src/app/App.tsx apps/web/src/features/chat/ChatView.tsx apps/web/src/features/chat/session-state.ts apps/web/src/features/evolution/ActivityPanel.tsx apps/web/src/features/skills/SkillsPanel.tsx scripts/d4-real-acceptance.ts scripts/d4-desktop-acceptance.ts tests/activities.test.ts
+
+Checked 16 files in 10ms. No fixes applied.
+

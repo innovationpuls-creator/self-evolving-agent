@@ -1,0 +1,25 @@
+
+> local-text-diff@1.0.0 test
+> node --test tests/*.test.mjs
+
+✔ empty strings are zero lines (0.641416ms)
+✔ Chinese additions, removals, unchanged lines and 1-based numbering (0.090292ms)
+✔ one empty side and a single blank line (0.075958ms)
+✔ repeated lines use deterministic deletion-first ties (0.07175ms)
+✔ CRLF normalization, trailing newline, whitespace and standalone CR (0.064ms)
+✔ limits and input types reject explicitly, without silent truncation (0.825708ms)
+✔ aborted calls fail (0.109125ms)
+✔ seeded randomized reconstruction, line numbers and optimal edit length (1000 pairs) (6.739458ms)
+actual text_diff probe: {"old_text":"","new_text":""} {"summary":{"added":0,"removed":0,"unchanged":0},"lines":[],"old_line_count":0,"new_line_count":0,"trailing_newline":{"old":false,"new":false,"changed":false},"equal":true,"newline_policy":"CRLF and LF are equivalent; standalone CR is content"}
+actual text_diff probe: {"old_text":"","new_text":"中文\n中文"} {"summary":{"added":2,"removed":0,"unchanged":0},"lines":[{"type":"added","text":"中文","old_line":null,"new_line":1},{"type":"added","text":"中文","old_line":null,"new_line":2}],"old_line_count":0,"new_line_count":2,"trailing_newline":{"old":false,"new":false,"changed":false},"equal":false,"newline_policy":"CRLF and LF are equivalent; standalone CR is content"}
+actual text_diff probe: {"old_text":"甲\n乙\n甲","new_text":"甲\n甲\n乙"} {"summary":{"added":1,"removed":1,"unchanged":2},"lines":[{"type":"unchanged","text":"甲","old_line":1,"new_line":1},{"type":"removed","text":"乙","old_line":2,"new_line":null},{"type":"unchanged","text":"甲","old_line":3,"new_line":2},{"type":"added","text":"乙","old_line":null,"new_line":3}],"old_line_count":3,"new_line_count":3,"trailing_newline":{"old":false,"new":false,"changed":false},"equal":false,"newline_policy":"CRLF and LF are equivalent; standalone CR is content"}
+actual text_diff probe: {"old_text":"标题\n旧内容\n结尾","new_text":"标题\n新内容\n结尾"} {"summary":{"added":1,"removed":1,"unchanged":2},"lines":[{"type":"unchanged","text":"标题","old_line":1,"new_line":1},{"type":"removed","text":"旧内容","old_line":2,"new_line":null},{"type":"added","text":"新内容","old_line":null,"new_line":2},{"type":"unchanged","text":"结尾","old_line":3,"new_line":3}],"old_line_count":3,"new_line_count":3,"trailing_newline":{"old":false,"new":false,"changed":false},"equal":false,"newline_policy":"CRLF and LF are equivalent; standalone CR is content"}
+✔ native Pi loader registers deferred tool; real execute matches output schema (142.174292ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 231.114

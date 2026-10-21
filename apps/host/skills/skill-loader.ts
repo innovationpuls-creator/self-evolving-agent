@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { discoverSkillText } from './skill-discovery.js';
 import {
   DefaultResourceLoader,
@@ -19,6 +21,7 @@ export class SkillResourceLoader implements ResourceLoader {
     private cwd: string,
     private agentDir: string,
     private settings: SettingsManager,
+    private discussion = false,
   ) {}
   setLoadout(loadout?: SkillLoadout) {
     this.selected = loadout;
@@ -36,7 +39,7 @@ export class SkillResourceLoader implements ResourceLoader {
       settingsManager: this.settings,
       noExtensions: true,
       noSkills: true,
-      additionalExtensionPaths: paths.extensionPaths,
+      additionalExtensionPaths: this.discussion ? [] : paths.extensionPaths,
       additionalSkillPaths: paths.skillPaths,
       extensionFactories: [createToolSearchExtension()],
       skillsOverride: (base) => {
@@ -44,7 +47,13 @@ export class SkillResourceLoader implements ResourceLoader {
         const combined = loadSkills({
           cwd: this.cwd,
           agentDir: this.agentDir,
-          skillPaths: [...this.skillPaths, ...text.map((s) => s.filePath)],
+          skillPaths: [
+            ...this.skillPaths,
+            ...text.map((s) => s.filePath),
+            ...(existsSync(join(this.agentDir, 'evolution', 'SKILL.md'))
+              ? [join(this.agentDir, 'evolution', 'SKILL.md')]
+              : []),
+          ],
           includeDefaults: false,
         });
         return {

@@ -15,6 +15,7 @@ import { memoryRoutes } from '../memory/memory-routes.js';
 import { sessionRoutes } from '../runtime/session-routes.js';
 import { skillRoutes } from '../skills/skill-routes.js';
 import { reflectionRoutes } from '../reflection/reflection-routes.js';
+import { activityRoutes } from '../evolution/activity-routes.js';
 import { evolutionRoutes } from '../evolution/evolution-routes.js';
 
 function equal(a: string, b: string) {
@@ -84,6 +85,7 @@ export async function startHost(options: {
           return;
         }
         if (
+          (await activityRoutes(service, req, res, url)) ||
           (await reflectionRoutes(service.reflection, req, res, url)) ||
           (await evolutionRoutes(
             service.evolution,

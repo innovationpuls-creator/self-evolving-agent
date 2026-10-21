@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-21T10:43:50.319Z",
+  "platform": "darwin",
+  "executable": "/Users/torch/Documents/ChatGPT/agent/release/d4-development-2026-10-21/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent",
+  "result": "passed",
+  "compiledSha256": "059b042c3dc9bfeb9596f224cdd90abdb684bf5b3a62c4d41eaf7836cbc4fa28",
+  "unpublishedDraftCanBeSelected": true,
+  "sharedHost": {
+    "sourceSession": "fe27a4ad-1abe-4fcb-b53a-fe77379a2ea3",
+    "discussionSession": "cf428447-61e1-4690-a971-4e043476d8d6",
+    "activityId": "941eae5a-2c1f-442c-b5a3-0308d415d35c",
+    "cancelled": true,
+    "webReload": true,
+    "unapprovedCodeLoaded": false
+  },
+  "suggestionDiscussion": true
+}

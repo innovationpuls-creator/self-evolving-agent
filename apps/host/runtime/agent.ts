@@ -1,6 +1,11 @@
+import { evolutionGuidance } from '../evolution/guidance.js';
+import { runToolCall } from '@earendil-works/pi-agent-core';
+import type { AssistantMessage } from '@earendil-works/pi-ai';
+import { ActivityService, activityGrant, activityResult, type ActivityResult } from '../evolution/activities.js';
+import { developmentTools } from '../evolution/development-tools.js';
 import { EventEmitter } from 'node:events';
 import { ensureKeyIdentity } from '../storage/data-key.js';
-import { mkdir, stat, readdir, chmod, copyFile, realpath } from 'node:fs/promises';
+import { mkdir, stat, readdir, chmod, copyFile, realpath, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
@@ -114,6 +119,8 @@ export class AgentService extends EventEmitter {
   diagnosticHistory!: DiagnosticHistory;
   reflection!: ReflectionService;
   evolution!: EvolutionService;
+  activities!: ActivityService;
+  private activityRuns = new Map<string, { controller: AbortController; task: Promise<void> }>();
   private gate?: { promise: Promise<void>; release: () => void };
   private queued: Array<{ id: string; text: string }> = [];
   private draining = false;
@@ -221,6 +228,15 @@ export class AgentService extends EventEmitter {
     this.runtime.streamSimple = (model, context, options) => send(model, this.sensitive.copy(context), options);
     this.evolution = new EvolutionService(this.db, this.sensitive, () => this.emit('event', { type: 'evolution' }));
     this.evolution.init();
+    this.activities = new ActivityService(this.db, this.sensitive, this.skills, () =>
+      this.emit('event', { type: 'evolution' }),
+    );
+    this.activities.init();
+    await mkdir(join(this.dataDir, 'pi', 'evolution'), { recursive: true, mode: 0o700 });
+    await writeFile(join(this.dataDir, 'pi', 'evolution', 'SKILL.md'), evolutionGuidance, { mode: 0o600 });
+    this.skills.connectEvolution((activityId, skillId, versionId) => {
+      this.activities.assertAdmission(activityId, skillId, versionId);
+    });
     this.reflection = new ReflectionService({
       db: this.db,
       store: this.store,
@@ -355,6 +371,8 @@ export class AgentService extends EventEmitter {
     }
   }
   private async createDiscussion(id: string, suggestion: EvolutionSuggestion) {
+    const project = await realpath(suggestion.project ?? this.dataDir);
+    this.activities.create(id, project, suggestion.goal, suggestion.id);
     const existing = await this.loadSaved(id);
     if (existing) {
       if (existing.saved.record.purpose !== 'discussion') throw new Error('讨论会话身份冲突');
@@ -394,6 +412,167 @@ export class AgentService extends EventEmitter {
       throw error;
     }
   }
+  async createActivity(sourceSessionId: string, goal: string) {
+    const origin = await this.get(sourceSessionId);
+    const id = randomUUID();
+    const a = this.activities.create(id, origin.record.cwd, goal);
+    const suggestion: EvolutionSuggestion = {
+      id: randomUUID(),
+      title: goal.slice(0, 100),
+      goal,
+      reason: '用户提出的能力目标',
+      value: '在讨论中确认用途',
+      uncertainty: '在讨论与验证中确认',
+      action: '讨论具体授权范围',
+      evidence: [],
+      priority: 'normal',
+      project: origin.record.cwd,
+      actor: 'user',
+      status: 'adopted',
+      revision: 1,
+      created: Date.now(),
+      updated: Date.now(),
+      source: {
+        sessionId: sourceSessionId,
+        project: origin.record.cwd,
+        entryId: origin.session.sessionManager.getLeafId() ?? 'root',
+      },
+    };
+    try {
+      await this.ensureDiscussion(id, suggestion);
+    } catch (error) {
+      this.activities.update(a.id, { status: 'failed', error: '讨论会话创建失败' });
+      throw error;
+    }
+    return this.activities.get(a.id);
+  }
+  async authorizeActivity(id: string, input: unknown) {
+    const a = this.activities.get(id),
+      item = await this.get(a.sessionId);
+    if (item.busy || item.skillFailed || item.storageFailed || item.blocked)
+      throw new SkillError('请等待讨论结束并处理会话错误');
+    item.busy = true;
+    let finish!: () => void;
+    item.actionDone = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    let grantedHere = false;
+    try {
+      const granted = await this.activities.authorize(id, activityGrant.parse(input));
+      grantedHere = true;
+      const grant = granted.grant;
+      if (!grant) throw new SkillError('用户授权记录缺失');
+      this.enableMemoryTools(item.session, item.record);
+      await item.session.sendCustomMessage(
+        {
+          customType: 'evolution_authorization',
+          display: false,
+          content: `用户已授权目标：${grant.goal}\n允许变更的候选目录：${JSON.stringify(grant.targets)}\n自主选择调查、开发、依赖安装和测试方法。仅在这些候选目录开发；不修改正式版本。先按需读取 capability-evolution Skill 的开发约定。完成后调用 evolution_complete 提交成果，无代码成果提交空 packages。`,
+          details: { grantId: grant.id },
+        },
+        { triggerTurn: false },
+      );
+      await this.persist(item);
+    } catch (error) {
+      const current = this.activities.get(id);
+      if (grantedHere && current.status === 'running')
+        this.activities.update(id, { status: 'failed', error: '授权上下文未能保存，开发未启动' });
+      throw error;
+    } finally {
+      item.busy = false;
+      finish();
+      this.changed(item);
+    }
+    if (this.activities.get(id).status === 'running') await this.prompt(a.sessionId, '按已授权的目标继续工作。');
+    return this.activities.get(id);
+  }
+  async cancelActivity(id: string) {
+    const a = this.activities.get(id);
+    if (['completed', 'failed', 'cancelled', 'interrupted'].includes(a.status)) return a;
+    this.activities.update(id, { status: 'cancelled', error: undefined });
+    this.activityRuns.get(id)?.controller.abort();
+    const itemBeforeStop = this.active.get(a.sessionId);
+    await itemBeforeStop?.actionDone;
+    await this.stop(a.sessionId);
+    const run = this.activityRuns.get(id);
+    if (run) await run.task;
+    const item = this.active.get(a.sessionId);
+    if (item) {
+      this.enableMemoryTools(item.session, item.record);
+      this.changed(item);
+    }
+    return this.activities.get(id);
+  }
+  private startActivityRelease(id: string) {
+    if (this.activityRuns.has(id)) return;
+    const controller = new AbortController();
+    const task = Promise.resolve()
+      .then(() => this.releaseActivity(id, controller.signal))
+      .finally(() => this.activityRuns.delete(id));
+    this.activityRuns.set(id, { controller, task });
+    void task.catch(() => {});
+  }
+  private async releaseActivity(id: string, signal: AbortSignal) {
+    try {
+      const a = this.activities.get(id);
+      if (a.status !== 'checking' || !a.grant || !a.result) return;
+      const prepared: Array<{
+        skillId: string;
+        version: string;
+        probes: ActivityResult['packages'][number]['probes'];
+        revision: number;
+      }> = [];
+      for (const p of a.result.packages) {
+        signal.throwIfAborted();
+        const target = a.grant.targets.find((t) => t.key === p.target);
+        if (!target) throw new SkillError('成果超出用户授权', 403);
+        if (target.skillId && this.skills.record(target.skillId).revision !== target.baseRevision)
+          throw new SkillError('授权后正式能力已变化，请重新讨论');
+        const records = await this.skills.import(
+          {
+            source: target.directory,
+            project: a.project,
+            bindings: [{ skill: p.skillFile, extensions: p.extensions, knowledgeFiles: p.knowledgeFiles }],
+          },
+          { id: target.skillId, name: target.name, baseRevision: target.baseRevision },
+        );
+        const record = records[0];
+        if (!record) throw new SkillError('未产生候选');
+        prepared.push({ skillId: record.id, version: record.latest, probes: p.probes, revision: record.revision });
+      }
+      for (const p of prepared) {
+        signal.throwIfAborted();
+        const op = this.skills.publish(p.skillId, p.version, p.revision, undefined, {
+          activityId: id,
+          probes: p.probes,
+          signal,
+        });
+        this.activities.update(id, {
+          releases: [
+            ...this.activities.get(id).releases,
+            { skillId: p.skillId, version: p.version, operationId: op.id },
+          ],
+        });
+        await this.skills.settled();
+        const result = this.skills.operation(op.id);
+        if (result.status !== 'applied') throw new SkillError(result.message);
+      }
+      signal.throwIfAborted();
+      this.activities.update(id, { status: 'completed', error: undefined });
+    } catch (e) {
+      if (this.activities.get(id).status !== 'cancelled')
+        this.activities.update(id, {
+          status: 'failed',
+          error: e instanceof SkillError ? e.message : '候选检查或发布失败；已提交版本与候选记录可查',
+        });
+    } finally {
+      const item = this.active.get(this.activities.get(id).sessionId);
+      if (item) {
+        this.enableMemoryTools(item.session, item.record);
+        this.changed(item);
+      }
+    }
+  }
   async create(cwd: string, provider: string, model: string) {
     await this.waitBarrier();
     while (this.gate) await this.waitBarrier();
@@ -423,6 +602,26 @@ export class AgentService extends EventEmitter {
   }
   private async build(record: RecordData, manager: SessionManager): Promise<Active> {
     const agentDir = join(this.dataDir, 'pi');
+    const activity = this.activities?.forSession(record.id);
+    const readOnly = record.purpose === 'discussion';
+    const development = activity
+      ? developmentTools(
+          this.activities,
+          activity.id,
+          join(this.skills.dataDir, 'evolution', activity.id),
+          async (result) => {
+            activityResult.parse(result);
+            this.activities.assertRunning(activity.id);
+            if (new Set(result.packages.map((p) => p.target)).size !== result.packages.length)
+              throw new SkillError('成果不能重复提交同一能力');
+            const current = this.activities.get(activity.id);
+            for (const p of result.packages)
+              if (!current.grant?.targets.some((t) => t.key === p.target))
+                throw new SkillError('成果超出用户授权范围', 403);
+            this.activities.update(activity.id, { status: 'checking', result });
+          },
+        )
+      : [];
     const settings = SettingsManager.inMemory(
       {
         compaction: { enabled: true },
@@ -439,7 +638,7 @@ export class AgentService extends EventEmitter {
       },
       { projectTrusted: false },
     );
-    const loader = new SkillResourceLoader(this.skills, record.cwd, agentDir, settings);
+    const loader = new SkillResourceLoader(this.skills, record.cwd, agentDir, settings, readOnly);
     await loader.reload();
     const { session } = await createAgentSession({
       cwd: record.cwd,
@@ -449,7 +648,21 @@ export class AgentService extends EventEmitter {
       sessionManager: manager,
       settingsManager: settings,
       resourceLoader: loader,
+      ...(readOnly
+        ? {
+            tools: [
+              'read',
+              'ls',
+              'find',
+              'grep',
+              ...diagnosticToolNames,
+              ...evolutionToolNames,
+              ...development.map((t) => t.name),
+            ],
+          }
+        : {}),
       customTools: [
+        ...development,
         ...memoryTools(this.memory, record.cwd, (callId) => this.memorySource(record.id, callId)),
         ...diagnosticTools(this.diagnosticHistory, record.cwd),
         ...evolutionTools(this.evolution, (callId) => this.memorySource(record.id, callId)).map((tool) => ({
@@ -479,7 +692,7 @@ export class AgentService extends EventEmitter {
         item.error = 'Skill 生命周期执行失败，请恢复能力后重试';
       },
     });
-    this.enableMemoryTools(session);
+    this.enableMemoryTools(session, record);
     session.subscribe((event) => {
       item.diagnostic.observe(event);
       if (event.type === 'agent_settled') {
@@ -576,7 +789,20 @@ export class AgentService extends EventEmitter {
     }
     return copy;
   }
-  private enableMemoryTools(session: AgentSession) {
+  private enableMemoryTools(session: AgentSession, record?: RecordData) {
+    if (record?.purpose === 'discussion') {
+      const a = this.activities.forSession(record.id);
+      session.setActiveToolsByName([
+        'read',
+        'ls',
+        'find',
+        'grep',
+        ...diagnosticToolNames,
+        ...evolutionToolNames,
+        ...(a?.status === 'running' ? ['write', 'edit', 'bash', 'evolution_complete'] : []),
+      ]);
+      return;
+    }
     const active = session.getActiveToolNames();
     const required = [...memoryToolNames, ...diagnosticToolNames, ...evolutionToolNames];
     if (required.some((name) => !active.includes(name)))
@@ -684,6 +910,7 @@ export class AgentService extends EventEmitter {
       streamingMessage: item.streamingMessage,
       tree: item.session.sessionManager.getTree(),
       leafId: item.session.sessionManager.getLeafId(),
+      activity: this.activities?.forSession(item.record.id),
     });
   }
   private changed(item: Active) {
@@ -789,6 +1016,7 @@ export class AgentService extends EventEmitter {
     }
     item.run = (async () => {
       try {
+        if (item.record.purpose === 'discussion') this.enableMemoryTools(item.session, item.record);
         await item.loader.refreshSkills();
         item.session.setActiveToolsByName(item.session.getActiveToolNames());
         try {
@@ -825,6 +1053,10 @@ export class AgentService extends EventEmitter {
         this.reflection.wake();
         dispatched();
         this.changed(item);
+        const activity = this.activities.forSession(id);
+        if (activity?.status === 'checking') this.startActivityRelease(activity.id);
+        else if (activity?.status === 'running' && item.error)
+          this.activities.update(activity.id, { status: 'failed', error: item.error });
       }
     })();
   }
@@ -865,7 +1097,7 @@ export class AgentService extends EventEmitter {
         this.memory.beginTransition(id);
         try {
           await item.session.navigateTree(value, { summarize: false });
-          this.enableMemoryTools(item.session);
+          this.enableMemoryTools(item.session, item.record);
           await this.persist(item);
           const manager = item.session.sessionManager;
           this.memory.reconcileSource(
@@ -896,7 +1128,7 @@ export class AgentService extends EventEmitter {
   private async applySkills(next: SkillLoadout, previous: SkillLoadout, op: SkillOperation, commit: () => void) {
     const changed = next.records.find((r) => r.id === op.skillId);
     if (!changed) throw new SkillError('Skill 不存在');
-    // A separate Session validates reviewed factories before the formal barrier.
+    // Validate admitted candidates with native Pi before the formal switch barrier.
     const sample = [...this.active.values()].find((a) => !changed.project || a.record.cwd === changed.project);
     const model = sample
       ? this.runtime.getModel(sample.record.provider, sample.record.model)
@@ -908,7 +1140,11 @@ export class AgentService extends EventEmitter {
       { projectTrusted: false },
     );
     const loader = new SkillResourceLoader(this.skills, cwd, join(this.dataDir, 'pi'), settings);
-    loader.setLoadout(next);
+    loader.setLoadout(
+      op.evolution
+        ? { ...next, records: next.records.map((r) => (r.id === changed.id ? { ...r, enabled: true } : r)) }
+        : next,
+    );
     const validationRuntime = await ModelRuntime.create({
       credentials: new InMemoryCredentialStore(),
       modelsPath: null,
@@ -935,6 +1171,83 @@ export class AgentService extends EventEmitter {
         },
       });
       if (failed) throw new SkillError('候选生命周期检查失败');
+      if (op.evolution) {
+        const v = next.versions.find((v) => v.skillId === op.skillId);
+        if (!v) throw new SkillError('候选版本缺失');
+        const owned = new Set(v.extensions.map((p) => resolve(this.skills.packagePath(v), p)));
+        const tools = candidate.getAllTools().filter((t) => owned.has(resolve(t.sourceInfo.path)));
+        const reserved = new Set([
+          'read',
+          'write',
+          'edit',
+          'bash',
+          'ls',
+          'grep',
+          'find',
+          'tool_search',
+          'evolution_complete',
+          ...memoryToolNames,
+          ...diagnosticToolNames,
+          ...evolutionToolNames,
+        ]);
+        for (const extension of loader.getExtensions().extensions) {
+          for (const name of extension.tools.keys()) {
+            if (!owned.has(resolve(extension.resolvedPath))) continue;
+            if (
+              reserved.has(name) ||
+              loader.getExtensions().extensions.some((other) => other !== extension && other.tools.has(name))
+            )
+              throw new SkillError(`候选 Tool 与现有能力名称冲突：${name}`);
+          }
+        }
+        if (tools.length && tools.some((t) => !op.evolution!.probes.some((p) => p.tool === t.name)))
+          throw new SkillError('每个候选 Tool 都需要实际调用检查');
+        candidate.setActiveToolsByName([...candidate.getActiveToolNames(), ...tools.map((t) => t.name)]);
+        for (const probe of op.evolution.probes) {
+          if (!tools.some((t) => t.name === probe.tool)) throw new SkillError('检查 Tool 不属于当前候选 Skill');
+          const call = { type: 'toolCall' as const, id: randomUUID(), name: probe.tool, arguments: probe.args };
+          const message: AssistantMessage = {
+            role: 'assistant',
+            content: [call],
+            api: model.api,
+            provider: model.provider,
+            model: model.id,
+            stopReason: 'toolUse',
+            timestamp: Date.now(),
+            usage: {
+              input: 0,
+              output: 0,
+              cacheRead: 0,
+              cacheWrite: 0,
+              totalTokens: 0,
+              cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 },
+            },
+          };
+          candidate.agent.state.messages = [...candidate.agent.state.messages, message];
+          const outcome = await runToolCall(call, {
+            tools: candidate.agent.state.tools,
+            assistantMessage: message,
+            context: candidate.agent.state,
+            signal: AbortSignal.timeout(30000),
+            beforeToolCall: candidate.agent.beforeToolCall,
+            afterToolCall: candidate.agent.afterToolCall,
+          });
+          const text = outcome.result.content
+            .filter((p) => p.type === 'text')
+            .map((p) => p.text)
+            .join('\n');
+          const checks = op.checks ?? [];
+          checks.push({
+            tool: probe.tool,
+            passed: !outcome.isError && text.includes(probe.expectedText) && !failed,
+            output: this.sensitive.text(text).slice(0, 12000),
+          });
+          op.checks = checks;
+          if (outcome.isError || !text.includes(probe.expectedText) || failed)
+            throw new SkillError(`Tool 实际检查失败：${probe.tool}`);
+        }
+        await this.skills.verify(v);
+      }
     } finally {
       candidate?.dispose();
     }
@@ -974,6 +1287,7 @@ export class AgentService extends EventEmitter {
           if (!before.definitions.has(t.name) && t.exposure === 'direct') active.push(t.name);
         item.session.setActiveToolsByName(active);
         item.skillFailed = false;
+        if (item.record.purpose === 'discussion') this.enableMemoryTools(item.session, item.record);
       }
       commit();
       for (const item of affected) {
@@ -1104,6 +1418,8 @@ export class AgentService extends EventEmitter {
         item.session.abortCompaction();
       }),
     );
+    for (const run of this.activityRuns.values()) run.controller.abort();
+    await Promise.allSettled([...this.activityRuns.values()].map((r) => r.task));
     await this.skills?.close();
     await Promise.allSettled([...this.loading.values(), ...this.creating]);
     try {

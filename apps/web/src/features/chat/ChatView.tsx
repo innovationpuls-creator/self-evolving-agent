@@ -1,3 +1,4 @@
+import { ActivityPanel } from '../evolution/ActivityPanel';
 import React, { useEffect, useRef, useState } from 'react';
 import { Markdown } from '../../components/Markdown';
 import { ReflectionStatus } from '../reflection/ReflectionStatus';
@@ -58,6 +59,8 @@ export function ChatView({
   onSettings,
   onDiagnostics,
   onReflection,
+  onOpen,
+  onSkill,
   onError,
 }: {
   api: ReflectionApi;
@@ -74,6 +77,8 @@ export function ChatView({
   onSettings: () => void;
   onDiagnostics: () => void;
   onReflection: () => void;
+  onOpen: (id: string) => Promise<void>;
+  onSkill: (id: string) => void;
   onError: (message: string) => void;
 }) {
   const [cwd, setCwd] = useState(''),
@@ -155,6 +160,17 @@ export function ChatView({
           </div>
         )}
       </header>
+      {session && (
+        <ActivityPanel
+          key={session.id}
+          api={api}
+          session={session}
+          ready={ready}
+          onOpen={onOpen}
+          onSkill={onSkill}
+          onError={onError}
+        />
+      )}
       <ReflectionStatus api={api} sessionId={session?.id} onOpen={onReflection} />
       {!session ? (
         selectedId ? (

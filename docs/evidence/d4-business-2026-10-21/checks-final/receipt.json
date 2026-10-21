@@ -1,0 +1,47 @@
+{
+  "time": "2026-10-21T10:43:08.605Z",
+  "sourceSha256": {
+    "apps/host/runtime/agent.ts": "eaee9ad6cdc66eb3a60b725c77b651a09762df3ae393e6b7dd6dc7e9241e4026",
+    "apps/host/skills/skills.ts": "1b098ac04d92f28dcf3c7c89a919d47ec902c2f52d9dc6634700e24911667194",
+    "apps/host/skills/skill-loader.ts": "e37d1474614942ed9982f4e737f12538a86b0d21df9094c6b7fa027b045ea7d5",
+    "apps/host/transport/server.ts": "2df1902001911a1a4c6bfb06e14c0fa29cec73b49dc65e5799fbba70a0e616be",
+    "apps/host/evolution/activities.ts": "013a90da647c16b0a4aa7a5201e1a94c75aee26169c9d6b1e86ecd4b9768ce81",
+    "apps/host/evolution/activity-routes.ts": "e9dbe26471a4ab38bfe25e3a92072c33bbc1fcee055ce85509aaac8253a2689b",
+    "apps/host/evolution/development-tools.ts": "84939b0d2385755b1c21bac2ef0a3b85858cd8476e564e2876543124d2271d33",
+    "apps/host/evolution/guidance.ts": "80ce16255637b44cd5fac10742a97bc9151fb589989b85abdf2e1d000f2ca830",
+    "apps/web/src/app/App.tsx": "dc904746717701bf5c359eb38235aa1e24e62bf108340c14765f2df530b3e2b1",
+    "apps/web/src/features/chat/ChatView.tsx": "de2a7e770b018bf9b59b51fa62807256c2053a40ab315016f436900fdb079faa",
+    "apps/web/src/features/chat/session-state.ts": "72468417d08afc72164f2a3b30a36ad3657d425db2f8fadb982cb4805bc71148",
+    "apps/web/src/features/evolution/ActivityPanel.tsx": "1682a1911b71cbce681ab411c5f19bf47b962fa31f17fe5fc7cccc1079944f9e",
+    "apps/web/src/features/skills/SkillsPanel.tsx": "cc9456190839a7f10372f282f2d34b4ab385007ad8b6b1e24deae00795a8fcc8",
+    "scripts/d4-real-acceptance.ts": "ad8ced3b12b404d32aa5f37564219176720474b6f0cbb40ccdfad5548cc9949c",
+    "scripts/d4-desktop-acceptance.ts": "eb6061bef4c458ad62561482700c9f26aed3eefe9028efdaff22793fb9c059c0",
+    "tests/activities.test.ts": "c06bfadf8ed0354d6b38a0081cb1d9f6ecb0f9e7af629ddbe434fdd27b050340"
+  },
+  "commands": [
+    {
+      "label": "typecheck",
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "elapsedMs": 2354
+    },
+    {
+      "label": "tests",
+      "command": "npm test",
+      "exitCode": 0,
+      "elapsedMs": 34424
+    },
+    {
+      "label": "lint",
+      "command": "npm run lint",
+      "exitCode": 0,
+      "elapsedMs": 421
+    },
+    {
+      "label": "format",
+      "command": "npm run format:check -- apps/host/runtime/agent.ts apps/host/skills/skills.ts apps/host/skills/skill-loader.ts apps/host/transport/server.ts apps/host/evolution/activities.ts apps/host/evolution/activity-routes.ts apps/host/evolution/development-tools.ts apps/host/evolution/guidance.ts apps/web/src/app/App.tsx apps/web/src/features/chat/ChatView.tsx apps/web/src/features/chat/session-state.ts apps/web/src/features/evolution/ActivityPanel.tsx apps/web/src/features/skills/SkillsPanel.tsx scripts/d4-real-acceptance.ts scripts/d4-desktop-acceptance.ts tests/activities.test.ts",
+      "exitCode": 0,
+      "elapsedMs": 321
+    }
+  ]
+}

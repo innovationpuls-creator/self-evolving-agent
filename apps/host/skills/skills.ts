@@ -1,3 +1,5 @@
+import type { z } from 'zod';
+import type { toolProbe } from '../evolution/activities.js';
 import { discoverSkillText } from './skill-discovery.js';
 import { dependencyIdentity, hostIdentity } from './skill-dependencies.js';
 import { createHash, randomUUID } from 'node:crypto';
@@ -56,6 +58,7 @@ export interface SkillVersion {
   digest: string;
   created: number;
   review?: { digest: string; notes: string; at: number };
+  evolution?: { activityId: string; digest: string; checkedAt: number; probes: z.infer<typeof toolProbe>[] };
   error?: string;
 }
 export interface SkillOperation {
@@ -64,6 +67,8 @@ export interface SkillOperation {
   status: 'checking' | 'waiting' | 'applied' | 'failed' | 'interrupted';
   message: string;
   created: number;
+  evolution?: { activityId: string; probes: z.infer<typeof toolProbe>[] };
+  checks?: Array<{ tool: string; passed: boolean; output: string }>;
 }
 export interface SkillLoadout {
   records: SkillRecord[];
@@ -164,6 +169,11 @@ export class SkillService {
   private tail = Promise.resolve();
   private pending = new Set<Promise<unknown>>();
   private closed = false;
+  private admissions = new Map<string, string>();
+  private evolutionAuthority?: (activityId: string, skillId: string, versionId?: string) => void;
+  connectEvolution(check: (activityId: string, skillId: string, versionId?: string) => void) {
+    this.evolutionAuthority = check;
+  }
   constructor(
     public dataDir: string,
     private db: DatabaseSync,
@@ -271,7 +281,11 @@ export class SkillService {
     await this.verifyDependencies(v);
     const current = await versionDigest(this.root(v), v);
     if (current !== v.digest) throw new SkillError('版本内容或依赖已改变，需要重新审查');
-    if (v.extensions.length && v.review?.digest !== v.digest)
+    if (v.evolution) {
+      if (v.evolution.digest !== v.digest || !this.evolutionAuthority) throw new SkillError('开发授权与版本不匹配');
+      this.evolutionAuthority(v.evolution.activityId, v.skillId, v.id);
+    }
+    if (v.extensions.length && v.review?.digest !== v.digest && !v.evolution && !this.admissions.has(v.id))
       throw new SkillError('可执行版本尚未完成人工代码、依赖及权限审查');
   }
   private assertRevision(r: SkillRecord, revision: number) {
@@ -379,7 +393,7 @@ export class SkillService {
     );
     return op;
   }
-  async import(input: ImportSkill) {
+  async import(input: ImportSkill, evolutionTarget?: { id?: string; name: string; baseRevision?: number }) {
     return this.serialize(async () => {
       const snapshot = randomUUID(),
         destination = join(this.dataDir, 'skills', 'versions', snapshot);
@@ -418,10 +432,17 @@ export class SkillService {
             ...loadSkills({ cwd: root, agentDir: root, skillPaths: [r.path], includeDefaults: false }).skills,
           );
         if (!skills.length) skills.push(...loadSkillsFromDir({ dir: root, source: 'path' }).skills);
+        if (evolutionTarget?.id) {
+          const selected = skills.filter((s) => s.name === evolutionTarget.name);
+          skills.splice(0, skills.length, ...selected);
+        }
         if (!skills.length) throw new SkillError('未发现有效 SKILL.md');
+        if (evolutionTarget && (skills.length !== 1 || skills[0]?.name !== evolutionTarget.name))
+          throw new SkillError('候选必须只包含授权的单个 Skill');
         const extensionPaths = paths.extensions
           .filter((r) => r.enabled && r.metadata.origin === 'package' && contained(root, r.path))
-          .map((r) => relative(root, r.path));
+          .map((r) => relative(root, r.path))
+          .filter((p) => !evolutionTarget?.id || input.bindings?.some((b) => b.extensions.includes(p)));
         const bindings = input.bindings ?? [];
         if (extensionPaths.length && !bindings.length)
           throw new SkillError('特殊 Package 需要明确绑定每个 Skill 与其 Extension 路径');
@@ -451,9 +472,19 @@ export class SkillService {
           if (!contained(root, await realpath(s.filePath))) throw new SkillError('Skill 路径超出 Package');
           const skillFile = relative(root, s.filePath),
             binding = bindings.find((b) => b.skill === skillFile);
-          const previous = this.records().find(
-            (r) => r.source === source && r.project === project && this.version(r.latest).skillFile === skillFile,
-          );
+          const previous = evolutionTarget?.id
+            ? this.record(evolutionTarget.id)
+            : this.records().find(
+                (r) => r.source === source && r.project === project && this.version(r.latest).skillFile === skillFile,
+              );
+          if (previous && evolutionTarget?.baseRevision !== undefined)
+            this.assertRevision(previous, evolutionTarget.baseRevision);
+          if (
+            evolutionTarget &&
+            !previous &&
+            this.records().some((r) => r.name === s.name && (!r.project || r.project === project))
+          )
+            throw new SkillError('授权后同名能力已出现，请重新讨论目标');
           const id = previous?.id ?? randomUUID(),
             v: SkillVersion = {
               id: randomUUID(),
@@ -469,8 +500,8 @@ export class SkillService {
           v.digest = await versionDigest(destination, v);
           const record: SkillRecord = {
             id,
-            source,
-            project,
+            source: previous?.source ?? source,
+            project: previous?.project ?? project,
             name: s.name,
             description: s.description,
             enabled: previous?.enabled ?? true,
@@ -554,6 +585,7 @@ export class SkillService {
           snapshot: randomUUID(),
           created: Date.now(),
           review: undefined,
+          evolution: undefined,
           error: undefined,
         };
       const target = this.root(v);
@@ -654,23 +686,39 @@ export class SkillService {
     op.message = '等待当前任务完成后切换';
     this.saveOperation(op);
   }
-  publish(id: string, versionId: string, baseRevision: number, enabled?: boolean) {
+  publish(
+    id: string,
+    versionId: string,
+    baseRevision: number,
+    enabled?: boolean,
+    evolution?: { activityId: string; probes: z.infer<typeof toolProbe>[]; signal: AbortSignal },
+  ) {
     const record = this.record(id);
     this.assertRevision(record, baseRevision);
     const v = this.version(versionId);
     if (v.skillId !== id) throw new SkillError('版本不属于当前 Skill');
+    if (evolution) {
+      if (!this.evolutionAuthority) throw new SkillError('开发授权服务尚未就绪');
+      this.evolutionAuthority(evolution.activityId, id);
+      evolution.signal.throwIfAborted();
+    }
     const op: SkillOperation = {
       id: randomUUID(),
       skillId: id,
       status: 'checking',
       message: '正在检查候选版本',
       created: Date.now(),
+      ...(evolution ? { evolution: { activityId: evolution.activityId, probes: evolution.probes } } : {}),
     };
     this.saveOperation(op);
     void this.serialize(async () => {
       try {
         const r = this.record(id);
         this.assertRevision(r, baseRevision);
+        if (evolution) {
+          evolution.signal.throwIfAborted();
+          this.admissions.set(v.id, evolution.activityId);
+        }
         if (enabled !== false) await this.verify(v);
         const parsed =
           enabled === false
@@ -698,6 +746,19 @@ export class SkillService {
         if (!this.apply) throw new SkillError('Skill 运行服务尚未就绪');
         await this.apply(next, previous, op, () =>
           this.transaction(() => {
+            if (evolution) {
+              evolution.signal.throwIfAborted();
+              this.evolutionAuthority!(evolution.activityId, id);
+              this.saveVersion({
+                ...v,
+                evolution: {
+                  activityId: evolution.activityId,
+                  digest: v.digest,
+                  checkedAt: Date.now(),
+                  probes: evolution.probes,
+                },
+              });
+            }
             this.save(nextRecord);
             op.status = 'applied';
             op.message = '已生效';
@@ -709,6 +770,8 @@ export class SkillService {
         op.status = 'failed';
         op.message = e instanceof SkillError ? e.message : '检查或切换失败，已尝试保留上一可用版本';
         this.saveOperation(op);
+      } finally {
+        if (evolution) this.admissions.delete(v.id);
       }
     }).catch(() => {});
     return op;
@@ -793,6 +856,9 @@ export class SkillService {
     return skills.filter(
       (s) => !relevant.some((r) => resolve(r.source, this.version(r.latest).skillFile) === resolve(s.filePath)),
     );
+  }
+  async settled() {
+    await this.tail;
   }
   async close() {
     this.closed = true;

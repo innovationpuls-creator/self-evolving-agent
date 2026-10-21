@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[D3 Reflection](D3-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -89,7 +89,26 @@ npm run test:skills:ui
 
 当前提供 D1 本机集成，以及通过整体业务验收的 D2 Skill、Memory 和 Diagnostic Log；满足 D3 数据及能力访问准入条件。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
 
-D3 已实现 Reflection 调度、来源记录与进化建议中心。真实受限 XPC 执行验收仍 blocked：当前 ad-hoc 签名无法验证 XPC 对端，任务保留 waiting_user 和具体原因；不会改用 Host 内执行。D4 自主代码生成、执行和发布尚未实现。特殊 Skill 经过人工审查仍与 Host 同进程、同权限运行；这不等于代码沙箱。Windows 实机、长期运行与完整安全场景仍待验收。
+D3 Reflection 的真实受限 XPC 及完整业务补验收已通过；运行时仍要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。Windows 实机、长期运行和正式签名分发仍待验收，D5 未实施。
+
+## 自主能力进化
+
+在会话的“能力目标与开发活动”输入目标并进入讨论，或从“进化建议”采纳建议进入讨论。讨论本身不授权修改。明确目标后展开“确认开发范围”，选择允许改进的已有 Skill，或填写允许创建的名称，点击“授权并开始开发”。
+
+Agent 在同一原生 Pi AgentSession 自主调查、编写代码、安装依赖和测试，也可得出无代码结论。Host 对提交成果做必要检查，通过后直接沿用 SkillVersion 自动生效，不再重复批准。活动保留目标、授权范围、结果、检查和版本入口；可取消活动，或在“能力管理 → 版本与修订历史”恢复旧版本。普通会话通过原生 Skill 与 tool_search 发现新能力。
+
+D4 授权检查记录与 D2 手工代码审查分开。直接导入或手工编辑的可执行候选仍走原有人工审查；取消不撤销已经提交的版本，已提交版本可显式回退。一次活动内多个 Skill 逐个提交，已完成的版本会留在活动记录中。Host 异常中断保留候选与已提交版本，不自动重放。
+
+复验命令（真实模型检查使用本机 Pi 授权并消耗模型额度）：
+
+```sh
+npm run build
+npm run test:d4:real
+npm run package:desktop
+npm run test:d4:desktop
+```
+
+Desktop 检查默认使用 `release/Agent-darwin-arm64/Agent.app`，可用 `AGENT_APP_PATH` 指定可执行文件。macOS 使用现有有效签名身份可避免 ad-hoc 包重新触发的钥匙串等待。完整证据与限制见 [D4 验收记录](D4-ACCEPTANCE.md)。
 
 ## 长期记忆
 
