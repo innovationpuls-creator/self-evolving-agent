@@ -32,7 +32,7 @@ Agent Loop、Tool Calling、模型接入、Session/分支/Compaction、基础文
 
 ## 交付与安全边界
 
-自进化核心以 Pi Package 在原生 Pi 中独立安装为目标，Web 和桌面客户端另有产品集成，不由一个普通 Skill 自动生成，也不作为使用核心能力的前提。原生兼容与安装成功不代表普通 Extension 已提供完整安全保证；严格敏感信息保护与权限隔离依赖满足既定约束的受控运行环境。
+原生 Pi 的独立交付目标修订为单独的 Diagnostic Extension：通过 Pi 官方 Tool/Session 扩展接口向 Agent 提供按需的高价值日志与证据查询，复用现有指标语义，不重建 Session 或整个自进化 Host。Memory、Reflection、Evolution 及完整产品交互继续留在现有产品；原生 Extension 不提供操作系统级隔离，敏感信息保护与范围约束仍须实际验证。
 
 原对话指出 SDK 与 CLI 默认加载能力可能不同，Extension 不具备天然隔离，原生 Session 脱敏也未获得完整保证。这些均列入 SA-08。
 
