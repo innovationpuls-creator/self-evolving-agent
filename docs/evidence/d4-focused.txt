@@ -1,0 +1,37 @@
+✔ D4 export binds goal, scope, every byte and file membership (7.824792ms)
+✔ D4 staging rejects wrong authorization, duplicate export, missing cleanup and tamper (8.15ms)
+✔ D4 extra files and symlinks cannot enter frozen candidate (2.699125ms)
+✔ D4 fails closed without its own signed runtime (0.462584ms)
+✔ malformed Worker protocol null fails locally (116.114375ms)
+✔ malformed Worker protocol [] fails locally (103.436292ms)
+✔ malformed Worker protocol "text" fails locally (107.45975ms)
+✔ malformed Worker protocol { fails locally (114.744333ms)
+✔ unserializable Host response ends only the Reflection run (121.251125ms)
+✔ synchronous Host handler failure returns a bounded operation error (124.679791ms)
+✔ terminal message with outstanding operation revokes and settles it before rejecting (121.336334ms)
+✔ failure revokes synchronously before queued operations can commit (124.526417ms)
+✔ requests buffered after terminal success are rejected without dispatch (114.323375ms)
+✔ ordinary native discovery, management, edit conflict, disable, rollback and restart (612.3115ms)
+✔ unreviewed factories never load; reviewed deferred tool, hooks and sibling isolation block indirect bypass (803.689125ms)
+✔ content tampering, escaping links, shared bindings, unknown project extensions and review mismatch fail closed (107.424292ms)
+✔ updates preserve the original Session, drain old execution and FIFO, failed candidate retains last good (910.221792ms)
+✔ knowledge revisions refresh documents without reloading executable runtime and remain independent of rollback (139.67425ms)
+✔ draft deletions, stale revision recovery, frontmatter and knowledge editor show authoritative content (91.345708ms)
+✔ declared dependency closure requires included locked bytes and keeps internal relative links (69.662375ms)
+✔ SQL commit and partial reload failures restore all original Sessions; failed restoration blocks until explicit recovery (204.58125ms)
+✔ publication waits for the entire admitted dispatch including its first encrypted save (152.629459ms)
+✔ native .agents discovery includes ancestors without instantiating project Extensions (58.197625ms)
+✔ a damaged formal snapshot can still be disabled to restore operation (161.381292ms)
+✔ Host shutdown waits for admitted recovery before disposing Runtime (69.745208ms)
+✔ native npm acquisition prepares a locked tree without executing installation scripts (16772.582375ms)
+✔ native compaction, selected history branch, model configuration and subscriptions survive a Skill switch (623.234125ms)
+✔ disabled special Skill stays absent across restart and upgrade while its package sibling remains enabled (211.152542ms)
+✔ resource provenance follows successful native loads and knowledge refresh; failed candidates retain the loaded snapshot (125.439042ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21904.053125

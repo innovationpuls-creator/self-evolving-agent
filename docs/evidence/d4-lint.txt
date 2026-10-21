@@ -1,0 +1,304 @@
+
+> self-evolving-agent@0.1.0 lint
+> biome lint
+
+apps/host/evolution/sandbox/candidate.ts:40:53 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+
+    38 │     .sort((a, b) => a.path.localeCompare(b.path, 'en'));
+    39 │   for (const f of files)
+  > 40 │     if (files.some((other) => other.path.startsWith(f.path + '/'))) throw new Error('candidate_path_collision');
+       │                                                     ^^^^^^^^^^^^
+    41 │   const identity = {
+    42 │     runId: value.runId,
+
+  i Unsafe fix: Use a template literal.
+
+     38  38 │       .sort((a, b) => a.path.localeCompare(b.path, 'en'));
+     39  39 │     for (const f of files)
+     40     │ - ····if·(files.some((other)·=>·other.path.startsWith(f.path·+·'/')))·throw·new·Error('candidate_path_collision');
+         40 │ + ····if·(files.some((other)·=>·other.path.startsWith(`${f.path}/`)))·throw·new·Error('candidate_path_collision');
+     41  41 │     const identity = {
+     42  42 │       runId: value.runId,
+
+
+apps/host/evolution/sandbox/worker-channel.ts:7:59 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  i Template literals are preferred over string concatenation.
+
+    5 │   const abort = new AbortController();
+    6 │   const pending = new Map<string, { resolve: (value: unknown) => void; reject: (error: Error) => void }>();
+  > 7 │   const send = (message: unknown) => process.stdout.write(JSON.stringify(message) + '\n');
+      │                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    8 │   let begin!: (start: T) => void;
+    9 │   const starting = new Promise<T>((resolve) => {
+
+  i Unsafe fix: Use a template literal.
+
+     5  5 │     const abort = new AbortController();
+     6  6 │     const pending = new Map<string, { resolve: (value: unknown) => void; reject: (error: Error) => void }>();
+     7    │ - ··const·send·=·(message:·unknown)·=>·process.stdout.write(JSON.stringify(message)·+·'\n');
+        7 │ + ··const·send·=·(message:·unknown)·=>·process.stdout.write(`${JSON.stringify(message)}\n`);
+     8  8 │     let begin!: (start: T) => void;
+     9  9 │     const starting = new Promise<T>((resolve) => {
+
+
+apps/host/storage/storage.ts:86:42 lint/complexity/noUselessEscapeInRegex  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  i The character doesn't need to be escaped.
+
+    84 │       .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-]*PRIVATE KEY-----|$)/g, '[已保护]')
+    85 │       .replace(/\b(?:sk|pk|ghp|github_pat|xox[baprs])[-_][A-Za-z0-9_-]*/g, '[已保护]')
+  > 86 │       .replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi, 'Bearer [已保护]')
+       │                                          ^^
+    87 │       .replace(
+    88 │         /((?:password|passwd|authorization|api[_-]?(?:key|token)|access(?:[_-]?token)?|refresh(?:[_-]?token)?|token|secret|private[_-]?key)\s*["']?\s*[=:]\s*)(?:"(?:\\.|[^"\\])*"?|'(?:\\.|[^'\\])*'?|[^\s,;"']+)/gi,
+
+  i The character should only be escaped if it is outside a character class or under the `v` flag.
+
+  i Safe fix: Unescape the character.
+
+    86 │ ······.replace(/\bBearer\s+[A-Za-z0-9._~+\/-]+=*/gi,·'Bearer·[已保护]')
+       │                                          -
+
+apps/host/evolution/sandbox/probes.ts:60:28 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    58 │ export async function runProbes(input: ProbeInput) {
+    59 │   const cwd = process.cwd(),
+  > 60 │     runtime = join(dirname(process.argv[1]!), '../../../..');
+       │                            ^^^^^^^^^^^^^^^^
+    61 │   const env = { ...process.env, PATH: `${join(runtime, 'toolchains/bin')}:/usr/bin:/bin` };
+    62 │   const native = join(runtime, '../../MacOS');
+
+
+apps/host/evolution/sandbox/probes.ts:69:49 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    67 │   await writeFile(join(sibling, 'canary'), 'sibling');
+    68 │   const siblingAccess = await attempt(join(sibling, 'canary'));
+  > 69 │   const traversal = await attempt(relative(cwd, input.paths[0]!));
+       │                                                 ^^^^^^^^^^^^^^^
+    70 │   const relativeEscape = await attempt(`../${sibling.split('/').pop()}/canary`);
+    71 │   await symlink(input.paths[0]!, 'escape-link');
+
+
+apps/host/evolution/sandbox/probes.ts:71:17 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    69 │   const traversal = await attempt(relative(cwd, input.paths[0]!));
+    70 │   const relativeEscape = await attempt(`../${sibling.split('/').pop()}/canary`);
+  > 71 │   await symlink(input.paths[0]!, 'escape-link');
+       │                 ^^^^^^^^^^^^^^^
+    72 │   const link = await attempt(join(cwd, 'escape-link'));
+    73 │   const directoryFD = await open(cwd, 'r');
+
+
+apps/host/evolution/sandbox/probes.ts:85:45 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    83 │   await writeFile('shell-probe.sh', 'printf shell-ok > shell-allowed.txt\n"$NODE" child.cjs & wait\n');
+    84 │   const shell = exec('/bin/sh', ['shell-probe.sh'], { ...env, NODE: process.execPath });
+  > 85 │   const externalCommand = exec('/bin/cat', [input.paths[0]!]);
+       │                                             ^^^^^^^^^^^^^^^
+    86 │   await writeFile(
+    87 │     'dynamic.mjs',
+
+
+apps/host/evolution/sandbox/probes.ts:151:21 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    149 │     ['d4_fixture-1.0-py3-none-any.whl', input.wheel],
+    150 │   ])
+  > 151 │     await writeFile(name!, Buffer.from(data!, 'base64'));
+        │                     ^^^^^
+    152 │   await writeFile('user.conf', '');
+    153 │   await writeFile('global.conf', '');
+
+
+apps/host/evolution/sandbox/probes.ts:151:40 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    149 │     ['d4_fixture-1.0-py3-none-any.whl', input.wheel],
+    150 │   ])
+  > 151 │     await writeFile(name!, Buffer.from(data!, 'base64'));
+        │                                        ^^^^^
+    152 │   await writeFile('user.conf', '');
+    153 │   await writeFile('global.conf', '');
+
+
+apps/host/evolution/sandbox/probes.ts:175:26 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    173 │     process.execPath,
+    174 │     [npm, 'rebuild', ...npmArgs, '--ignore-scripts=false'],
+  > 175 │     { ...env, D4_CANARY: input.paths[0]! },
+        │                          ^^^^^^^^^^^^^^^
+    176 │     30000,
+    177 │   );
+
+
+apps/host/evolution/sandbox/probes.ts:308:62 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    306 │     openat: {
+    307 │       allowed: exec(join(native, 'D4FDProbe'), ['allowed.txt'], env),
+  > 308 │       denied: exec(join(native, 'D4FDProbe'), [relative(cwd, input.paths[0]!)], env),
+        │                                                              ^^^^^^^^^^^^^^^
+    309 │     },
+    310 │     node,
+
+
+apps/host/evolution/sandbox/worker.ts:41:36 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    39 │   const tools = join(cwd, 'tool-bin');
+    40 │   await mkdir(tools);
+  > 41 │   const runtimeRoot = join(dirname(process.argv[1]!), '../../../..');
+       │                                    ^^^^^^^^^^^^^^^^
+    42 │   const nodeBin = join(runtimeRoot, 'toolchains/bin');
+    43 │   process.env.PATH = `${nodeBin}:/usr/bin:/bin`;
+
+
+apps/host/evolution/sandbox/worker.ts:169:56 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    167 │   });
+    168 │   try {
+  > 169 │     if (start.mode === 'develop') await session.prompt(start.prompt!);
+        │                                                        ^^^^^^^^^^^^^
+    170 │     else await session.prompt('Call normalize_labels with values [" b ","a","b"] and confirm the result.');
+    171 │     if (start.mode === 'develop') {
+
+
+apps/host/runtime/session-routes.ts:57:33 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    55 │   const recover = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
+    56 │   if (recover && req.method === 'POST') {
+  > 57 │     await service.recoverSkills(recover[1]!);
+       │                                 ^^^^^^^^^^^
+    58 │     json(res, 200, { ok: true });
+    59 │     return true;
+
+
+apps/host/runtime/session-routes.ts:65:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    63 │   );
+    64 │   if (match) {
+  > 65 │     const id = match[1]!,
+       │                ^^^^^^^^^
+    66 │       action = match[2];
+    67 │     if (!action && req.method === 'GET') {
+
+
+apps/host/skills/skill-loader.ts:9:8 lint/style/useImportType  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Some named imports are only used as types.
+
+     7 │   type SettingsManager,
+     8 │ } from '@earendil-works/pi-coding-agent';
+   > 9 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    10 │
+    11 │ // Only the native loader's approved, materialized local paths may import code.
+
+  i This import is only used as a type.
+
+     7 │   type SettingsManager,
+     8 │ } from '@earendil-works/pi-coding-agent';
+   > 9 │ import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+       │          ^^^^^^^^^^^^
+    10 │
+    11 │ // Only the native loader's approved, materialized local paths may import code.
+
+  i Importing the types with import type ensures that they are removed by the compilers and avoids loading unnecessary modules.
+
+  i Safe fix: Add inline type keywords.
+
+    9 │ import·{·type·SkillService,·type·SkillLoadout,·type·SkillResourceSource,·SkillError·}·from·'./skills.js';
+      │          +++++
+
+apps/host/skills/skill-routes.ts:41:68 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    39 │   const operation = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
+    40 │   if (operation && req.method === 'GET') {
+  > 41 │     json(res, 200, service.sensitive.copy(service.skills.operation(operation[1]!)));
+       │                                                                    ^^^^^^^^^^^^^
+    42 │     return true;
+    43 │   }
+
+
+apps/host/skills/skill-routes.ts:49:16 lint/style/noNonNullAssertion ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Forbidden non-null assertion.
+
+    47 │     );
+    48 │   if (skillRoute) {
+  > 49 │     const id = skillRoute[1]!,
+       │                ^^^^^^^^^^^^^^
+    50 │       action = skillRoute[2];
+    51 │     if (!action && req.method === 'GET') {
+
+
+apps/host/storage/storage.ts:16:5 lint/complexity/useOptionalChain  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━
+
+  ! Change to an optional chain.
+
+    14 │ export function restore(saved: Snapshot) {
+    15 │   if (
+  > 16 │     !saved ||
+       │     ^^^^^^^^^
+  > 17 │     !saved.header ||
+       │     ^^^^^^^^^^^^^
+    18 │     !Array.isArray(saved.entries) ||
+    19 │     (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+
+  i Unsafe fix: Change to an optional chain.
+
+     14  14 │   export function restore(saved: Snapshot) {
+     15  15 │     if (
+     16     │ - ····!saved·||
+     17     │ - ····!saved.header·||
+         16 │ + ····!saved?.header·||
+     18  17 │       !Array.isArray(saved.entries) ||
+     19  18 │       (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
+
+
+apps/web/src/components/Markdown.tsx:1:8 lint/correctness/noUnusedImports  FIXABLE  ━━━━━━━━━━━━━━━━
+
+  ! This import is unused.
+
+  > 1 │ import React from 'react';
+      │        ^^^^^
+    2 │ import ReactMarkdown from 'react-markdown';
+    3 │ import remarkGfm from 'remark-gfm';
+
+  i Unused imports might be the result of an incomplete refactoring.
+
+  i Unsafe fix: Remove the unused imports.
+
+    1 │ import·React·from·'react';
+      │ --------------------------
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 89.
+Checked 100 files in 72ms. No fixes applied.
+Found 73 warnings.
+Found 36 infos.

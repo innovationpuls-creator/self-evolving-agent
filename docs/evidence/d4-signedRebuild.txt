@@ -1,0 +1,1 @@
+{"signing":"development","deepStrictVerification":"passed","bundleId":"dev.personal.agent"}

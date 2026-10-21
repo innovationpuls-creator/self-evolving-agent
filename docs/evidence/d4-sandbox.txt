@@ -1,0 +1,11 @@
+
+> self-evolving-agent@0.1.0 test:d4:sandbox
+> tsx scripts/d4-sandbox-acceptance.ts
+
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app/Contents/Helpers/D4Bridge.app: replacing existing signature
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app: replacing existing signature
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app/Contents/Helpers/D4Bridge.app: replacing existing signature
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app: replacing existing signature
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app/Contents/Helpers/D4Bridge.app: replacing existing signature
+/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/d4-acceptance-7s1uQN/Fixture.app: replacing existing signature
+{"receipt":"/Users/torch/Documents/ChatGPT/agent/release/d4-evidence/sandbox.json","executionCompleted":true,"admission":false,"blockers":["XPC container permits sibling workspace access; cwd is not authorization","detached descendant survives process-group cleanup","No per-activity hard aggregate memory/process count boundary","D2 high-privilege Extension loading requires exact human review; sandbox verification cannot grant automatic Host privileges"]}

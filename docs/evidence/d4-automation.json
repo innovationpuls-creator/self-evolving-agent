@@ -1,0 +1,120 @@
+{
+  "date": "2026-10-21",
+  "baseline": "b603111",
+  "tests": {
+    "passed": 161,
+    "failed": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "warnings": 72,
+    "infos": 36,
+    "errors": 0
+  },
+  "logs": {
+    "tests": {
+      "log": "d4-tests.txt",
+      "sha256": "1487b27314c48857a8442c9f42b4e481f1bce3afb98bc725408ac56a95b3f20c",
+      "exitCode": 0,
+      "rawSha256": "1487b27314c48857a8442c9f42b4e481f1bce3afb98bc725408ac56a95b3f20c",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "focused": {
+      "log": "d4-focused.txt",
+      "sha256": "dd49c44d11c268c4c3ea468b2fa390e38eaa14d71be77e7be9dcf5fd7618b2e3",
+      "exitCode": 0,
+      "rawSha256": "dd49c44d11c268c4c3ea468b2fa390e38eaa14d71be77e7be9dcf5fd7618b2e3",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "typecheck": {
+      "log": "d4-typecheck.txt",
+      "sha256": "6d291750f2503d1ebf2d3ef83769fa8d0b5dcc4d6ebbf02a953b26a3554bf6f4",
+      "exitCode": 0,
+      "rawSha256": "7a94d08118cbbecac2c5699f96bf9389c5d298ffa3deda22f020c3df84b57d30",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "lint": {
+      "log": "d4-lint.txt",
+      "sha256": "b409c0eaf0c44de5270cfbefcfa17f6b3c20352e2dcfb3ed35989c04062c40d9",
+      "exitCode": 0,
+      "rawSha256": "f00e7dc56f608b64d8c9e1eb4bc2f74dc31bd1387f6521f6ce2ae93379078fcd",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "format": {
+      "log": "d4-format.txt",
+      "sha256": "e70e3a0351cf3b94c4d4ae5f1656baf8be83bb960ae33a1b009f64959fee767d",
+      "exitCode": 0,
+      "rawSha256": "e70e3a0351cf3b94c4d4ae5f1656baf8be83bb960ae33a1b009f64959fee767d",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "build": {
+      "log": "d4-build.txt",
+      "sha256": "1e3b020beb58f5b1357165e74d4cc93b3400d702a102f022e92fbf52440243c7",
+      "exitCode": 0,
+      "rawSha256": "60c26a3bbf4a8671620ca16cc5ae54cae43cc732389cf1b99fbc2b4a4edb005c",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "signedRebuild": {
+      "log": "d4-signedRebuild.txt",
+      "sha256": "ff98ad152e892b5b895df134e9d04b9b4004b621a7975c87d252b06d35b554e0",
+      "exitCode": 0,
+      "rawSha256": "ff98ad152e892b5b895df134e9d04b9b4004b621a7975c87d252b06d35b554e0",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "desktop": {
+      "log": "d4-desktop.txt",
+      "sha256": "05b1d4111e830bd7b7cf47f17bcee7083ea624bd82b073b71119ae8439c4ab24",
+      "exitCode": 0,
+      "rawSha256": "05b1d4111e830bd7b7cf47f17bcee7083ea624bd82b073b71119ae8439c4ab24",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    },
+    "sandbox": {
+      "log": "d4-sandbox.txt",
+      "sha256": "57a93531de6742de2e0bcefe9a11848760259722cb0252f3532ecd29712553d2",
+      "exitCode": 1,
+      "rawSha256": "57a93531de6742de2e0bcefe9a11848760259722cb0252f3532ecd29712553d2",
+      "normalization": "trim line-end whitespace and blank EOF lines; original logs retained in release"
+    }
+  },
+  "sandbox": {
+    "sha256": "1b82cf47fbee3baf705201a87799829412dac9dd9d6a374b54b99545907c4152",
+    "executionCompleted": true,
+    "admission": false,
+    "blockers": [
+      "XPC container permits sibling workspace access; cwd is not authorization",
+      "detached descendant survives process-group cleanup",
+      "No per-activity hard aggregate memory/process count boundary",
+      "D2 high-privilege Extension loading requires exact human review; sandbox verification cannot grant automatic Host privileges"
+    ]
+  },
+  "product": {
+    "path": "/Users/torch/Documents/ChatGPT/agent/release/d4-sandbox/Agent-darwin-arm64/Agent.app",
+    "electron": "44.9.0",
+    "WorkerSha256": "525917ec76c45527d2419b93e6f1d36876b6d2f82621945d15a38c18b3f382b5",
+    "strictDeepVerification": "passed",
+    "buildMethod": "existing Electron 44.9.0 app; copied compiled Host; buildReflectionNative d4; signDesktop whole app; interrupted repeat download excluded"
+  },
+  "sources": {
+    "apps/desktop/native/evolution/fd-probe.c": "5e2888d54d3f973bdb8fe758e576b5b6ff4ce7150e49c486546de6033d5e1e97",
+    "apps/desktop/native/evolution/limit.c": "8445f98d823dada82c5119464cb4eb07a66e3a2a599ad9aa880d33238adb0b92",
+    "apps/desktop/native/reflection/bridge.m": "6430a6580275c6a42019cee195fa07240cd1272e85925f9439834df0fe192b0f",
+    "apps/host/evolution/sandbox/candidate.ts": "7b31e0e03b61ffc298c48e9cdb84e16aa80069595cd66b34ac1b0be4f8388526",
+    "apps/host/evolution/sandbox/native-executor.ts": "a0f97c08f631382af6c1cde3f21ae9764bc6477573d4e1f8ad5e1cb84e684857",
+    "apps/host/evolution/sandbox/probes.ts": "3c714a642d36336b95e22d57f8e1b0c9f7ce59b3766bcfb1b10fb8750a0cdf70",
+    "apps/host/evolution/sandbox/worker-channel.ts": "e0224b1cc8fcfe7f92f2d4e794048f11b82b98cb0c5954c5ae163812ad395211",
+    "apps/host/evolution/sandbox/worker.ts": "6d024504bed6c84e457edf5c730b969347c4e54106fb97c32ddb263f8be92719",
+    "apps/host/reflection/native-executor.ts": "a6736c771e3a02803f19584266335975290a64f634c866470fdf4c9e5c1e0b47",
+    "package.json": "0e2825597492d5f1f2f478ff37cbe6ee7374a3a68e6dc1d4841ccfe8da2e48ba",
+    "scripts/build-reflection-native.ts": "475d03d8a4a930a9ec9be349371fdc5bbc41ee19007e8166a1cc1801df57cedf",
+    "scripts/d4-sandbox-acceptance.ts": "aa9e3ee0b74659c53b2433a9e3823bd1c5713d7bb3bad2088480982f87c0a287",
+    "scripts/fixtures/d4-controller.ts": "43828ccf874c89a474fa54b7144707fced62a102fb210930a729114fb0e10029",
+    "scripts/fixtures/d4-sandbox-worker.js": "02e2286ec4725fbbd155eb75d7a3aaea7892122ad9631278ac86e9e158ac0e2b",
+    "scripts/package-desktop.ts": "641b9f7d02e0955a30fe1c634296baccc94cebc326e1c36388d4b17144b31518",
+    "scripts/sign-desktop.ts": "40a4c579642a6dda71196389dee1d24020c7c510a35a6ec197ce417fd381cc79",
+    "tests/d4-sandbox.test.ts": "7ae99083c772ebf36edaa8b01470380847967657d92bd60e9fd24ba59abbed6c"
+  },
+  "cleanup": {
+    "receipt": "d4-cleanup.json",
+    "sha256": "15ec3d805410b6df1aa90f878865dc5ee494f606ad64771dec6738fdb139540e"
+  }
+}

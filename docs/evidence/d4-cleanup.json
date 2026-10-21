@@ -1,0 +1,33 @@
+{
+  "D4ProcessesRemaining": false,
+  "removedTaskArtifacts": [
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-15A7CB68-978F-423D-8176-793696B220CD",
+      "files": []
+    },
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-17716114-DF05-4D60-BC20-1BAB9FB5E673",
+      "files": []
+    },
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-3F510ECB-1A08-49C7-B114-21517D64C264",
+      "files": []
+    },
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-473F6BB0-A94A-4D35-82BF-C543A9B5C87D",
+      "files": []
+    },
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-D8E92E97-DFCC-4AED-9638-DDAEB2BF9365",
+      "files": []
+    },
+    {
+      "path": "/Users/torch/Library/Containers/dev.personal.agent.d4-sandbox/Data/tmp/reflection-8FD9DE27-5110-4424-83D5-4F4851EB85C6",
+      "files": []
+    },
+    {
+      "path": "/private/var/folders/gj/h882rrl558x8lkn3xs2fnc5c0000gn/T/electron-download-TzFI4r",
+      "kind": "interrupted task Electron download"
+    }
+  ]
+}

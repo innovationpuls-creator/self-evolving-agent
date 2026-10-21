@@ -24,6 +24,7 @@ for (const path of paths) {
   if (platform === 'darwin') {
     const app = join(path, 'Agent.app');
     await buildReflectionNative(app);
+    if (process.env.AGENT_D4_SANDBOX_PROTOTYPE === '1') await buildReflectionNative(app, undefined, 'd4');
     await signDesktop(app);
   }
   console.log(path);

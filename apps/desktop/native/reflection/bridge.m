@@ -9,7 +9,13 @@
 #import <stdatomic.h>
 
 // Only this fixed, bundled service is addressable. JSON operation authorization stays in Host.
+#ifdef D4_SANDBOX
+static NSString *const serviceID = @"dev.personal.agent.d4-sandbox";
+static const char *bridgeID = "dev.personal.agent.d4-bridge";
+#else
 static NSString *const serviceID = @"dev.personal.agent.reflection";
+static const char *bridgeID = "dev.personal.agent.reflection-bridge";
+#endif
 static const NSUInteger lineLimit = 8 * 1024 * 1024;
 static xpc_connection_t connection;
 static pid_t workerPID;
@@ -92,7 +98,14 @@ static void readLines(int fd, void (^lineHandler)(NSString *), void (^endHandler
         @autoreleasepool {
             NSMutableData *pending = [NSMutableData data]; char buffer[8192];
             ssize_t count;
+#ifdef D4_SANDBOX
+            NSUInteger totalBytes = 0;
+#endif
             while ((count = read(fd, buffer, sizeof(buffer))) > 0) {
+#ifdef D4_SANDBOX
+                totalBytes += (NSUInteger)count;
+                if (totalBytes > 32 * 1024 * 1024) { fail(@"d4_output_limit"); return; }
+#endif
                 for (ssize_t i = 0; i < count; i++) {
                     if (buffer[i] == '\n') {
                         NSString *line = [[NSString alloc] initWithData:pending encoding:NSUTF8StringEncoding];
@@ -112,8 +125,14 @@ static void readLines(int fd, void (^lineHandler)(NSString *), void (^endHandler
 #ifdef REFLECTION_SERVICE
 static void startWorker(NSString *firstLine) {
     NSURL *contents = [NSBundle.mainBundle.bundleURL URLByAppendingPathComponent:@"Contents"];
+#ifdef D4_SANDBOX
+    NSString *node = [[contents URLByAppendingPathComponent:@"MacOS/D4Node"] path];
+    NSString *launcher = [[contents URLByAppendingPathComponent:@"MacOS/D4Launcher"] path];
+    NSString *worker = [[contents URLByAppendingPathComponent:@"Resources/runtime/dist/host/evolution/sandbox/worker.js"] path];
+#else
     NSString *node = [[contents URLByAppendingPathComponent:@"MacOS/ReflectionNode"] path];
     NSString *worker = [[contents URLByAppendingPathComponent:@"Resources/runtime/dist/host/reflection/worker.js"] path];
+#endif
     NSString *workspace = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"reflection-" stringByAppendingString:NSUUID.UUID.UUIDString]];
     NSString *agentDir = [workspace stringByAppendingPathComponent:@"agent"];
     if (![NSFileManager.defaultManager createDirectoryAtPath:agentDir withIntermediateDirectories:YES attributes:@{NSFilePosixPermissions:@0700} error:NULL]) { fail(@"sandbox_workspace_unavailable"); return; }
@@ -127,18 +146,34 @@ static void startWorker(NSString *firstLine) {
     posix_spawnattr_t attributes; posix_spawnattr_init(&attributes);
     posix_spawnattr_setflags(&attributes, POSIX_SPAWN_SETPGROUP | POSIX_SPAWN_CLOEXEC_DEFAULT);
     posix_spawnattr_setpgroup(&attributes, 0);
+#ifdef D4_SANDBOX
+    char *arguments[] = {(char *)launcher.UTF8String, (char *)node.UTF8String, (char *)worker.UTF8String, NULL};
+#else
+    NSString *launcher = node;
     char *arguments[] = {(char *)node.UTF8String, (char *)worker.UTF8String, NULL};
+#endif
     NSArray<NSString *> *environment = @[@"PATH=/usr/bin:/bin", @"PI_OFFLINE=1", @"PI_SKIP_VERSION_CHECK=1", @"PI_TELEMETRY=0", [@"TMPDIR=" stringByAppendingString:NSTemporaryDirectory()], [@"HOME=" stringByAppendingString:NSHomeDirectory()], [@"AGENT_REFLECTION_AGENT_DIR=" stringByAppendingString:agentDir]];
+#ifdef D4_SANDBOX
+    NSString *temp = [workspace stringByAppendingPathComponent:@"tmp"];
+    [NSFileManager.defaultManager createDirectoryAtPath:temp withIntermediateDirectories:YES attributes:nil error:NULL];
+    environment = @[@"PATH=/usr/bin:/bin", @"PI_OFFLINE=1", @"PI_SKIP_VERSION_CHECK=1", @"PI_TELEMETRY=0", @"AGENT_D4_SANDBOX=1", [@"TMPDIR=" stringByAppendingString:temp], [@"HOME=" stringByAppendingString:workspace], [@"AGENT_REFLECTION_AGENT_DIR=" stringByAppendingString:agentDir]];
+#endif
     char *variables[environment.count + 1];
     for (NSUInteger i = 0; i < environment.count; i++) variables[i] = (char *)environment[i].UTF8String;
     variables[environment.count] = NULL;
-    int result = posix_spawn(&workerPID, node.UTF8String, &actions, &attributes, arguments, variables);
+    int result = posix_spawn(&workerPID, launcher.UTF8String, &actions, &attributes, arguments, variables);
     posix_spawnattr_destroy(&attributes); posix_spawn_file_actions_destroy(&actions);
     close(input[0]); close(output[1]); close(diagnostics[1]);
     if (result != 0) { close(input[1]); close(output[0]); close(diagnostics[0]); workerPID = 0; fail(@"sandbox_worker_start_failed"); return; }
     workerInput = input[1];
     NSData *initial = [[firstLine stringByAppendingString:@"\n"] dataUsingEncoding:NSUTF8StringEncoding];
     if (!writeAll(workerInput, initial)) { fail(@"worker_input_failed"); return; }
+#ifdef D4_SANDBOX
+    pid_t guardedPID = workerPID;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 300 * NSEC_PER_SEC), dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        @synchronized(writeLock) { if (workerPID == guardedPID) fail(@"d4_activity_timeout"); }
+    });
+#endif
     int outputRead = output[0], diagnosticRead = diagnostics[0];
     dispatch_semaphore_t stdoutDone = dispatch_semaphore_create(0);
     readLines(outputRead, ^(NSString *line) {
@@ -159,7 +194,11 @@ static void startWorker(NSString *firstLine) {
         sendLine(connection, line);
     }, ^{ close(outputRead); dispatch_semaphore_signal(stdoutDone); });
     // Diagnostic output is drained but never crosses the sandbox/Host boundary.
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{ char ignored[8192]; while (read(diagnosticRead, ignored, sizeof(ignored)) > 0) {} close(diagnosticRead); });
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{ char ignored[8192]; ssize_t count; NSUInteger total=0; while ((count=read(diagnosticRead, ignored, sizeof(ignored))) > 0) {
+#ifdef D4_SANDBOX
+        total += (NSUInteger)count; if(total > 4 * 1024 * 1024) { fail(@"d4_diagnostics_limit"); break; }
+#endif
+    } close(diagnosticRead); });
     pid_t spawnedPID=workerPID;
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
         pid_t pid = spawnedPID;
@@ -192,7 +231,7 @@ static void receive(NSString *line) {
 }
 
 static void acceptPeer(xpc_connection_t peer) {
-            if (connection || xpc_connection_set_peer_team_identity_requirement(peer, "dev.personal.agent.reflection-bridge") != 0) { xpc_connection_cancel(peer); return; }
+            if (connection || xpc_connection_set_peer_team_identity_requirement(peer, bridgeID) != 0) { xpc_connection_cancel(peer); return; }
             connection = peer;
             xpc_connection_set_event_handler(peer, ^(xpc_object_t event) {
                 if (xpc_get_type(event) == XPC_TYPE_ERROR) { stopWorker(); exit(0); }

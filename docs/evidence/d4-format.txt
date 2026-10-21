@@ -1,0 +1,5 @@
+
+> self-evolving-agent@0.1.0 format:check
+> biome format
+
+Checked 100 files in 27ms. No fixes applied.
