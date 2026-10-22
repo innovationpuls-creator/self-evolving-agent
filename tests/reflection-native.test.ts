@@ -34,12 +34,15 @@ test('packaged XPC isolates Node and shell while Host handles bounded IPC', {
     assert.equal(spawnSync('clang', [join(scratch, 'main.c'), '-o', join(bundle, 'Contents/MacOS/Agent')]).status, 0);
     const hostDist = join(scratch, 'host');
     await mkdir(join(hostDist, 'reflection'), { recursive: true });
+    await mkdir(join(scratch, 'shared'));
+    await writeFile(join(scratch, 'shared/sensitive-data.js'), 'export const sharedResource = true;');
     await writeFile(
       join(hostDist, 'reflection/worker.js'),
       `
       import { createInterface } from 'node:readline';
       import { readFile } from 'node:fs/promises';
       import { spawnSync } from 'node:child_process';
+      import { sharedResource } from '../../shared/sensitive-data.js';
       const lines = createInterface({ input: process.stdin });
       let started = false;
       lines.on('line', async line => {
@@ -51,7 +54,7 @@ test('packaged XPC isolates Node and shell while Host handles bounded IPC', {
           const shell = spawnSync('/bin/sh', ['-c', 'cat "$1"', 'reflection-probe', message.canary], { encoding: 'utf8' });
           const shellDenied = shell.status !== 0 && !shell.stdout?.includes(message.canaryValue);
           console.log(JSON.stringify({ kind: 'ready', pid: process.pid }));
-          console.log(JSON.stringify({ kind: 'request', requestId: 'probe-1', operation: 'probe', input: { denied, shellDenied, cwd: process.cwd(), agentDir: process.env.AGENT_REFLECTION_AGENT_DIR, envKeys: Object.keys(process.env) } }));
+          console.log(JSON.stringify({ kind: 'request', requestId: 'probe-1', operation: 'probe', input: { denied, shellDenied, sharedResource, cwd: process.cwd(), agentDir: process.env.AGENT_REFLECTION_AGENT_DIR, envKeys: Object.keys(process.env) } }));
         } else if (message.kind === 'response') {
           console.log(JSON.stringify({ kind: 'finished', ok: message.ok }));
           // A terminal message is not proof that the process has already exited.
@@ -74,7 +77,16 @@ test('packaged XPC isolates Node and shell while Host handles bounded IPC', {
       return;
     }
     assert.deepEqual(availability, { available: true });
-    let probe: { denied: boolean; shellDenied: boolean; cwd: string; agentDir: string; envKeys: string[] } | undefined;
+    let probe:
+      | {
+          denied: boolean;
+          shellDenied: boolean;
+          sharedResource: boolean;
+          cwd: string;
+          agentDir: string;
+          envKeys: string[];
+        }
+      | undefined;
     await executor.execute(
       {
         kind: 'start',
@@ -96,6 +108,7 @@ test('packaged XPC isolates Node and shell while Host handles bounded IPC', {
     assert.ok(probe);
     assert.equal(probe.denied, true);
     assert.equal(probe.shellDenied, true);
+    assert.equal(probe.sharedResource, true);
     assert.ok(probe.agentDir.startsWith(probe.cwd));
     assert.equal(probe.envKeys.includes('AGENT_DATA_KEY'), false);
     assert.equal(await readFile(canary, 'utf8'), canaryValue);

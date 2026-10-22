@@ -22,6 +22,7 @@ export async function ensureKeyIdentity(
   store: EncryptedStore,
   validateSession: (id: string) => Promise<unknown>,
   desktopKeyProof?: string,
+  initialize = true,
 ) {
   let credentials: unknown;
   try {
@@ -63,7 +64,8 @@ export async function ensureKeyIdentity(
   }
   if (!authenticated) {
     const entries = await readdir(store.dir);
-    if (entries.some((entry) => entry !== 'host.lock')) throw new DataKeyError('key-unverified');
+    if (entries.some((entry) => entry !== 'host.lock' && entry !== 'host.pid'))
+      throw new DataKeyError('key-unverified');
   }
-  await store.write('credentials.enc', {});
+  if (initialize) await store.write('credentials.enc', {});
 }

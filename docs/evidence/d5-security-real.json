@@ -1,0 +1,35 @@
+{
+  "started": "2026-10-21T15:35:07.737Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v26.10.0",
+  "passed": true,
+  "model": {
+    "provider": "openai-codex",
+    "id": "gpt-6-luna",
+    "name": "GPT-6 Luna"
+  },
+  "providerCalls": 3,
+  "authenticatedProvider": true,
+  "protectedProviderContext": true,
+  "nativeTools": [
+    "write",
+    "read"
+  ],
+  "protectedOutputs": [
+    "HTTP Session",
+    "WebSocket events",
+    "export",
+    "diagnostic index",
+    "diagnostic detail",
+    "historical evidence",
+    "product disk files"
+  ],
+  "encryptedExactHistory": true,
+  "restartConsistency": true,
+  "authentication": {
+    "queryTokenRejected": 401,
+    "crossOriginRejected": 403,
+    "websocketFirstFrame": true
+  }
+}

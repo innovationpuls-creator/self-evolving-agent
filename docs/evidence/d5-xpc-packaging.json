@@ -1,0 +1,22 @@
+{
+  "completed": "2026-10-21T15:44:32.875741+00:00",
+  "platform": "darwin",
+  "arch": "arm64",
+  "command": "AGENT_CODESIGN_IDENTITY=<existing Apple Development identity> npx tsx --test tests/reflection-native.test.ts",
+  "result": "passed",
+  "tests": 2,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "checks": [
+    "real packaged XPC Node and Shell denied outside canary read",
+    "Host-mediated bounded IPC completed",
+    "bundled shared protection resource loaded from XPC runtime",
+    "missing packaged runtime remained unavailable"
+  ],
+  "sourceSha256": {
+    "scripts/build-reflection-native.ts": "db0fbf2bbfc8e96524fbad83914a8a447af32bab74678955e56442b0e637142d",
+    "tests/reflection-native.test.ts": "0303fd3ce1a39c413f58d02810af1e45e2f16d1ee36dc546d752a24171cf4ee2"
+  },
+  "output": "✔ Reflection fails closed without a packaged runtime (1.787292ms)\n✔ packaged XPC isolates Node and shell while Host handles bounded IPC (31079.69725ms)\nℹ tests 2\nℹ suites 0\nℹ pass 2\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 31253.62475\n"
+}

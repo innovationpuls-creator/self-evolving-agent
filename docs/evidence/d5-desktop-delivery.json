@@ -1,0 +1,38 @@
+{
+  "time": "2026-10-22T02:11:03.328Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "executable": "/Users/torch/Documents/ChatGPT/agent/release/d5-delivery-2026-10-21/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent",
+  "previousExecutable": "/Users/torch/Documents/ChatGPT/agent/release/d4-development-2026-10-21/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent",
+  "checks": [
+    "macOS deep strict signature verification",
+    "previous signed version committed real Provider Tool call, Memory and formal Skill",
+    "manual application replacement preserved Keychain key, exact Session messages, Memory, Skill and XPC availability",
+    "native menu created encrypted backup after graceful idle Host shutdown and resumed Host",
+    "restored sibling directory reopened through Keychain and continued real Provider native Tool Calling",
+    "busy native backup menu refused without replacing Host or aborting the real Provider task",
+    "corrupt SQLite failed closed; native restore menu used unlocked Keychain key offline, preserved damaged bytes and reopened restored Session/Memory/formal Skill",
+    "corrupt credentials failed closed; offline restore authenticated backup with unlocked key, preserved damaged ciphertext and reused restored real Provider credentials"
+  ],
+  "result": "passed",
+  "applicationSha256": "b65aad83e184c678c811c98320915b6503fbf1d9ae11729d0a88e895d7b2ca17",
+  "hostSha256": "3f6f1bfa34fb5ac21ef555666047a78c108a21b0a2fcac1347b64163c8d9ba24",
+  "compiledSha256": {
+    "host/storage/maintenance.js": "df0510ea3ef3c85a6e2e1247dbf648060345eccf138218b6465e7e4b61bcc3c0",
+    "host/storage/schema.js": "e36937a3ff1aa2d47a50fd739801f0c1d73759dcf3ef59285526fc0e73eaaab7",
+    "host/runtime/agent.js": "0970bc195a4cd78df554e110da397353c04107f277e0bdbf49d0e727c1e0f371",
+    "host/reflection/reflection-service.js": "6f37953adb06a62f2c0e72f78aee5f65785d5af4ea7fe0f0d1cc88f87f238bdf",
+    "desktop/maintenance-worker.js": "a42c3ffd8816dae8d888af33e7745408a4cefefa78e83efec6b1fe0d3fbeff32"
+  },
+  "backup": {
+    "bytes": 102436,
+    "sha256": "dd30d353a186b1ee3d28691ebdb2f0ec858503876a55202116a2acc36fabc449"
+  },
+  "session": {
+    "id": "65b498e7-e3fd-4c44-a367-8418538c336d",
+    "messagesBefore": 5,
+    "messagesAfter": 10
+  },
+  "damagedDatabaseSha256": "f369949643d1b991ca5f83d2c1ab2b4c1d453a2b0e4cf6a4257bf9a08b48deb8",
+  "damagedCredentialsSha256": "8507fabb9a444dad10e7f1237199a9cf621f56535f35da5e49ca15fa885d8973"
+}

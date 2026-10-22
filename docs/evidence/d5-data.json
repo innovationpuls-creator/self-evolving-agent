@@ -1,0 +1,57 @@
+{
+  "environment": {
+    "node": "v26.10.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "checks": [
+    {
+      "check": "round-trip",
+      "files": 15,
+      "sessions": 2,
+      "tables": 25,
+      "beforeHash": "64eed0127e67ef9a830716c098bb195a2ffa6add0ccab7a2af6d1eb6b6514c76",
+      "restoredHash": "64eed0127e67ef9a830716c098bb195a2ffa6add0ccab7a2af6d1eb6b6514c76",
+      "exactSessionCiphertext": true,
+      "nativeToolAfterRestore": true,
+      "grantRetained": true,
+      "noReplay": true
+    },
+    {
+      "check": "rejection-boundaries",
+      "wrongKey": true,
+      "tamper": true,
+      "truncation": true,
+      "existingDataUnchanged": true,
+      "activeHostRefused": true
+    },
+    {
+      "check": "upgrade-failure-and-corruption",
+      "automaticBackup": true,
+      "transactionRollback": true,
+      "newerSchemaRefusedWithoutOverwrite": true,
+      "corruptDatabaseRestored": true,
+      "committedSessionRowsHash": "cc88501cf53656bac652e090f9041874cce2179a153a6eb8174a5e27f4ae684c"
+    },
+    {
+      "check": "SIGKILL-transaction",
+      "beforeHash": "8e02cff7107df97d1f260995a97501611f85b57010f9cb7f01441d09f7146225",
+      "afterHash": "8e02cff7107df97d1f260995a97501611f85b57010f9cb7f01441d09f7146225",
+      "uncommittedTableAbsent": true,
+      "lockRecovered": true
+    },
+    {
+      "check": "SIGKILL-archive-and-restore",
+      "partialArchiveNotPublished": true,
+      "partialRestoreNotPublished": true,
+      "sourceHash": "c019cfa93d769677d39faa9d4baec9d55590878db8aa59ca6b559e134b11866d",
+      "restoredHash": "c019cfa93d769677d39faa9d4baec9d55590878db8aa59ca6b559e134b11866d"
+    },
+    {
+      "check": "version-and-path-boundaries",
+      "damagedVersionExplicit": true,
+      "symlinkEscapeRefused": true,
+      "executionTrustUnchanged": true
+    }
+  ]
+}

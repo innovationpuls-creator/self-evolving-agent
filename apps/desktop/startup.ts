@@ -15,6 +15,7 @@ export interface HostAttempt {
   ready: Promise<string>;
   exited: Promise<void>;
   stop(): Promise<void>;
+  prepareMaintenance?(): Promise<void>;
 }
 interface StartupPorts {
   unlock(signal: AbortSignal, stage: (value: UnlockStage) => void): Promise<UnlockedKey>;
@@ -40,6 +41,8 @@ export class DesktopStartup {
   private quitting = false;
   private nativePending = false;
   private restartApp = false;
+  private maintenanceFlight?: Promise<unknown>;
+  private maintaining = false;
   constructor(
     private ports: StartupPorts,
     private timing = { keyWait: 15000, hostWait: 30000, restart: 1000, exit: 2000 },
@@ -126,6 +129,7 @@ export class DesktopStartup {
     void attempt.exited.then(() => {
       if (!current()) return;
       this.attempt = undefined;
+      if (this.maintaining) return;
       if (ready) {
         this.set({ phase: 'recovering' });
         this.restartTimer = setTimeout(() => this.startHost(true), this.timing.restart);
@@ -144,6 +148,33 @@ export class DesktopStartup {
   retryHost() {
     if (this.state.phase === 'failed' && this.state.retryHost) this.startHost(false);
   }
+  get canRestoreOffline() {
+    return this.state.phase === 'failed' && !!this.key && !this.attempt && !this.quitting;
+  }
+  maintain<T>(work: (key: UnlockedKey) => Promise<T>, options: { allowOffline?: boolean } = {}): Promise<T> {
+    const attempt = this.attempt,
+      key = this.key,
+      prepare = attempt?.prepareMaintenance?.bind(attempt);
+    const online = this.state.phase === 'ready' && !!prepare;
+    const offline = options.allowOffline && this.canRestoreOffline;
+    if (this.quitting || this.maintaining || !key || (!online && !offline))
+      return Promise.reject(new Error('maintenance-unavailable'));
+    this.maintaining = true;
+    const task = (async () => {
+      try {
+        // The Host rejects while work is active. Maintenance never uses stop()'s forced-exit fallback.
+        if (online && prepare) await prepare();
+        if (this.quitting) throw new Error('maintenance-cancelled');
+        this.attempt = undefined;
+        return await work(key);
+      } finally {
+        this.maintaining = false;
+        if (online && !this.quitting && !this.attempt) this.startHost(true);
+      }
+    })();
+    this.maintenanceFlight = task;
+    return task;
+  }
   restart() {
     if (this.state.phase !== 'failed' || this.state.retryHost) return;
     this.restartApp = true;
@@ -161,6 +192,7 @@ export class DesktopStartup {
     if (this.nativePending && !this.attempt)
       this.exitTimer = setTimeout(() => this.ports.forceExit(), this.timing.exit);
     await this.unlockFlight;
+    await this.maintenanceFlight?.catch(() => {});
     clearTimeout(this.exitTimer);
     await this.attempt?.stop();
     this.key = undefined;

@@ -1,0 +1,1516 @@
+{
+  "started": "2026-10-21T15:46:08.894Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "v26.10.0",
+  "durationMs": 1811362,
+  "rounds": 57,
+  "sessions": 171,
+  "ordinaryToolCalls": 171,
+  "completedActivities": 57,
+  "reflectionRuns": 228,
+  "restarts": 5,
+  "reconnects": 57,
+  "passed": true,
+  "samples": [
+    {
+      "elapsedMs": 29817,
+      "round": 1,
+      "released": 4,
+      "rss": 198794640,
+      "heapUsed": 55954304,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8337599,
+      "cpu": {
+        "user": 2757925,
+        "system": 436918
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 4096,
+      "roundMs": 26135
+    },
+    {
+      "elapsedMs": 65717,
+      "round": 2,
+      "released": 4,
+      "rss": 176725800,
+      "heapUsed": 53111320,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8504026,
+      "cpu": {
+        "user": 5041605,
+        "system": 752503
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 315392,
+      "roundMs": 32814
+    },
+    {
+      "elapsedMs": 114083,
+      "round": 3,
+      "released": 4,
+      "rss": 164192664,
+      "heapUsed": 53489256,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8044509,
+      "cpu": {
+        "user": 7685832,
+        "system": 1245580
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 315392,
+      "roundMs": 47479
+    },
+    {
+      "elapsedMs": 150884,
+      "round": 4,
+      "released": 4,
+      "rss": 166439912,
+      "heapUsed": 53524704,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8388326,
+      "cpu": {
+        "user": 9567087,
+        "system": 1577741
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 372736,
+      "roundMs": 36382
+    },
+    {
+      "elapsedMs": 176712,
+      "round": 5,
+      "released": 4,
+      "rss": 180155264,
+      "heapUsed": 53608736,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9511163,
+      "cpu": {
+        "user": 11033956,
+        "system": 1805294
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 442368,
+      "roundMs": 25717
+    },
+    {
+      "elapsedMs": 203786,
+      "round": 6,
+      "released": 4,
+      "rss": 176486664,
+      "heapUsed": 53706360,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10518117,
+      "cpu": {
+        "user": 12481995,
+        "system": 2039026
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 442368,
+      "roundMs": 22780
+    },
+    {
+      "elapsedMs": 234159,
+      "round": 7,
+      "released": 4,
+      "rss": 186368352,
+      "heapUsed": 53720608,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10015157,
+      "cpu": {
+        "user": 13939489,
+        "system": 2273977
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 532480,
+      "roundMs": 23151
+    },
+    {
+      "elapsedMs": 262932,
+      "round": 8,
+      "released": 4,
+      "rss": 186598544,
+      "heapUsed": 53731056,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 13576022,
+      "cpu": {
+        "user": 15448962,
+        "system": 2503990
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 614400,
+      "roundMs": 21924
+    },
+    {
+      "elapsedMs": 294729,
+      "round": 9,
+      "released": 4,
+      "rss": 193217800,
+      "heapUsed": 53715368,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8387825,
+      "cpu": {
+        "user": 17326210,
+        "system": 2742535
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 614400,
+      "roundMs": 23954
+    },
+    {
+      "elapsedMs": 336819,
+      "round": 10,
+      "released": 4,
+      "rss": 204687680,
+      "heapUsed": 53841920,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11017319,
+      "cpu": {
+        "user": 20084612,
+        "system": 3198541
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 700416,
+      "roundMs": 36005
+    },
+    {
+      "elapsedMs": 373761,
+      "round": 11,
+      "released": 4,
+      "rss": 206310224,
+      "heapUsed": 54225744,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8074927,
+      "cpu": {
+        "user": 22978988,
+        "system": 3666110
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 778240,
+      "roundMs": 32469
+    },
+    {
+      "elapsedMs": 400200,
+      "round": 12,
+      "released": 4,
+      "rss": 192793640,
+      "heapUsed": 54214016,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8850043,
+      "cpu": {
+        "user": 25019455,
+        "system": 3957789
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 778240,
+      "roundMs": 26228
+    },
+    {
+      "elapsedMs": 428159,
+      "round": 13,
+      "released": 4,
+      "rss": 190909816,
+      "heapUsed": 54241448,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8784433,
+      "cpu": {
+        "user": 26927777,
+        "system": 4238753
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 860160,
+      "roundMs": 24196
+    },
+    {
+      "elapsedMs": 458721,
+      "round": 14,
+      "released": 4,
+      "rss": 204082600,
+      "heapUsed": 54194520,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9511097,
+      "cpu": {
+        "user": 28994212,
+        "system": 4542353
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 937984,
+      "roundMs": 24756
+    },
+    {
+      "elapsedMs": 490462,
+      "round": 15,
+      "released": 4,
+      "rss": 211439352,
+      "heapUsed": 54258848,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 13740477,
+      "cpu": {
+        "user": 31538765,
+        "system": 4878409
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 937984,
+      "roundMs": 26774
+    },
+    {
+      "elapsedMs": 527877,
+      "round": 16,
+      "released": 4,
+      "rss": 211619504,
+      "heapUsed": 54255920,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11900164,
+      "cpu": {
+        "user": 34720252,
+        "system": 5330262
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1003520,
+      "roundMs": 34030
+    },
+    {
+      "elapsedMs": 559222,
+      "round": 17,
+      "released": 4,
+      "rss": 199020016,
+      "heapUsed": 54274968,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8492706,
+      "cpu": {
+        "user": 37522326,
+        "system": 5729820
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1003520,
+      "roundMs": 31148
+    },
+    {
+      "elapsedMs": 595029,
+      "round": 18,
+      "released": 4,
+      "rss": 245633096,
+      "heapUsed": 54242592,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8850867,
+      "cpu": {
+        "user": 40907035,
+        "system": 6255730
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1073152,
+      "roundMs": 35790
+    },
+    {
+      "elapsedMs": 670834,
+      "round": 19,
+      "released": 4,
+      "rss": 241864728,
+      "heapUsed": 54285952,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8850939,
+      "cpu": {
+        "user": 48198175,
+        "system": 7596059
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1138688,
+      "roundMs": 76027
+    },
+    {
+      "elapsedMs": 707632,
+      "round": 20,
+      "released": 4,
+      "rss": 207524392,
+      "heapUsed": 54288560,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9805755,
+      "cpu": {
+        "user": 51745935,
+        "system": 8114845
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1138688,
+      "roundMs": 36272
+    },
+    {
+      "elapsedMs": 738120,
+      "round": 21,
+      "released": 4,
+      "rss": 213373960,
+      "heapUsed": 54534560,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8850910,
+      "cpu": {
+        "user": 54506112,
+        "system": 8528787
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1228800,
+      "roundMs": 25907
+    },
+    {
+      "elapsedMs": 766514,
+      "round": 22,
+      "released": 4,
+      "rss": 252776784,
+      "heapUsed": 54371096,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8850927,
+      "cpu": {
+        "user": 57146712,
+        "system": 8890792
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1302528,
+      "roundMs": 24414
+    },
+    {
+      "elapsedMs": 795200,
+      "round": 23,
+      "released": 4,
+      "rss": 204050720,
+      "heapUsed": 54451488,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11006248,
+      "cpu": {
+        "user": 59362811,
+        "system": 9214994
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1302528,
+      "roundMs": 22952
+    },
+    {
+      "elapsedMs": 823403,
+      "round": 24,
+      "released": 4,
+      "rss": 203215376,
+      "heapUsed": 54460888,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12313949,
+      "cpu": {
+        "user": 61551718,
+        "system": 9496073
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1376256,
+      "roundMs": 21147
+    },
+    {
+      "elapsedMs": 851965,
+      "round": 25,
+      "released": 4,
+      "rss": 212668872,
+      "heapUsed": 54458384,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8879296,
+      "cpu": {
+        "user": 63569154,
+        "system": 9755840
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1482752,
+      "roundMs": 19707
+    },
+    {
+      "elapsedMs": 881507,
+      "round": 26,
+      "released": 4,
+      "rss": 206148232,
+      "heapUsed": 54385856,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10141947,
+      "cpu": {
+        "user": 65536372,
+        "system": 10010519
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1482752,
+      "roundMs": 19254
+    },
+    {
+      "elapsedMs": 911278,
+      "round": 27,
+      "released": 4,
+      "rss": 286757416,
+      "heapUsed": 54495256,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12498804,
+      "cpu": {
+        "user": 67588308,
+        "system": 10271919
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1556480,
+      "roundMs": 19022
+    },
+    {
+      "elapsedMs": 941110,
+      "round": 28,
+      "released": 4,
+      "rss": 297751032,
+      "heapUsed": 54455216,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8396052,
+      "cpu": {
+        "user": 69637396,
+        "system": 10536297
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1605632,
+      "roundMs": 18849
+    },
+    {
+      "elapsedMs": 970697,
+      "round": 29,
+      "released": 4,
+      "rss": 284152768,
+      "heapUsed": 54480728,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9566471,
+      "cpu": {
+        "user": 71692678,
+        "system": 10797544
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1605632,
+      "roundMs": 18440
+    },
+    {
+      "elapsedMs": 1001063,
+      "round": 30,
+      "released": 4,
+      "rss": 262099976,
+      "heapUsed": 54470672,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11952784,
+      "cpu": {
+        "user": 73822229,
+        "system": 11062836
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1683456,
+      "roundMs": 18808
+    },
+    {
+      "elapsedMs": 1030959,
+      "round": 31,
+      "released": 4,
+      "rss": 279516048,
+      "heapUsed": 54610648,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12555681,
+      "cpu": {
+        "user": 76242023,
+        "system": 11385805
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1769472,
+      "roundMs": 18698
+    },
+    {
+      "elapsedMs": 1060920,
+      "round": 32,
+      "released": 4,
+      "rss": 263950600,
+      "heapUsed": 54546048,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11534312,
+      "cpu": {
+        "user": 78455947,
+        "system": 11654719
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1769472,
+      "roundMs": 18658
+    },
+    {
+      "elapsedMs": 1090739,
+      "round": 33,
+      "released": 4,
+      "rss": 246124832,
+      "heapUsed": 54467232,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12524245,
+      "cpu": {
+        "user": 80622616,
+        "system": 11924378
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1843200,
+      "roundMs": 18476
+    },
+    {
+      "elapsedMs": 1120991,
+      "round": 34,
+      "released": 4,
+      "rss": 228020368,
+      "heapUsed": 54528656,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11219018,
+      "cpu": {
+        "user": 82914007,
+        "system": 12194772
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1900544,
+      "roundMs": 18728
+    },
+    {
+      "elapsedMs": 1150997,
+      "round": 35,
+      "released": 4,
+      "rss": 215208536,
+      "heapUsed": 54553560,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10464235,
+      "cpu": {
+        "user": 85222122,
+        "system": 12477332
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1900544,
+      "roundMs": 18728
+    },
+    {
+      "elapsedMs": 1180818,
+      "round": 36,
+      "released": 4,
+      "rss": 210227584,
+      "heapUsed": 54509128,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8005360,
+      "cpu": {
+        "user": 87481651,
+        "system": 12758904
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 1982464,
+      "roundMs": 18551
+    },
+    {
+      "elapsedMs": 1210918,
+      "round": 37,
+      "released": 4,
+      "rss": 211620296,
+      "heapUsed": 54498296,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11383533,
+      "cpu": {
+        "user": 89852398,
+        "system": 13041103
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2048000,
+      "roundMs": 18651
+    },
+    {
+      "elapsedMs": 1241170,
+      "round": 38,
+      "released": 4,
+      "rss": 209686912,
+      "heapUsed": 54519936,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10052645,
+      "cpu": {
+        "user": 92280440,
+        "system": 13332304
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2048000,
+      "roundMs": 18902
+    },
+    {
+      "elapsedMs": 1271042,
+      "round": 39,
+      "released": 4,
+      "rss": 210277024,
+      "heapUsed": 54592680,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8370947,
+      "cpu": {
+        "user": 94717872,
+        "system": 13622398
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2101248,
+      "roundMs": 18772
+    },
+    {
+      "elapsedMs": 1300943,
+      "round": 40,
+      "released": 4,
+      "rss": 212767728,
+      "heapUsed": 54561768,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8396035,
+      "cpu": {
+        "user": 97186692,
+        "system": 13906615
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2183168,
+      "roundMs": 18676
+    },
+    {
+      "elapsedMs": 1331164,
+      "round": 41,
+      "released": 4,
+      "rss": 228496176,
+      "heapUsed": 54704768,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 7979262,
+      "cpu": {
+        "user": 100132146,
+        "system": 14281652
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2211840,
+      "roundMs": 18895
+    },
+    {
+      "elapsedMs": 1361178,
+      "round": 42,
+      "released": 4,
+      "rss": 221992136,
+      "heapUsed": 54617648,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9544680,
+      "cpu": {
+        "user": 102660309,
+        "system": 14574045
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2281472,
+      "roundMs": 18908
+    },
+    {
+      "elapsedMs": 1390994,
+      "round": 43,
+      "released": 4,
+      "rss": 213308112,
+      "heapUsed": 54631224,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 9738049,
+      "cpu": {
+        "user": 105186314,
+        "system": 14869226
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2281472,
+      "roundMs": 18721
+    },
+    {
+      "elapsedMs": 1421030,
+      "round": 44,
+      "released": 4,
+      "rss": 212751080,
+      "heapUsed": 54594384,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8070824,
+      "cpu": {
+        "user": 107895325,
+        "system": 15165786
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2338816,
+      "roundMs": 18760
+    },
+    {
+      "elapsedMs": 1451013,
+      "round": 45,
+      "released": 4,
+      "rss": 215945792,
+      "heapUsed": 54644192,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 11713741,
+      "cpu": {
+        "user": 110520087,
+        "system": 15466352
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2424832,
+      "roundMs": 18742
+    },
+    {
+      "elapsedMs": 1480990,
+      "round": 46,
+      "released": 4,
+      "rss": 214258168,
+      "heapUsed": 54659552,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 7979751,
+      "cpu": {
+        "user": 113201670,
+        "system": 15769634
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2494464,
+      "roundMs": 18715
+    },
+    {
+      "elapsedMs": 1510825,
+      "round": 47,
+      "released": 4,
+      "rss": 208032200,
+      "heapUsed": 54582952,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8392721,
+      "cpu": {
+        "user": 115890326,
+        "system": 16082581
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2494464,
+      "roundMs": 18547
+    },
+    {
+      "elapsedMs": 1541225,
+      "round": 48,
+      "released": 4,
+      "rss": 227431264,
+      "heapUsed": 54658840,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12437389,
+      "cpu": {
+        "user": 118662518,
+        "system": 16394084
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2551808,
+      "roundMs": 18951
+    },
+    {
+      "elapsedMs": 1571366,
+      "round": 49,
+      "released": 4,
+      "rss": 224875144,
+      "heapUsed": 54605840,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 7979749,
+      "cpu": {
+        "user": 121437901,
+        "system": 16703225
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2621440,
+      "roundMs": 19097
+    },
+    {
+      "elapsedMs": 1601018,
+      "round": 50,
+      "released": 4,
+      "rss": 229544920,
+      "heapUsed": 54627104,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12682871,
+      "cpu": {
+        "user": 124257028,
+        "system": 17009174
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2621440,
+      "roundMs": 18748
+    },
+    {
+      "elapsedMs": 1631239,
+      "round": 51,
+      "released": 4,
+      "rss": 232838512,
+      "heapUsed": 54859176,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8071315,
+      "cpu": {
+        "user": 127675031,
+        "system": 17418103
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2727936,
+      "roundMs": 18961
+    },
+    {
+      "elapsedMs": 1661289,
+      "round": 52,
+      "released": 4,
+      "rss": 226104136,
+      "heapUsed": 54703040,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10678568,
+      "cpu": {
+        "user": 130518706,
+        "system": 17735950
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2727936,
+      "roundMs": 19009
+    },
+    {
+      "elapsedMs": 1691220,
+      "round": 53,
+      "released": 4,
+      "rss": 217125920,
+      "heapUsed": 54618520,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8140696,
+      "cpu": {
+        "user": 133362084,
+        "system": 18062594
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2809856,
+      "roundMs": 18938
+    },
+    {
+      "elapsedMs": 1721112,
+      "round": 54,
+      "released": 4,
+      "rss": 217453504,
+      "heapUsed": 54690960,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8159165,
+      "cpu": {
+        "user": 136240065,
+        "system": 18384314
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2867200,
+      "roundMs": 18828
+    },
+    {
+      "elapsedMs": 1751109,
+      "round": 55,
+      "released": 4,
+      "rss": 218420256,
+      "heapUsed": 54714408,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 12331132,
+      "cpu": {
+        "user": 139243322,
+        "system": 18712984
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2867200,
+      "roundMs": 18823
+    },
+    {
+      "elapsedMs": 1781153,
+      "round": 56,
+      "released": 4,
+      "rss": 215962656,
+      "heapUsed": 54703312,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 8071315,
+      "cpu": {
+        "user": 142322902,
+        "system": 19046772
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2932736,
+      "roundMs": 18864
+    },
+    {
+      "elapsedMs": 1810953,
+      "round": 57,
+      "released": 4,
+      "rss": 221779624,
+      "heapUsed": 54677752,
+      "agentSessions": 0,
+      "sessionManagers": 0,
+      "modelRuntimes": 1,
+      "external": 10307291,
+      "cpu": {
+        "user": 145413851,
+        "system": 19383447
+      },
+      "activeResources": [
+        "FSReqPromise",
+        "SimpleShutdownWrap",
+        "TCPServerWrap",
+        "TCPSocketWrap",
+        "TCPSocketWrap",
+        "Timeout",
+        "Timeout"
+      ],
+      "workerProcesses": 0,
+      "databaseBytes": 2985984,
+      "roundMs": 18665
+    }
+  ],
+  "provider": "Pi Faux deterministic workload; cacheRetention none excludes the simulator promptCache from resource measurements",
+  "finalMemory": {
+    "rss": 135068080,
+    "heapTotal": 59228160,
+    "heapUsed": 54164040,
+    "external": 7942948,
+    "arrayBuffers": 3438899
+  },
+  "finalResources": [
+    "FSReqPromise"
+  ],
+  "workerProcessMetric": "Original per-round workerProcesses counts reflection-bridge only; reproduction script now counts all three packaged worker executables.",
+  "postRunProcessCheck": {
+    "time": "2026-10-22T02:12:03.465701+00:00",
+    "counts": {
+      "reflection-bridge": 0,
+      "reflection-service": 0,
+      "ReflectionNode": 0
+    },
+    "scope": "all currently running packaged Reflection executables; sampled separately after completion"
+  }
+}

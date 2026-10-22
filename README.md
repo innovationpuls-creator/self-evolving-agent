@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[D3 Reflection](D3-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[D3 Reflection](D3-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -44,6 +44,8 @@ npm run package:desktop
 ```
 
 应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。本地开发签名与正式签名的配置、尚待人工验收的边界见 [钥匙串启动报告](DESKTOP-KEYCHAIN-ACCEPTANCE.md#开发与正式签名)。
+
+在 **Agent** 菜单保存加密备份、从备份恢复到新目录。维护会拒绝正在运行的任务；空闲时正常关闭 Host 后执行，再重新连接。升级、迁移、损坏处理、CLI 及密钥保存要求见 [备份恢复与手动更新](docs/D5-OPERATIONS.md)。原生 Pi 可独立安装 [Pi Diagnostics Extension](packages/pi-diagnostics/README.md)，按需查询同项目的跨会话指标与原始证据。
 
 ## 开发检查
 
@@ -87,9 +89,9 @@ npm run test:skills:ui
 
 ## 当前边界
 
-当前提供 D1 本机集成，以及通过整体业务验收的 D2 Skill、Memory 和 Diagnostic Log；满足 D3 数据及能力访问准入条件。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端及导出通道对已知凭据和常见敏感格式进行保护；这不代表完整敏感数据传播验收已经完成。
+当前提供 D1～D5 本机能力。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端、诊断、导出及产品落盘的真实凭证传播专项已通过，保护范围和未知秘密限制见 [D5 验收报告](D5-ACCEPTANCE.md)。
 
-D3 Reflection 的真实受限 XPC 及完整业务补验收已通过；运行时仍要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。Windows 实机、长期运行和正式签名分发仍待验收，D5 未实施。
+D3 Reflection 的真实受限 XPC 及完整业务补验收已通过；运行时仍要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。D5 已通过 30 分钟本机持续负载、恢复和既有 Apple Development 签名包验证；Windows 实机、Developer ID 公证与公开分发没有验证。Windows 受限 Reflection 继续不可用。D6 未启动。
 
 ## 自主能力进化
 

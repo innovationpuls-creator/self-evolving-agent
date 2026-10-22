@@ -135,7 +135,7 @@ async function files(root: string, dir = root): Promise<string[]> {
   }
   return result;
 }
-async function versionDigest(root: string, version: SkillVersion) {
+export async function versionDigest(root: string, version: SkillVersion) {
   // Field order is part of the existing reviewed snapshot identity.
   const meta = {
     packageRoot: version.packageRoot,

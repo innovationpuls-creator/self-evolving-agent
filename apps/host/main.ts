@@ -1,5 +1,5 @@
-import { mkdir, open, readFile, unlink } from 'node:fs/promises';
-import { resolve, join } from 'node:path';
+import { mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { startHost } from './transport/server.js';
 import { DataKeyError, decodeDataKey } from './storage/data-key.js';
 
@@ -14,29 +14,7 @@ interface Config {
 async function run(config: Config) {
   const dataDir = resolve(config.dataDir);
   await mkdir(dataDir, { recursive: true, mode: 0o700 });
-  const lock = join(dataDir, 'host.lock');
-  try {
-    const pid = Number(await readFile(lock, 'utf8'));
-    try {
-      process.kill(pid, 0);
-      throw new Error('该数据目录已有 Host 运行');
-    } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== 'ESRCH') throw error;
-      await unlink(lock);
-    }
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
-  }
-  const handle = await open(lock, 'wx', 0o600);
-  await handle.writeFile(String(process.pid));
-  await handle.close();
-  let host: Awaited<ReturnType<typeof startHost>>;
-  try {
-    host = await startHost({ ...config, dataDir, key: decodeDataKey(config.key) });
-  } catch (error) {
-    await unlink(lock);
-    throw error;
-  }
+  const host = await startHost({ ...config, dataDir, key: decodeDataKey(config.key) });
   let stopping = false;
   const close = async () => {
     if (stopping) return;
@@ -47,9 +25,6 @@ async function run(config: Config) {
     } catch {
       status = 1;
     } finally {
-      await unlink(lock).catch(() => {
-        status = 1;
-      });
       process.exit(status);
     }
   };
@@ -57,6 +32,14 @@ async function run(config: Config) {
   process.on('SIGTERM', () => void close());
   process.parentPort?.on('message', (event) => {
     if (event.data?.type === 'shutdown') void close();
+    if (event.data?.type === 'prepare-maintenance')
+      void host.service.prepareMaintenance().then(
+        () => {
+          process.parentPort?.postMessage({ type: 'maintenance-ready' });
+          return close();
+        },
+        () => process.parentPort?.postMessage({ type: 'maintenance-busy' }),
+      );
   });
   if (process.parentPort) process.parentPort.postMessage({ type: 'ready', origin: host.origin });
   else console.log(`Agent Host: ${host.origin}`);

@@ -687,6 +687,7 @@ export class ReflectionService {
         const timeout = setTimeout(() => controller.abort(), this.d.modelTimeoutMs ?? 120000);
         timeout.unref();
         const combined = AbortSignal.any([signal, controller.signal]);
+        let rejectAborted: (() => void) | undefined;
         try {
           const response = await Promise.race([
             this.d.runtime.completeSimple(
@@ -697,11 +698,9 @@ export class ReflectionService {
               },
             ),
             new Promise<never>((_, reject) => {
+              rejectAborted = () => reject(new ReflectionError('模型请求取消或超时', 504));
               if (combined.aborted) reject(new ReflectionError('模型请求取消或超时', 504));
-              else
-                combined.addEventListener('abort', () => reject(new ReflectionError('模型请求取消或超时', 504)), {
-                  once: true,
-                });
+              else combined.addEventListener('abort', rejectAborted, { once: true });
             }),
           ]);
           live();
@@ -718,6 +717,7 @@ export class ReflectionService {
             }
           return safe;
         } finally {
+          if (rejectAborted) combined.removeEventListener('abort', rejectAborted);
           clearTimeout(timeout);
           controllers.delete(requestId);
         }

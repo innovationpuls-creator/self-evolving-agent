@@ -5,6 +5,9 @@ import { ActivityService, activityGrant, activityResult, type ActivityResult } f
 import { developmentTools } from '../evolution/development-tools.js';
 import { EventEmitter } from 'node:events';
 import { ensureKeyIdentity } from '../storage/data-key.js';
+import { acquireDataLock } from '../storage/data-lock.js';
+import { backupData } from '../storage/maintenance.js';
+import { inspectDatabase, commitDataFormat } from '../storage/schema.js';
 import { mkdir, stat, readdir, chmod, copyFile, realpath, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
@@ -48,6 +51,8 @@ interface Saved {
   session: Snapshot;
 }
 interface Active {
+  lastAccess: number;
+  accessVersion: number;
   // HTTP and events share a projection: Pi can advance raw state before an awaited Extension releases its event.
   clientMessages: AgentSession['messages'];
   streamingMessage?: unknown;
@@ -140,14 +145,20 @@ export class AgentService extends EventEmitter {
     return release;
   }
   private vault: Vault;
+  private releaseDataLock?: () => Promise<void>;
   private db!: DatabaseSync;
   private active = new Map<string, Active>();
+  private suspendedVersions = new Map<string, number>();
+  private idleTimer?: NodeJS.Timeout;
+  private releasing?: Promise<number>;
+  private refreshingKnowledge = 0;
+  private externalRequests = 0;
   private loading = new Map<string, Promise<Active>>();
   private creating = new Set<Promise<unknown>>();
   private closing = false;
   constructor(
     readonly dataDir: string,
-    key: Buffer,
+    private dataKey: Buffer,
     private options: {
       desktopKeyProof?: string;
       reflectionExecutor?: ReflectionExecutor;
@@ -157,13 +168,23 @@ export class AgentService extends EventEmitter {
     } = {},
   ) {
     super();
-    this.store = new EncryptedStore(dataDir, key);
+    this.store = new EncryptedStore(dataDir, dataKey);
     this.vault = new Vault(this.store, this.sensitive);
   }
   async init() {
     await mkdir(this.dataDir, { recursive: true, mode: 0o700 });
+    this.releaseDataLock = await acquireDataLock(this.dataDir);
+    await ensureKeyIdentity(this.store, (id) => this.loadSaved(id), this.options.desktopKeyProof, false);
+    const schema = inspectDatabase(this.dataDir);
     await ensureKeyIdentity(this.store, (id) => this.loadSaved(id), this.options.desktopKeyProof);
     await this.vault.init();
+    if (schema.exists && schema.version === 0)
+      await backupData({
+        dataDir: this.dataDir,
+        destination: `${this.dataDir}.pre-d5-${randomUUID()}.agentbackup`,
+        key: this.dataKey,
+        lockHeld: true,
+      });
     // node:sqlite is the TD-06 fallback; avoids Electron/standalone native-addon ABI differences.
     this.db = new DatabaseSync(join(this.dataDir, 'product.sqlite'));
     this.db.exec(
@@ -270,6 +291,65 @@ export class AgentService extends EventEmitter {
       if (loaded) this.reflection.recover(loaded.saved.record, loaded.saved.session);
     }
     this.reflection.wake();
+    commitDataFormat(this.db);
+    this.idleTimer = setInterval(() => {
+      void this.releaseIdleSessions().catch(() => this.diagnostics.system('SESSION_RELEASE_FAILED', 'error'));
+    }, 60000);
+    this.idleTimer.unref();
+  }
+
+  /** Release only settled runtimes; encrypted history and product state remain authoritative. */
+  releaseIdleSessions(idleMs = 15 * 60000): Promise<number> {
+    if (!Number.isFinite(idleMs) || idleMs < 0) return Promise.reject(new Error('无效的会话空闲时间'));
+    if (this.releasing) return this.releasing;
+    this.releasing = (async () => {
+      const available = () =>
+        !this.closing &&
+        !this.gate &&
+        !this.draining &&
+        !this.loading.size &&
+        !this.creating.size &&
+        !this.refreshingKnowledge;
+      if (!available()) return 0;
+      let released = 0;
+      for (const [id, item] of this.active) {
+        const accessed = item.lastAccess;
+        const accessVersion = item.accessVersion;
+        const eligible = () =>
+          available() &&
+          !item.busy &&
+          !item.session.isStreaming &&
+          !item.session.isCompacting &&
+          !item.storageFailed &&
+          !item.blocked &&
+          !item.skillFailed &&
+          !this.activityRuns.has(this.activities?.forSession(id)?.id ?? '') &&
+          !this.queued.some((q) => q.id === id) &&
+          item.lastAccess === accessed &&
+          item.accessVersion === accessVersion &&
+          Date.now() - accessed >= idleMs;
+        if (!eligible()) continue;
+        try {
+          await item.dispatchDone;
+          await item.actionDone;
+          await item.run;
+          await item.checkpoint;
+          await item.save;
+        } catch {
+          continue;
+        }
+        // An admitted operation or publication can begin while checkpoints settle.
+        if (!eligible()) continue;
+        this.suspendedVersions.set(id, item.stateVersion);
+        item.session.dispose();
+        this.active.delete(id);
+        released++;
+      }
+      return released;
+    })().finally(() => {
+      this.releasing = undefined;
+    });
+    return this.releasing;
   }
   private async records(): Promise<RecordData[]> {
     const records: RecordData[] = [];
@@ -286,6 +366,7 @@ export class AgentService extends EventEmitter {
     };
   }
   async credentials(provider: string, key?: string, importExisting = false) {
+    if (this.closing) throw new Error('Host 正在退出');
     if (!this.runtime.getProvider(provider)) throw new Error('未知模型提供方');
     const credential = importExisting
       ? readStoredCredential(provider)
@@ -676,8 +757,10 @@ export class AgentService extends EventEmitter {
       ],
     });
     const item: Active = {
+      lastAccess: Date.now(),
+      accessVersion: 0,
       clientMessages: session.messages.slice(),
-      stateVersion: 0,
+      stateVersion: this.suspendedVersions.get(record.id) ?? 0,
       diagnostic: new DiagnosticRecorder(this.diagnostics, record.id, record.cwd, manager),
       record,
       session,
@@ -809,8 +892,13 @@ export class AgentService extends EventEmitter {
       session.setActiveToolsByName([...new Set([...active, ...required])]);
   }
   private async get(id: string): Promise<Active> {
+    if (this.closing) throw new Error('Host 正在退出');
     const live = this.active.get(id);
-    if (live) return live;
+    if (live) {
+      live.lastAccess = Date.now();
+      live.accessVersion++;
+      return live;
+    }
     await this.waitBarrier();
     while (this.gate) await this.waitBarrier();
     const pending = this.loading.get(id);
@@ -915,6 +1003,8 @@ export class AgentService extends EventEmitter {
   }
   private changed(item: Active) {
     try {
+      item.lastAccess = Date.now();
+      item.accessVersion++;
       if (!item.busy && !item.session.isStreaming) {
         item.clientMessages = item.session.messages.slice();
         item.streamingMessage = undefined;
@@ -1338,10 +1428,15 @@ export class AgentService extends EventEmitter {
   }
   async refreshSkillKnowledge() {
     await this.waitBarrier();
-    for (const item of this.active.values()) {
-      if (item.busy) continue;
-      await item.loader.refreshSkills();
-      item.session.setActiveToolsByName(item.session.getActiveToolNames());
+    this.refreshingKnowledge++;
+    try {
+      for (const item of this.active.values()) {
+        if (item.busy) continue;
+        await item.loader.refreshSkills();
+        item.session.setActiveToolsByName(item.session.getActiveToolNames());
+      }
+    } finally {
+      this.refreshingKnowledge--;
     }
   }
   async recoverSkills(id: string) {
@@ -1409,20 +1504,59 @@ export class AgentService extends EventEmitter {
   async export(id: string) {
     return { resumable: false, session: await this.viewSession(id) };
   }
+  /** Covers requests that have authenticated but may still be waiting for their body. */
+  admitRequest() {
+    if (this.closing) throw new Error('Host 正在退出');
+    this.externalRequests++;
+    return () => {
+      this.externalRequests--;
+    };
+  }
+  async prepareMaintenance(): Promise<void> {
+    if (
+      this.closing ||
+      this.externalRequests ||
+      this.gate ||
+      this.draining ||
+      this.loading.size ||
+      this.creating.size ||
+      this.activityRuns.size ||
+      this.refreshingKnowledge ||
+      this.queued.length ||
+      [...this.active.values()].some((i) => i.busy || i.session.isStreaming || i.session.isCompacting) ||
+      this.skills.operations().some((op) => op.status === 'checking' || op.status === 'waiting') ||
+      this.reflection.jobs.list({ status: 'running' }).length
+    )
+      throw new Error('仍有活动任务，请等待结束后重试');
+    // No await before closing admission: a new prompt, publication or Reflection cannot race this decision.
+    this.closing = true;
+    try {
+      await this.releasing;
+      await Promise.all(
+        [...this.active.values()].flatMap((i) => [i.dispatchDone, i.actionDone, i.run, i.checkpoint, i.save]),
+      );
+    } catch (error) {
+      this.closing = false;
+      this.reflection.wake();
+      throw error;
+    }
+  }
   async close() {
     this.closing = true;
-    await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
-    await Promise.allSettled(
-      [...this.active.values()].map(async (item) => {
-        await item.session.abort();
-        item.session.abortCompaction();
-      }),
-    );
-    for (const run of this.activityRuns.values()) run.controller.abort();
-    await Promise.allSettled([...this.activityRuns.values()].map((r) => r.task));
-    await this.skills?.close();
-    await Promise.allSettled([...this.loading.values(), ...this.creating]);
+    clearInterval(this.idleTimer);
     try {
+      await this.releasing;
+      await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
+      await Promise.allSettled(
+        [...this.active.values()].map(async (item) => {
+          await item.session.abort();
+          item.session.abortCompaction();
+        }),
+      );
+      for (const run of this.activityRuns.values()) run.controller.abort();
+      await Promise.allSettled([...this.activityRuns.values()].map((r) => r.task));
+      await this.skills?.close();
+      await Promise.allSettled([...this.loading.values(), ...this.creating]);
       const outcomes = await Promise.allSettled(
         [...this.active.values()].map(async (item) => {
           try {
@@ -1440,10 +1574,20 @@ export class AgentService extends EventEmitter {
       if (outcomes.some((outcome) => outcome.status === 'rejected'))
         throw new Error('退出时部分会话未能保存，原检查点已保留');
     } finally {
+      this.active.clear();
+      this.suspendedVersions.clear();
+      this.loading.clear();
+      this.activityRuns.clear();
+      this.queued.length = 0;
       this.diagnostics?.system('HOST_STOPPED', 'info');
       this.diagnostics?.close();
       this.memory?.close();
-      this.db.close();
+      try {
+        this.db?.close();
+      } finally {
+        await this.releaseDataLock?.();
+        this.releaseDataLock = undefined;
+      }
     }
   }
 }

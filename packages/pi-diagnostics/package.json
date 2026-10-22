@@ -1,0 +1,12 @@
+{
+  "name": "@personal-agent/pi-diagnostics",
+  "version": "0.1.0",
+  "description": "Project-scoped native Pi execution diagnostics and protected Session evidence",
+  "type": "module",
+  "keywords": ["pi-package"],
+  "files": ["lib", "README.md"],
+  "pi": { "extensions": ["./lib/index.ts"] },
+  "peerDependencies": { "@earendil-works/pi-coding-agent": "*", "typebox": "*" },
+  "scripts": { "build": "node build.mjs", "prepack": "node build.mjs" },
+  "engines": { "node": ">=22" }
+}

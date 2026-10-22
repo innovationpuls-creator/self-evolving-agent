@@ -1,12 +1,14 @@
 # 当前开发决策索引
 
+2026-10-22 D5 本机可靠性交付：加密全量备份、SQLite 一致性快照、旧数据升级前备份、恢复到新目录和桌面维护菜单已实现；恢复保留授权与精确版本信任，不自动重放。独立原生 Pi 诊断 Extension 已实际安装并跨会话调用。真实凭证传播检查、30 分钟多 Session/受限 Reflection/Evolution 长稳、签名包手动升级和损坏后恢复通过，证据及限制见 [D5-ACCEPTANCE.md](D5-ACCEPTANCE.md)。只完成 D5；D6 未启动，以下用户设计审批规则保持有效。
+
 2026-10-21 D5/D6 交付范围修订：不再将整套自进化核心移植为原生 Pi Package；改为遵循官方 Extension 规范的独立诊断模块，供 Agent 按需查询 RE-04 定义的高价值会话日志与证据。D5 聚焦 macOS 个人自用的数据备份、迁移/恢复、凭证与远程认证、长期稳定、手动更新，不要求付费 Developer ID 公证、Windows 实机或自动更新器；Windows 未经验证的受限 Reflection 不得降级执行。D5 验收后另设 D6 最终 UI/UX 设计与改造：Codex 调研并制作可交互 Demo、解释方案差异；用户对信息架构、模块显隐、交互与视觉方向拥有最终决定权。用户明确确认方案后才能改造正式前端，先前不得以 Codex 的偏好或 Demo 自动替换生产 UI。优先复用成熟开源组件与素材。
 
 2026-10-21 用户纠偏：D4 不以沙箱、VM、Native Broker 或 Host 无法读取候选源码作为产品需求与准入条件。按 Pi SDK 原生 AgentSession、Tool Calling、Skill/Extension 和既有 SkillVersion 实施授权开发、测试、生效和回退。D4 沙箱原型源码退出当前产品，历史失败报告仅供追溯；D3 已验收 Reflection 实现不受此决定影响。D4 首版业务闭环已实现并通过本机真实 Pi/Web 场景及 Desktop 交互验收，详见 [D4-ACCEPTANCE.md](D4-ACCEPTANCE.md)。
 
 - D4 历史探索及其未通过项见 [执行环境复审](docs/D4-VM-EXECUTION-REVIEW.md)，不再作为现行需求；不恢复或继续开发自建 VM、Broker、隔离 Skill adapter。
 
-- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 早期沙箱原型已撤出当前源码；当前 D4 原生授权开发闭环见本轮验收记录，等待用户验收；D5 尚未实施。
+- D1 范围与增量：[DP-03](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。D1 已归档；D2 整体集成验收通过，详见 [D2-INTEGRATION-ACCEPTANCE.md](D2-INTEGRATION-ACCEPTANCE.md)；D3 免费 Apple Development 签名、实际 XPC 隔离及完整真实业务补验收通过，解除 blocked，详见 [D3-ACCEPTANCE.md](D3-ACCEPTANCE.md)。D4 原生授权开发闭环已验收，历史沙箱原型已撤出当前源码。D5 本机实现与运行验证完成，见 [D5 验收报告](D5-ACCEPTANCE.md)。
 - 运行边界：[TD-04](docs/06-技术决策/TD-04-Web-Desktop一体化运行与交付.md)。React Web / Electron Desktop 共用独立进程 Agent Host，Electron Main 不运行 Pi。
 - 执行基线：Pi SDK 1.3.0；Agent Loop、Tool Calling、Session、Compaction 使用原生实现。
 - 存储：[TD-05](docs/06-技术决策/TD-05-Session安全持久化与恢复.md)、[TD-06](docs/06-技术决策/TD-06-数据持久化方案.md)。Pi 内存 Session 与完整加密快照保存历史，SQLite 仅保存产品业务状态。

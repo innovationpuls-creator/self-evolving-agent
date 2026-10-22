@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-21T15:37:50.160Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "result": "passed",
+  "previousPackageSha256": "1396c419655a2555b063a862bb8aee0858dadd6124329624d6a31cf67ae54b32",
+  "checks": [
+    "real macOS signing failure rejected publication",
+    "previous output bytes unchanged",
+    "staging output removed"
+  ]
+}

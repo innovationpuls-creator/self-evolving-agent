@@ -115,6 +115,7 @@ export async function buildReflectionNative(appBundle: string, hostDist = join(r
     ),
     cp(node.executable, nodeBinary),
     cp(hostDist, join(runtime, 'dist/host'), { recursive: true }),
+    cp(join(dirname(hostDist), 'shared'), join(runtime, 'dist/shared'), { recursive: true }),
     writeFile(join(runtime, 'package.json'), JSON.stringify({ type: 'module', private: true })),
   ]);
   await access(join(runtime, 'dist/host/reflection/worker.js'));

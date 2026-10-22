@@ -1,4 +1,4 @@
-import { createServer, type IncomingMessage } from 'node:http';
+import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -50,8 +50,11 @@ export async function startHost(options: {
   service.sensitive.add(options.token);
   service.sensitive.add(options.key.toString('base64'));
   let origin = '';
+  let closingTransport = false;
+  const requests = new Set<Promise<void>>();
   const authenticated = (req: IncomingMessage) => equal(req.headers.authorization ?? '', `Bearer ${options.token}`);
-  const server = createServer(async (req, res) => {
+  const handleRequest = async (req: IncomingMessage, res: ServerResponse) => {
+    let finishRequest: (() => void) | undefined;
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'no-referrer');
@@ -60,6 +63,10 @@ export async function startHost(options: {
       "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'",
     );
     try {
+      if (closingTransport) {
+        json(res, 503, { error: 'Host 正在退出' });
+        return;
+      }
       if (req.headers.host !== new URL(origin).host || (req.headers.origin && req.headers.origin !== origin)) {
         json(res, 403, { error: '来源不受信任' });
         return;
@@ -84,6 +91,7 @@ export async function startHost(options: {
           json(res, 401, { error: '请连接 Agent Host' });
           return;
         }
+        finishRequest = service.admitRequest();
         if (
           (await activityRoutes(service, req, res, url)) ||
           (await reflectionRoutes(service.reflection, req, res, url)) ||
@@ -141,12 +149,27 @@ export async function startHost(options: {
               ? '当前对话较短，暂时无需压缩'
               : '操作未完成，请检查会话状态、模型凭据或数据目录',
         });
+    } finally {
+      finishRequest?.();
     }
+  };
+  const server = createServer((req, res) => {
+    const task = handleRequest(req, res);
+    requests.add(task);
+    void task.finally(() => requests.delete(task)).catch(() => res.destroy());
   });
+  server.headersTimeout = 15000;
+  server.requestTimeout = 30000;
   const sockets = new WebSocketServer({ noServer: true, maxPayload: 1024 });
   const verified = new Set<WebSocket>();
+  const responsive = new WeakSet<WebSocket>();
   server.on('upgrade', (req, socket, head) => {
-    if (req.url !== '/events' || req.headers.host !== new URL(origin).host || req.headers.origin !== origin) {
+    if (
+      closingTransport ||
+      req.url !== '/events' ||
+      req.headers.host !== new URL(origin).host ||
+      req.headers.origin !== origin
+    ) {
       socket.end('HTTP/1.1 403 Forbidden\r\n\r\n');
       return;
     }
@@ -154,6 +177,8 @@ export async function startHost(options: {
       ws.on('error', () => ws.terminate());
       const authorize = () => {
         verified.add(ws);
+        responsive.add(ws);
+        ws.on('pong', () => responsive.add(ws));
         ws.send(JSON.stringify({ type: 'connected' }));
       };
       ws.once('close', () => verified.delete(ws));
@@ -189,7 +214,13 @@ export async function startHost(options: {
   };
   service.on('event', broadcast);
   const heartbeat = setInterval(() => {
-    for (const ws of verified) ws.ping();
+    for (const ws of verified) {
+      if (!responsive.has(ws)) ws.terminate();
+      else {
+        responsive.delete(ws);
+        ws.ping();
+      }
+    }
   }, 30000);
   heartbeat.unref();
   try {
@@ -213,15 +244,17 @@ export async function startHost(options: {
     service,
     close() {
       closing ??= (async () => {
+        closingTransport = true;
         clearInterval(heartbeat);
         service.off('event', broadcast);
         for (const ws of sockets.clients) ws.terminate();
         sockets.close();
         const stopped = new Promise<void>((ok, fail) => server.close((error) => (error ? fail(error) : ok())));
         try {
-          await service.close();
-        } finally {
           await stopped;
+          await Promise.allSettled([...requests]);
+        } finally {
+          await service.close();
         }
       })();
       return closing;

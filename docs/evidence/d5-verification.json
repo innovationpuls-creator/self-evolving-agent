@@ -1,0 +1,44 @@
+{
+  "time": "2026-10-22T02:18:19.813161+00:00",
+  "environment": {
+    "macOS": "27.2 (26B5101f)",
+    "arch": "arm64",
+    "node": "26.10.0",
+    "pi": "1.3.0",
+    "electron": "44.9.0"
+  },
+  "regression": {
+    "tests": 182,
+    "passed": 182,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 78689.123083,
+    "signedXpcActuallyRun": true
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "lint": {
+    "result": "passed",
+    "warnings": 95,
+    "infos": 38
+  },
+  "formatCheck": "passed",
+  "compiledDesktopMatchesCurrentBuild": true,
+  "samplingScriptSmoke": {
+    "rounds": 1,
+    "passed": true,
+    "workerProcesses": 0
+  },
+  "knownProviderSecretScan": {
+    "repositoryFiles": 670,
+    "packagedApplicationFiles": 15776,
+    "secretMatches": 0,
+    "note": "actual access/refresh values compared in memory; values not emitted"
+  },
+  "unchangedBoundaries": {
+    "formalWebSource": true,
+    "D6ApprovalRules": true,
+    "windowsRestrictedReflectionUnavailable": true
+  },
+  "reproduction": "See D5-ACCEPTANCE.md; structured task evidence excludes credentials and raw full Session data."
+}

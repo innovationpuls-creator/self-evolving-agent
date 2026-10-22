@@ -6,7 +6,13 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["apps/**/*.ts", "apps/**/*.tsx", "scripts/**/*.ts", "tests/**/*.ts"]
+    "includes": [
+      "apps/**/*.ts",
+      "apps/**/*.tsx",
+      "scripts/**/*.ts",
+      "tests/**/*.ts",
+      "packages/pi-diagnostics/src/**/*.ts"
+    ]
   },
   "formatter": {
     "enabled": true,
