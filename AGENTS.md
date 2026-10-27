@@ -11,3 +11,7 @@
 - 不得为了单个问题、样例或测试结果专项优化 Prompt、代码或参数。修改应针对通用原因，避免当前案例变好而整体表现变差。
 - 性能结论必须由 benchmark、profiling、压测或其他量化测试证明，具体指标及优先级按项目目标决定。
 - Avoid unnecessary secondary labels and descriptions. Let the layout do the explaining.
+## Multi-Agent Delegation
+
+- Use Explorer for code investigation, Developer for implementation, Verifier for testing, Skeptic for critical review, and Librarian for retrieving existing knowledge.
+- Delegate only when beneficial. Parallelize independent tasks, avoid conflicting edits, and require evidence before accepting results.

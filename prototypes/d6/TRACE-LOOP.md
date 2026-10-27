@@ -1,6 +1,6 @@
 # A 轨迹 · DeepSeek Harness 网页版结构
 
-用户再次否定了讲解式长文版本：说明过多、留白过多。本次直接替换为 Harness 网页版的紧凑事件表；上一版源文件、说明和截图保留在 `evidence/trace-ledger/previous/` 与 `evidence/trace-loop/`，不代表当前界面。
+用户再次否定了讲解式长文版本：说明过多、留白过多。本次直接替换为 Harness 网页版的紧凑事件表；上一版源文件与说明保留在 `evidence/trace-ledger/previous/`，旧截图已清理，不代表当前界面。
 
 ## 对照与实际修改
 

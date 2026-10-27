@@ -14,8 +14,10 @@ import {
   X,
   Check,
   ChevronRight,
+  Folder,
+  ArrowLeft,
 } from 'lucide-react';
-import type { Session as HostSession, Tree } from '../../../../apps/web/src/features/chat/session-state';
+import type { Session as HostSession } from '../../../../apps/web/src/features/chat/session-state';
 import { messageText } from '../../../../apps/web/src/features/chat/session-state';
 import { presentSession } from './session-presentation';
 import {
@@ -28,6 +30,8 @@ import { Markdown } from '../components/content';
 import { ToolResult, ToolCalls } from './ToolResult';
 import { Source } from './Source';
 import { useRead, type Host, type Route } from './types';
+import { SessionHistory } from './SessionHistory';
+import './session-dialogs.css';
 export type SessionDraft = { text: string; files: string[] };
 export function SessionRoom({
   host,
@@ -370,7 +374,18 @@ export function SessionRoom({
         open={!!picker}
         onClose={() => setPicker(undefined)}
         title={picker === 'files' ? '引用项目文件' : '引用 Skill'}
-        description={picker === 'files' ? session.cwd : '指引不会改变执行权限。'}
+        description={picker === 'files' ? undefined : '指引不会改变执行权限。'}
+        className="host-resources-dialog"
+        footer={
+          picker === 'files' && (
+            <div className="host-resource-footer">
+              <span role="status">已选 {draft.files.length} / 8 个文件</span>
+              <Button kind="primary" onClick={() => setPicker(undefined)}>
+                完成引用
+              </Button>
+            </div>
+          )
+        }
       >
         {picker && (
           <Resources
@@ -397,14 +412,9 @@ export function SessionRoom({
       <Modal open={model} onClose={() => setModel(false)} title="模型与推理">
         {model && <ModelSettings host={host} session={session} />}
       </Modal>
-      <Modal
-        open={branch}
-        onClose={() => setBranch(false)}
-        title="会话历史与分支"
-        description="查看历史不会切换执行位置。"
-      >
-        {branch && <Branches host={host} session={session} go={go} close={() => setBranch(false)} />}
-      </Modal>
+      {branch && (
+        <SessionHistory key={session.id} host={host} session={session} go={go} close={() => setBranch(false)} />
+      )}
     </>
   );
 }
@@ -453,8 +463,25 @@ function Resources({
     files?: Array<{ path: string; directory: boolean }>;
     skills?: Array<{ name: string; description: string }>;
   }>(host.api, `/sessions/${session.id}/input-resources?${new URLSearchParams({ kind, query })}`);
+  const directory = query.slice(0, query.lastIndexOf('/') + 1);
+  const parent = directory.replace(/[^/]+\/$/, '');
   return (
     <>
+      {kind === 'files' && (
+        <div className="host-resource-location">
+          <Button kind="ghost" disabled={!directory} onClick={() => onQuery(parent)} aria-label="返回上级目录">
+            <ArrowLeft size={15} />
+          </Button>
+          <span title={session.cwd + (directory ? `/${directory}` : '')}>
+            {directory || session.cwd.split('/').filter(Boolean).at(-1) || session.cwd}
+          </span>
+          {directory && (
+            <Button kind="ghost" onClick={() => onQuery('')}>
+              项目根目录
+            </Button>
+          )}
+        </div>
+      )}
       <SearchBox value={query} onChange={onQuery} placeholder={kind === 'files' ? '搜索项目文件' : '搜索 Skill'} />
       {read.loading && <p role="status">正在读取…</p>}
       {read.error && (
@@ -468,12 +495,13 @@ function Resources({
           type="button"
           className="picker-row"
           key={f.path}
-          aria-pressed={selected.includes(f.path)}
+          aria-pressed={f.directory ? undefined : selected.includes(f.path)}
           onClick={() => (f.directory ? onQuery(f.path) : onSelect(f.path))}
           disabled={!f.directory && !selected.includes(f.path) && selected.length >= 8}
         >
-          <FileText size={17} />
-          <span>{f.path}</span>
+          {f.directory ? <Folder size={17} /> : <FileText size={17} />}
+          <span>{f.path.slice(directory.length)}</span>
+          {f.directory && <ChevronRight size={15} />}
           {selected.includes(f.path) && <Check size={16} />}
         </button>
       ))}
@@ -535,88 +563,6 @@ function ModelSettings({ host, session }: { host: Host; session: HostSession }) 
           </select>
         </Field>
       )}
-      {error && <p role="alert">{error}</p>}
-    </>
-  );
-}
-function Branches({
-  host,
-  session,
-  go,
-  close,
-}: {
-  host: Host;
-  session: HostSession;
-  go: (route: Route) => void;
-  close: () => void;
-}) {
-  const [target, T] = useState(''),
-    [error, E] = useState(''),
-    [busy, B] = useState(false);
-  const nodes: Tree['entry'][] = [];
-  const visit = (tree: Tree[]) => {
-    for (const n of tree) {
-      if (n.entry.message) nodes.push(n.entry);
-      visit(n.children);
-    }
-  };
-  visit(session.tree || []);
-  const act = async (action: 'branch' | 'compact') => {
-    B(true);
-    E('');
-    try {
-      await host.api(`/sessions/${session.id}/${action}`, 'POST', { value: target });
-      close();
-    } catch (e) {
-      E(e instanceof Error ? e.message : '操作未完成');
-    } finally {
-      B(false);
-    }
-  };
-  return (
-    <>
-      <Field label="历史位置">
-        <select value={target} onChange={(e) => T(e.target.value)}>
-          <option value="">选择原始消息</option>
-          {nodes.map((n) => (
-            <option key={n.id} value={n.id}>
-              {n.message?.role} · {n.message ? messageText(n.message).slice(0, 100) : n.type} · {n.id}
-            </option>
-          ))}
-        </select>
-      </Field>
-      <Notice title="切换执行位置会影响来源决定" tone="warn">
-        来源分支变化可能撤销已有项目决定。查看原始证据不会切换分支。
-      </Notice>
-      <div className="inline-actions">
-        <Button
-          disabled={!target}
-          onClick={() => {
-            close();
-            go({
-              page: 'source',
-              reference: { sessionId: session.id, entryId: target },
-              project: session.cwd,
-              originSession: session.id,
-            });
-          }}
-        >
-          只读查看
-        </Button>
-        <Button
-          disabled={!target || busy || session.busy || host.connection !== 'ready'}
-          onClick={() => void act('branch')}
-        >
-          切换到所选位置
-        </Button>
-        <Button
-          kind="ghost"
-          disabled={busy || session.busy || host.connection !== 'ready'}
-          onClick={() => void act('compact')}
-        >
-          压缩当前上下文
-        </Button>
-      </div>
       {error && <p role="alert">{error}</p>}
     </>
   );
