@@ -111,9 +111,25 @@ test('ordinary native discovery, management, edit conflict, disable, rollback an
     assert.equal((await f.publish(f.skills.record(r.id), r.latest, false)).status, 'applied');
     const disabled = await f.prompt([]);
     assert.ok(disabled.id === state.id);
+    let observed = false;
+    f.fake.setResponses([
+      async (context) => {
+        observed = true;
+        const systems = context.messages.filter((message) => message.role === 'system');
+        assert.ok(!JSON.stringify(systems).includes('Plain capability for testing discovery'));
+        assert.ok(JSON.stringify(context.messages.at(-1)).includes('/skill:plain'));
+        return fauxAssistantMessage('Plain command received without expansion.');
+      },
+    ]);
     const command = await f.host.service.prompt(f.s.id, '/skill:plain');
     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
     assert.equal(command, undefined);
+    assert.ok(observed);
+    const afterCommand = await f.host.service.viewSession(f.s.id);
+    assert.equal(
+      afterCommand.messages.filter((message) => message.role === 'toolResult').length,
+      disabled.messages.filter((message) => message.role === 'toolResult').length,
+    );
     await f.host.close();
     closed = true;
     second = await startHost({ dataDir: join(f.dir, 'data'), key: f.key, token: f.token });

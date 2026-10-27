@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Leave dedicated test Skill with safe candidate content; preserve failed history",
+    "status": "passed",
+    "actual": {
+      "status": 201,
+      "oldCurrent": "621d6adb-e829-477b-a662-da7d896a27fd",
+      "current": "621d6adb-e829-477b-a662-da7d896a27fd",
+      "candidate": "e2c00137-426c-43f3-b8db-d7b11ffca200"
+    }
+  }
+]

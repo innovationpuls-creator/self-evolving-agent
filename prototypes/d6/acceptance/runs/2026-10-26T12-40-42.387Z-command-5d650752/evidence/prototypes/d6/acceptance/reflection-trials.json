@@ -1,0 +1,398 @@
+[
+  {
+    "index": 0,
+    "mode": "sequential",
+    "pid": 55803,
+    "code": 0,
+    "durationMs": 1344.482125,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (258.919042ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (213.284542ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (222.915458ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1269.357417\n",
+    "stderr": ""
+  },
+  {
+    "index": 1,
+    "mode": "sequential",
+    "pid": 55832,
+    "code": 0,
+    "durationMs": 1161.467417,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (238.065834ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (214.164208ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (205.52075ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1077.224125\n",
+    "stderr": ""
+  },
+  {
+    "index": 2,
+    "mode": "sequential",
+    "pid": 55850,
+    "code": 0,
+    "durationMs": 1146.4465830000004,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (235.525833ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (214.676542ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (210.349334ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1075.253375\n",
+    "stderr": ""
+  },
+  {
+    "index": 3,
+    "mode": "sequential",
+    "pid": 55868,
+    "code": 0,
+    "durationMs": 1185.4292920000003,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (237.955917ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (211.490667ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (238.14025ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1109.600875\n",
+    "stderr": ""
+  },
+  {
+    "index": 4,
+    "mode": "sequential",
+    "pid": 55885,
+    "code": 0,
+    "durationMs": 1174.143833,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (256.329166ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (208.88025ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (205.62875ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1098.888375\n",
+    "stderr": ""
+  },
+  {
+    "index": 5,
+    "mode": "sequential",
+    "pid": 55917,
+    "code": 0,
+    "durationMs": 1144.7552500000002,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (229.925542ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (214.84275ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (206.257625ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1067.070167\n",
+    "stderr": ""
+  },
+  {
+    "index": 6,
+    "mode": "sequential",
+    "pid": 55940,
+    "code": 0,
+    "durationMs": 1161.1247500000009,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (234.327958ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (213.078708ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (214.546792ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1084.217459\n",
+    "stderr": ""
+  },
+  {
+    "index": 7,
+    "mode": "sequential",
+    "pid": 55954,
+    "code": 0,
+    "durationMs": 1171.7821250000015,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (251.406416ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (215.1055ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (207.235541ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1094.751416\n",
+    "stderr": ""
+  },
+  {
+    "index": 8,
+    "mode": "sequential",
+    "pid": 55967,
+    "code": 0,
+    "durationMs": 1158.6558750000004,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (246.037917ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (209.258542ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (211.824291ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1086.445875\n",
+    "stderr": ""
+  },
+  {
+    "index": 9,
+    "mode": "sequential",
+    "pid": 55981,
+    "code": 0,
+    "durationMs": 1164.896791000001,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (241.868334ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (220.258083ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (209.829667ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1091.715333\n",
+    "stderr": ""
+  },
+  {
+    "index": 10,
+    "mode": "sequential",
+    "pid": 55995,
+    "code": 0,
+    "durationMs": 1176.2125410000008,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (249.530417ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (223.886875ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (210.511125ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1103.576834\n",
+    "stderr": ""
+  },
+  {
+    "index": 11,
+    "mode": "sequential",
+    "pid": 56011,
+    "code": 0,
+    "durationMs": 1159.8207500000008,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (244.445291ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (212.866875ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (207.926958ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1084.2115\n",
+    "stderr": ""
+  },
+  {
+    "index": 12,
+    "mode": "sequential",
+    "pid": 56025,
+    "code": 0,
+    "durationMs": 1155.9152909999993,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (239.902542ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (215.446333ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (209.742792ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1082.424042\n",
+    "stderr": ""
+  },
+  {
+    "index": 13,
+    "mode": "sequential",
+    "pid": 56039,
+    "code": 0,
+    "durationMs": 1163.8981249999997,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (237.156584ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (228.180167ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (206.780458ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1091.682667\n",
+    "stderr": ""
+  },
+  {
+    "index": 14,
+    "mode": "sequential",
+    "pid": 56056,
+    "code": 0,
+    "durationMs": 1154.5373749999999,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (241.016875ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (212.088083ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (211.387166ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1080.610792\n",
+    "stderr": ""
+  },
+  {
+    "index": 15,
+    "mode": "sequential",
+    "pid": 56072,
+    "code": 0,
+    "durationMs": 1193.448207999998,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (251.011333ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (220.073334ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (216.593625ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1119.919\n",
+    "stderr": ""
+  },
+  {
+    "index": 16,
+    "mode": "sequential",
+    "pid": 56086,
+    "code": 0,
+    "durationMs": 1162.0049590000017,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (239.744708ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (213.913916ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (212.803125ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1088.163958\n",
+    "stderr": ""
+  },
+  {
+    "index": 17,
+    "mode": "sequential",
+    "pid": 56100,
+    "code": 0,
+    "durationMs": 1177.853916,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (242.264459ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (217.28475ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (224.427292ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1103.748541\n",
+    "stderr": ""
+  },
+  {
+    "index": 18,
+    "mode": "sequential",
+    "pid": 56106,
+    "code": 0,
+    "durationMs": 1183.669082999997,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (239.450708ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (217.109125ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (224.775959ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1103.699834\n",
+    "stderr": ""
+  },
+  {
+    "index": 19,
+    "mode": "sequential",
+    "pid": 56111,
+    "code": 0,
+    "durationMs": 1198.1491669999996,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (249.92875ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (225.65825ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (213.737583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1117.332583\n",
+    "stderr": ""
+  },
+  {
+    "index": 23,
+    "mode": "parallel-4",
+    "pid": 56122,
+    "code": 0,
+    "durationMs": 2205.895708,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (524.194583ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (516.7125ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (522.060583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2117.494166\n",
+    "stderr": ""
+  },
+  {
+    "index": 21,
+    "mode": "parallel-4",
+    "pid": 56120,
+    "code": 0,
+    "durationMs": 2206.560834,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (547.025834ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (516.875916ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (520.360208ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2118.687833\n",
+    "stderr": ""
+  },
+  {
+    "index": 22,
+    "mode": "parallel-4",
+    "pid": 56121,
+    "code": 0,
+    "durationMs": 2208.452250000002,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (531.643708ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (522.047792ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (523.700958ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2121.146541\n",
+    "stderr": ""
+  },
+  {
+    "index": 20,
+    "mode": "parallel-4",
+    "pid": 56119,
+    "code": 0,
+    "durationMs": 2210.7628750000003,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (564.334375ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (511.245542ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (499.467542ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2123.323375\n",
+    "stderr": ""
+  },
+  {
+    "index": 24,
+    "mode": "parallel-4",
+    "pid": 56133,
+    "code": 0,
+    "durationMs": 2205.7807079999984,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (580.186959ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (492.553208ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (508.303167ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2112.166584\n",
+    "stderr": ""
+  },
+  {
+    "index": 25,
+    "mode": "parallel-4",
+    "pid": 56134,
+    "code": 0,
+    "durationMs": 2205.3051670000023,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (591.650417ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (501.986875ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (499.373833ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2112.517542\n",
+    "stderr": ""
+  },
+  {
+    "index": 27,
+    "mode": "parallel-4",
+    "pid": 56136,
+    "code": 0,
+    "durationMs": 2205.268415999999,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (569.060166ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (497.537875ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (519.437417ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2113.242875\n",
+    "stderr": ""
+  },
+  {
+    "index": 26,
+    "mode": "parallel-4",
+    "pid": 56135,
+    "code": 0,
+    "durationMs": 2206.7835840000007,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (553.360625ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (507.448208ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (512.584042ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2114.187542\n",
+    "stderr": ""
+  },
+  {
+    "index": 31,
+    "mode": "parallel-4",
+    "pid": 56161,
+    "code": 0,
+    "durationMs": 2166.094333000001,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (542.47075ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (466.254417ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (557.4395ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2073.440417\n",
+    "stderr": ""
+  },
+  {
+    "index": 29,
+    "mode": "parallel-4",
+    "pid": 56159,
+    "code": 0,
+    "durationMs": 2229.9109160000007,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (557.51ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (526.485375ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (528.475833ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2132.667666\n",
+    "stderr": ""
+  },
+  {
+    "index": 30,
+    "mode": "parallel-4",
+    "pid": 56160,
+    "code": 0,
+    "durationMs": 2233.636833999997,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (530.101875ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (517.778ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (555.026417ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2142.752375\n",
+    "stderr": ""
+  },
+  {
+    "index": 28,
+    "mode": "parallel-4",
+    "pid": 56158,
+    "code": 0,
+    "durationMs": 2236.2626249999994,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (538.682458ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (517.19175ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (544.603208ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2137.888542\n",
+    "stderr": ""
+  },
+  {
+    "index": 32,
+    "mode": "parallel-4",
+    "pid": 56181,
+    "code": 0,
+    "durationMs": 2218.6039579999997,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (581.5815ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (490.339458ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (491.019917ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2123.870833\n",
+    "stderr": ""
+  },
+  {
+    "index": 33,
+    "mode": "parallel-4",
+    "pid": 56182,
+    "code": 0,
+    "durationMs": 2218.124040999999,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (569.8275ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (517.11775ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (492.525625ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2124.485875\n",
+    "stderr": ""
+  },
+  {
+    "index": 35,
+    "mode": "parallel-4",
+    "pid": 56184,
+    "code": 0,
+    "durationMs": 2218.3962500000016,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (553.040791ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (532.678458ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (478.260166ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2126.242542\n",
+    "stderr": ""
+  },
+  {
+    "index": 34,
+    "mode": "parallel-4",
+    "pid": 56183,
+    "code": 0,
+    "durationMs": 2223.081958999999,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (573.044084ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (524.771083ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (487.653959ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2130.794959\n",
+    "stderr": ""
+  },
+  {
+    "index": 36,
+    "mode": "parallel-4",
+    "pid": 56206,
+    "code": 0,
+    "durationMs": 2231.441166999997,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (562.014292ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (525.446042ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (510.263875ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2136.722375\n",
+    "stderr": ""
+  },
+  {
+    "index": 37,
+    "mode": "parallel-4",
+    "pid": 56207,
+    "code": 0,
+    "durationMs": 2231.0648340000007,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (572.764083ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (525.945625ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (492.379542ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2136.634083\n",
+    "stderr": ""
+  },
+  {
+    "index": 38,
+    "mode": "parallel-4",
+    "pid": 56208,
+    "code": 0,
+    "durationMs": 2236.544708999998,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (535.306958ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (539.744833ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (504.193792ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2142.669083\n",
+    "stderr": ""
+  },
+  {
+    "index": 39,
+    "mode": "parallel-4",
+    "pid": 56209,
+    "code": 0,
+    "durationMs": 2247.858916000001,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (557.646958ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (512.677084ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (527.523959ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2154.286\n",
+    "stderr": ""
+  },
+  {
+    "index": 40,
+    "mode": "parallel-4",
+    "pid": 56222,
+    "code": 0,
+    "durationMs": 2277.111582999998,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (586.181333ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (527.059542ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (522.15475ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2189.173166\n",
+    "stderr": ""
+  },
+  {
+    "index": 43,
+    "mode": "parallel-4",
+    "pid": 56225,
+    "code": 0,
+    "durationMs": 2278.186125,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (563.563083ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (533.459458ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (516.9805ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2190.190292\n",
+    "stderr": ""
+  },
+  {
+    "index": 41,
+    "mode": "parallel-4",
+    "pid": 56223,
+    "code": 0,
+    "durationMs": 2280.1433340000003,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (550.897292ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (525.436917ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (529.450958ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2193.760792\n",
+    "stderr": ""
+  },
+  {
+    "index": 42,
+    "mode": "parallel-4",
+    "pid": 56224,
+    "code": 0,
+    "durationMs": 2280.4779160000035,
+    "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (582.792792ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (524.904791ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (530.439292ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2194.9965\n",
+    "stderr": ""
+  }
+]

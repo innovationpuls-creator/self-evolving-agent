@@ -1,0 +1,26 @@
+[
+  {
+    "name": "back restores scrolled real catalog and row focus",
+    "expected": 754,
+    "actual": 754,
+    "status": "passed"
+  },
+  {
+    "name": "later refresh does not replay completed scroll restoration",
+    "expected": "near top after activating refresh",
+    "actual": 0,
+    "status": "passed"
+  },
+  {
+    "name": "mobile real Session drawer and Escape focus restoration",
+    "expected": "trigger focused",
+    "actual": "trigger focused",
+    "status": "passed"
+  },
+  {
+    "name": "explicit return preserves source Session identity",
+    "expected": "d94260ed-8852-4843-b4dc-4694a61f1336",
+    "actual": "d94260ed-8852-4843-b4dc-4694a61f1336",
+    "status": "passed"
+  }
+]

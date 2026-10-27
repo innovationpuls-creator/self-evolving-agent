@@ -252,7 +252,10 @@ try {
   await page.locator(`.start select option[value="${model.provider}/${model.model}"]`).waitFor({ state: 'attached' });
   await page.getByRole('button', { name: '模型设置', exact: true }).click();
   if (associationsOnly) {
-    Object.assign(receipt, JSON.parse(await readFile(resolve('docs/evidence/d2-diagnostic-real-ui.json'), 'utf8')));
+    Object.assign(
+      receipt,
+      JSON.parse(await readFile(resolve('release/d2-diagnostic-evidence/trajectory-real-ui.json'), 'utf8')),
+    );
     await verifyAssociations(page);
   } else {
     const marker = randomUUID();
@@ -364,12 +367,8 @@ try {
     };
     console.log('Real Agent cross-Session diagnostic tools and evidence-based file output passed');
 
-    await page.getByRole('button', { name: '运行诊断', exact: true }).click();
-    await page
-      .locator('.diagnostics-item')
-      .filter({ hasText: trace.id.slice(0, 8) })
-      .click();
-    await page.locator('.diagnostics-call').first().waitFor();
+    await page.getByRole('tab', { name: '轨迹', exact: true }).click();
+    await page.locator('.trajectory-panel').waitFor();
     browser = await chromium.launch({
       executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
       headless: true,
@@ -380,21 +379,17 @@ try {
     await web.goto(`${new URL(page.url()).origin}/#token=${encodeURIComponent(token)}`);
     let listRequests = 0;
     web.on('request', (request) => {
-      if (new URL(request.url()).pathname === '/api/diagnostics') listRequests++;
+      if (new URL(request.url()).pathname.startsWith('/api/diagnostics')) listRequests++;
     });
-    await web.getByRole('button', { name: '历史日志', exact: true }).click();
-    await web.getByLabel('诊断 Tool 筛选').fill('read');
-    await web.getByRole('checkbox', { name: '仅含异常' }).check();
-    await web.getByRole('button', { name: '筛选', exact: true }).click();
-    await web
-      .locator('.diagnostics-item')
-      .filter({ hasText: trace.id.slice(0, 8) })
-      .click();
-    const callRow = web
-      .locator('.diagnostics-call')
-      .filter({ hasText: `#${large.sequence} read` })
-      .first();
-    await callRow.getByRole('button', { name: '查看调用结果', exact: true }).click();
+    await web.evaluate(
+      ({ sessionId, traceId, entryId, toolCallId }) =>
+        sessionStorage.setItem(
+          'agent-navigation',
+          JSON.stringify({ kind: 'chat', sessionId, evidence: { sessionId, traceId, entryId, toolCallId } }),
+        ),
+      { sessionId: a.id, traceId: trace.id, entryId: large.resultEntryId, toolCallId: large.toolCallId },
+    );
+    await web.reload();
     await web.locator('.diagnostics-evidence pre').filter({ hasText: marker }).waitFor();
     const firstSegment = await web.locator('.diagnostics-evidence pre').innerText();
     await web.getByRole('button', { name: '后一段证据', exact: true }).click();
@@ -427,10 +422,7 @@ try {
     await web.waitForFunction(() => document.querySelector('.connection')?.textContent?.includes('已连接'), undefined, {
       timeout: 30000,
     });
-    await web
-      .locator('.diagnostics-item')
-      .filter({ hasText: trace.id.slice(0, 8) })
-      .waitFor();
+    await web.locator(`[data-trace-id="${trace.id}"]`).waitFor();
     assert.ok(listRequests > countBeforeRestart, 'reconnected client must reload authoritative diagnostics');
     assert.equal((await call<State>(web, `/sessions/${b.id}`)).messages.length, beforeRestart.messages.length);
     const recovered = await call<Detail>(web, `/diagnostics/${trace.id}`);
@@ -439,7 +431,7 @@ try {
     assert.equal((await call<Evidence>(web, evidencePath)).content, originalEvidence.content);
     receipt.sharedUI = {
       desktopCurrentSession: true,
-      chromeGlobalFilters: true,
+      chromeSessionTrajectory: true,
       paginatedEvidence: true,
       protectedSyntheticSecret: true,
       hostRestartReconnect: true,
@@ -473,7 +465,10 @@ try {
   }
   receipt.result = 'passed';
   await mkdir(resolve('docs/evidence'), { recursive: true });
-  await writeFile(resolve('docs/evidence/d2-diagnostic-real-ui.json'), `${JSON.stringify(receipt, null, 2)}\n`);
+  await writeFile(
+    resolve('release/d2-diagnostic-evidence/trajectory-real-ui.json'),
+    `${JSON.stringify(receipt, null, 2)}\n`,
+  );
   console.log(JSON.stringify(receipt));
 } finally {
   await browser?.close();

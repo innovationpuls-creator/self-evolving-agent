@@ -1,0 +1,24 @@
+{
+  "positions": {
+    "scrollBottom": 700.625,
+    "composerTop": 708.625
+  },
+  "toolbar": {
+    "top1": 837,
+    "top2": 837,
+    "overflow": 0
+  },
+  "border": [
+    "6px",
+    "6px"
+  ],
+  "errors": [],
+  "checks": [
+    "session composer does not cover reading",
+    "navigation retains draft",
+    "memory conflict blocks save",
+    "consistent control border radius",
+    "mobile toolbar stays in one row",
+    "no horizontal overflow"
+  ]
+}

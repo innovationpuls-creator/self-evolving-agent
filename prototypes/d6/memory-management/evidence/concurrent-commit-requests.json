@@ -1,0 +1,699 @@
+[
+  {
+    "path": "/memory?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha",
+    "method": "POST",
+    "status": 201,
+    "body": {
+      "knowledge": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "base 1",
+        "scope": "project",
+        "kind": "fact"
+      },
+      "reason": "隔离提交竞态测试"
+    },
+    "response": {
+      "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+      "content": "base 1",
+      "kind": "fact",
+      "scope": "project",
+      "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+      "revision": 1,
+      "previousRevision": null,
+      "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+      "status": "current",
+      "operation": "create",
+      "reason": "隔离提交竞态测试",
+      "actor": "user",
+      "created": 1792936637781,
+      "sources": [],
+      "basis": [],
+      "isCurrent": true,
+      "usable": true,
+      "unavailable": false
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha&includeHistory=true",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "current": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "base 1",
+        "kind": "fact",
+        "scope": "project",
+        "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+        "revision": 1,
+        "previousRevision": null,
+        "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+        "status": "current",
+        "operation": "create",
+        "reason": "隔离提交竞态测试",
+        "actor": "user",
+        "created": 1792936637781,
+        "sources": [],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "base 1",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "create",
+          "reason": "隔离提交竞态测试",
+          "actor": "user",
+          "created": 1792936637781,
+          "sources": [],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        }
+      ]
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "3c2df537-7b7e-4133-aeda-b71921dcf59b",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "隔离会话回归：请直接输出一篇较长的中文介绍，主题是植物生长，需要至少 3000 字。不要调用工具",
+        "updated": 1792936120016,
+        "interrupted": true,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 33
+      },
+      {
+        "id": "41181bf1-cab4-4873-ac97-75679eadbaa9",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "隔离会话回归：请直接输出一篇较长的中文介绍，主题是植物生长，需要至少 3000 字。不要调用工具",
+        "updated": 1792936115791,
+        "interrupted": true,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 46
+      },
+      {
+        "id": "52f6fa1c-6e2d-47f2-98e9-cf5cde395322",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "隔离会话回归：请直接输出一篇较长的中文介绍，主题是植物生长，需要至少 3000 字。不要调用工具",
+        "updated": 1792936112049,
+        "interrupted": true,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 63
+      },
+      {
+        "id": "e9204664-02c3-43f0-996d-ffa9d15921dc",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "隔离验证，请只调用 memory_save 保存一条项目决定。knowledge 为 {\"tit",
+        "updated": 1792935811089,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 129
+      },
+      {
+        "id": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是隔离 Memory 管理验证，只操作记忆 7a02a014-af4c-450b-9785-5",
+        "updated": 1792935695904,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 973
+      },
+      {
+        "id": "bf502d0b-90e4-44ee-beb0-a7265cd36286",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/beta",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "新会话",
+        "updated": 1792935417074,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "32fbe8c6-91fb-4cd0-96ce-8ba8ee2e9cb2",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/memory-management/.runtime/projects/2026-10-25T13-36-57-002Z/alpha",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "新会话",
+        "updated": 1792935417022,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "1a6c0e09-d656-43ba-8971-8c1a65b89709",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一条真实会话连接验证。请只用中文回复一句“已收到”，不要调用工具。窗口编号 390。",
+        "updated": 1792931787687,
+        "interrupted": true,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "b62e65b3-b286-47e2-b258-e21f78e7b0d3",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一条真实会话连接验证。请只用中文回复一句“已收到”，不要调用工具。窗口编号 850。",
+        "updated": 1792931781502,
+        "interrupted": true,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "7238fa37-9a86-46fd-b15f-c8e5126f9348",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一条真实会话连接验证。请只用中文回复一句“已收到”，不要调用工具。窗口编号 1440。",
+        "updated": 1792931776121,
+        "interrupted": true,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "b8a7569e-bc1b-46c6-81e9-7215f6a7b5ff",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "请使用 read 完整读取 long-evidence.md，确认首末条目的编号即可，不要修改文",
+        "updated": 1792931026912,
+        "interrupted": false,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "834a7490-4ae4-4aae-afbc-8d6e368cdb0e",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一条真实连接验证消息，请只回复：收到。",
+        "updated": 1792924869636,
+        "interrupted": true,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/retry-policy",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "请读取 POLICY.md，对照已有的项目记忆说明当前重试策略和证据不一致的地方。本次只核对事实",
+        "updated": 1792923936039,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 0
+      },
+      {
+        "id": "d5066d20-9412-4114-82c7-e978687a6aff",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一个独立的连接恢复检查。请只回复：收到。",
+        "updated": 1792923930171,
+        "interrupted": false,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "这是一个独立的连接恢复检查。请只回复：收到。",
+        "updated": 1792923867740,
+        "interrupted": false,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "2a843fee-65d9-426f-8d62-8468885c6b38",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/retry-policy",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "本项目已确认以 POLICY.md 为当前事实来源。请读取文件，并读取现有记忆 a59e58a5",
+        "updated": 1792923828561,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 0
+      },
+      {
+        "id": "20e14ea8-e8a8-4235-8182-971dac89c7cb",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/host/.runtime/projects/other-project",
+        "provider": "openai-codex",
+        "model": "gpt-6-luna",
+        "title": "新会话",
+        "updated": 1792923600073,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "gpt-5.3-codex-spark",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-5.5",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-5.6-luna",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-5.6-sol",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-5.6-terra",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-6-astra",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-6-luna",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-6-sol",
+          "provider": "openai-codex"
+        },
+        {
+          "id": "gpt-6.1-sol",
+          "provider": "openai-codex"
+        }
+      ]
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha&includeHistory=true",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "current": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "base 1",
+        "kind": "fact",
+        "scope": "project",
+        "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+        "revision": 1,
+        "previousRevision": null,
+        "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+        "status": "current",
+        "operation": "create",
+        "reason": "隔离提交竞态测试",
+        "actor": "user",
+        "created": 1792936637781,
+        "sources": [],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "base 1",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "create",
+          "reason": "隔离提交竞态测试",
+          "actor": "user",
+          "created": 1792936637781,
+          "sources": [],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        }
+      ]
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha&includeHistory=true",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "current": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "base 1",
+        "kind": "fact",
+        "scope": "project",
+        "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+        "revision": 1,
+        "previousRevision": null,
+        "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+        "status": "current",
+        "operation": "create",
+        "reason": "隔离提交竞态测试",
+        "actor": "user",
+        "created": 1792936637781,
+        "sources": [],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "base 1",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "create",
+          "reason": "隔离提交竞态测试",
+          "actor": "user",
+          "created": 1792936637781,
+          "sources": [],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        }
+      ]
+    }
+  },
+  {
+    "path": "/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a/revise?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha",
+    "method": "POST",
+    "status": 200,
+    "body": {
+      "baseRevision": 2,
+      "knowledge": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "another writer 3",
+        "kind": "fact",
+        "scope": "project"
+      },
+      "reason": "他人随后提交"
+    },
+    "response": {
+      "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+      "content": "another writer 3",
+      "kind": "fact",
+      "scope": "project",
+      "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+      "revision": 3,
+      "previousRevision": 2,
+      "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+      "status": "current",
+      "operation": "revise",
+      "reason": "他人随后提交",
+      "actor": "user",
+      "created": 1792936638012,
+      "sources": [],
+      "basis": [],
+      "isCurrent": true,
+      "usable": true,
+      "unavailable": false
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a/revise?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha",
+    "method": "POST",
+    "status": 200,
+    "body": {
+      "reason": "本次用户保存",
+      "baseRevision": 1,
+      "knowledge": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "my commit 2",
+        "scope": "project",
+        "kind": "fact"
+      }
+    },
+    "response": {
+      "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+      "content": "my commit 2",
+      "kind": "fact",
+      "scope": "project",
+      "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+      "revision": 2,
+      "previousRevision": 1,
+      "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+      "status": "current",
+      "operation": "revise",
+      "reason": "本次用户保存",
+      "actor": "user",
+      "created": 1792936638009,
+      "sources": [],
+      "basis": [],
+      "isCurrent": true,
+      "usable": true,
+      "unavailable": false
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha&includeHistory=true",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "current": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "another writer 3",
+        "kind": "fact",
+        "scope": "project",
+        "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+        "revision": 3,
+        "previousRevision": 2,
+        "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+        "status": "current",
+        "operation": "revise",
+        "reason": "他人随后提交",
+        "actor": "user",
+        "created": 1792936638012,
+        "sources": [],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "another writer 3",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 3,
+          "previousRevision": 2,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "revise",
+          "reason": "他人随后提交",
+          "actor": "user",
+          "created": 1792936638012,
+          "sources": [],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        },
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "my commit 2",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 2,
+          "previousRevision": 1,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "revise",
+          "reason": "本次用户保存",
+          "actor": "user",
+          "created": 1792936638009,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        },
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "base 1",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "create",
+          "reason": "隔离提交竞态测试",
+          "actor": "user",
+          "created": 1792936637781,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        }
+      ]
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/memory/ff02d87a-dfd9-42e1-b2ea-53fc099cc66a?project=<D6_MEMORY_MANAGEMENT>%2F.runtime%2Fprojects%2F2026-10-25T13-36-57-002Z%2Falpha&includeHistory=true",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "current": {
+        "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+        "content": "another writer 3",
+        "kind": "fact",
+        "scope": "project",
+        "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+        "revision": 3,
+        "previousRevision": 2,
+        "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+        "status": "current",
+        "operation": "revise",
+        "reason": "他人随后提交",
+        "actor": "user",
+        "created": 1792936638012,
+        "sources": [],
+        "basis": [],
+        "isCurrent": true,
+        "usable": true,
+        "unavailable": false
+      },
+      "history": [
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "another writer 3",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 3,
+          "previousRevision": 2,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "revise",
+          "reason": "他人随后提交",
+          "actor": "user",
+          "created": 1792936638012,
+          "sources": [],
+          "basis": [],
+          "isCurrent": true,
+          "usable": true,
+          "unavailable": false
+        },
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "my commit 2",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 2,
+          "previousRevision": 1,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "revise",
+          "reason": "本次用户保存",
+          "actor": "user",
+          "created": 1792936638009,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        },
+        {
+          "title": "Memory QA 2026-10-25T13-36-57-002Z advancing-head",
+          "content": "base 1",
+          "kind": "fact",
+          "scope": "project",
+          "id": "ff02d87a-dfd9-42e1-b2ea-53fc099cc66a",
+          "revision": 1,
+          "previousRevision": null,
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260",
+          "status": "current",
+          "operation": "create",
+          "reason": "隔离提交竞态测试",
+          "actor": "user",
+          "created": 1792936637781,
+          "sources": [],
+          "basis": [],
+          "isCurrent": false,
+          "usable": false,
+          "unavailable": false
+        }
+      ]
+    }
+  }
+]

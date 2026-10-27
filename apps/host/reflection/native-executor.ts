@@ -37,7 +37,8 @@ export class NativeReflectionExecutor {
       worker: join(service, 'Contents/Resources/runtime/dist/host/reflection/worker.js'),
     };
   }
-  async available(): Promise<{ available: boolean; reason?: string }> {
+  async available(signal?: AbortSignal): Promise<{ available: boolean; reason?: string }> {
+    signal?.throwIfAborted();
     if (process.platform !== 'darwin') return { available: false, reason: 'Reflection 原生隔离尚未支持此平台' };
     const bundle = this.bundle();
     if (!bundle) return { available: false, reason: '未配置同版本 Agent.app，Reflection 原生隔离不可用' };
@@ -57,9 +58,10 @@ export class NativeReflectionExecutor {
       if (manifest.protocol !== 1 || manifest.version !== current.version || manifest.architecture !== process.arch)
         throw new Error('version');
       for (const path of [paths.node, paths.service, paths.bridge, canonical]) {
-        await command('codesign', ['--verify', '--strict', path], { timeout: 15_000, maxBuffer: 65536 });
+        await command('codesign', ['--verify', '--strict', path], { timeout: 15_000, maxBuffer: 65536, signal });
       }
       const identity = await command('codesign', ['-d', '--verbose=4', paths.bridge], {
+        signal,
         encoding: 'utf8',
         timeout: 15000,
         maxBuffer: 65536,
@@ -74,11 +76,13 @@ export class NativeReflectionExecutor {
         [paths.node, true],
       ] as const) {
         const checked = await command('codesign', ['-d', '--entitlements', ':-', path], {
+          signal,
           encoding: 'utf8',
           timeout: 15_000,
           maxBuffer: 65536,
         });
         const conversion = command('/usr/bin/plutil', ['-convert', 'json', '-o', '-', '--', '-'], {
+          signal,
           encoding: 'utf8',
           timeout: 15000,
           maxBuffer: 65536,
@@ -95,6 +99,7 @@ export class NativeReflectionExecutor {
       }
       return { available: true };
     } catch {
+      signal?.throwIfAborted();
       return { available: false, reason: 'Reflection 原生组件缺失、版本不一致或沙箱签名检查失败' };
     }
   }
@@ -104,7 +109,7 @@ export class NativeReflectionExecutor {
     signal: AbortSignal,
   ): Promise<void> {
     signal.throwIfAborted();
-    const availability = await this.available();
+    const availability = await this.available(signal);
     if (!availability.available) throw new Error(availability.reason);
     const bundle = this.bundle();
     if (!bundle) throw new Error('Reflection 原生组件不可用');

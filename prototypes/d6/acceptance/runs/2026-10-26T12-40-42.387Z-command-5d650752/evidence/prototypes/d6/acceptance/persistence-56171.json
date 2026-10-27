@@ -1,0 +1,222 @@
+[
+  {
+    "mode": "controlled formal Host mechanism, Faux model",
+    "outcome": "succeeded",
+    "stages": [
+      {
+        "after": "memory_save",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "694ab1dc-c79d-4ef6-8a53-44643bea63d9",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          }
+        ]
+      },
+      {
+        "after": "suggestion_submit",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "694ab1dc-c79d-4ef6-8a53-44643bea63d9",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "7e4f847a-884f-4728-b8c2-5e82be330478",
+            "summary": "受控建议"
+          }
+        ]
+      },
+      {
+        "after": "reflection_save",
+        "summary": "受控机制总结",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "694ab1dc-c79d-4ef6-8a53-44643bea63d9",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "7e4f847a-884f-4728-b8c2-5e82be330478",
+            "summary": "受控建议"
+          }
+        ]
+      },
+      {
+        "after": "complete",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "694ab1dc-c79d-4ef6-8a53-44643bea63d9",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "7e4f847a-884f-4728-b8c2-5e82be330478",
+            "summary": "受控建议"
+          }
+        ]
+      }
+    ],
+    "effectCount": 3,
+    "reopenedStatus": "succeeded",
+    "preservedChanges": [
+      {
+        "kind": "memory",
+        "id": "694ab1dc-c79d-4ef6-8a53-44643bea63d9",
+        "revision": 1,
+        "summary": "isolated mechanism fixture"
+      },
+      {
+        "kind": "suggestion",
+        "id": "7e4f847a-884f-4728-b8c2-5e82be330478",
+        "summary": "受控建议"
+      }
+    ],
+    "passed": true
+  },
+  {
+    "mode": "controlled formal Host mechanism, Faux model",
+    "outcome": "failed",
+    "stages": [
+      {
+        "after": "memory_save",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "0d6169dd-5bf1-4c94-9bc7-19c606a9a222",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          }
+        ]
+      },
+      {
+        "after": "suggestion_submit",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "0d6169dd-5bf1-4c94-9bc7-19c606a9a222",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "9f8eb37d-95a6-43fa-bd48-78220835b945",
+            "summary": "受控建议"
+          }
+        ]
+      },
+      {
+        "after": "reflection_save",
+        "summary": "受控机制总结",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "0d6169dd-5bf1-4c94-9bc7-19c606a9a222",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "9f8eb37d-95a6-43fa-bd48-78220835b945",
+            "summary": "受控建议"
+          }
+        ]
+      }
+    ],
+    "effectCount": 3,
+    "reopenedStatus": "failed",
+    "preservedChanges": [
+      {
+        "kind": "memory",
+        "id": "0d6169dd-5bf1-4c94-9bc7-19c606a9a222",
+        "revision": 1,
+        "summary": "isolated mechanism fixture"
+      },
+      {
+        "kind": "suggestion",
+        "id": "9f8eb37d-95a6-43fa-bd48-78220835b945",
+        "summary": "受控建议"
+      }
+    ],
+    "passed": true
+  },
+  {
+    "mode": "controlled formal Host mechanism, Faux model",
+    "outcome": "interrupted",
+    "stages": [
+      {
+        "after": "memory_save",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "a787acc4-0d24-4f29-bf95-6ad2bdfb0192",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          }
+        ]
+      },
+      {
+        "after": "suggestion_submit",
+        "summary": "",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "a787acc4-0d24-4f29-bf95-6ad2bdfb0192",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "3e03cc31-614a-4e06-a2ed-9dd7e4c46e8c",
+            "summary": "受控建议"
+          }
+        ]
+      },
+      {
+        "after": "reflection_save",
+        "summary": "受控机制总结",
+        "changes": [
+          {
+            "kind": "memory",
+            "id": "a787acc4-0d24-4f29-bf95-6ad2bdfb0192",
+            "revision": 1,
+            "summary": "isolated mechanism fixture"
+          },
+          {
+            "kind": "suggestion",
+            "id": "3e03cc31-614a-4e06-a2ed-9dd7e4c46e8c",
+            "summary": "受控建议"
+          }
+        ]
+      }
+    ],
+    "effectCount": 3,
+    "reopenedStatus": "interrupted",
+    "preservedChanges": [
+      {
+        "kind": "memory",
+        "id": "a787acc4-0d24-4f29-bf95-6ad2bdfb0192",
+        "revision": 1,
+        "summary": "isolated mechanism fixture"
+      },
+      {
+        "kind": "suggestion",
+        "id": "3e03cc31-614a-4e06-a2ed-9dd7e4c46e8c",
+        "summary": "受控建议"
+      }
+    ],
+    "passed": true
+  }
+]

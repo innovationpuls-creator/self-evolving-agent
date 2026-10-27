@@ -1,0 +1,35 @@
+{
+  "kind": "interrupted",
+  "source": "d5066d20-9412-4114-82c7-e978687a6aff",
+  "before": {
+    "jobs": [
+      {
+        "id": "3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+        "sessionId": "d5066d20-9412-4114-82c7-e978687a6aff",
+        "created": 1792923930208,
+        "updated": 1792923937620,
+        "scheduledAt": 1792923930615,
+        "status": "running",
+        "reflectionSessionId": "70c1fd94-a25b-4384-a903-99c7164616bc",
+        "sourceCount": 1
+      }
+    ],
+    "records": [
+      {
+        "id": "3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+        "jobId": "3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+        "summary": ""
+      }
+    ],
+    "total": 1,
+    "limit": 20,
+    "offset": 0,
+    "pending": 0,
+    "availability": {
+      "available": true,
+      "checkedAt": 1792923937620
+    }
+  },
+  "runtimePid": 16692,
+  "action": "SIGTERM isolated Host during active Reflection, then normal restart"
+}

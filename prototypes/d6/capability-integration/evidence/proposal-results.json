@@ -1,0 +1,21 @@
+[
+  {
+    "name": "user-created proposal is distinct from actual agent Tool submission; ignore and archive",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "user": {
+        "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+        "actor": "user",
+        "project": null,
+        "status": "archived"
+      },
+      "agent": {
+        "sessionId": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "entryId": "3f51c699",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha"
+      },
+      "mode": "agent source uses controlled native Tool Call, not autonomous discovery"
+    }
+  }
+]

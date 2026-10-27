@@ -1,0 +1,328 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T11:25:10.569307+00:00",
+  "title": "Design System: D6-A Workspace",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "canonical": "#455c45",
+        "tonalRamp": [
+          "oklch(15% 0.04637 144.75)",
+          "oklch(26% 0.04637 144.75)",
+          "oklch(38% 0.04637 144.75)",
+          "oklch(49% 0.04637 144.75)",
+          "oklch(61% 0.04637 144.75)",
+          "oklch(72% 0.04637 144.75)",
+          "oklch(84% 0.04637 144.75)",
+          "oklch(95% 0.04637 144.75)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Primary Hover",
+        "canonical": "#354c35",
+        "tonalRamp": [
+          "oklch(15% 0.04774 144.59)",
+          "oklch(26% 0.04774 144.59)",
+          "oklch(38% 0.04774 144.59)",
+          "oklch(49% 0.04774 144.59)",
+          "oklch(61% 0.04774 144.59)",
+          "oklch(72% 0.04774 144.59)",
+          "oklch(84% 0.04774 144.59)",
+          "oklch(95% 0.04774 144.59)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#242923",
+        "tonalRamp": [
+          "oklch(15% 0.01301 140.46)",
+          "oklch(26% 0.01301 140.46)",
+          "oklch(38% 0.01301 140.46)",
+          "oklch(49% 0.01301 140.46)",
+          "oklch(61% 0.01301 140.46)",
+          "oklch(72% 0.01301 140.46)",
+          "oklch(84% 0.01301 140.46)",
+          "oklch(95% 0.01301 140.46)"
+        ]
+      },
+      "secondary-text": {
+        "role": "neutral",
+        "displayName": "Secondary Text",
+        "canonical": "#687066",
+        "tonalRamp": [
+          "oklch(15% 0.01814 139.44)",
+          "oklch(26% 0.01814 139.44)",
+          "oklch(38% 0.01814 139.44)",
+          "oklch(49% 0.01814 139.44)",
+          "oklch(61% 0.01814 139.44)",
+          "oklch(72% 0.01814 139.44)",
+          "oklch(84% 0.01814 139.44)",
+          "oklch(95% 0.01814 139.44)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.00000 0.00)",
+          "oklch(26% 0.00000 0.00)",
+          "oklch(38% 0.00000 0.00)",
+          "oklch(49% 0.00000 0.00)",
+          "oklch(61% 0.00000 0.00)",
+          "oklch(72% 0.00000 0.00)",
+          "oklch(84% 0.00000 0.00)",
+          "oklch(95% 0.00000 0.00)"
+        ]
+      },
+      "divider": {
+        "role": "neutral",
+        "displayName": "Divider",
+        "canonical": "#e5e8e1",
+        "tonalRamp": [
+          "oklch(15% 0.00987 125.69)",
+          "oklch(26% 0.00987 125.69)",
+          "oklch(38% 0.00987 125.69)",
+          "oklch(49% 0.00987 125.69)",
+          "oklch(61% 0.00987 125.69)",
+          "oklch(72% 0.00987 125.69)",
+          "oklch(84% 0.00987 125.69)",
+          "oklch(95% 0.00987 125.69)"
+        ]
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft",
+        "canonical": "#f5f6f2",
+        "tonalRamp": [
+          "oklch(15% 0.00538 117.92)",
+          "oklch(26% 0.00538 117.92)",
+          "oklch(38% 0.00538 117.92)",
+          "oklch(49% 0.00538 117.92)",
+          "oklch(61% 0.00538 117.92)",
+          "oklch(72% 0.00538 117.92)",
+          "oklch(84% 0.00538 117.92)",
+          "oklch(95% 0.00538 117.92)"
+        ]
+      },
+      "row-hover": {
+        "role": "neutral",
+        "displayName": "Row Hover",
+        "canonical": "#f7f8f5",
+        "tonalRamp": [
+          "oklch(15% 0.00409 121.56)",
+          "oklch(26% 0.00409 121.56)",
+          "oklch(38% 0.00409 121.56)",
+          "oklch(49% 0.00409 121.56)",
+          "oklch(61% 0.00409 121.56)",
+          "oklch(72% 0.00409 121.56)",
+          "oklch(84% 0.00409 121.56)",
+          "oklch(95% 0.00409 121.56)"
+        ]
+      },
+      "icon-surface": {
+        "role": "neutral",
+        "displayName": "Icon Surface",
+        "canonical": "#eef1e8",
+        "tonalRamp": [
+          "oklch(15% 0.01233 121.70)",
+          "oklch(26% 0.01233 121.70)",
+          "oklch(38% 0.01233 121.70)",
+          "oklch(49% 0.01233 121.70)",
+          "oklch(61% 0.01233 121.70)",
+          "oklch(72% 0.01233 121.70)",
+          "oklch(84% 0.01233 121.70)",
+          "oklch(95% 0.01233 121.70)"
+        ]
+      },
+      "icon-ink": {
+        "role": "neutral",
+        "displayName": "Icon Ink",
+        "canonical": "#56694e",
+        "tonalRamp": [
+          "oklch(15% 0.04770 136.53)",
+          "oklch(26% 0.04770 136.53)",
+          "oklch(38% 0.04770 136.53)",
+          "oklch(49% 0.04770 136.53)",
+          "oklch(61% 0.04770 136.53)",
+          "oklch(72% 0.04770 136.53)",
+          "oklch(84% 0.04770 136.53)",
+          "oklch(95% 0.04770 136.53)"
+        ]
+      },
+      "caution-surface": {
+        "role": "neutral",
+        "displayName": "Caution Surface",
+        "canonical": "#faf6ed",
+        "tonalRamp": [
+          "oklch(15% 0.01265 86.83)",
+          "oklch(26% 0.01265 86.83)",
+          "oklch(38% 0.01265 86.83)",
+          "oklch(49% 0.01265 86.83)",
+          "oklch(61% 0.01265 86.83)",
+          "oklch(72% 0.01265 86.83)",
+          "oklch(84% 0.01265 86.83)",
+          "oklch(95% 0.01265 86.83)"
+        ]
+      },
+      "caution-ink": {
+        "role": "neutral",
+        "displayName": "Caution Ink",
+        "canonical": "#7d613b",
+        "tonalRamp": [
+          "oklch(15% 0.06488 73.97)",
+          "oklch(26% 0.06488 73.97)",
+          "oklch(38% 0.06488 73.97)",
+          "oklch(49% 0.06488 73.97)",
+          "oklch(61% 0.06488 73.97)",
+          "oklch(72% 0.06488 73.97)",
+          "oklch(84% 0.06488 73.97)",
+          "oklch(95% 0.06488 73.97)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Module and object title; 25px below the 700px breakpoint."
+      },
+      "note": {
+        "displayName": "Memory reading",
+        "purpose": "Memory body, preserving line breaks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shared-secondary",
+        "value": "0 1px 1px #00000004",
+        "purpose": "Inherited secondary button."
+      },
+      {
+        "name": "shared-dialog",
+        "value": "0 20px 70px #15211730, 0 0 0 1px #20251e12",
+        "purpose": "Existing modal elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "skill-tile",
+        "value": "border-color 130ms ease, background 130ms ease",
+        "purpose": "Subtle hover, removed for reduced motion."
+      },
+      {
+        "name": "button",
+        "value": "background 100ms, color 100ms",
+        "purpose": "Inherited button states."
+      },
+      {
+        "name": "shared-ease",
+        "value": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+        "purpose": "Shared floating surface fade."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "context-stack",
+        "value": "1250px"
+      },
+      {
+        "name": "compact-workspace",
+        "value": "1000px"
+      },
+      {
+        "name": "single-column",
+        "value": "700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "A workspace primary action; shared hover filter is retained.",
+      "html": "<button class=\"ds-primary\">保存记忆</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;border-radius:6px;padding:8px 13px;font-size:13px;font-weight:500;line-height:1.4;cursor:pointer;transition:background 100ms,color 100ms;background:#455c45;color:#fff;border:1px solid #455c45}.ds-primary:hover:not(:disabled){background:#354c35;filter:brightness(.92)}.ds-primary:focus-visible{outline:2px solid #455c45;outline-offset:3px;}.ds-primary:disabled{opacity:.4;cursor:not-allowed}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "description": "Existing quiet Button variant.",
+      "html": "<button class=\"ds-secondary\">查看历史</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;border-radius:6px;padding:8px 13px;font-size:13px;font-weight:500;line-height:1.4;cursor:pointer;transition:background 100ms,color 100ms;background:#fff;color:#242923;border:1px solid #e1e3dc;box-shadow:0 1px 1px #00000004}.ds-secondary:hover{background:#f4f5f1;border-color:#bfc4b8}.ds-secondary:focus-visible{outline:2px solid #455c45;outline-offset:3px;}.ds-secondary:disabled{opacity:.4;cursor:not-allowed}"
+    },
+    {
+      "name": "Ghost button",
+      "kind": "button",
+      "description": "Auxiliary object action.",
+      "html": "<button class=\"ds-ghost\">返回记忆</button>",
+      "css": ".ds-ghost{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;border-radius:6px;padding:8px 13px;font-size:13px;font-weight:500;line-height:1.4;cursor:pointer;transition:background 100ms,color 100ms;background:transparent;color:#555e52;border:1px solid transparent}.ds-ghost:hover{background:#f4f5f1;color:#292d29}.ds-ghost:focus-visible{outline:2px solid #455c45;outline-offset:3px;}.ds-ghost:disabled{opacity:.4;cursor:not-allowed}"
+    },
+    {
+      "name": "Search",
+      "kind": "input",
+      "refersTo": "search",
+      "description": "Shared search uses the quiet shell focus accent.",
+      "html": "<label class=\"ds-search\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input aria-label=\"搜索记忆\" placeholder=\"搜索记忆\"/></label>",
+      "css": ".ds-search{display:flex;align-items:center;gap:8px;width:230px;border:1px solid #e5e8e1;border-radius:4px;background:#fff;padding:0 9px;color:#62695f}.ds-search input{border:0;background:none;padding:8px 0;font-size:13px;line-height:1.6;color:#242923;width:100%;outline:none;min-width:0}.ds-search:focus-within{outline:2px solid #32634e;outline-offset:1px}"
+    },
+    {
+      "name": "Collection tabs",
+      "kind": "nav",
+      "description": "Radix Tabs visual treatment; static preview only.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-active\" role=\"tab\" aria-selected=\"true\">使用中</button><button role=\"tab\" aria-selected=\"false\">已撤销</button></div>",
+      "css": ".ds-tabs{display:flex;gap:24px;border-bottom:1px solid #e5e8e1}.ds-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:12px 0;min-height:44px;font-size:13px;color:#687066;cursor:pointer}.ds-tabs button:hover{color:#292d29}.ds-tabs .ds-active{color:#242923;border-bottom-color:#455c45;font-weight:600}.ds-tabs button:focus-visible{outline:2px solid #455c45;outline-offset:3px;}"
+    },
+    {
+      "name": "Memory row",
+      "kind": "custom",
+      "description": "Grouped reading row.",
+      "html": "<button class=\"ds-memory\"><span>事实</span><span><strong>比较报告的材料范围</strong><p>保留已确认的认识与尚待核实的部分。</p><small>项目 · 今天修订</small></span><svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></button>",
+      "css": ".ds-memory{display:grid;grid-template-columns:64px minmax(0,1fr) 20px;gap:18px;width:100%;text-align:left;padding:23px 16px;border:0;border-top:1px solid #e5e8e1;background:transparent;color:#242923;cursor:pointer}.ds-memory>span:first-child,.ds-memory small{font-size:12px;color:#687066}.ds-memory strong{font-size:16px;font-weight:550;line-height:1.6}.ds-memory p{font-size:13px;line-height:1.8;color:#60695b;margin:6px 0 10px}.ds-memory:hover{background:#f7f8f5}.ds-memory:focus-visible{outline:2px solid #455c45;outline-offset:3px;}.ds-memory>svg{color:#7f8879;margin-top:4px;flex-shrink:0}"
+    },
+    {
+      "name": "Skill tile",
+      "kind": "card",
+      "refersTo": "skill-tile",
+      "description": "Purpose-led skill entry.",
+      "html": "<button class=\"ds-skill\"><span class=\"ds-skill-icon\"><svg width=\"23\" height=\"23\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" aria-hidden=\"true\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z\"/><path d=\"M14 2v6h6M8 13h8M8 17h6\"/></svg></span><h2>文档比较</h2><code>text-diff</code><p>比较材料变化，保留判断依据。</p><div class=\"ds-skill-bottom\">含执行工具</div></button>",
+      "css": ".ds-skill{width:100%;padding:24px;border:1px solid #e5e8e1;border-radius:10px;background:#fff;color:#242923;text-align:left;cursor:pointer;transition:border-color 130ms ease,background 130ms ease}.ds-skill:hover{border-color:#a6b19e;background:#fcfdfb}.ds-skill:focus-visible{outline:2px solid #455c45;outline-offset:3px;}.ds-skill-icon{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;background:#eef1e8;color:#56694e;border-radius:10px}.ds-skill h2{font-size:18px;line-height:1.5;font-weight:600;letter-spacing:-.015em;margin:21px 0 3px}.ds-skill code{font-size:11px;color:#6c7465}.ds-skill p{font-size:13px;line-height:1.85;color:#596351;margin:15px 0 26px;min-height:48px}.ds-skill-bottom{border-top:1px solid #e5e8e1;padding-top:15px;font-size:12px;color:#687066}@media(prefers-reduced-motion:reduce){.ds-skill{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "安静的个人参考室",
+    "overview": "白底阅读面、石墨文字、克制的橄榄色操作与中性导航服务个人长期使用。记忆先读认识，技能先看用途，反思按时间回看，建议只在有必要时要求判断；四种集合保留各自的组织方式。\n\n本文件从 `workspace.css`、四个模块和共享控件的实际实现提取，只适用于 A（`quiet`）的记忆、技能与工具、反思记录、改进建议。其阅读与维护页面由 `src/main.tsx` 路由到 `src/workspace/`，B、会话、轨迹、设置不继承本次重设计。当前是模拟数据原型；最终设计验收由 ChatGPT 决定。",
+    "keyCharacteristics": [
+      "白底、细分隔与少量语义底色。",
+      "集合进入完整详情，阅读正文与属性依据分层。",
+      "四类集合有不同节奏，操作在相关对象中出现。",
+      "Lucide SVG 提供辨识；没有图片资产，截图只作为评审证据。"
+    ],
+    "rules": [
+      {
+        "name": "The Restrained Accent Rule",
+        "body": "橄榄色帮助定位动作和选择；阅读层级主要由位置、间距与字重建立。",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading First Rule",
+        "body": "对象标题先建立内容主题，范围、状态与日期放在标题下方或属性区；不把元信息提升为展示性眉题。",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "**Do** 保留四类集合各自的组织方式，并以完整详情承载阅读。",
+      "**Do** 将来源、修订、信任和授权后果放到相关决策点。",
+      "**Do** 用标题、正文、属性分层与响应式重排保持阅读顺序。"
+    ],
+    "donts": [
+      "**Don't** 为填满待处理列表而捏造缺陷或建议。",
+      "**Don't** 将本次 A 工作空间规则应用到 B、会话、轨迹或设置。",
+      "**Don't** 将原型呈现、内部评审或截图称作最终设计验收或真实 Host 验证。"
+    ]
+  }
+}

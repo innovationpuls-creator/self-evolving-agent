@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "npm --prefix prototypes/d6 run build:host && npm --prefix prototypes/d6/host run build"
+  ],
+  "cwd": "",
+  "code": 0,
+  "signal": null,
+  "sourceChanges": []
+}

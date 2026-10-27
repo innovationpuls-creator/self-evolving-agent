@@ -1,0 +1,77 @@
+[
+  {
+    "name": "real file picker, selected reference and draft preservation",
+    "width": 1440,
+    "status": "passed"
+  },
+  {
+    "name": "real model selection and branch history are readable",
+    "width": 1440,
+    "status": "passed"
+  },
+  {
+    "name": "actual trajectory inside A navigation returns to accepted composer",
+    "width": 1440,
+    "status": "passed"
+  },
+  {
+    "name": "real Memory catalog preserves filter, project, focus and scroll on detail return",
+    "width": 1440,
+    "status": "passed"
+  },
+  {
+    "name": "real Skill and Evolution catalogs expose read scope without fake write actions",
+    "width": 1440,
+    "status": "passed"
+  },
+  {
+    "name": "real file picker, selected reference and draft preservation",
+    "width": 850,
+    "status": "passed"
+  },
+  {
+    "name": "real model selection and branch history are readable",
+    "width": 850,
+    "status": "passed"
+  },
+  {
+    "name": "actual trajectory inside A navigation returns to accepted composer",
+    "width": 850,
+    "status": "passed"
+  },
+  {
+    "name": "real Memory catalog preserves filter, project, focus and scroll on detail return",
+    "width": 850,
+    "status": "passed"
+  },
+  {
+    "name": "real Skill and Evolution catalogs expose read scope without fake write actions",
+    "width": 850,
+    "status": "passed"
+  },
+  {
+    "name": "real file picker, selected reference and draft preservation",
+    "width": 390,
+    "status": "passed"
+  },
+  {
+    "name": "real model selection and branch history are readable",
+    "width": 390,
+    "status": "passed"
+  },
+  {
+    "name": "actual trajectory inside A navigation returns to accepted composer",
+    "width": 390,
+    "status": "passed"
+  },
+  {
+    "name": "real Memory catalog preserves filter, project, focus and scroll on detail return",
+    "width": 390,
+    "status": "passed"
+  },
+  {
+    "name": "real Skill and Evolution catalogs expose read scope without fake write actions",
+    "width": 390,
+    "status": "passed"
+  }
+]

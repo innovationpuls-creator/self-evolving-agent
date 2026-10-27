@@ -104,6 +104,8 @@ export class ReflectionJobs {
           CREATE INDEX reflection_job_source_owner ON reflection_job_sources(job_id,seq);
           INSERT INTO product_migrations VALUES('reflection_jobs',1);
         `);
+      this.db.exec(`CREATE INDEX IF NOT EXISTS reflection_job_catalog ON reflection_jobs(created DESC,id DESC);
+        CREATE INDEX IF NOT EXISTS reflection_job_session_catalog ON reflection_jobs(session_id,created DESC,id DESC);`);
       return Number(
         this.db
           .prepare("UPDATE reflection_jobs SET status='interrupted',updated=?,error=? WHERE status='running'")
@@ -221,6 +223,17 @@ export class ReflectionJobs {
       )
       .all(filter.sessionId ?? null, filter.sessionId ?? null, filter.status ?? null, filter.status ?? null)
       .map((row) => this.required(String(row.id)));
+  }
+
+  hasDue() {
+    return !!this.db
+      .prepare("SELECT 1 FROM reflection_jobs WHERE status='pending' AND scheduled_at<=? LIMIT 1")
+      .get(this.now());
+  }
+
+  nextScheduledAt() {
+    const row = this.db.prepare("SELECT MIN(scheduled_at) AS due FROM reflection_jobs WHERE status='pending'").get();
+    return row?.due === null || row?.due === undefined ? undefined : Number(row.due);
   }
 
   expedite(sessionId: string): number {

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "node",
+    "prototypes/d6/acceptance/scripts/campaign.mjs"
+  ],
+  "cwd": "",
+  "code": 1,
+  "signal": null,
+  "sourceChanges": [
+    {
+      "path": "prototypes/d6/acceptance/scripts/whole-journey.mjs",
+      "before": {
+        "bytes": 8937,
+        "sha256": "9d8e69e78340010a9072cbc5d97968d130c7bfd62139f2787e3b395e2a5d4501"
+      },
+      "after": {
+        "bytes": 8995,
+        "sha256": "244d3e4cc9f31a0bf55b80e45f33dec9afd5b354ba87527b33ad021c947bf01f"
+      }
+    }
+  ]
+}

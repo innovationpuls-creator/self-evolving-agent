@@ -4,12 +4,16 @@ import { z } from 'zod';
 import type { AgentService } from '../runtime/agent.js';
 
 export async function skillRoutes(
-  service: Pick<AgentService, 'skills' | 'sensitive' | 'skillDetail' | 'refreshSkillKnowledge'>,
+  service: Pick<AgentService, 'skills' | 'sensitive' | 'skillDetail' | 'refreshSkillKnowledge' | 'tools'>,
   req: IncomingMessage,
   res: ServerResponse,
   url: URL,
 ): Promise<boolean> {
   const route = url.pathname;
+  if (route === '/api/tools' && req.method === 'GET') {
+    json(res, 200, await service.tools(url.searchParams.get('project') || undefined));
+    return true;
+  }
   if (route === '/api/skills' && req.method === 'GET') {
     json(res, 200, service.sensitive.copy(await service.skills.discover(url.searchParams.get('project') ?? undefined)));
     return true;

@@ -1,0 +1,22 @@
+{
+  "name": "d6-a-product-host-integration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/check.mjs'",
+    "test": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx --test tests/*.test.ts'",
+    "test:journey": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/verify.mjs'",
+    "test:boundaries": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/boundaries.mjs'",
+    "test:product": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/product-smoke.mjs'",
+    "test:live": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/live.mjs'",
+    "test:stream": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/live.mjs --stream-only'",
+    "test:evidence": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/long-evidence.mjs'",
+    "test:regression": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/regression.mjs && node scripts/workspace-smoke.mjs'",
+    "test:isolation": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/isolation.mjs'",
+    "lint": "biome lint scripts tests",
+    "format:check": "biome format scripts tests *.json",
+    "redact": "node ../acceptance/scripts/run.mjs -- sh -c 'python3 scripts/redact.py'",
+    "record:journey": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/verify.mjs --record'",
+    "report": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/index.mjs'"
+  }
+}

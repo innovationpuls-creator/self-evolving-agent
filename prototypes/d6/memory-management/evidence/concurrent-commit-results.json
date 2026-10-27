@@ -1,0 +1,13 @@
+[
+  {
+    "name": "自己的提交后又被他人修订，仍打开本次保存的确切版本",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "saved": 2,
+      "current": 3,
+      "opened": 2,
+      "focus": "H1"
+    }
+  }
+]

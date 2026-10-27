@@ -1,4 +1,5 @@
 import type { EvolutionActivity } from '../../../../host/evolution/activities.js';
+import type { memoryFeedback } from '../../../../host/memory/memory-feedback.js';
 export interface Model {
   provider: string;
   id: string;
@@ -6,16 +7,32 @@ export interface Model {
 }
 export interface Message {
   role: string;
-  content: string | Array<{ type: string; text?: string; name?: string; arguments?: unknown; id?: string }>;
+  content:
+    | string
+    | Array<{ type: string; text?: string; thinking?: string; name?: string; arguments?: unknown; id?: string }>;
+  timestamp?: number;
+  durationMs?: number;
+  model?: string;
+  provider?: string;
+  stopReason?: string;
+  usage?: Record<string, unknown>;
   toolName?: string;
   toolCallId?: string;
   display?: boolean;
   customType?: string;
   isError?: boolean;
   errorMessage?: string;
+  details?: { memory?: ReturnType<typeof memoryFeedback> };
 }
 export interface Tree {
-  entry: { id: string; type: string; customType?: string; message?: Message };
+  entry: {
+    id: string;
+    type: string;
+    timestamp?: string;
+    customType?: string;
+    data?: Record<string, unknown>;
+    message?: Message;
+  };
   children: Tree[];
 }
 export interface Session {

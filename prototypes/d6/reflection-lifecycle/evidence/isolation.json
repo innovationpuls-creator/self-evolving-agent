@@ -1,0 +1,49 @@
+{
+  "initialFiles": 358,
+  "changed": [
+    {
+      "path": "prototypes/d6/src/real/App.tsx",
+      "allowed": true
+    },
+    {
+      "path": "prototypes/d6/src/real/real.css",
+      "allowed": true
+    },
+    {
+      "path": "prototypes/d6/src/real/Session.tsx",
+      "allowed": true
+    },
+    {
+      "path": "prototypes/d6/src/real/Source.tsx",
+      "allowed": true
+    }
+  ],
+  "missing": [],
+  "preexistingSix": [
+    {
+      "path": "prototypes/d6/round4/README.md",
+      "unchanged": true
+    },
+    {
+      "path": "prototypes/d6/scripts/contracts.mjs",
+      "unchanged": true
+    },
+    {
+      "path": "prototypes/d6/src/pages/Settings.tsx",
+      "unchanged": true
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/live.md",
+      "unchanged": true
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/generate.md",
+      "unchanged": true
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/hooks.md",
+      "unchanged": true
+    }
+  ],
+  "status": "passed"
+}

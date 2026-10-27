@@ -1,0 +1,657 @@
+.prose {
+  font-size: 16px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.prose > h1 {
+  font-size: 25px;
+  line-height: 1.45;
+  margin: 28px 0 18px;
+}
+.prose > h2 {
+  font-size: 20px;
+  line-height: 1.5;
+  margin: 27px 0 15px;
+}
+.prose > h2:first-child {
+  margin-top: 0;
+}
+.prose > h3 {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 27px 0 12px;
+}
+.prose > p {
+  margin: 12px 0 18px;
+}
+.prose strong {
+  font-weight: 600;
+}
+.prose ul,
+.prose ol {
+  padding-left: 24px;
+  margin: 14px 0 20px;
+}
+.prose li {
+  padding-left: 3px;
+  margin: 5px 0;
+}
+.prose li > p {
+  margin: 5px 0;
+}
+.prose blockquote {
+  margin: 25px 0;
+  padding: 2px 0 2px 18px;
+  border-left: 2px solid #b9c5ac;
+  color: #7c856f;
+  font-size: 13px;
+  line-height: 1.85;
+}
+.prose blockquote p {
+  margin: 5px 0;
+}
+.prose code:not(pre code) {
+  font:
+    12.8px / 1.7 "SFMono-Regular",
+    Consolas,
+    monospace;
+  background: #eef0e8;
+  color: #59694e;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.prose .contains-task-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 13px;
+}
+.table-scroll {
+  overflow: auto;
+  max-width: 100%;
+}
+.prose table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.75;
+  margin: 7px 0 10px;
+}
+.prose th {
+  text-align: left;
+  font-weight: 500;
+  padding: 12px 13px 11px;
+  border-bottom: 1px solid #cdd4c3;
+  background: #f1f3ed;
+  color: #68745d;
+  white-space: nowrap;
+}
+.prose td {
+  padding: 13px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.prose td:first-child {
+  font-weight: 500;
+  width: 20%;
+  white-space: nowrap;
+}
+.code-view {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  overflow: hidden;
+  background: #f3f4ef;
+  margin: 20px 0;
+  max-width: 100%;
+  min-width: 0;
+}
+.code-view > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 11px;
+  border-bottom: 1px solid var(--line);
+  font:
+    11px / 1.5 -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  color: #8a9380;
+  background: #f8f9f4;
+  gap: 15px;
+}
+.code-view > header > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow-wrap: anywhere;
+}
+.code-view > header > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-shrink: 0;
+}
+.code-view > header button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font-size: 10px;
+  color: inherit;
+}
+.code-view > header button[aria-pressed="true"] {
+  color: var(--accent);
+}
+.code-view pre {
+  margin: 0;
+  padding: 13px 0;
+  overflow: auto;
+  max-height: 460px;
+  tab-size: 2;
+  white-space: pre;
+}
+.code-view pre.wrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.code-view code {
+  font:
+    12.5px / 1.85 "SFMono-Regular",
+    Consolas,
+    monospace;
+  color: #46523d;
+  display: block;
+  min-width: max-content;
+}
+.code-view pre.wrap code {
+  min-width: 0;
+}
+.code-line {
+  display: flex;
+  min-height: 21px;
+  padding-right: 18px;
+}
+.line-number {
+  display: inline-block;
+  width: 39px;
+  flex-shrink: 0;
+  padding: 0 12px 0 8px;
+  text-align: right;
+  color: #afb5a5;
+  user-select: none;
+  position: sticky;
+  left: 0;
+  background: #f3f4ef;
+}
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #795779;
+}
+.hljs-string,
+.hljs-attr {
+  color: #617947;
+}
+.hljs-number,
+.hljs-literal {
+  color: #ab6c45;
+}
+.hljs-title,
+.hljs-built_in {
+  color: #4f7691;
+}
+.hljs-comment {
+  color: #99a28d;
+}
+.hljs-params {
+  color: #7f856c;
+}
+.json-view {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  margin: 22px 0;
+  overflow: hidden;
+  min-width: 0;
+}
+.json-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid var(--line);
+  background: var(--faint);
+  padding: 0 12px;
+  color: var(--muted);
+}
+.json-toolbar > span {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.json-toolbar .tabbar {
+  border: 0;
+  gap: 16px;
+}
+.json-toolbar .tabbar > button {
+  font-size: 11px;
+  padding: 10px 0 8px;
+}
+.json-view > .json-node {
+  padding: 11px;
+}
+.json-node > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-align: left;
+  padding: 7px 0;
+  max-width: 100%;
+  font:
+    12.5px / 1.7 "SFMono-Regular",
+    Consolas,
+    monospace;
+  overflow-wrap: anywhere;
+}
+.json-node small {
+  font:
+    10px / 1.5 -apple-system,
+    sans-serif;
+  color: #9aa38e;
+  margin-left: 6px;
+}
+.json-children {
+  margin-left: 7px;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+  min-width: 0;
+}
+.json-leaf {
+  display: flex;
+  gap: 12px;
+  padding: 6px 0;
+  align-items: flex-start;
+  font:
+    12.5px / 1.8 "SFMono-Regular",
+    Consolas,
+    monospace;
+  min-width: 0;
+}
+.json-key {
+  color: #77896a;
+  flex-shrink: 0;
+  max-width: 45%;
+  overflow-wrap: anywhere;
+}
+.json-value {
+  color: #88977a;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.json-value.string {
+  color: #485f3b;
+}
+.json-value.number {
+  color: #a57641;
+}
+.json-value.boolean {
+  color: #87688c;
+}
+.json-view > .code-view {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.diff-view {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+.diff-view > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 0 12px;
+  background: var(--faint);
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.diff-view > header > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.diff-view .tabbar {
+  border: 0;
+  gap: 15px;
+  font-size: 11px;
+}
+.diff-view .tabbar > button {
+  padding: 9px 0 7px;
+}
+.diff-lines {
+  font:
+    12.8px / 1.9 "SFMono-Regular",
+    "PingFang SC",
+    monospace;
+}
+.diff-lines > div {
+  display: flex;
+  gap: 0;
+  padding: 7px 10px 7px 0;
+  align-items: flex-start;
+  overflow-wrap: anywhere;
+}
+.diff-lines > div > span {
+  font-size: 10px;
+  color: #99a090;
+  display: block;
+  width: 27px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.diff-lines > div > div {
+  min-width: 0;
+  flex: 1;
+}
+.diff-context {
+  color: #a4aa9a;
+  background: #f8f9f4;
+  font-size: 11px;
+}
+.removed {
+  background: #fbefeb;
+  color: #9a5c4d;
+}
+.added {
+  background: #edf4e8;
+  color: #55774a;
+}
+.diff-view > .code-view {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.evidence > p {
+  font-size: var(--xs);
+  margin: 11px 0 7px;
+}
+.evidence-meta {
+  font-size: 11px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+.evidence .btn.ghost {
+  padding-left: 0;
+}
+.studio .code-view {
+  background: #f3f5f8;
+}
+.studio .code-view > header {
+  background: #f8f9fb;
+  color: #8795a7;
+}
+.studio .line-number {
+  background: #f3f5f8;
+  color: #b2bdca;
+}
+.studio .code-view code {
+  color: #46576c;
+}
+.studio .prose th {
+  background: #f0f3f7;
+  color: #627388;
+  border-color: #ccd6e1;
+}
+.studio .prose blockquote {
+  border-color: #bacadd;
+  color: #7a8c9e;
+}
+.studio .json-key {
+  color: #5e7b9a;
+}
+.studio .json-value.string {
+  color: #536b7f;
+}
+.studio .prose code:not(pre code) {
+  background: #edf1f6;
+  color: #526d89;
+}
+.studio .prose {
+  font-size: 13px;
+  line-height: 1.95;
+}
+.studio .prose h2 {
+  font-size: 20px;
+}
+.studio .prose h3 {
+  font-size: 16px;
+}
+.studio .prose td {
+  padding: 12px;
+}
+.studio .prose table {
+  min-width: 440px;
+}
+.studio .prose blockquote {
+  font-size: 12.8px;
+}
+.studio .prose p {
+  margin-top: 11px;
+}
+@media (max-width: 700px) {
+  .prose {
+    font-size: 16px;
+    line-height: 1.95;
+  }
+  .prose > h2 {
+    font-size: 20px;
+  }
+  .prose blockquote {
+    font-size: 13px;
+    margin-block: 23px;
+  }
+  .prose table {
+    font-size: 12.8px;
+    min-width: 480px;
+  }
+  .code-view code {
+    font-size: 11px;
+  }
+  .code-view > header {
+    font-size: 10px;
+    padding: 8px;
+  }
+  .code-view > header > div {
+    gap: 10px;
+  }
+  .line-number {
+    width: 30px;
+    padding-right: 8px;
+  }
+  .json-node > button {
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 11px;
+  }
+  .json-node small {
+    font-size: 10px;
+  }
+  .json-children {
+    padding-left: 10px;
+    margin-left: 5px;
+  }
+  .json-leaf {
+    gap: 8px;
+    font-size: 11px;
+    flex-wrap: wrap;
+  }
+  .json-value {
+    max-width: 100%;
+  }
+  .diff-view > header {
+    gap: 9px;
+    padding-inline: 9px;
+  }
+  .diff-view > header > span {
+    font-size: 10px;
+  }
+  .diff-view .tabbar {
+    font-size: 10px;
+    gap: 12px;
+  }
+  .diff-lines {
+    font-size: 12.8px;
+  }
+  .json-toolbar {
+    padding-inline: 9px;
+  }
+  .json-toolbar > span {
+    font-size: 10px;
+  }
+}
+
+.diff-fold {
+  width: 100%;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  background: var(--faint);
+  color: var(--muted);
+  font:
+    12px / 1.6 -apple-system,
+    sans-serif;
+  border-block: 1px solid var(--line);
+}
+.diff-fold:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.diff-originals {
+  padding: 0 14px;
+}
+
+/* A reading and inspection typography; the compact ledger has its own metrics. */
+:is(.quiet, .quiet-surface) .prose {
+  font-size: 16px;
+  line-height: 1.75;
+}
+:is(.quiet, .quiet-surface) .prose > h2 {
+  font-size: 20px;
+  margin: 26px 0 12px;
+}
+:is(.quiet, .quiet-surface) .prose > h2:first-child {
+  margin-top: 0;
+}
+:is(.quiet, .quiet-surface) .prose > h3 {
+  margin: 24px 0 10px;
+}
+:is(.quiet, .quiet-surface) .prose > p {
+  margin: 10px 0 16px;
+}
+:is(.quiet, .quiet-surface) .prose table {
+  font-size: 13px;
+}
+:is(.quiet, .quiet-surface) .prose :is(th, td) {
+  padding: 9px 12px;
+}
+:is(.quiet, .quiet-surface) .prose th {
+  background: var(--faint);
+  color: var(--muted);
+  border-color: var(--control-line);
+}
+:is(.quiet, .quiet-surface) .prose blockquote {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 20px 0;
+  border-color: var(--control-line);
+}
+:is(.quiet, .quiet-surface) .prose code:not(pre code) {
+  color: var(--ink);
+  background: #efeee8;
+  font-family: var(--font-code);
+  font-size: 13px;
+}
+:is(.quiet, .quiet-surface) :is(.code-view, .diff-view, .json-view) {
+  border-radius: 6px;
+  background: #f6f5f1;
+}
+:is(.quiet, .quiet-surface) :is(.code-view > header, .diff-view > header, .json-toolbar) {
+  background: var(--faint);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
+:is(.quiet, .quiet-surface) :is(.code-view > header button, .diff-view .tabbar, .json-toolbar .tabbar > button) {
+  font-size: 12px;
+}
+:is(.quiet, .quiet-surface) .code-view > header button {
+  min-height: 28px;
+}
+:is(.quiet, .quiet-surface) .code-view code {
+  color: #363d36;
+  font: 13px / 1.8 var(--font-code);
+}
+:is(.quiet, .quiet-surface) .line-number {
+  background: #f6f5f1;
+  color: #75796f;
+  font-size: 12px;
+}
+:is(.quiet, .quiet-surface) .hljs-comment {
+  color: #737a6b;
+}
+:is(.quiet, .quiet-surface) .diff-lines {
+  font: 13px / 1.8 var(--font-code);
+}
+:is(.quiet, .quiet-surface) .diff-context {
+  color: var(--muted);
+  background: #f6f5f1;
+  font-size: 13px;
+}
+:is(.quiet, .quiet-surface) .diff-lines > div > span {
+  color: #75796f;
+  font-size: 12px;
+}
+:is(.quiet, .quiet-surface) .json-node > button,
+:is(.quiet, .quiet-surface) .json-leaf {
+  font: 13px / 1.7 var(--font-code);
+}
+:is(.quiet, .quiet-surface) .json-node small {
+  font-size: 12px;
+  color: var(--muted);
+}
+:is(.quiet, .quiet-surface) .json-key {
+  color: #5b6655;
+}
+:is(.quiet, .quiet-surface) .json-value {
+  color: #535c4c;
+}
+:is(.quiet, .quiet-surface) .json-toolbar .tabbar {
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  :is(.quiet, .quiet-surface) .code-view > header {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  :is(.quiet, .quiet-surface) .code-view > header > div {
+    margin-left: auto;
+  }
+}

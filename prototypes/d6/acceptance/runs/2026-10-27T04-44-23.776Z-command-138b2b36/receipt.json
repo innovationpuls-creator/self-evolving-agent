@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "npm --prefix prototypes/d6/reflection-lifecycle run lint && npm --prefix prototypes/d6/reflection-lifecycle run format:check && cd prototypes/d6/acceptance && ../../../node_modules/.bin/biome lint scripts tests && ../../../node_modules/.bin/biome format scripts tests *.json"
+  ],
+  "cwd": "",
+  "code": 0,
+  "signal": null,
+  "sourceChanges": []
+}

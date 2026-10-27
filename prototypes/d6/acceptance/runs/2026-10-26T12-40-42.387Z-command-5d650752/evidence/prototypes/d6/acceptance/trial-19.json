@@ -1,0 +1,9 @@
+{
+  "index": 19,
+  "mode": "sequential",
+  "pid": 56111,
+  "code": 0,
+  "durationMs": 1198.1491669999996,
+  "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (249.92875ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (225.65825ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (213.737583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1117.332583\n",
+  "stderr": ""
+}

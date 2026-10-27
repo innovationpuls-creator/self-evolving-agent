@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Reflection 详情真实 Origin403、重试；401锁定与重新认证",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "origin": 403,
+      "bearer": 401,
+      "noProtectedContentAfter401": true,
+      "recovered": true
+    }
+  },
+  {
+    "name": "超出末页恢复；Memory成果跨项目404不回退到其他项目",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "outOfRangeRecovered": 0,
+      "wrongProject": 404,
+      "noScopeFallback": true
+    }
+  },
+  {
+    "name": "列表240字符投影与完整长结论分开；不同记录不借Session标题区分",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "list": 240,
+      "detail": 432,
+      "fullTaskTitleAvailable": true
+    }
+  }
+]

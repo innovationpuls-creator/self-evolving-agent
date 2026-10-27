@@ -1,0 +1,24 @@
+{
+  "name": "d6-a-host-experience",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node ../acceptance/scripts/run.mjs -- sh -c 'vite build --configLoader native --config vite.config.ts'",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/runtime.ts'",
+    "prepare:real": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/prepare-real.ts'",
+    "open": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/open.mjs'",
+    "test": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx --test tests/*.test.ts'",
+    "test:browser": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/browser.ts'",
+    "record:journey": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/journey-browser.ts'",
+    "lint": "biome lint src scripts tests vite.config.ts",
+    "format": "biome format --write src scripts tests *.json vite.config.ts",
+    "format:check": "biome format src scripts tests *.json vite.config.ts",
+    "test:navigation": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/navigation-browser.ts'",
+    "test:composer:real": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx scripts/composer-browser.ts'",
+    "test:isolation": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/isolation.mjs'",
+    "test:regression": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/regression.mjs'",
+    "evidence:redact": "node ../acceptance/scripts/run.mjs -- sh -c 'python3 scripts/redact.py'",
+    "test:workspace": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/workspace-smoke.mjs'"
+  }
+}

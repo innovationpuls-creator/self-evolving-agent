@@ -1,0 +1,16 @@
+{
+  "name": "d6-reflection-quality",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.config.ts",
+    "build": "vite build --config vite.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "biome lint src tests scripts vite.config.ts",
+    "format:check": "biome format src tests scripts *.json vite.config.ts",
+    "format": "biome format --write src tests scripts *.json vite.config.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:browser": "node --import tsx scripts/browser.mjs",
+    "test:isolation": "node scripts/isolation.mjs && node scripts/runtime-isolation.mjs"
+  }
+}

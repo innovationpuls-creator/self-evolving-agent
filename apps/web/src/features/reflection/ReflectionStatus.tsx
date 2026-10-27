@@ -10,7 +10,7 @@ export function ReflectionStatus({
   sessionId?: string;
   onOpen: () => void;
 }) {
-  const { catalog, error } = useReflectionCatalog(api, sessionId);
+  const { catalog, error } = useReflectionCatalog(api, sessionId, 0, true);
   if (!catalog && !error) return null;
   const jobs = [...(catalog?.jobs ?? [])].sort((a, b) => b.updated - a.updated);
   const active =
@@ -21,7 +21,7 @@ export function ReflectionStatus({
   if (!active && catalog?.availability.available && !error) return null;
   const unavailable = catalog && !catalog.availability.available;
   const status = error ? 'unknown' : (active?.status ?? 'waiting_user');
-  const waiting = jobs.filter((job) => job.status === 'pending').length;
+  const waiting = catalog?.pending ?? 0;
   const label = error ? '状态待刷新' : active ? reflectionStatusLabels[active.status] : '暂不可用';
   return (
     <div className="reflection-status" role="status">

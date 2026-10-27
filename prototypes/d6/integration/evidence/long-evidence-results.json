@@ -1,0 +1,41 @@
+[
+  {
+    "name": "real read Tool evidence paging",
+    "width": 1440,
+    "status": "passed",
+    "expected": "actual 8192-character segments, nextOffset and no overflow",
+    "actual": {
+      "session": "b8a7569e-bc1b-46c6-81e9-7215f6a7b5ff",
+      "entry": "1a4e3030",
+      "total": 15390,
+      "firstLength": 8192,
+      "secondLength": 7198
+    }
+  },
+  {
+    "name": "real read Tool evidence paging",
+    "width": 850,
+    "status": "passed",
+    "expected": "actual 8192-character segments, nextOffset and no overflow",
+    "actual": {
+      "session": "b8a7569e-bc1b-46c6-81e9-7215f6a7b5ff",
+      "entry": "1a4e3030",
+      "total": 15390,
+      "firstLength": 8192,
+      "secondLength": 7198
+    }
+  },
+  {
+    "name": "real read Tool evidence paging",
+    "width": 390,
+    "status": "passed",
+    "expected": "actual 8192-character segments, nextOffset and no overflow",
+    "actual": {
+      "session": "b8a7569e-bc1b-46c6-81e9-7215f6a7b5ff",
+      "entry": "1a4e3030",
+      "total": 15390,
+      "firstLength": 8192,
+      "secondLength": 7198
+    }
+  }
+]

@@ -1,0 +1,1355 @@
+{
+  "mode": "controlled native Pi provider, formal Host routes/services and encrypted persistence; no autonomous real-model claim",
+  "sourceProject": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-51-58.491Z-command-962c6f98/workspace/prototypes/d6/capability-integration/.runtime/projects/alpha",
+  "otherProject": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-51-58.491Z-command-962c6f98/workspace/prototypes/d6/capability-integration/.runtime/projects/beta",
+  "sourceSession": "61a56b0b-c019-4377-a423-1edab47b2fdd",
+  "secondSession": "d49edeeb-27b2-435b-9dd3-a73f25769ec0",
+  "foreignSession": "4a76618d-76e6-4a76-a76f-fb809d5bb802",
+  "skillId": "f11c4331-2178-49e0-88f3-be9fb9b74dc2",
+  "skillFile": "SKILL.md",
+  "extensionFile": "tool.js",
+  "knowledgeFile": "notes.md",
+  "initialVersion": "fb5a96f9-7e2d-4e35-9d2d-1376c4534c0f",
+  "skillIds": [
+    "f11c4331-2178-49e0-88f3-be9fb9b74dc2",
+    "4e630171-2981-4ee7-8b38-72bb29156815",
+    "756a2abb-e548-43a5-a6a4-3140b23df571",
+    "3c9b6df4-69bc-4914-9f42-819fc6b9bfe6",
+    "eaa523ab-47e9-40e7-9c42-7e5390cd9719",
+    "ca6c804c-1bee-4b1b-b177-4122e238e815",
+    "922a7df6-2dd4-4d28-8c82-bd29c26e7243",
+    "84bf8ede-edc3-4039-97a0-0ebea306410c",
+    "a7a13f53-71ee-42d8-940f-bae9814fd10b",
+    "9eed0caf-6145-4380-b4db-d292bbc05481",
+    "b79bfbbf-a48a-479e-941c-b46e8ab2bf32",
+    "6b5150b6-5ad1-46ad-948a-4df59c3cb588",
+    "04e3d8d6-b454-48b5-8c34-aad0a91c3ffe",
+    "de903273-d4a8-47e0-b790-7deb4917e857",
+    "6d692445-73fe-41f7-9b8e-f14565f1b467",
+    "aae5900f-d3ab-47b8-a248-60e38a2249df",
+    "163e6c17-1a8b-4476-954c-85a95de66ad8",
+    "0a10c7ff-da40-4a9a-99d9-befb89c0ff16",
+    "53c7ba13-9a32-4326-a5e1-d9d4d8d98f1a",
+    "2c6cfcc5-5a02-4058-93f9-6df77600df3a",
+    "5ffa236a-b19d-4fa5-a0d9-4e795308a8ba",
+    "4105c0d6-4628-4d24-8783-21cfe36a790f",
+    "12e8fa22-805b-4aa3-820e-059827fa2ecd",
+    "ee43de71-2ee6-4d4b-90fc-726137d82124",
+    "df18d872-6a69-4f5d-b38c-901f0afa6004",
+    "a966a34f-839a-4b21-8614-00effcfd59a9",
+    "c8b68c67-d7eb-482c-94df-d63912e0769e",
+    "db048a45-2dfe-4e20-be2e-7a5619b51c6f",
+    "1113bdb5-de6f-4538-97fb-ae87b02370e3",
+    "d64d9f47-db37-45f6-98df-aa3bb86bb666",
+    "6ccaf4bc-4d5c-4893-9981-ae2c4399117d",
+    "e30614e9-6e25-46c2-ba61-488ec4f4bf83",
+    "6791e1a0-6cb1-44c3-af5a-631e3352e982",
+    "ccf098f7-e4ac-4710-884a-da12486e3ba0"
+  ],
+  "suggestionIds": [
+    "0af6085c-3c2b-4753-bbbf-70353bb28c9d",
+    "68d2ac3d-7441-4f5c-b512-a9a3d2d5c682",
+    "d6caeffb-6fbf-4306-9164-3071a62ffbdd",
+    "a4fd9f9f-f822-4532-a9ff-52a5d6fe4238",
+    "099c6c73-c797-4d18-ab3f-7939b7442140",
+    "95b1855e-f99c-45ea-9808-f53f710de66f",
+    "e9d79046-13b3-456c-9a55-126404215204",
+    "49198149-243d-4f44-a338-786063beee0e",
+    "86fe7243-1d9c-4b4f-b563-3776ed020540",
+    "88bafc0a-db67-4e73-8477-b906b96922b6",
+    "e8d67462-2504-4fe7-8a25-d9c5060fcc87",
+    "c049282e-5498-4c7f-bc9d-ededca9a808a",
+    "8f873e73-299f-4b44-8fd2-7c4058838e30",
+    "16b11511-e640-4f4e-b991-ce1159ea10c5",
+    "c0dc5af1-c8c8-4a7c-8fa0-2669f786ca5d",
+    "1d355876-5574-4df6-8706-b89a77deb7e8",
+    "e49b4c0a-df30-4db5-bd2a-dffcafb23aa9",
+    "08e7ec19-3baf-445e-9c4c-5e453579be2e",
+    "cd380914-96d8-4c97-b525-8ef445aca67f",
+    "cc9ac013-ae0f-4c8a-9ce4-5d4f0fb3fa0c",
+    "7249c964-2a26-4818-85ef-c3873cbb513b",
+    "9320462a-3b9a-4a0f-8ff1-0b4387e3ff5c",
+    "7e0ebe16-f5e2-456d-8d6f-da157dafa90e",
+    "b681d7ef-930f-4af2-ab86-d66e173bb798",
+    "aac6e1ab-0a66-427e-acc1-e4b03ef3d844",
+    "2e2e5ca2-ec54-478e-8586-59d14e2448a2",
+    "6bd9bd31-12fd-493e-b5ab-94f6ae2e5b21"
+  ],
+  "agentSuggestionId": "0af6085c-3c2b-4753-bbbf-70353bb28c9d",
+  "userSuggestionId": "6bd9bd31-12fd-493e-b5ab-94f6ae2e5b21",
+  "skillCount": 34,
+  "suggestionCount": 27,
+  "recordedOperation": {
+    "id": "7e8d6dd7-59c3-4654-82a4-a325c04bed06",
+    "skillId": "f11c4331-2178-49e0-88f3-be9fb9b74dc2",
+    "status": "applied",
+    "message": "已生效",
+    "created": 1793076720318
+  },
+  "tools": {
+    "tools": [
+      {
+        "name": "read",
+        "description": "Read the contents of a file. Supports text files and images (jpg, png, gif, webp, bmp). Images are sent as attachments. For text files, output is truncated to 2000 lines or 50KB (whichever is hit first). Use offset/limit for large files. When you need the full file, continue with offset until complete.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file to read (relative or absolute)"
+            },
+            "offset": {
+              "type": "number",
+              "description": "Line number to start reading from (1-indexed)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of lines to read"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "bash",
+        "description": "Execute a bash command in the current working directory. Returns stdout and stderr. Output is truncated to last 2000 lines or 50KB (whichever is hit first). If truncated, full output is saved to a temp file. Optionally provide a timeout in seconds.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "command"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "Shell command to execute"
+            },
+            "timeout": {
+              "type": "number",
+              "description": "Timeout in seconds (optional, no default timeout)"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "edit",
+        "description": "Edit a single file using exact text replacement. Every edits[].oldText must match a unique, non-overlapping region of the original file. If two changes affect the same block or nearby lines, merge them into one edit instead of emitting overlapping edits. Do not include large unchanged regions just to connect distant changes.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "path",
+            "edits"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file to edit (relative or absolute)"
+            },
+            "edits": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "oldText",
+                  "newText"
+                ],
+                "properties": {
+                  "oldText": {
+                    "type": "string",
+                    "description": "Exact text for one targeted replacement. It must be unique in the original file and must not overlap with any other edits[].oldText in the same call."
+                  },
+                  "newText": {
+                    "type": "string",
+                    "description": "Replacement text for this targeted edit."
+                  }
+                }
+              },
+              "description": "One or more targeted replacements. Each edit is matched against the original file, not incrementally. Do not include overlapping or nested edits. If two changes touch the same block or nearby lines, merge them into one edit instead."
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "write",
+        "description": "Write content to a file. Creates the file if it doesn't exist, overwrites if it does. Automatically creates parent directories.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "path",
+            "content"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file to write (relative or absolute)"
+            },
+            "content": {
+              "type": "string",
+              "description": "Content to write to the file"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "grep",
+        "description": "Search file contents for a pattern. Returns matching lines with file paths and line numbers. Respects .gitignore. Output is truncated to 100 matches or 50KB (whichever is hit first). Long lines are truncated to 500 chars.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "pattern"
+          ],
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "Search pattern (regex or literal string)"
+            },
+            "path": {
+              "type": "string",
+              "description": "Directory or file to search (default: current directory)"
+            },
+            "glob": {
+              "type": "string",
+              "description": "Filter files by glob pattern, e.g. '*.ts' or '**/*.spec.ts'"
+            },
+            "ignoreCase": {
+              "type": "boolean",
+              "description": "Case-insensitive search (default: false)"
+            },
+            "literal": {
+              "type": "boolean",
+              "description": "Treat pattern as literal string instead of regex (default: false)"
+            },
+            "context": {
+              "type": "number",
+              "description": "Number of lines to show before and after each match (default: 0)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of matches to return (default: 100)"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "disabled",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [],
+        "callableSessions": []
+      },
+      {
+        "name": "find",
+        "description": "Search for files by glob pattern. Returns matching file paths relative to the search directory. Respects .gitignore. Output is truncated to 1000 results or 50KB (whichever is hit first).",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "pattern"
+          ],
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "Glob pattern to match files, e.g. '*.ts', '**/*.json', or 'src/**/*.spec.ts'"
+            },
+            "path": {
+              "type": "string",
+              "description": "Directory to search in (default: current directory)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of results (default: 1000)"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "disabled",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [],
+        "callableSessions": []
+      },
+      {
+        "name": "ls",
+        "description": "List directory contents. Returns entries sorted alphabetically, with '/' suffix for directories. Includes dotfiles. Output is truncated to 500 entries or 50KB (whichever is hit first).",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Directory to list (default: current directory)"
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of entries to return (default: 500)"
+            }
+          }
+        },
+        "source": "Pi 原生基础 Tool",
+        "exposure": "direct",
+        "status": "disabled",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [],
+        "callableSessions": []
+      },
+      {
+        "name": "powershell",
+        "description": "Execute a PowerShell command in the current working directory. Returns stdout and stderr. Output is truncated to last 2000 lines or 50KB (whichever is hit first). If truncated, full output is saved to a temp file. Optionally provide a timeout in seconds.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "command"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "description": "Shell command to execute"
+            },
+            "timeout": {
+              "type": "number",
+              "description": "Timeout in seconds (optional, no default timeout)"
+            }
+          }
+        },
+        "source": "builtin",
+        "exposure": "direct",
+        "status": "disabled",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [],
+        "callableSessions": []
+      },
+      {
+        "name": "capability_echo",
+        "description": "Isolated text echo: return the supplied text unchanged.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          }
+        },
+        "source": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-51-58.491Z-command-962c6f98/workspace/prototypes/d6/capability-integration/.runtime/data/skills/versions/03ec54a6-22ef-4db0-bb86-ce26996ee048/tool.js",
+        "skillId": "f11c4331-2178-49e0-88f3-be9fb9b74dc2",
+        "skillName": "d6-safe-echo",
+        "exposure": "deferred",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "tool_search",
+        "description": "# Tool discovery\n\nSearches over deferred tool metadata with BM25 and exposes matching tools for the next model call.\n\nSome of the tools, such as tools of MCP servers, may not have been provided to you upfront, and you should use this tool (`tool_search`) to search for the required tools. For MCP tool discovery, always use `tool_search`.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "query"
+          ],
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query for deferred tools."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Maximum number of tools to return. Defaults to 8."
+            }
+          }
+        },
+        "source": "inline",
+        "exposure": "model-only",
+        "status": "disabled",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": []
+      },
+      {
+        "name": "memory_search",
+        "description": "Search relevant Global and current Project knowledge. History is opt-in; unavailable sources are reported.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "query"
+          ],
+          "properties": {
+            "query": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "includeHistory": {
+              "type": "boolean"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "memory_get",
+        "description": "Read one visible memory, optionally with scoped revision history and Session/Entry references.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "includeHistory": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "memory_save",
+        "description": "Save useful descriptive knowledge, not rules. Project decisions depend on their source branch; general experience survives rollback. Label unverified ideas hypothesis.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "knowledge",
+            "reason"
+          ],
+          "properties": {
+            "knowledge": {
+              "type": "object",
+              "required": [
+                "title",
+                "content",
+                "kind",
+                "scope"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "content": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "kind": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "fact"
+                    },
+                    {
+                      "type": "string",
+                      "const": "experience"
+                    },
+                    {
+                      "type": "string",
+                      "const": "decision"
+                    },
+                    {
+                      "type": "string",
+                      "const": "hypothesis"
+                    }
+                  ]
+                },
+                "scope": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "global"
+                    },
+                    {
+                      "type": "string",
+                      "const": "project"
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "memory_revise",
+        "description": "Append a correction or supplement with evidence and baseRevision. confirm=true explicitly establishes a new current basis, including for withdrawn knowledge.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id",
+            "baseRevision",
+            "knowledge",
+            "reason"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseRevision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "knowledge": {
+              "type": "object",
+              "required": [
+                "title",
+                "content",
+                "kind",
+                "scope"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "content": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "kind": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "fact"
+                    },
+                    {
+                      "type": "string",
+                      "const": "experience"
+                    },
+                    {
+                      "type": "string",
+                      "const": "decision"
+                    },
+                    {
+                      "type": "string",
+                      "const": "hypothesis"
+                    }
+                  ]
+                },
+                "scope": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "global"
+                    },
+                    {
+                      "type": "string",
+                      "const": "project"
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "confirm": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "memory_retire",
+        "description": "Withdraw outdated knowledge with a reason, preserving evidence and revision history.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "id",
+            "baseRevision",
+            "reason"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseRevision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "diagnostic_search",
+        "description": "Search observed execution metrics across Sessions in the current project, including historical branches. No transcript is injected automatically.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "traceId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "entryId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "branchLeafId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "from": {
+              "type": "number",
+              "minimum": 0
+            },
+            "to": {
+              "type": "number",
+              "minimum": 0
+            },
+            "toolName": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "running"
+                },
+                {
+                  "type": "string",
+                  "const": "ended"
+                },
+                {
+                  "type": "string",
+                  "const": "stopped"
+                },
+                {
+                  "type": "string",
+                  "const": "failed"
+                },
+                {
+                  "type": "string",
+                  "const": "interrupted"
+                }
+              ]
+            },
+            "hasError": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "true"
+                },
+                {
+                  "type": "string",
+                  "const": "false"
+                }
+              ]
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "diagnostic_get",
+        "description": "Read one visible Trace, with paginated native Turn, Tool, compaction and retry metrics and precise Session/Entry references.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "traceId"
+          ],
+          "properties": {
+            "traceId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "diagnostic_evidence",
+        "description": "Read a protected, paginated native Session Entry in the current project. Existing Memory sources work without a Trace. Nested calls have bounded summaries, not full result bodies.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "sessionId",
+            "entryId"
+          ],
+          "properties": {
+            "sessionId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "entryId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "toolCallId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "offset": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32768
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      },
+      {
+        "name": "suggestion_submit",
+        "description": "Save a capability improvement idea with evidence, expected value and uncertainty for user discussion.",
+        "parameters": {
+          "type": "object",
+          "required": [
+            "title",
+            "goal",
+            "reason",
+            "value",
+            "uncertainty",
+            "action",
+            "priority",
+            "evidence"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "uncertainty": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "priority": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "const": "normal"
+                },
+                {
+                  "type": "string",
+                  "const": "high"
+                }
+              ]
+            },
+            "attentionReason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "evidence": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sessionId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "entryId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "traceId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "memoryId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "revision": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "skillId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "knowledgeRevision": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "reflectionId": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "additionalProperties": false
+              },
+              "maxItems": 100
+            }
+          },
+          "additionalProperties": false
+        },
+        "source": "sdk",
+        "exposure": "direct",
+        "status": "available",
+        "sessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "activeSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ],
+        "callableSessions": [
+          "61a56b0b-c019-4377-a423-1edab47b2fdd",
+          "d49edeeb-27b2-435b-9dd3-a73f25769ec0"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "skillId": "f11c4331-2178-49e0-88f3-be9fb9b74dc2",
+        "name": "d6-safe-echo",
+        "extensions": [
+          "tool.js"
+        ],
+        "status": "enabled",
+        "review": "approved",
+        "loaded": true
+      },
+      {
+        "skillId": "4e630171-2981-4ee7-8b38-72bb29156815",
+        "name": "reference-01",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "756a2abb-e548-43a5-a6a4-3140b23df571",
+        "name": "reference-02",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "3c9b6df4-69bc-4914-9f42-819fc6b9bfe6",
+        "name": "reference-03",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "eaa523ab-47e9-40e7-9c42-7e5390cd9719",
+        "name": "reference-04",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "ca6c804c-1bee-4b1b-b177-4122e238e815",
+        "name": "reference-05",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "922a7df6-2dd4-4d28-8c82-bd29c26e7243",
+        "name": "reference-06",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "84bf8ede-edc3-4039-97a0-0ebea306410c",
+        "name": "reference-07",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "a7a13f53-71ee-42d8-940f-bae9814fd10b",
+        "name": "reference-08",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "9eed0caf-6145-4380-b4db-d292bbc05481",
+        "name": "reference-09",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "b79bfbbf-a48a-479e-941c-b46e8ab2bf32",
+        "name": "reference-10",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "6b5150b6-5ad1-46ad-948a-4df59c3cb588",
+        "name": "reference-11",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "04e3d8d6-b454-48b5-8c34-aad0a91c3ffe",
+        "name": "reference-12",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "de903273-d4a8-47e0-b790-7deb4917e857",
+        "name": "reference-13",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "6d692445-73fe-41f7-9b8e-f14565f1b467",
+        "name": "reference-14",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "aae5900f-d3ab-47b8-a248-60e38a2249df",
+        "name": "reference-15",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "163e6c17-1a8b-4476-954c-85a95de66ad8",
+        "name": "reference-16",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "0a10c7ff-da40-4a9a-99d9-befb89c0ff16",
+        "name": "reference-17",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "53c7ba13-9a32-4326-a5e1-d9d4d8d98f1a",
+        "name": "reference-18",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "2c6cfcc5-5a02-4058-93f9-6df77600df3a",
+        "name": "reference-19",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "5ffa236a-b19d-4fa5-a0d9-4e795308a8ba",
+        "name": "reference-20",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "4105c0d6-4628-4d24-8783-21cfe36a790f",
+        "name": "reference-21",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "12e8fa22-805b-4aa3-820e-059827fa2ecd",
+        "name": "reference-22",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "ee43de71-2ee6-4d4b-90fc-726137d82124",
+        "name": "reference-23",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "df18d872-6a69-4f5d-b38c-901f0afa6004",
+        "name": "reference-24",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "a966a34f-839a-4b21-8614-00effcfd59a9",
+        "name": "reference-25",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "c8b68c67-d7eb-482c-94df-d63912e0769e",
+        "name": "reference-26",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "db048a45-2dfe-4e20-be2e-7a5619b51c6f",
+        "name": "reference-27",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "1113bdb5-de6f-4538-97fb-ae87b02370e3",
+        "name": "reference-28",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "d64d9f47-db37-45f6-98df-aa3bb86bb666",
+        "name": "reference-29",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "6ccaf4bc-4d5c-4893-9981-ae2c4399117d",
+        "name": "reference-30",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "e30614e9-6e25-46c2-ba61-488ec4f4bf83",
+        "name": "reference-31",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      },
+      {
+        "skillId": "6791e1a0-6cb1-44c3-af5a-631e3352e982",
+        "name": "reference-32",
+        "extensions": [],
+        "status": "unloaded",
+        "review": "not_required",
+        "loaded": false
+      }
+    ]
+  }
+}

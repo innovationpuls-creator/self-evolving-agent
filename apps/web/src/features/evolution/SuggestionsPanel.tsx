@@ -5,7 +5,7 @@ import './evolution.css';
 
 type Api = <T>(path: string, method?: string, data?: unknown, signal?: AbortSignal) => Promise<T>;
 type Status = EvolutionSuggestion['status'];
-type EvidenceReference = { sessionId: string; entryId: string; toolCallId?: string };
+import type { EvidenceTarget } from '../diagnostics/evidence';
 const labels: Record<Status, string> = {
   pending: '待处理',
   adopted: '已采纳',
@@ -27,37 +27,23 @@ function Evidence({
   onMemory?: (id: string, revision?: number) => void;
   onSkill?: (id: string, revision?: string) => void;
   onReflection?: (id: string) => void;
-  onEvidence?: (reference: EvidenceReference) => void;
+  onEvidence?: (reference: EvidenceTarget) => void;
 }) {
   return (
     <li>
-      {value.sessionId && (
+      {(value.sessionId || value.traceId) && (
         <div>
-          会话 <code>{value.sessionId}</code>
-        </div>
-      )}
-      {value.entryId && (
-        <div>
-          {onEvidence && value.sessionId ? (
-            <button
-              type="button"
-              onClick={() => {
-                if (value.sessionId && value.entryId)
-                  onEvidence({ sessionId: value.sessionId, entryId: value.entryId });
-              }}
-            >
-              查看原始证据
-            </button>
-          ) : (
-            <>
-              记录 <code>{value.entryId}</code>
-            </>
-          )}
-        </div>
-      )}
-      {value.traceId && (
-        <div>
-          执行记录 <code>{value.traceId}</code>
+          <button
+            type="button"
+            disabled={!onEvidence}
+            onClick={() => {
+              if (value.sessionId)
+                onEvidence?.({ sessionId: value.sessionId, entryId: value.entryId, traceId: value.traceId });
+              else if (value.traceId) onEvidence?.({ traceId: value.traceId, entryId: value.entryId });
+            }}
+          >
+            查看来源轨迹
+          </button>
         </div>
       )}
       {value.memoryId && (
@@ -130,7 +116,7 @@ export function SuggestionsPanel({
   onReflection?: (id: string) => void;
   onClose: () => void;
   onDiscuss: (sessionId: string) => void | Promise<void>;
-  onEvidence?: (reference: EvidenceReference) => void;
+  onEvidence?: (reference: EvidenceTarget) => void;
 }) {
   const [status, setStatus] = useState<Status | ''>(
     initialId ? '' : (statusValues.find((value) => value === readPosition('suggestions').filter) ?? 'pending'),

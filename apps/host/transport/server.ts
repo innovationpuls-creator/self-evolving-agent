@@ -13,6 +13,7 @@ import { body, json } from './http.js';
 import { diagnosticRoutes } from '../diagnostics/diagnostic-routes.js';
 import { memoryRoutes } from '../memory/memory-routes.js';
 import { sessionRoutes } from '../runtime/session-routes.js';
+import { providerAuthRoutes } from '../runtime/provider-auth.js';
 import { skillRoutes } from '../skills/skill-routes.js';
 import { reflectionRoutes } from '../reflection/reflection-routes.js';
 import { activityRoutes } from '../evolution/activity-routes.js';
@@ -93,6 +94,7 @@ export async function startHost(options: {
         }
         finishRequest = service.admitRequest();
         if (
+          (await providerAuthRoutes(service.providerAuth, req, res, url)) ||
           (await activityRoutes(service, req, res, url)) ||
           (await reflectionRoutes(service.reflection, req, res, url)) ||
           (await evolutionRoutes(

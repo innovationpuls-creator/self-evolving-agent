@@ -1,0 +1,122 @@
+[
+  {
+    "name": "edit → exact diff → digest review → 202 operation → applied",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "old": "a8e506b5-ac98-4753-b287-9c3d78ccd57d",
+      "candidate": "f60ccc4d-aee1-4b2c-8de1-62da4ed99ae1",
+      "current": "f60ccc4d-aee1-4b2c-8de1-62da4ed99ae1",
+      "reviewDigest": "b7971459fc7519bc7e4b5244174f6d0b19727f5c00cd468015120c20d58a29bc"
+    }
+  },
+  {
+    "name": "version history and independent knowledge revision",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "version": "f60ccc4d-aee1-4b2c-8de1-62da4ed99ae1",
+      "knowledge": "6d2c55be-fe91-4e2e-a65c-5c1139b82390"
+    }
+  },
+  {
+    "name": "suggestion pagination → adopt → live discussion without authorization",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "suggestion": "11c999cf-3a78-4475-a9af-d24ade6e4274",
+      "discussion": "c88c501d-0405-4d3e-937c-f58f79006660",
+      "activity": "1078cc41-454a-4d6d-887e-7d4dc1b84ec0",
+      "grant": null
+    }
+  },
+  {
+    "name": "responsive secondary screens without horizontal overflow",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "scroll": 1440,
+      "client": 1440
+    }
+  },
+  {
+    "name": "edit → exact diff → digest review → 202 operation → applied",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "old": "f60ccc4d-aee1-4b2c-8de1-62da4ed99ae1",
+      "candidate": "e6010229-e8eb-4887-9796-99ce96e391fd",
+      "current": "e6010229-e8eb-4887-9796-99ce96e391fd",
+      "reviewDigest": "c171364e1ee47627634235324280c26e97ead594901affeb7287bc3abbf2e0b9"
+    }
+  },
+  {
+    "name": "version history and independent knowledge revision",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "version": "e6010229-e8eb-4887-9796-99ce96e391fd",
+      "knowledge": "e0844ab4-beee-4ea9-b466-a5938fbc0972"
+    }
+  },
+  {
+    "name": "suggestion pagination → adopt → live discussion without authorization",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "suggestion": "e52f722f-331e-4e49-a83f-c0d476b33684",
+      "discussion": "479290fa-98bf-4a37-a188-ae0bacef55dc",
+      "activity": "b186eeeb-6320-484b-a718-b61b5046e021",
+      "grant": null
+    }
+  },
+  {
+    "name": "responsive secondary screens without horizontal overflow",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "scroll": 850,
+      "client": 850
+    }
+  },
+  {
+    "name": "edit → exact diff → digest review → 202 operation → applied",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "old": "e6010229-e8eb-4887-9796-99ce96e391fd",
+      "candidate": "d2adde66-07d8-4f12-9d16-c923667656e8",
+      "current": "d2adde66-07d8-4f12-9d16-c923667656e8",
+      "reviewDigest": "24a69722110638d4d9e0c33937af912389e257d8586d9945ce62f382e91098e6"
+    }
+  },
+  {
+    "name": "version history and independent knowledge revision",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "version": "d2adde66-07d8-4f12-9d16-c923667656e8",
+      "knowledge": "248a6f77-a655-4653-9a1e-1fa9a2911923"
+    }
+  },
+  {
+    "name": "suggestion pagination → adopt → live discussion without authorization",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "suggestion": "baa54f7d-c0f9-45cb-b1a9-42decf3f6273",
+      "discussion": "37948925-99c4-4459-ad13-6d5d3c6508df",
+      "activity": "974e5146-67b2-4018-8ac1-0e4bb8c52c52",
+      "grant": null
+    }
+  },
+  {
+    "name": "responsive secondary screens without horizontal overflow",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "scroll": 390,
+      "client": 390
+    }
+  }
+]

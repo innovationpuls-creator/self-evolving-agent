@@ -1,0 +1,10 @@
+{
+  "command": [
+    "node",
+    "prototypes/d6/acceptance/scripts/mock-campaign.mjs"
+  ],
+  "cwd": "",
+  "code": 1,
+  "signal": null,
+  "sourceChanges": []
+}

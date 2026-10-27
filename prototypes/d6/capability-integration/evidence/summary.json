@@ -1,0 +1,85 @@
+{
+  "browser": [
+    {
+      "name": "browser",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "name": "complete-chain",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "activity",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "name": "boundaries",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "continuity",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "partial",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "proposal",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "import-draft",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "restart",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "session-regression",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "name": "real-browser",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "name": "reflection-browser",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "name": "memory-browse",
+      "passed": 10,
+      "failed": 0
+    },
+    {
+      "name": "memory-boundaries",
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "name": "regression",
+      "passed": 7,
+      "failed": 0
+    }
+  ],
+  "engineering": {
+    "passed": 16,
+    "failed": 0
+  },
+  "visualApproval": false,
+  "autonomousDevelopmentVerified": false
+}

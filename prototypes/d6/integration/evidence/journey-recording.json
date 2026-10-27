@@ -1,0 +1,121 @@
+{
+  "results": [
+    {
+      "name": "existing A shell, reader and floating composer with actual Session",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "real native messages inside original A shell",
+      "actual": {
+        "messages": 6,
+        "mockProvider": false
+      },
+      "durationMs": 86
+    },
+    {
+      "name": "Session-scoped summary list without per-row detail prefetch",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "same Session; summary endpoint only; multiple actual checks",
+      "actual": {
+        "jobs": 3,
+        "detailPrefetch": 0,
+        "summaryLengths": [
+          55,
+          59,
+          74
+        ]
+      },
+      "durationMs": 69
+    },
+    {
+      "name": "Reflection changes remain distinct from source task Memory operation",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "no invented change count; full original title can expand",
+      "actual": {
+        "reflectionChanges": 0,
+        "fullTitleAvailable": true
+      },
+      "durationMs": 106
+    },
+    {
+      "name": "native Tool feedback leads to exact persisted Memory revision",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "semantic native result visible; raw protocol collapsed",
+      "actual": "semantic native result visible; raw protocol collapsed",
+      "durationMs": 67
+    },
+    {
+      "name": "historical body diff and basis",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "revision 1=7, revision 2=3; selecting history never replaces with current",
+      "actual": "revision 1=7, revision 2=3; selecting history never replaces with current",
+      "durationMs": 121
+    },
+    {
+      "name": "basis locates exact native entry and draft survives route changes",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "exact source Entry highlighted; unsent draft unchanged",
+      "actual": "exact source Entry highlighted; unsent draft unchanged",
+      "durationMs": 71
+    },
+    {
+      "name": "return to original Session restores reading position and draft",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "original conversation anchor retained independently of source-entry anchor",
+      "actual": {
+        "before": 299,
+        "after": 299,
+        "draftRetained": true
+      },
+      "durationMs": 172
+    },
+    {
+      "name": "no horizontal overflow; composer remains inside viewport",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "all primary controls fit current width",
+      "actual": {
+        "width": 1440,
+        "doc": 1440,
+        "composer": {
+          "x": 464,
+          "y": 888,
+          "width": 760,
+          "height": 96,
+          "top": 888,
+          "right": 1224,
+          "bottom": 984,
+          "left": 464
+        }
+      },
+      "durationMs": 3
+    },
+    {
+      "name": "switch actual Sessions and restore each unsent draft",
+      "width": 1440,
+      "height": 1000,
+      "status": "passed",
+      "expected": "switch via existing navigation; project and unsent text remain separate",
+      "actual": {
+        "availableSessions": 10,
+        "independentDrafts": true
+      },
+      "durationMs": 144
+    }
+  ],
+  "errors": [],
+  "syntheticResponses": false
+}

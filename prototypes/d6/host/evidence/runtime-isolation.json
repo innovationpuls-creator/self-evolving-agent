@@ -1,0 +1,65 @@
+[
+  {
+    "width": 1440,
+    "surface": "A-chat",
+    "before": "351dfe427842a757d3603b972ed7af50fd5c4805d94a5e10561c6b110acf666f",
+    "after": "351dfe427842a757d3603b972ed7af50fd5c4805d94a5e10561c6b110acf666f",
+    "status": "passed"
+  },
+  {
+    "width": 1440,
+    "surface": "A-reflection",
+    "before": "f63deef920a5039c388b1c7fb6b49c14e737d6ea548355620e53bce7b5b99efc",
+    "after": "f63deef920a5039c388b1c7fb6b49c14e737d6ea548355620e53bce7b5b99efc",
+    "status": "passed"
+  },
+  {
+    "width": 1440,
+    "surface": "B-reflection",
+    "before": "d0fb970e17b5c1676e7708b2e89bd31cf83c1c9b1213b64ab2636f4006f4194d",
+    "after": "d0fb970e17b5c1676e7708b2e89bd31cf83c1c9b1213b64ab2636f4006f4194d",
+    "status": "passed"
+  },
+  {
+    "width": 850,
+    "surface": "A-chat",
+    "before": "40134edc85c6b02cc2e12c87f060954aded04594600569a65a45134955504582",
+    "after": "40134edc85c6b02cc2e12c87f060954aded04594600569a65a45134955504582",
+    "status": "passed"
+  },
+  {
+    "width": 850,
+    "surface": "A-reflection",
+    "before": "2ef55792292ace22fe4a05900fe0da9f04a26c8279a87693686b0d4ec725d445",
+    "after": "2ef55792292ace22fe4a05900fe0da9f04a26c8279a87693686b0d4ec725d445",
+    "status": "passed"
+  },
+  {
+    "width": 850,
+    "surface": "B-reflection",
+    "before": "0fd111d1ae9e8e1e1ed758a86c391053816a6284bd2bea53f2622df955a2499d",
+    "after": "0fd111d1ae9e8e1e1ed758a86c391053816a6284bd2bea53f2622df955a2499d",
+    "status": "passed"
+  },
+  {
+    "width": 390,
+    "surface": "A-chat",
+    "before": "b29ffd595e6f47ce5b199b88046a5b122d63c7e89c35e6d3453b3cfe7aaac0a1",
+    "after": "b29ffd595e6f47ce5b199b88046a5b122d63c7e89c35e6d3453b3cfe7aaac0a1",
+    "status": "passed"
+  },
+  {
+    "width": 390,
+    "surface": "A-reflection",
+    "before": "02eeb6b9bfef2c2dd8898c69980adf2c08b9160f1b192d7d01bff993044919a6",
+    "after": "02eeb6b9bfef2c2dd8898c69980adf2c08b9160f1b192d7d01bff993044919a6",
+    "status": "passed"
+  },
+  {
+    "width": 390,
+    "surface": "B-reflection",
+    "before": "f7a9ac64016f06e47e97fd219c8182d9c531f0f1a304597715e088e923a404ca",
+    "after": "f7a9ac64016f06e47e97fd219c8182d9c531f0f1a304597715e088e923a404ca",
+    "status": "passed"
+  }
+]

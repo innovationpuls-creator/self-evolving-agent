@@ -1,0 +1,32 @@
+[
+  {
+    "src": "videos/complete-chain-1440.webm",
+    "duration": 15,
+    "width": 1440,
+    "height": 1000
+  },
+  {
+    "src": "videos/capability-chain-1440.webm",
+    "duration": 5.72,
+    "width": 1440,
+    "height": 1000
+  },
+  {
+    "src": "videos/partial-failure-1440.webm",
+    "duration": 2.8,
+    "width": 1440,
+    "height": 1000
+  },
+  {
+    "src": "videos/real-chain-1440.webm",
+    "duration": 1.64,
+    "width": 1440,
+    "height": 1000
+  },
+  {
+    "src": "videos/controlled-chain-1440.webm",
+    "duration": 2.44,
+    "width": 1440,
+    "height": 1000
+  }
+]

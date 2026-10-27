@@ -1,0 +1,1314 @@
+{
+  "outcome": "failed",
+  "committed": true,
+  "stages": [
+    {
+      "after": "memory_save",
+      "summary": "",
+      "changes": [
+        {
+          "kind": "memory",
+          "id": "a2a825fe-412a-47cf-8053-9df12e374539",
+          "revision": 1,
+          "summary": "isolated mechanism fixture"
+        }
+      ]
+    },
+    {
+      "after": "suggestion_submit",
+      "summary": "",
+      "changes": [
+        {
+          "kind": "memory",
+          "id": "a2a825fe-412a-47cf-8053-9df12e374539",
+          "revision": 1,
+          "summary": "isolated mechanism fixture"
+        },
+        {
+          "kind": "suggestion",
+          "id": "537a349f-83ee-49f7-9b4d-0e936e0238ce",
+          "summary": "受控建议"
+        }
+      ]
+    },
+    {
+      "after": "reflection_save",
+      "summary": "受控机制总结",
+      "changes": [
+        {
+          "kind": "memory",
+          "id": "a2a825fe-412a-47cf-8053-9df12e374539",
+          "revision": 1,
+          "summary": "isolated mechanism fixture"
+        },
+        {
+          "kind": "suggestion",
+          "id": "537a349f-83ee-49f7-9b4d-0e936e0238ce",
+          "summary": "受控建议"
+        }
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "at": 1099.774125,
+      "event": "host.init"
+    },
+    {
+      "at": 1140.759209,
+      "event": "prompt.before"
+    },
+    {
+      "at": 1184.559125,
+      "event": "prompt.returned",
+      "value": {
+        "id": "e3bc1bbe-c06f-4241-b6c5-49bc4da4017a",
+        "cwd": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/.runtime/mechanism-40-failed-1793018479011",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "isolated ordinary task",
+        "updated": 1793018479095,
+        "interrupted": true,
+        "busy": true,
+        "queued": 0,
+        "thinkingLevel": "off",
+        "thinkingLevels": [
+          "off"
+        ],
+        "stateVersion": 2,
+        "messages": [],
+        "tree": [
+          {
+            "entry": {
+              "type": "model_change",
+              "id": "e9554866",
+              "parentId": null,
+              "timestamp": "2026-10-26T12:41:19.072Z",
+              "provider": "faux",
+              "modelId": "mechanism"
+            },
+            "children": [
+              {
+                "entry": {
+                  "type": "thinking_level_change",
+                  "id": "9e452bec",
+                  "parentId": "e9554866",
+                  "timestamp": "2026-10-26T12:41:19.072Z",
+                  "thinkingLevel": "off"
+                },
+                "children": [
+                  {
+                    "entry": {
+                      "type": "custom",
+                      "customType": "diagnostic_trace_v1",
+                      "data": {
+                        "version": 1,
+                        "phase": "start",
+                        "traceId": "272c7d86-e102-4b9c-9e36-21fedb9e03ff",
+                        "at": 1793018479095
+                      },
+                      "id": "e8cc84ad",
+                      "parentId": "9e452bec",
+                      "timestamp": "2026-10-26T12:41:19.095Z"
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "leafId": "e8cc84ad"
+      }
+    },
+    {
+      "at": 1389.383542,
+      "event": "executor.available"
+    },
+    {
+      "at": 1390.839375,
+      "event": "executor.start",
+      "value": {
+        "kind": "start",
+        "runId": "fd2f516a-fcbd-4642-9c9c-fcd712170180",
+        "sessionId": "218cf023-c876-408a-a2ba-65981dfb3acd",
+        "traceId": "fe18a7be-f98f-45a2-add7-62e62025540c",
+        "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/.runtime/mechanism-40-failed-1793018479011",
+        "model": {
+          "id": "reflection-host-approved",
+          "name": "Authorized Reflection",
+          "provider": "reflection-host",
+          "api": "faux:1793018479054:xa1tyohx6zd",
+          "baseUrl": "",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 128000,
+          "maxTokens": 16384
+        },
+        "tools": [
+          {
+            "name": "memory_search",
+            "description": "Search relevant Global and current Project knowledge. History is opt-in; unavailable sources are reported.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "query"
+              ],
+              "properties": {
+                "query": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "includeHistory": {
+                  "type": "boolean"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "memory_get",
+            "description": "Read one visible memory, optionally with scoped revision history and Session/Entry references.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "includeHistory": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "memory_save",
+            "description": "Save useful descriptive knowledge, not rules. Project decisions depend on their source branch; general experience survives rollback. Label unverified ideas hypothesis. Supply evidence references for factual sources; current Project decisions require current non-Reflection Session evidence.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "knowledge",
+                "reason"
+              ],
+              "properties": {
+                "knowledge": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "content",
+                    "kind",
+                    "scope"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 32000
+                    },
+                    "kind": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "fact"
+                        },
+                        {
+                          "type": "string",
+                          "const": "experience"
+                        },
+                        {
+                          "type": "string",
+                          "const": "decision"
+                        },
+                        {
+                          "type": "string",
+                          "const": "hypothesis"
+                        }
+                      ]
+                    },
+                    "scope": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "global"
+                        },
+                        {
+                          "type": "string",
+                          "const": "project"
+                        }
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "memory_revise",
+            "description": "Append a correction or supplement with evidence and baseRevision. confirm=true explicitly establishes a new current basis, including for withdrawn knowledge. Supply evidence references for factual sources; current Project decisions require current non-Reflection Session evidence.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "id",
+                "baseRevision",
+                "knowledge",
+                "reason"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "baseRevision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "knowledge": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "content",
+                    "kind",
+                    "scope"
+                  ],
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 240
+                    },
+                    "content": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 32000
+                    },
+                    "kind": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "fact"
+                        },
+                        {
+                          "type": "string",
+                          "const": "experience"
+                        },
+                        {
+                          "type": "string",
+                          "const": "decision"
+                        },
+                        {
+                          "type": "string",
+                          "const": "hypothesis"
+                        }
+                      ]
+                    },
+                    "scope": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "const": "global"
+                        },
+                        {
+                          "type": "string",
+                          "const": "project"
+                        }
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "confirm": {
+                  "type": "boolean"
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "memory_retire",
+            "description": "Withdraw outdated knowledge with a reason, preserving evidence and revision history. Supply evidence references for factual sources; current Project decisions require current non-Reflection Session evidence.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "id",
+                "baseRevision",
+                "reason"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "baseRevision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "diagnostic_search",
+            "description": "Search observed execution metrics across Sessions in the current project, including historical branches. No transcript is injected automatically.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "traceId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "entryId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "branchLeafId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "from": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "to": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "toolName": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "status": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "running"
+                    },
+                    {
+                      "type": "string",
+                      "const": "ended"
+                    },
+                    {
+                      "type": "string",
+                      "const": "stopped"
+                    },
+                    {
+                      "type": "string",
+                      "const": "failed"
+                    },
+                    {
+                      "type": "string",
+                      "const": "interrupted"
+                    }
+                  ]
+                },
+                "hasError": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "true"
+                    },
+                    {
+                      "type": "string",
+                      "const": "false"
+                    }
+                  ]
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "diagnostic_get",
+            "description": "Read one visible Trace, with paginated native Turn, Tool, compaction and retry metrics and precise Session/Entry references.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "traceId"
+              ],
+              "properties": {
+                "traceId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 200
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "diagnostic_evidence",
+            "description": "Read a protected, paginated native Session Entry in the current project. Existing Memory sources work without a Trace. Nested calls have bounded summaries, not full result bodies.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "sessionId",
+                "entryId"
+              ],
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "entryId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "toolCallId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 32768
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "suggestion_submit",
+            "description": "Save a capability improvement idea with evidence, expected value and uncertainty for user discussion.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "title",
+                "goal",
+                "reason",
+                "value",
+                "uncertainty",
+                "action",
+                "priority",
+                "evidence"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 240
+                },
+                "goal": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "uncertainty": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "action": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8000
+                },
+                "priority": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "const": "normal"
+                    },
+                    {
+                      "type": "string",
+                      "const": "high"
+                    }
+                  ]
+                },
+                "attentionReason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "history_sessions",
+            "description": "List native Sessions in the authorized project, without activating historical Agents.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "history_entries",
+            "description": "Inspect native entry references and a protected preview, optionally for one historical branch. Use diagnostic_evidence for full paginated contents.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "sessionId"
+              ],
+              "properties": {
+                "sessionId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "leafId": {
+                  "type": "string",
+                  "maxLength": 128
+                },
+                "offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "limit": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "reflection_search",
+            "description": "Read past Reflection records in the authorized project, including earlier uncertainty and knowledge changes.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "skill_info",
+            "description": "Read scoped Skill descriptions and declared descriptive Knowledge. Does not load executable extensions or expose host filesystem paths.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "path": {
+                  "type": "string",
+                  "maxLength": 4096
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "skill_knowledge_revise",
+            "description": "Revise only a declared independent descriptive Knowledge file. Formal SKILL.md, Tool, Hook and rules are protected.",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "id",
+                "baseRevision",
+                "path",
+                "content",
+                "reason"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "baseRevision": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "path": {
+                  "type": "string",
+                  "maxLength": 4096
+                },
+                "content": {
+                  "type": "string",
+                  "maxLength": 32000
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 4000
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "reflection_save",
+            "description": "用简体中文保存简短结论，不写审查过程或长篇复述。\nsummary：1–2 句，直接说明结论；没有证据支持的新发现时写“本次没有新增发现”。\nfindings：仅列证据支持、值得保留的新发现，每项一句；没有则 []。\nuncertainties：只列影响结论且仍未确认的事项，每项一句；没有则 []。\nevidence：引用实际读取的证据，不编造来源。已有认识不等于本次新增发现。\n不为填满字段而生成问题、知识更新或建议；没有新增发现、不修改 Memory、不提交建议都是有效结果。\n示例（仅说明格式，不是本次事实）：{\"summary\":\"本次没有新增发现。\",\"findings\":[],\"uncertainties\":[],\"evidence\":[]}。",
+            "parameters": {
+              "type": "object",
+              "required": [
+                "summary",
+                "findings",
+                "uncertainties",
+                "evidence"
+              ],
+              "properties": {
+                "summary": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 32000
+                },
+                "findings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 8000
+                  },
+                  "maxItems": 100
+                },
+                "uncertainties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "maxLength": 8000
+                  },
+                  "maxItems": 100
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "sessionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "entryId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "traceId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "memoryId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "revision": {
+                        "type": "integer",
+                        "exclusiveMinimum": 0,
+                        "maximum": 9007199254740991
+                      },
+                      "skillId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      "knowledgeRevision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 128
+                      },
+                      "reflectionId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "maxItems": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "prompt": "Review completed task evidence autonomously. Source Session e3bc1bbe-c06f-4241-b6c5-49bc4da4017a; stable references [{\"markerEntryId\":\"5cc22ffc\",\"settledAt\":1793018479149,\"traceId\":\"272c7d86-e102-4b9c-9e36-21fedb9e03ff\",\"status\":\"ended\"}]. You may inspect other authorized history and past reflections. Update descriptive knowledge or submit suggestions only when justified.\n用简体中文保存简短结论，不写审查过程或长篇复述。\nsummary：1–2 句，直接说明结论；没有证据支持的新发现时写“本次没有新增发现”。\nfindings：仅列证据支持、值得保留的新发现，每项一句；没有则 []。\nuncertainties：只列影响结论且仍未确认的事项，每项一句；没有则 []。\nevidence：引用实际读取的证据，不编造来源。已有认识不等于本次新增发现。\n不为填满字段而生成问题、知识更新或建议；没有新增发现、不修改 Memory、不提交建议都是有效结果。\n示例（仅说明格式，不是本次事实）：{\"summary\":\"本次没有新增发现。\",\"findings\":[],\"uncertainties\":[],\"evidence\":[]}。"
+      }
+    },
+    {
+      "at": 1390.872125,
+      "event": "model.request"
+    },
+    {
+      "at": 1402.940292,
+      "event": "model.response",
+      "value": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "toolCall",
+            "id": "tool:1793018479054:k30ikr95r6",
+            "name": "memory_save",
+            "arguments": {
+              "knowledge": {
+                "title": "受控机制事实",
+                "content": "用于验证事务保存，不代表模型自主发现。",
+                "kind": "fact",
+                "scope": "project"
+              },
+              "reason": "isolated mechanism fixture",
+              "evidence": []
+            }
+          }
+        ],
+        "api": "faux:1793018479054:xa1tyohx6zd",
+        "provider": "reflection-host",
+        "model": "reflection-host-approved",
+        "usage": {
+          "input": 14,
+          "output": 40,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 54,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "toolUse",
+        "timestamp": 1793018479054
+      }
+    },
+    {
+      "at": 1430.504584,
+      "event": "checkpoint.saved"
+    },
+    {
+      "at": 1435.611375,
+      "event": "model.request"
+    },
+    {
+      "at": 1447.205834,
+      "event": "model.response",
+      "value": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "toolCall",
+            "id": "tool:1793018479054:c17e60mhrkc",
+            "name": "suggestion_submit",
+            "arguments": {
+              "title": "受控建议",
+              "goal": "机制测试",
+              "reason": "fixture",
+              "value": "test",
+              "uncertainty": "controlled",
+              "action": "do not execute",
+              "evidence": [],
+              "priority": "normal"
+            }
+          }
+        ],
+        "api": "faux:1793018479054:xa1tyohx6zd",
+        "provider": "reflection-host",
+        "model": "reflection-host-approved",
+        "usage": {
+          "input": 14,
+          "output": 43,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 57,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "toolUse",
+        "timestamp": 1793018479054
+      }
+    },
+    {
+      "at": 1494.711125,
+      "event": "checkpoint.saved"
+    },
+    {
+      "at": 1500.29625,
+      "event": "model.request"
+    },
+    {
+      "at": 1507.482792,
+      "event": "model.response",
+      "value": {
+        "role": "assistant",
+        "content": [
+          {
+            "type": "toolCall",
+            "id": "tool:1793018479054:d5xcrkvvdvd",
+            "name": "reflection_save",
+            "arguments": {
+              "summary": "受控机制总结",
+              "findings": [],
+              "uncertainties": [],
+              "evidence": []
+            }
+          }
+        ],
+        "api": "faux:1793018479054:xa1tyohx6zd",
+        "provider": "reflection-host",
+        "model": "reflection-host-approved",
+        "usage": {
+          "input": 14,
+          "output": 21,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "totalTokens": 35,
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 0
+          }
+        },
+        "stopReason": "toolUse",
+        "timestamp": 1793018479054
+      }
+    },
+    {
+      "at": 1554.569292,
+      "event": "checkpoint.saved"
+    },
+    {
+      "at": 1559.408959,
+      "event": "executor.error",
+      "value": {
+        "name": "Error",
+        "message": "controlled post-commit execution failure",
+        "stack": "Error: controlled post-commit execution failure\n    at Object.execute (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/tests/reflection-race.test.ts:86:41)\n    at async ReflectionService.execute (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/apps/host/reflection/reflection-service.ts:973:7)\n    at async ReflectionService.pump (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/apps/host/reflection/reflection-service.ts:359:7)"
+      }
+    },
+    {
+      "at": 1560.2185,
+      "event": "wait.returned",
+      "value": [
+        {
+          "id": "ded301e4-6346-4f32-a9cb-4f01f079f54b",
+          "sessionId": "e3bc1bbe-c06f-4241-b6c5-49bc4da4017a",
+          "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/.runtime/mechanism-40-failed-1793018479011",
+          "provider": "faux",
+          "model": "mechanism",
+          "scheduledAt": 1793018479149,
+          "created": 1793018479334,
+          "updated": 1793018479514,
+          "runId": "fd2f516a-fcbd-4642-9c9c-fcd712170180",
+          "reflectionSessionId": "218cf023-c876-408a-a2ba-65981dfb3acd",
+          "status": "failed",
+          "error": "反思未完成，请检查模型、沙箱或受控接口状态",
+          "sources": [
+            {
+              "markerEntryId": "5cc22ffc",
+              "settledAt": 1793018479149,
+              "traceId": "272c7d86-e102-4b9c-9e36-21fedb9e03ff",
+              "status": "ended"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "exception": {
+    "name": "Error",
+    "message": "controlled post-commit execution failure",
+    "stack": "Error: controlled post-commit execution failure\n    at Object.execute (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/tests/reflection-race.test.ts:86:41)\n    at async ReflectionService.execute (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/apps/host/reflection/reflection-service.ts:973:7)\n    at async ReflectionService.pump (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/apps/host/reflection/reflection-service.ts:359:7)"
+  },
+  "jobs": [
+    {
+      "id": "ded301e4-6346-4f32-a9cb-4f01f079f54b",
+      "sessionId": "e3bc1bbe-c06f-4241-b6c5-49bc4da4017a",
+      "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/.runtime/mechanism-40-failed-1793018479011",
+      "provider": "faux",
+      "model": "mechanism",
+      "scheduledAt": 1793018479149,
+      "created": 1793018479334,
+      "updated": 1793018479514,
+      "runId": "fd2f516a-fcbd-4642-9c9c-fcd712170180",
+      "reflectionSessionId": "218cf023-c876-408a-a2ba-65981dfb3acd",
+      "status": "failed",
+      "error": "反思未完成，请检查模型、沙箱或受控接口状态",
+      "sources": [
+        {
+          "markerEntryId": "5cc22ffc",
+          "settledAt": 1793018479149,
+          "traceId": "272c7d86-e102-4b9c-9e36-21fedb9e03ff",
+          "status": "ended"
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "ded301e4-6346-4f32-a9cb-4f01f079f54b",
+      "jobId": "ded301e4-6346-4f32-a9cb-4f01f079f54b",
+      "sessionId": "e3bc1bbe-c06f-4241-b6c5-49bc4da4017a",
+      "reflectionSessionId": "218cf023-c876-408a-a2ba-65981dfb3acd",
+      "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-40-42.387Z-command-5d650752/workspace/prototypes/d6/acceptance/.runtime/mechanism-40-failed-1793018479011",
+      "status": "failed",
+      "created": 1793018479344,
+      "updated": 1793018479513,
+      "summary": "受控机制总结",
+      "findings": [],
+      "uncertainties": [],
+      "evidence": [],
+      "changes": [
+        {
+          "kind": "memory",
+          "id": "a2a825fe-412a-47cf-8053-9df12e374539",
+          "revision": 1,
+          "summary": "isolated mechanism fixture"
+        },
+        {
+          "kind": "suggestion",
+          "id": "537a349f-83ee-49f7-9b4d-0e936e0238ce",
+          "summary": "受控建议"
+        }
+      ],
+      "error": "反思未完成，请检查模型、沙箱或受控接口状态"
+    }
+  ]
+}

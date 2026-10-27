@@ -1,6 +1,7 @@
 import { Markdown } from '../../components/Markdown';
 import { readPosition, savePosition } from '../../app/view-state';
 import { useEffect, useRef, useState } from 'react';
+import { ToolCatalog } from './ToolCatalog';
 interface Skill {
   id: string;
   name: string;
@@ -376,11 +377,7 @@ export function SkillsPanel({
               ))}
             </details>
           )}
-          <details>
-            <summary>Pi 基础能力</summary>
-            <p>read · bash · edit · write</p>
-            <p>基础工具保留原生行为，执行受当前任务权限约束。</p>
-          </details>
+          <ToolCatalog api={api} project={project} onSkill={(id) => void guard(() => open(id))} />
         </div>
         <div className="skill-detail">
           {detail && (

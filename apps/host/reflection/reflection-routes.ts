@@ -4,7 +4,7 @@ import { body, json } from '../transport/http.js';
 import { ReflectionError, type ReflectionService } from './reflection-service.js';
 
 export async function reflectionRoutes(
-  service: Pick<ReflectionService, 'jobs' | 'list' | 'get' | 'availability' | 'recheck' | 'wake'>,
+  service: Pick<ReflectionService, 'jobs' | 'list' | 'catalog' | 'get' | 'availability' | 'recheck' | 'wake'>,
   req: IncomingMessage,
   res: ServerResponse,
   url: URL,
@@ -14,9 +14,18 @@ export async function reflectionRoutes(
   try {
     if (route === '/api/reflections' && req.method === 'GET') {
       const query = z
-        .object({ sessionId: z.string().uuid().optional() })
+        .object({
+          sessionId: z.string().uuid().optional(),
+          view: z.enum(['summary', 'status']).optional(),
+          limit: z.coerce.number().int().min(1).max(100).optional(),
+          offset: z.coerce.number().int().min(0).optional(),
+        })
         .strict()
         .parse(Object.fromEntries(url.searchParams));
+      if (query.view) {
+        json(res, 200, service.catalog({ ...query, statusOnly: query.view === 'status' }));
+        return true;
+      }
       json(res, 200, {
         records: await service.list(query.sessionId),
         jobs: service.jobs.list(query),
@@ -38,8 +47,24 @@ export async function reflectionRoutes(
       z.object({})
         .strict()
         .parse(await body(req));
-      await service.recheck();
+      const controller = new AbortController();
+      const cancel = () => {
+        if (!res.writableEnded) controller.abort();
+      };
+      res.once('close', cancel);
+      try {
+        await service.recheck(controller.signal);
+      } finally {
+        res.off('close', cancel);
+      }
       json(res, 200, { ok: true, availability: await service.availability() });
+      return true;
+    }
+    const jobMatch = /^\/api\/reflections\/jobs\/([a-f0-9-]{36})$/.exec(route);
+    if (jobMatch?.[1] && req.method === 'GET') {
+      const job = service.jobs.get(jobMatch[1]);
+      if (!job) json(res, 404, { error: '反思任务不存在', code: 'REFLECTION_NOT_FOUND' });
+      else json(res, 200, { job });
       return true;
     }
     const match = /^\/api\/reflections\/([a-f0-9-]{36})$/.exec(route);
@@ -53,7 +78,8 @@ export async function reflectionRoutes(
       route === '/api/reflections' ||
       route === '/api/reflections/expedite' ||
       route === '/api/reflections/recheck' ||
-      match
+      match ||
+      jobMatch
     )
       json(res, 405, { error: '不支持的反思操作', code: 'REFLECTION_METHOD' });
     else json(res, 404, { error: '反思接口不存在', code: 'REFLECTION_NOT_FOUND' });

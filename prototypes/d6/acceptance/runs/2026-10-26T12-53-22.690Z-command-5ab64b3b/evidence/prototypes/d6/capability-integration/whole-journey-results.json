@@ -1,0 +1,110 @@
+[
+  {
+    "name": "新建会话→读取文件→实际Tool结果→继续讨论→跨会话查找→Memory修订来源→原生Reflection→返回任务",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "session": "29d607b4-1870-40f5-9f61-4954cdf7a733",
+      "memory": "b3970108-65e8-443a-9647-50bb01d3d526",
+      "memoryRevision": 2,
+      "reflection": {
+        "id": "d0db75bc-483f-4330-9cfa-20814f174384",
+        "sessionId": "29d607b4-1870-40f5-9f61-4954cdf7a733",
+        "created": 1793019207245,
+        "updated": 1793019211603,
+        "scheduledAt": 1793019209085,
+        "status": "succeeded",
+        "reflectionSessionId": "01acec4d-d23a-4bef-8592-6f6be84fad07",
+        "sourceCount": 2
+      },
+      "mode": "Faux instructions; real Pi tools, encrypted formal Host, signed native Reflection Worker"
+    }
+  },
+  {
+    "name": "短窗口授权与长内容：权限提示和确认按钮可达，无横向页面溢出",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "height": 520,
+      "cancellationControl": {
+        "x": 234,
+        "y": 438.40625,
+        "width": 82,
+        "height": 35.59375
+      },
+      "permissionNoticeReachable": true
+    }
+  },
+  {
+    "name": "新建会话→读取文件→实际Tool结果→继续讨论→跨会话查找→Memory修订来源→原生Reflection→返回任务",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "session": "4b831e0e-46d0-4b7e-ae89-9c4a32b2483e",
+      "memory": "0f80e0b9-4192-4a56-9822-8e15402ff40a",
+      "memoryRevision": 2,
+      "reflection": {
+        "id": "bf0ae0db-815b-40a9-88db-884e0e0a3847",
+        "sessionId": "4b831e0e-46d0-4b7e-ae89-9c4a32b2483e",
+        "created": 1793019214970,
+        "updated": 1793019219212,
+        "scheduledAt": 1793019216796,
+        "status": "succeeded",
+        "reflectionSessionId": "d41b9d94-b410-4873-959a-c9975d7ed0d4",
+        "sourceCount": 2
+      },
+      "mode": "Faux instructions; real Pi tools, encrypted formal Host, signed native Reflection Worker"
+    }
+  },
+  {
+    "name": "短窗口授权与长内容：权限提示和确认按钮可达，无横向页面溢出",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "height": 520,
+      "cancellationControl": {
+        "x": 56,
+        "y": 438.40625,
+        "width": 82,
+        "height": 35.59375
+      },
+      "permissionNoticeReachable": true
+    }
+  },
+  {
+    "name": "新建会话→读取文件→实际Tool结果→继续讨论→跨会话查找→Memory修订来源→原生Reflection→返回任务",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "session": "06bafd8d-15d0-4aae-8156-b666a2dc8bd0",
+      "memory": "49d38675-b1d1-4426-85c6-db6ca5470a75",
+      "memoryRevision": 2,
+      "reflection": {
+        "id": "631e0991-934e-4adc-977c-2792657fa5f7",
+        "sessionId": "06bafd8d-15d0-4aae-8156-b666a2dc8bd0",
+        "created": 1793019222678,
+        "updated": 1793019227104,
+        "scheduledAt": 1793019224660,
+        "status": "succeeded",
+        "reflectionSessionId": "6185bcad-e64b-41f9-ab62-f255e7a3e744",
+        "sourceCount": 2
+      },
+      "mode": "Faux instructions; real Pi tools, encrypted formal Host, signed native Reflection Worker"
+    }
+  },
+  {
+    "name": "短窗口授权与长内容：权限提示和确认按钮可达，无横向页面溢出",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "height": 520,
+      "cancellationControl": {
+        "x": 32,
+        "y": 457.40625,
+        "width": 82,
+        "height": 35.59375
+      },
+      "permissionNoticeReachable": true
+    }
+  }
+]

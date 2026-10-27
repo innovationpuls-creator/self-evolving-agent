@@ -253,11 +253,14 @@ export function useHost(initialId?: string) {
           diagnostics: 'diagnostics',
         };
         if (names[data.type]) window.dispatchEvent(new Event(`agent-${names[data.type]}-changed`));
+        if (data.type === 'models') void refresh().catch(() => {});
         if (data.type === 'queue_failed' || data.type === 'blocked') {
           setError(`${data.sessionId === selectedRef.current ? '当前会话' : '后台会话'}：${data.error}`);
         }
         if (data.type !== 'state' && data.type !== 'update') return;
         const event: SessionEvent = data;
+        if (event.type === 'state' || event.event.type === 'tool_execution_end')
+          window.dispatchEvent(new Event('agent-tools-changed'));
         listEvents.current++;
         if (event.type === 'state')
           setSessions((list) => {

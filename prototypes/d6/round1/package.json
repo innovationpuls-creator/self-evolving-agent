@@ -1,0 +1,14 @@
+{
+  "name": "agent-d6-design-exploration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test:browser": "node scripts/browser.mjs",
+    "lint": "biome lint src scripts vite.config.ts",
+    "format:check": "biome format src scripts package.json tsconfig.json biome.json vite.config.ts",
+    "format": "biome format --write src scripts package.json tsconfig.json biome.json vite.config.ts"
+  }
+}

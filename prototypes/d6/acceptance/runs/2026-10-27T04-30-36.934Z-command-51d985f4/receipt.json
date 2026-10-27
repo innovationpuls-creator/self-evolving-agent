@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "npm run typecheck && npm --prefix prototypes/d6 run typecheck && for scope in host integration reflection-lifecycle memory-management capability-integration acceptance; do node_modules/.bin/tsc --noEmit -p prototypes/d6/$scope/tsconfig.json || exit 1; done && npm --prefix prototypes/d6 run lint && npm --prefix prototypes/d6 run format:check && for scope in host integration reflection-lifecycle memory-management capability-integration; do npm --prefix prototypes/d6/$scope run lint || exit 1; npm --prefix prototypes/d6/$scope run format:check || exit 1; done && cd prototypes/d6/acceptance && ../../../node_modules/.bin/biome lint scripts tests && ../../../node_modules/.bin/biome format scripts tests *.json"
+  ],
+  "cwd": "",
+  "code": 0,
+  "signal": null,
+  "sourceChanges": []
+}

@@ -1,0 +1,57 @@
+{
+  "results": [
+    {
+      "name": "repeat-1",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-20.203Z-command-3883ed74",
+      "code": 0,
+      "signal": null,
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-20.203Z-command-3883ed74\n✔ SIGKILL after committed effect: restart interrupts job, preserves record and never replays effect (1194.267709ms)\n✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (314.865792ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (339.408ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (304.049917ms)\n✔ Reflection Worker evidence authorizer rejects foreign project and missing Entry; authenticated user semantics remain distinct (111.448209ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2435.00625\nD6 receipt: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-20.203Z-command-3883ed74/receipt.json; source changes: 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "repeat-2",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-24.373Z-command-564f0f35",
+      "code": 0,
+      "signal": null,
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-24.373Z-command-564f0f35\n✔ SIGKILL after committed effect: restart interrupts job, preserves record and never replays effect (1031.223459ms)\n✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (288.321917ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (244.853125ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (265.575416ms)\n✔ Reflection Worker evidence authorizer rejects foreign project and missing Entry; authenticated user semantics remain distinct (127.933ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1885.500458\nD6 receipt: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-24.373Z-command-564f0f35/receipt.json; source changes: 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "parallel-1",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.826Z-command-559dbf82",
+      "code": 0,
+      "signal": null,
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.826Z-command-559dbf82\n✔ SIGKILL after committed effect: restart interrupts job, preserves record and never replays effect (1452.875459ms)\n✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (440.8635ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (452.423709ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (437.705625ms)\n✔ Reflection Worker evidence authorizer rejects foreign project and missing Entry; authenticated user semantics remain distinct (156.848167ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2953.437042\nD6 receipt: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.826Z-command-559dbf82/receipt.json; source changes: 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "parallel-2",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.827Z-command-5b412b4e",
+      "code": 0,
+      "signal": null,
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.827Z-command-5b412b4e\n✔ SIGKILL after committed effect: restart interrupts job, preserves record and never replays effect (1473.910667ms)\n✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (453.381417ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (498.261417ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (424.094125ms)\n✔ Reflection Worker evidence authorizer rejects foreign project and missing Entry; authenticated user semantics remain distinct (159.009875ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2953.1145\nD6 receipt: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-27.827Z-command-5b412b4e/receipt.json; source changes: 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "SIGTERM",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-32.604Z-command-5e619000",
+      "code": 130,
+      "signal": null,
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-32.604Z-command-5e619000\nINTERRUPTION_READY\nD6 receipt: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-32.604Z-command-5e619000/receipt.json; source changes: 0\n",
+      "stderr": ""
+    },
+    {
+      "name": "SIGKILL",
+      "path": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-34.091Z-command-ef6a8197",
+      "code": null,
+      "signal": "SIGKILL",
+      "stdout": "D6 run: /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-34.091Z-command-ef6a8197\nINTERRUPTION_READY\n",
+      "stderr": ""
+    }
+  ],
+  "sourceChanges": [],
+  "distinctRuns": true,
+  "originalHistoricalEvidenceUnchanged": true,
+  "boundary": "filesystem output separation; not an OS sandbox",
+  "abruptExit": "SIGKILL leaves a private incomplete run; observer harvests and removes only its own workspaces after the test child exits"
+}

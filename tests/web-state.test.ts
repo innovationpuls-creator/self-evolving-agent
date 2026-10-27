@@ -118,3 +118,37 @@ test('an interrupted historical Tool never becomes the current turn stage', () =
   };
   assert.deepEqual(pendingToolNames(value), []);
 });
+
+test('Memory action feedback renders actual successful writes only, preserving operation revision', async () => {
+  const { MemoryToolFeedback } = await import('../apps/web/src/features/chat/MemoryToolFeedback.js');
+  const feedback = {
+    operation: 'revise' as const,
+    message: '更新认识：Project fact · 修订 #2（替代 #1）',
+    id: 'memory-id',
+    revision: 2,
+    previousRevision: 1,
+    currentKnowledge: true,
+    kind: 'fact' as const,
+    status: 'current' as const,
+    sources: [{ sessionId: 'source-session', entryId: 'source-entry', project: '/a' }],
+  };
+  const render = (toolName: string, isError = false) =>
+    renderToStaticMarkup(
+      createElement(MemoryToolFeedback, {
+        message: { role: 'toolResult', content: [], toolName, isError, details: { memory: feedback } },
+        api: async () => {
+          throw new Error('Collapsed feedback must not prefetch Memory');
+        },
+        project: '/a',
+        onMemory: () => {},
+        onEvidence: () => {},
+      }),
+    );
+  assert.match(render('memory_revise'), /更新认识.*修订 #2/);
+  assert.match(render('memory_revise'), /查看本次修订/);
+  assert.match(render('memory_revise'), /查看来源证据/);
+  assert.doesNotMatch(render('memory_revise'), /最新修订 #2/);
+  assert.equal(render('memory_revise', true), '');
+  assert.equal(render('memory_search'), '');
+  assert.equal(render('memory_get'), '');
+});

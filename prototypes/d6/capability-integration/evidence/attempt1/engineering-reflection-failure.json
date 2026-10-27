@@ -1,0 +1,177 @@
+[
+  {
+    "name": "D6 typecheck",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> typecheck\n> tsc --noEmit\n\n",
+    "stderr": ""
+  },
+  {
+    "name": "D6 Biome",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6",
+      "run",
+      "lint"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> lint\n> biome lint src scripts vite.config.ts\n\nChecked 125 files in 69ms. No fixes applied.\n",
+    "stderr": ""
+  },
+  {
+    "name": "D6 format",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6",
+      "run",
+      "format:check"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> format:check\n> biome format src scripts package.json tsconfig.json biome.json vite.config.ts\n\nChecked 128 files in 24ms. No fixes applied.\n",
+    "stderr": ""
+  },
+  {
+    "name": "capability adapter types",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/capability-integration",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> typecheck\n> tsc --noEmit -p tsconfig.json\n\n",
+    "stderr": ""
+  },
+  {
+    "name": "formal Host mechanism and frontend state contracts",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/capability-integration",
+      "test"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> test\n> node --import tsx --test tests/*.test.ts\n\n▶ isolated formal Host: Skill, Tool, Suggestion and Activity boundaries\n  ✔ unreviewed candidates never load and review binds exact version/digest (34.986041ms)\n  ✔ 202 publish becomes applied only after formal checks and current-version commit (102.309084ms)\n  ✔ editing creates immutable candidate, invalidates old review and stale edit is 409 (20.3135ms)\n  ✔ reviewed new version, legal rollback and enable/disable remain authoritative operations (112.906459ms)\n  ✔ descriptive Knowledge is independently revisioned without changing executable version (12.149958ms)\n  ✔ Tool catalogue proves per-Session membership and isolates another project (161.099333ms)\n  ✔ Suggestion genuine pagination and actor provenance remain distinct from user goals (11.079792ms)\n  ✔ adoption creates a real independent discussion without development permission (174.508ms)\n  ✔ exact Activity grant rejects stale revision, foreign Skill and out-of-target native write (569.935333ms)\n  ✔ partial Activity failure retains already applied release and its exact authorization proof (422.348958ms)\n  ✔ cancelled activity cannot write; Host restart marks active activity interrupted without replay (375.645083ms)\n  ✔ real HTTP transport enforces Bearer and Origin independently (2.04ms)\n✔ isolated formal Host: Skill, Tool, Suggestion and Activity boundaries (2101.191709ms)\n✔ publication feedback requires completed Operation and matching authoritative state (0.309667ms)\n✔ executable review cannot carry over after digest or version-content identity changes (0.071ms)\n✔ navigation draft store retains original version and conflict base independently for each file (0.301208ms)\nℹ tests 16\nℹ suites 0\nℹ pass 16\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 2713.397959\n",
+    "stderr": ""
+  },
+  {
+    "name": "capability Biome",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/capability-integration",
+      "run",
+      "lint"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> lint\n> biome lint scripts tests\n\nChecked 27 files in 11ms. No fixes applied.\nFound 1 info.\n",
+    "stderr": "scripts/import-draft.mjs:57:47 lint/style/useTemplate  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n  i Template literals are preferred over string concatenation.\n  \n    55 │     const dir = (await prep.json()).directory;\n    56 │     const text = await fs.readFile(join(dir, 'SKILL.md'), 'utf8');\n  > 57 │     await fs.writeFile(join(dir, 'SKILL.md'), text + '\\nExternal edit retains exact provenance.\\n');\n       │                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    58 │     const imported = p.waitForResponse((r) => r.url().endsWith('/import-draft') && r.request().method() === 'POST');\n    59 │     await p.getByRole('button', { name: '导入目录修改', exact: true }).click();\n  \n  i Unsafe fix: Use a template literal.\n  \n    55 55 │       const dir = (await prep.json()).directory;\n    56 56 │       const text = await fs.readFile(join(dir, 'SKILL.md'), 'utf8');\n    57    │ - ····await·fs.writeFile(join(dir,·'SKILL.md'),·text·+·'\\nExternal·edit·retains·exact·provenance.\\n');\n       57 │ + ····await·fs.writeFile(join(dir,·'SKILL.md'),·`${text}\\nExternal·edit·retains·exact·provenance.\\n`);\n    58 58 │       const imported = p.waitForResponse((r) => r.url().endsWith('/import-draft') && r.request().method() === 'POST');\n    59 59 │       await p.getByRole('button', { name: '导入目录修改', exact: true }).click();\n  \n\n"
+  },
+  {
+    "name": "capability format",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/capability-integration",
+      "run",
+      "format:check"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> format:check\n> biome format scripts tests package.json tsconfig.json biome.json\n\nChecked 30 files in 6ms. No fixes applied.\n",
+    "stderr": ""
+  },
+  {
+    "name": "preserved Memory contracts",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/memory-management",
+      "test"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> test\n> node --import tsx --test tests/*.test.ts\n\n✔ a sent request with no reply remains uncertain; no implicit retry (0.3795ms)\n✔ HTTP conflict retains exact base and local text (0.079375ms)\n✔ acknowledged commit cannot be retried while authoritative read fails (0.150833ms)\n✔ Host current advancing after commit preserves original receipt (0.069834ms)\n✔ two submit handlers for the same draft cannot send a second in-flight write (0.078667ms)\nℹ tests 5\nℹ suites 0\nℹ pass 5\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 101.517791\n",
+    "stderr": ""
+  },
+  {
+    "name": "preserved Reflection contracts",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/reflection-lifecycle",
+      "test"
+    ],
+    "exitCode": 1,
+    "status": "failed",
+    "stdout": "\n> test\n> node --import tsx --test tests/*.test.ts\n\n✔ SIGKILL after committed effect: restart interrupts job, preserves record and never replays effect (870.074542ms)\n✔ stable Job link discovers subsequently created Record; no list detail prefetch (0.559583ms)\n✔ only missing Record is tolerated; auth/network/503 are never empty success (0.26975ms)\n✖ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (194.366584ms)\n✔ committed effects survive reflection_save, failed, restart and duplicate Tool Call (209.5305ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (266.676542ms)\n✔ Reflection Worker evidence authorizer rejects foreign project and missing Entry; authenticated user semantics remain distinct (79.23ms)\nℹ tests 7\nℹ suites 0\nℹ pass 6\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1434.85175\n\n✖ failing tests:\n\ntest at tests/persistence.test.ts:1:1095\n✖ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (194.366584ms)\n  AssertionError [ERR_ASSERTION]: []\n  \n  false !== true\n  \n      at TestContext.<anonymous> (<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/reflection-lifecycle/tests/persistence.test.ts:128:14)\n      at async Test.run (node:internal/test_runner/test:1409:7)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {\n    generatedMessage: false,\n    code: 'ERR_ASSERTION',\n    actual: false,\n    expected: true,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n",
+    "stderr": ""
+  },
+  {
+    "name": "preserved transport contracts",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6/integration",
+      "test"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> test\n> node --import tsx --test tests/*.test.ts\n\n✔ native Tool requests and errors stay addressable without empty Agent paragraphs (0.625125ms)\n✔ stream projection retains actual content rather than inferring completion (0.053959ms)\n✔ extended A routes preserve exact project, revision and origin context (0.170667ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 106.554125\n",
+    "stderr": ""
+  },
+  {
+    "name": "mock A/B build",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> build\n> vite build\n\nvite v8.3.4 building client environment for production...\ntransforming...\n✓ 2356 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.46 kB │ gzip:   0.30 kB\ndist/assets/App-C7f33umX.css     22.35 kB │ gzip:   4.23 kB\ndist/assets/index-CTv492cD.css  177.15 kB │ gzip:  33.66 kB\ndist/assets/App-D5nZZ0zc.js     155.78 kB │ gzip:  43.03 kB\ndist/assets/index-BrnFObNH.js   815.47 kB │ gzip: 249.81 kB\n\n✓ built in 178ms\n",
+    "stderr": "[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+  },
+  {
+    "name": "Host A build",
+    "command": [
+      "npm",
+      "--prefix",
+      "prototypes/d6",
+      "run",
+      "build:host"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "\n> build:host\n> vite build --mode host --outDir integration/dist\n\nvite v8.3.4 building client environment for host...\ntransforming...\n✓ 2356 modules transformed.\nrendering chunks...\ncomputing gzip size...\nintegration/dist/index.html                   0.46 kB │ gzip:   0.30 kB\nintegration/dist/assets/App-C7f33umX.css     22.35 kB │ gzip:   4.23 kB\nintegration/dist/assets/index-CTv492cD.css  177.15 kB │ gzip:  33.66 kB\nintegration/dist/assets/App-CsCNxNTv.js     155.78 kB │ gzip:  43.03 kB\nintegration/dist/assets/index-BhpEOWCQ.js   815.42 kB │ gzip: 249.80 kB\n\n✓ built in 154ms\n",
+    "stderr": "[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+  },
+  {
+    "name": "scope hashes",
+    "command": [
+      "node",
+      "prototypes/d6/capability-integration/scripts/isolation.mjs"
+    ],
+    "exitCode": 0,
+    "status": "passed",
+    "stdout": "{\"initialFiles\":621,\"changed\":[{\"path\":\"prototypes/d6/src/real/Session.tsx\",\"allowed\":true},{\"path\":\"prototypes/d6/src/real/navigation.ts\",\"allowed\":true},{\"path\":\"prototypes/d6/src/real/App.tsx\",\"allowed\":true}],\"missing\":[],\"preexistingSix\":[{\"path\":\"prototypes/d6/round4/README.md\",\"unchanged\":true},{\"path\":\"prototypes/d6/scripts/contracts.mjs\",\"unchanged\":true},{\"path\":\"prototypes/d6/src/pages/Settings.tsx\",\"unchanged\":true},{\"path\":\"prototypes/d6/.agents/skills/impeccable/reference/live.md\",\"unchanged\":true},{\"path\":\"prototypes/d6/.agents/skills/impeccable/reference/generate.md\",\"unchanged\":true},{\"path\":\"prototypes/d6/.agents/skills/impeccable/reference/hooks.md\",\"unchanged\":true}],\"status\":\"passed\"}\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "files": 4174,
+  "changed": [
+    {
+      "path": "prototypes/d6/round4/README.md",
+      "before": "2f9e1f3790de91a21c12b3aaf3da2881616b5cd3463c42503df6b81f0f6686fa",
+      "after": "67027e2dec37636834bf784498d233effb3043c49e6777e7f251d8a83c6c6a27",
+      "modifiedAt": "2026-10-25T03:49:06.039046-07:00"
+    },
+    {
+      "path": "prototypes/d6/scripts/contracts.mjs",
+      "before": "2a87f4342203658c7422ba7d538b231eb74580d21723489b92ac14834afe7d76",
+      "after": "3078636612360a375c268239af857c5c3f812b926dccda586d3592f076585364",
+      "modifiedAt": "2026-10-25T03:49:28.944892-07:00"
+    },
+    {
+      "path": "prototypes/d6/src/pages/Settings.tsx",
+      "before": "cf9b2609196738736f3107c7dd29b500153e20a2f2b78fa3af97f6fb8e5fde1a",
+      "after": "7f7acd4f2cb47e492e703200260abb24166d34039656144f6926b19eadb02b0c",
+      "modifiedAt": "2026-10-25T03:49:28.944589-07:00"
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/live.md",
+      "before": "7caeecefe54d68bc915a7f2978cba5e88eda69a239cb09dcce78c6d94e93df84",
+      "after": "3c49b76197b5a276dfde41c4f22fcea0e25cdebca031d58d889611223aec7138",
+      "modifiedAt": "2026-10-25T03:49:06.039550-07:00"
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/generate.md",
+      "before": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
+      "after": "f8c9ae0f9a0b42eb84caa8e07d8560d957d0a1eb2a83f3ba9c606f938d6eb3ca",
+      "modifiedAt": "2026-10-25T03:49:06.039708-07:00"
+    },
+    {
+      "path": "prototypes/d6/.agents/skills/impeccable/reference/hooks.md",
+      "before": "3c623f602043dcbdad8c043491e57ece96f699106f8378cc8a720e6b39c0ddcd",
+      "after": "19277611bf29844f68c71aca54c81ba03817a6685e3d03c73575a860429aa321",
+      "modifiedAt": "2026-10-25T03:49:06.039253-07:00"
+    }
+  ],
+  "status": "changed_since_initial_snapshot",
+  "observation": "Earlier check was unchanged; final check observes six outside-host changes. No rollback performed; source not attributed.",
+  "checkedAt": "2026-10-25T03:53:16.666135-07:00"
+}

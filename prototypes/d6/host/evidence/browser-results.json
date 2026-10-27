@@ -1,0 +1,1249 @@
+{
+  "origin": "http://127.0.0.1:4189",
+  "time": "2026-10-25T10:37:05.792Z",
+  "summary": {
+    "passed": 34,
+    "failed": 0,
+    "pageErrors": 0
+  },
+  "results": [
+    {
+      "name": "Session → scoped Reflection → real source memory operation → revision → source → original Session",
+      "expected": "all destinations retain actual ids and revision 2",
+      "actual": {
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "reflection": "8620fd09-f6c9-4b87-b248-5508ae2d075d",
+        "memory": "a59e58a5-acc1-438d-af39-543699d7ee8c",
+        "revision": 2,
+        "savedBy": "source task memory_revise; Reflection.changes remains authoritative and empty",
+        "requests": [
+          {
+            "width": 1440,
+            "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+            "method": "GET",
+            "status": 200
+          }
+        ]
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "primary page has no horizontal overflow",
+      "expected": "document and workspace fit viewport",
+      "actual": {
+        "viewport": 1440,
+        "body": 1440,
+        "workspace": 1192,
+        "width": 1192
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "browser Back restores detail row focus and list scope",
+      "expected": "same job focused after returning to list",
+      "actual": {
+        "focus": true,
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336"
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "cross Session and project filtering plus empty records",
+      "expected": "Host returns no records for unused Session",
+      "actual": {
+        "session": "20e14ea8-e8a8-4235-8182-971dac89c7cb",
+        "records": 0
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "same-title tasks stay separately addressable across Sessions",
+      "expected": "both actual failed/interrupted session ids in picker",
+      "actual": {
+        "distinctSessions": [
+          "df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+          "d5066d20-9412-4114-82c7-e978687a6aff"
+        ]
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "real native Reflection failed",
+      "expected": "persisted failed detail and actual reason remain visible",
+      "actual": {
+        "status": "failed",
+        "text": "检查未完成\n\n反思未完成，请检查模型、沙箱或受控接口状态\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "real native Reflection interrupted",
+      "expected": "persisted interrupted detail and actual reason remain visible",
+      "actual": {
+        "status": "interrupted",
+        "text": "检查未完成\n\n反思已中断；已提交成果保留，不自动重放\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "missing evidence is reported by actual Host",
+      "expected": "entry_missing_from_checkpoint without invented text",
+      "actual": "Host available=false, reason=entry_missing_from_checkpoint",
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "wrong project cannot read project Memory",
+      "expected": "real Host 404, no fallback to global or different project",
+      "actual": "记忆不存在",
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "source Origin rejection and retry use actual Host",
+      "expected": "403 surfaces actual reason, retry restores source after restoring request Origin",
+      "actual": "real 403 → normal same-origin GET 200",
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "revoked/absent Bearer cannot leave readable stale data",
+      "expected": "actual 401 removes protected view and asks to reconnect",
+      "actual": "actual Host 401 → auth_required; evidence unmounted",
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    },
+    {
+      "name": "Session → scoped Reflection → real source memory operation → revision → source → original Session",
+      "expected": "all destinations retain actual ids and revision 2",
+      "actual": {
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "reflection": "8620fd09-f6c9-4b87-b248-5508ae2d075d",
+        "memory": "a59e58a5-acc1-438d-af39-543699d7ee8c",
+        "revision": 2,
+        "savedBy": "source task memory_revise; Reflection.changes remains authoritative and empty",
+        "requests": [
+          {
+            "width": 850,
+            "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+            "method": "GET",
+            "status": 200
+          }
+        ]
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "primary page has no horizontal overflow",
+      "expected": "document and workspace fit viewport",
+      "actual": {
+        "viewport": 850,
+        "body": 850,
+        "workspace": 656,
+        "width": 656
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "browser Back restores detail row focus and list scope",
+      "expected": "same job focused after returning to list",
+      "actual": {
+        "focus": true,
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336"
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "cross Session and project filtering plus empty records",
+      "expected": "Host returns no records for unused Session",
+      "actual": {
+        "session": "20e14ea8-e8a8-4235-8182-971dac89c7cb",
+        "records": 0
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "same-title tasks stay separately addressable across Sessions",
+      "expected": "both actual failed/interrupted session ids in picker",
+      "actual": {
+        "distinctSessions": [
+          "df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+          "d5066d20-9412-4114-82c7-e978687a6aff"
+        ]
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "real native Reflection failed",
+      "expected": "persisted failed detail and actual reason remain visible",
+      "actual": {
+        "status": "failed",
+        "text": "检查未完成\n\n反思未完成，请检查模型、沙箱或受控接口状态\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "real native Reflection interrupted",
+      "expected": "persisted interrupted detail and actual reason remain visible",
+      "actual": {
+        "status": "interrupted",
+        "text": "检查未完成\n\n反思已中断；已提交成果保留，不自动重放\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "missing evidence is reported by actual Host",
+      "expected": "entry_missing_from_checkpoint without invented text",
+      "actual": "Host available=false, reason=entry_missing_from_checkpoint",
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "wrong project cannot read project Memory",
+      "expected": "real Host 404, no fallback to global or different project",
+      "actual": "记忆不存在",
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "source Origin rejection and retry use actual Host",
+      "expected": "403 surfaces actual reason, retry restores source after restoring request Origin",
+      "actual": "real 403 → normal same-origin GET 200",
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "revoked/absent Bearer cannot leave readable stale data",
+      "expected": "actual 401 removes protected view and asks to reconnect",
+      "actual": "actual Host 401 → auth_required; evidence unmounted",
+      "status": "passed",
+      "width": 850,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-850.zip"
+    },
+    {
+      "name": "Session → scoped Reflection → real source memory operation → revision → source → original Session",
+      "expected": "all destinations retain actual ids and revision 2",
+      "actual": {
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "reflection": "8620fd09-f6c9-4b87-b248-5508ae2d075d",
+        "memory": "a59e58a5-acc1-438d-af39-543699d7ee8c",
+        "revision": 2,
+        "savedBy": "source task memory_revise; Reflection.changes remains authoritative and empty",
+        "requests": [
+          {
+            "width": 390,
+            "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+            "method": "GET",
+            "status": 200
+          }
+        ]
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "primary page has no horizontal overflow",
+      "expected": "document and workspace fit viewport",
+      "actual": {
+        "viewport": 390,
+        "body": 390,
+        "workspace": 390,
+        "width": 390
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "browser Back restores detail row focus and list scope",
+      "expected": "same job focused after returning to list",
+      "actual": {
+        "focus": true,
+        "session": "d94260ed-8852-4843-b4dc-4694a61f1336"
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "cross Session and project filtering plus empty records",
+      "expected": "Host returns no records for unused Session",
+      "actual": {
+        "session": "20e14ea8-e8a8-4235-8182-971dac89c7cb",
+        "records": 0
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "same-title tasks stay separately addressable across Sessions",
+      "expected": "both actual failed/interrupted session ids in picker",
+      "actual": {
+        "distinctSessions": [
+          "df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+          "d5066d20-9412-4114-82c7-e978687a6aff"
+        ]
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "real native Reflection failed",
+      "expected": "persisted failed detail and actual reason remain visible",
+      "actual": {
+        "status": "failed",
+        "text": "检查未完成\n\n反思未完成，请检查模型、沙箱或受控接口状态\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "real native Reflection interrupted",
+      "expected": "persisted interrupted detail and actual reason remain visible",
+      "actual": {
+        "status": "interrupted",
+        "text": "检查未完成\n\n反思已中断；已提交成果保留，不自动重放\n\n未保存检查结论。\n\n本次检查未新增变化；来源任务中的操作请见下方「任务来源」。\n\n依据与来源\n证据 1\n任务来源 1 · 已结束"
+      },
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "missing evidence is reported by actual Host",
+      "expected": "entry_missing_from_checkpoint without invented text",
+      "actual": "Host available=false, reason=entry_missing_from_checkpoint",
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "wrong project cannot read project Memory",
+      "expected": "real Host 404, no fallback to global or different project",
+      "actual": "记忆不存在",
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "source Origin rejection and retry use actual Host",
+      "expected": "403 surfaces actual reason, retry restores source after restoring request Origin",
+      "actual": "real 403 → normal same-origin GET 200",
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "revoked/absent Bearer cannot leave readable stale data",
+      "expected": "actual 401 removes protected view and asks to reconnect",
+      "actual": "actual Host 401 → auth_required; evidence unmounted",
+      "status": "passed",
+      "width": 390,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-390.zip"
+    },
+    {
+      "name": "server explicitly rejects unauthenticated and foreign-Origin requests",
+      "expected": "401 without token;403 with token but wrong Origin",
+      "actual": {
+        "unauthorized": {
+          "status": 401,
+          "body": {
+            "error": "请连接 Agent Host"
+          }
+        },
+        "forbidden": {
+          "status": 403,
+          "body": {
+            "error": "来源不受信任"
+          }
+        }
+      },
+      "status": "passed",
+      "width": 1440,
+      "height": 1000,
+      "data": "real Host HTTP/SQLite/native history",
+      "trace": "traces/journey-1440.zip"
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/f872b5e3-362f-4312-a4e4-ce1e7e4b074c",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=41e5fb88&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fretry-policy&includeHistory=true",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=20e14ea8-e8a8-4235-8182-971dac89c7cb",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections/6b91abeb-f01a-4369-a6e8-2cf44b98b029",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d5066d20-9412-4114-82c7-e978687a6aff",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/reflections/3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing-d6-entry&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fother-project&includeHistory=true",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 1440,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing&offset=0&limit=8192",
+      "method": "GET",
+      "status": 401
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/f872b5e3-362f-4312-a4e4-ce1e7e4b074c",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=41e5fb88&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fretry-policy&includeHistory=true",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=20e14ea8-e8a8-4235-8182-971dac89c7cb",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections/6b91abeb-f01a-4369-a6e8-2cf44b98b029",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d5066d20-9412-4114-82c7-e978687a6aff",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/reflections/3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing-d6-entry&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fother-project&includeHistory=true",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 850,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing&offset=0&limit=8192",
+      "method": "GET",
+      "status": 401
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/f872b5e3-362f-4312-a4e4-ce1e7e4b074c",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=41e5fb88&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fretry-policy&includeHistory=true",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=status&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions/d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=3e275025&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections/8620fd09-f6c9-4b87-b248-5508ae2d075d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d94260ed-8852-4843-b4dc-4694a61f1336",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=20e14ea8-e8a8-4235-8182-971dac89c7cb",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=df9c7a2e-ac7f-4cfb-a4c2-cfd0ca080115",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections/6b91abeb-f01a-4369-a6e8-2cf44b98b029",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections?view=summary&limit=20&offset=0&sessionId=d5066d20-9412-4114-82c7-e978687a6aff",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/reflections/3a497b99-c68f-4dac-bd1e-fa47a99bfc9f",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing-d6-entry&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/memory/a59e58a5-acc1-438d-af39-543699d7ee8c?project=<D6_HOST>%2F.runtime%2Fprojects%2Fother-project&includeHistory=true",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 403
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=e0b05633&offset=0&limit=8192",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/sessions",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/models",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "width": 390,
+      "path": "/api/diagnostics/evidence?sessionId=d94260ed-8852-4843-b4dc-4694a61f1336&entryId=missing&offset=0&limit=8192",
+      "method": "GET",
+      "status": 401
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "partial Activity failure preserves prior authorized applied release",
+    "width": 1440,
+    "status": "failed",
+    "actual": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:15:49\n    at async check (file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/common.mjs:71:20)\n    at async file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:7:2"
+  },
+  {
+    "name": "cancel discussion activity without implicit permission",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "status": "cancelled",
+      "grant": null
+    }
+  },
+  {
+    "name": "partial Activity failure preserves prior authorized applied release",
+    "width": 850,
+    "status": "failed",
+    "actual": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:15:49\n    at async check (file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/common.mjs:71:20)\n    at async file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:7:2"
+  },
+  {
+    "name": "cancel discussion activity without implicit permission",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "status": "cancelled",
+      "grant": null
+    }
+  },
+  {
+    "name": "partial Activity failure preserves prior authorized applied release",
+    "width": 390,
+    "status": "failed",
+    "actual": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:15:49\n    at async check (file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/common.mjs:71:20)\n    at async file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/partial.mjs:7:2"
+  },
+  {
+    "name": "cancel discussion activity without implicit permission",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "status": "cancelled",
+      "grant": null
+    }
+  }
+]

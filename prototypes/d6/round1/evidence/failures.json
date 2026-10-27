@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "quiet: 失败 preserves v1; empty goal cannot grant",
+    "quiet: 无代码 preserves v1; empty goal cannot grant",
+    "quiet: 取消 preserves v1; empty goal cannot grant",
+    "quiet: model cancel, logout, environment branch",
+    "studio: 失败 preserves v1; empty goal cannot grant",
+    "studio: 无代码 preserves v1; empty goal cannot grant",
+    "studio: 取消 preserves v1; empty goal cannot grant",
+    "studio: model cancel, logout, environment branch"
+  ]
+}

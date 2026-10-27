@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "node --import tsx --test prototypes/d6/host/tests/*.test.ts prototypes/d6/integration/tests/*.test.ts prototypes/d6/memory-management/tests/*.test.ts prototypes/d6/reflection-lifecycle/tests/*.test.ts prototypes/d6/capability-integration/tests/*.test.ts prototypes/d6/acceptance/tests/*.test.ts"
+  ],
+  "cwd": "",
+  "code": 0,
+  "signal": null,
+  "sourceChanges": []
+}

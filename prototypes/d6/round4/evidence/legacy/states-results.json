@@ -1,0 +1,23 @@
+{
+  "results": [
+    "quiet/chat: empty, loading, read failure, long fixture",
+    "quiet/trace: empty, loading, read failure, long fixture",
+    "quiet/memory: empty, loading, read failure, long fixture",
+    "quiet/reflection: empty, loading, read failure, long fixture",
+    "quiet/skills: empty, loading, read failure, long fixture",
+    "quiet/evolution: empty, loading, read failure, long fixture",
+    "quiet/settings: empty, loading, read failure, long fixture",
+    "quiet: modal Tab containment and Escape focus return",
+    "quiet: connection loss and reconnect",
+    "studio/chat: empty, loading, read failure, long fixture",
+    "studio/trace: empty, loading, read failure, long fixture",
+    "studio/memory: empty, loading, read failure, long fixture",
+    "studio/reflection: empty, loading, read failure, long fixture",
+    "studio/skills: empty, loading, read failure, long fixture",
+    "studio/evolution: empty, loading, read failure, long fixture",
+    "studio/settings: empty, loading, read failure, long fixture",
+    "studio: modal Tab containment and Escape focus return",
+    "studio: connection loss and reconnect"
+  ],
+  "errors": []
+}

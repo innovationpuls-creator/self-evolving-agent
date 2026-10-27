@@ -1,0 +1,16 @@
+{
+  "extends": ["../../biome.json"],
+  "files": {
+    "includes": [
+      "src/**/*.tsx",
+      "src/**/*.css",
+      "scripts/*.mjs",
+      "vite.config.ts",
+      "package.json",
+      "tsconfig.json",
+      "biome.json"
+    ]
+  },
+  "vcs": { "enabled": false },
+  "root": false
+}

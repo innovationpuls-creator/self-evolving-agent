@@ -18,6 +18,7 @@ export async function sessionRoutes(
   service: Pick<
     AgentService,
     | 'models'
+    | 'inputResources'
     | 'credentials'
     | 'list'
     | 'create'
@@ -61,6 +62,16 @@ export async function sessionRoutes(
   const match = /^\/api\/sessions\/([a-f0-9-]{36})(?:\/(prompt|stop|compact|branch|model|thinking|export))?$/.exec(
     route,
   );
+  const resources = /^\/api\/sessions\/([a-f0-9-]{36})\/input-resources$/.exec(route);
+  if (resources && req.method === 'GET') {
+    const kind = z.enum(['skills', 'files']).parse(url.searchParams.get('kind'));
+    const query = z
+      .string()
+      .max(4096)
+      .parse(url.searchParams.get('query') ?? '');
+    json(res, 200, await service.inputResources(resources[1]!, kind, query));
+    return true;
+  }
   if (match) {
     const id = match[1]!,
       action = match[2];
@@ -75,10 +86,13 @@ export async function sessionRoutes(
     if (req.method === 'POST') {
       if (action === 'prompt') {
         const x = z
-          .object({ text: z.string().min(1).max(200000) })
+          .object({
+            text: z.string().min(1).max(200000),
+            files: z.array(z.string().min(1).max(4096)).max(8).optional(),
+          })
           .strict()
           .parse(await body(req));
-        await service.prompt(id, x.text);
+        await service.prompt(id, x.text, x.files);
         json(res, 202, { ok: true });
         return true;
       }

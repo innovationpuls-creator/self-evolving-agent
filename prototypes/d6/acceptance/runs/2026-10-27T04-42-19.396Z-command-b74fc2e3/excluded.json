@@ -1,0 +1,1 @@
+{"classification":"harness no-op","reason":"runner intentionally closes child stdin; heredoc program was not forwarded; no tests executed","usedAsAcceptanceEvidence":false}

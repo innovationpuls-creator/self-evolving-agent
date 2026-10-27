@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Markdown } from '../../components/Markdown';
 import { readPosition, savePosition } from '../../app/view-state';
 import type { MemoryContent, MemoryView } from '../../../../host/memory/memory';
-import type { EvidenceReference } from '../diagnostics/DiagnosticsPanel';
+import { memoryFeedback } from '../../../../host/memory/memory-feedback';
+import type { EvidenceReference } from '../diagnostics/evidence';
 
 type Api = <T>(path: string, method?: string, data?: unknown) => Promise<T>;
 interface Catalog {
@@ -256,7 +257,8 @@ export function MemoryPanel({
       editingRef.current = false;
       setEditing(false);
       selected.current = value.id;
-      setNotice('');
+      setSelectedRevision(undefined);
+      setNotice(memoryFeedback(value).message);
       await loadDetail(value.id, true);
       await refresh();
     });
@@ -265,11 +267,13 @@ export function MemoryPanel({
     if (!current || !window.confirm('删除后不再用于当前检索，来源与修订历史仍会保留。删除这条记忆？')) return;
     void guard(async () => {
       const owner = generation.current;
-      await api(`/memory/${current.id}${suffix()}`, 'DELETE', {
+      const value = await api<MemoryView>(`/memory/${current.id}${suffix()}`, 'DELETE', {
         baseRevision: current.revision,
         reason: '用户在记忆管理中删除',
       });
       if (generation.current !== owner) return;
+      setSelectedRevision(undefined);
+      setNotice(memoryFeedback(value).message);
       await loadDetail(current.id, true);
       await refresh();
     });
@@ -549,6 +553,40 @@ export function MemoryPanel({
                       ? '历史修订仅供查看；编辑请先切换到当前版本。'
                       : '下方保留当前授权范围内的来源与修订历史。'}
                   </p>
+                )}
+                {viewed && (
+                  <section aria-label="认识来源">
+                    <h3>
+                      {historical
+                        ? '当时的认识与来源'
+                        : viewed.status === 'current'
+                          ? '当前认识与来源'
+                          : '历史认识与来源'}
+                    </h3>
+                    <p>
+                      {viewed.operation === 'create'
+                        ? '此修订新增'
+                        : `此修订${viewed.previousRevision ? `替代 #${viewed.previousRevision}` : '更新'}`}{' '}
+                      · {viewed.actor === 'agent' ? 'Agent' : viewed.actor === 'user' ? '用户' : '系统'} ·{' '}
+                      {new Date(viewed.created).toLocaleString('zh-CN')}
+                    </p>
+                    <p>依据：{viewed.reason}</p>
+                    {viewed.sources.length ? (
+                      viewed.sources.map((source) => (
+                        <p key={`${source.sessionId}:${source.entryId}`}>
+                          Session <code>{source.sessionId}</code> · Entry <code>{source.entryId}</code>{' '}
+                          <button type="button" onClick={() => onEvidence(source)}>
+                            查看执行证据
+                          </button>
+                        </p>
+                      ))
+                    ) : (
+                      <p>
+                        没有当前授权范围内的 Session / Entry 来源；
+                        {viewed.actor === 'user' ? '由用户手动维护。' : '不能据此补造执行证据。'}
+                      </p>
+                    )}
+                  </section>
                 )}
                 <details open={selectedRevision !== undefined}>
                   <summary>来源与修改历史 · {detail.history.length} 个修订</summary>

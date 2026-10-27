@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { EvolutionEvidence } from '../../../../host/evolution/evolution';
 import type { ReflectionJob } from '../../../../host/reflection/reflection-jobs';
 import type { ReflectionRecord } from '../../../../host/reflection/reflection-service';
-import type { EvidenceReference } from '../diagnostics/DiagnosticsPanel';
+import type { EvidenceTarget } from '../diagnostics/evidence';
 import { reflectionStatusLabels, useReflectionCatalog, type ReflectionApi } from './reflection-state';
 import './reflection.css';
 
@@ -23,7 +23,7 @@ function Evidence({
   onReflection,
 }: {
   value: EvolutionEvidence;
-  onEvidence?: (source: EvidenceReference) => void;
+  onEvidence?: (source: EvidenceTarget) => void;
   onMemory?: (id: string, revision?: number, project?: string) => void;
   onReflection?: (id: string) => void;
   onSkill?: (id: string, revision?: number, project?: string, knowledgeRevision?: string) => void;
@@ -71,11 +71,13 @@ function Evidence({
         </p>
       )}
       <div className="reflection-inline-actions">
-        {onEvidence && value.sessionId && value.entryId && (
+        {onEvidence && (value.sessionId || value.traceId) && (
           <button
             type="button"
             onClick={() => {
-              if (value.sessionId && value.entryId) onEvidence({ sessionId: value.sessionId, entryId: value.entryId });
+              if (value.sessionId)
+                onEvidence({ sessionId: value.sessionId, entryId: value.entryId, traceId: value.traceId });
+              else if (value.traceId) onEvidence({ traceId: value.traceId, entryId: value.entryId });
             }}
           >
             查看原始证据
@@ -166,7 +168,7 @@ export function ReflectionPanel({
   initialId?: string;
   onSuggestion?: (id: string) => void;
   onClose: () => void;
-  onEvidence?: (source: EvidenceReference) => void;
+  onEvidence?: (source: EvidenceTarget) => void;
   onMemory?: (id: string, revision?: number, project?: string) => void;
   onReflection?: (id: string) => void;
   onSkill?: (id: string, revision?: number, project?: string, knowledgeRevision?: string) => void;
@@ -175,26 +177,31 @@ export function ReflectionPanel({
     initialId || readPosition('reflection').scope === 'all' ? 'all' : session ? 'session' : 'all',
   );
   const sessionId = scope === 'session' ? session?.id : undefined;
-  const { catalog, loading, error, revision, refresh } = useReflectionCatalog(api, sessionId);
+  const [offset, setOffset] = useState(readPosition('reflection').offset ?? 0);
+  const { catalog, loading, error, revision, refresh } = useReflectionCatalog(api, sessionId, offset);
   const [selectedId, setSelectedId] = useState<string | undefined>(initialId ?? readPosition('reflection').id);
   const [detail, setDetail] = useState<Detail & { context: string }>();
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState('');
   const [operationError, setOperationError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [offset, setOffset] = useState(readPosition('reflection').offset ?? 0);
   const detailEpoch = useRef(0);
   const operationEpoch = useRef(0);
+  const environmentController = useRef<AbortController | undefined>(undefined);
+  const sourceController = useRef<AbortController | undefined>(undefined);
+  const [sourceDetail, setSourceDetail] = useState<{ context: string; job: ReflectionJob }>();
   const context = `${scope}:${session?.id ?? ''}:${selectedId ?? ''}`;
   const owner = useRef(context);
   if (owner.current !== context) {
     owner.current = context;
     detailEpoch.current++;
     operationEpoch.current++;
+    environmentController.current?.abort();
+    sourceController.current?.abort();
   }
   const jobs = [...(catalog?.jobs ?? [])].sort((a, b) => b.created - a.created || b.id.localeCompare(a.id));
   const selectedJob = jobs.find((job) => job.id === selectedId);
-  const recordId = selectedJob?.reflectionSessionId ? selectedJob.id : undefined;
+  const recordId = selectedJob ? (selectedJob.reflectionSessionId ? selectedJob.id : undefined) : selectedId;
 
   useEffect(() => {
     setSelectedId(initialId ?? readPosition('reflection').id);
@@ -210,12 +217,13 @@ export function ReflectionPanel({
   useEffect(() => {
     const generation = ++detailEpoch.current;
     const controller = new AbortController();
-    setDetail(undefined);
+    setDetail((current) => (current?.context === context ? current : undefined));
     setDetailError('');
     setDetailLoading(Boolean(recordId));
     if (recordId) {
       void api<Detail>(`/reflections/${recordId}`, 'GET', undefined, controller.signal)
         .then((value) => {
+          if (sessionId && value.record.sessionId !== sessionId) throw new Error('该反思不在当前会话范围内');
           if (generation === detailEpoch.current) setDetail({ ...value, context });
         })
         .catch((reason: unknown) => {
@@ -230,25 +238,30 @@ export function ReflectionPanel({
       detailEpoch.current++;
       controller.abort();
     };
-  }, [api, recordId, context, revision]);
+  }, [api, recordId, context, revision, sessionId]);
 
   useEffect(
     () => () => {
       operationEpoch.current++;
+      environmentController.current?.abort();
+      sourceController.current?.abort();
     },
     [],
   );
   useEffect(() => {
-    if (offset && offset >= jobs.length && !loading)
-      setOffset(Math.max(0, Math.floor((jobs.length - 1) / pageSize) * pageSize));
-  }, [offset, jobs.length, loading]);
+    if (catalog && offset && offset >= catalog.total && !loading)
+      setOffset(Math.max(0, Math.floor((catalog.total - 1) / pageSize) * pageSize));
+  }, [offset, catalog, loading]);
 
   const recheck = async () => {
     const generation = ++operationEpoch.current;
+    environmentController.current?.abort();
+    const controller = new AbortController();
+    environmentController.current = controller;
     setBusy(true);
     setOperationError('');
     try {
-      await api('/reflections/recheck', 'POST', {});
+      await api('/reflections/recheck', 'POST', {}, controller.signal);
       if (generation === operationEpoch.current) refresh();
     } catch (reason) {
       if (generation === operationEpoch.current)
@@ -260,6 +273,28 @@ export function ReflectionPanel({
   const currentDetail = detail?.context === context ? detail : undefined;
   const currentJob = currentDetail?.job ?? selectedJob;
   const record = currentDetail?.record;
+  const sources =
+    currentDetail?.job?.sources ?? (sourceDetail?.context === context ? sourceDetail.job.sources : undefined);
+  const loadSources = async () => {
+    if (!currentJob || sources) return;
+    sourceController.current?.abort();
+    const controller = new AbortController();
+    sourceController.current = controller;
+    const generation = detailEpoch.current;
+    try {
+      const value = await api<{ job: ReflectionJob }>(
+        `/reflections/jobs/${currentJob.id}`,
+        'GET',
+        undefined,
+        controller.signal,
+      );
+      if (!controller.signal.aborted && generation === detailEpoch.current)
+        setSourceDetail({ context, job: value.job });
+    } catch (reason) {
+      if (!controller.signal.aborted && generation === detailEpoch.current)
+        setDetailError(reason instanceof Error ? reason.message : '触发来源读取失败');
+    }
+  };
   return (
     <section className="reflection-panel">
       <header>
@@ -293,7 +328,7 @@ export function ReflectionPanel({
             <option value="all">全部会话</option>
           </select>
         </label>
-        <span>{jobs.length} 项反思</span>
+        <span>{catalog?.total ?? 0} 项反思</span>
       </div>
       {catalog && !catalog.availability.available && (
         <div className="reflection-availability" role="status">
@@ -313,7 +348,7 @@ export function ReflectionPanel({
               {loading ? '正在读取反思记录…' : '还没有反思记录。任务结束后的反思会显示在这里。'}
             </p>
           )}
-          {jobs.slice(offset, offset + pageSize).map((job) => {
+          {jobs.map((job) => {
             const item = catalog?.records.find((candidate) => candidate.jobId === job.id);
             return (
               <button
@@ -339,26 +374,26 @@ export function ReflectionPanel({
                         : '任务反思')}
                 </strong>
                 <small>
-                  {job.sources.length} 段执行记录{scope === 'all' ? ` · 会话 ${job.sessionId.slice(0, 8)}` : ''}
+                  {job.sourceCount} 段执行记录{scope === 'all' ? ` · 会话 ${job.sessionId.slice(0, 8)}` : ''}
                 </small>
               </button>
             );
           })}
-          {jobs.length > pageSize && (
+          {(catalog?.total ?? 0) > pageSize && (
             <div className="reflection-pagination">
               <button
                 type="button"
-                disabled={!offset}
+                disabled={!offset || loading}
                 onClick={() => setOffset((value) => Math.max(0, value - pageSize))}
               >
                 上一页
               </button>
               <small>
-                {Math.floor(offset / pageSize) + 1} / {Math.ceil(jobs.length / pageSize)}
+                {Math.floor(offset / pageSize) + 1} / {Math.ceil((catalog?.total ?? 0) / pageSize)}
               </small>
               <button
                 type="button"
-                disabled={offset + pageSize >= jobs.length}
+                disabled={loading || offset + pageSize >= (catalog?.total ?? 0)}
                 onClick={() => setOffset((value) => value + pageSize)}
               >
                 下一页
@@ -372,7 +407,7 @@ export function ReflectionPanel({
               ← 反思列表
             </button>
           )}
-          {selectedId && !selectedJob && !loading && (
+          {selectedId && !selectedJob && !currentDetail && !loading && !detailLoading && (
             <p className="notice" role="status">
               指定反思不在当前范围内，或来源已不可用。可切换到全部会话查看。
             </p>
@@ -407,7 +442,7 @@ export function ReflectionPanel({
                   {busy ? '检查中…' : '重新检查环境'}
                 </button>
               )}
-              {detailLoading && <p className="reflection-muted">正在读取反思详情…</p>}
+              {detailLoading && !record && <p className="reflection-muted">正在读取反思详情…</p>}
               {record && (
                 <>
                   <section className="reflection-content">
@@ -477,13 +512,22 @@ export function ReflectionPanel({
                   </details>
                 </>
               )}
-              <details className="reflection-evidence">
-                <summary>触发来源 · {currentJob.sources.length} 段执行记录</summary>
+              <details
+                className="reflection-evidence"
+                onToggle={(event) => {
+                  if (event.currentTarget.open) void loadSources();
+                  else sourceController.current?.abort();
+                }}
+              >
+                <summary>
+                  触发来源 · {sources?.length ?? ('sourceCount' in currentJob ? currentJob.sourceCount : 0)} 段执行记录
+                </summary>
                 <p>
                   来源会话 <code>{currentJob.sessionId}</code>
                 </p>
                 <ul>
-                  {currentJob.sources.map((source) => (
+                  {!sources && <li>展开后按需读取来源记录。</li>}
+                  {sources?.map((source) => (
                     <li key={source.markerEntryId}>
                       <p>
                         {date(source.settledAt)} ·{' '}

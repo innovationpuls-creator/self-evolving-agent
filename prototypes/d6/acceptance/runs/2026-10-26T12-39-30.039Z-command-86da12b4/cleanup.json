@@ -1,0 +1,9 @@
+{
+  "removed": [
+    "workspace",
+    "tmp"
+  ],
+  "exportedTo": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-39-30.039Z-command-86da12b4",
+  "reason": "task-created snapshots and temporary product data only; original evidence and receipts preserved",
+  "priorRunStatus": "see original receipt; cleanup is not a test rerun"
+}

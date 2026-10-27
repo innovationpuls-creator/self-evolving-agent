@@ -1,0 +1,1516 @@
+[
+  {
+    "width": 1440,
+    "path": "/api/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076196640,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "mechanism",
+          "provider": "faux"
+        }
+      ]
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076196577,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "334b702d-f985-4808-91c8-d3ec3f69610f",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "用于观察环境等待和恢复的普通任务。",
+        "updated": 1793076190080,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "169247af-9bf2-437e-a6e6-a9efabb29e3a",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "检查第 1 次隔离任务。",
+        "updated": 1793076189814,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1253
+      },
+      {
+        "id": "3ad8dc5e-cf88-414e-a829-64b43a0dedf1",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/beta",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "新会话",
+        "updated": 1793076168728,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076196640,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+          "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+          "created": 1793076196638,
+          "updated": 1793076196640,
+          "scheduledAt": 1793076196577,
+          "status": "waiting_user",
+          "error": "受控机制测试：执行环境不可用",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 127,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": false,
+        "reason": "受控机制测试：执行环境不可用",
+        "checkedAt": 1793076196531
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/recheck",
+    "method": "POST",
+    "status": 200,
+    "body": {},
+    "response": {
+      "ok": true,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076197084
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197084,
+        "runId": null,
+        "status": "pending",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197223,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "jobId": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "running",
+        "created": 1793076197223,
+        "updated": 1793076197223,
+        "summary": "",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [
+          {
+            "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+            "entryId": "d3643482",
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7"
+          }
+        ],
+        "changes": []
+      },
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197223,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197223,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/jobs/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197387,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 1440,
+    "path": "/api/reflections/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "jobId": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076197223,
+        "updated": 1793076197387,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197387,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/358294cf-025f-437e-b8c2-3c3934e8d974",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "record": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "jobId": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076197223,
+        "updated": 1793076197387,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+        "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076196577,
+        "created": 1793076196638,
+        "updated": 1793076197387,
+        "runId": "f8038d74-7730-4a83-8d2c-f483373155f2",
+        "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "d3643482",
+            "settledAt": 1793076196577,
+            "traceId": "2e2dc1e2-4065-4df0-b11e-a30326a1fba7",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "358294cf-025f-437e-b8c2-3c3934e8d974",
+          "sessionId": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+          "created": 1793076196638,
+          "updated": 1793076197387,
+          "scheduledAt": 1793076196577,
+          "status": "succeeded",
+          "reflectionSessionId": "ae96269c-993e-4e0d-9b91-cd7760de8623",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 127,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076197084
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076197925,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "mechanism",
+          "provider": "faux"
+        }
+      ]
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076197864,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076196577,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "334b702d-f985-4808-91c8-d3ec3f69610f",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "用于观察环境等待和恢复的普通任务。",
+        "updated": 1793076190080,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "169247af-9bf2-437e-a6e6-a9efabb29e3a",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "检查第 1 次隔离任务。",
+        "updated": 1793076189814,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1253
+      },
+      {
+        "id": "3ad8dc5e-cf88-414e-a829-64b43a0dedf1",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/beta",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "新会话",
+        "updated": 1793076168728,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      }
+    ]
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076197925,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+          "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+          "created": 1793076197923,
+          "updated": 1793076197925,
+          "scheduledAt": 1793076197864,
+          "status": "waiting_user",
+          "error": "受控机制测试：执行环境不可用",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 128,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": false,
+        "reason": "受控机制测试：执行环境不可用",
+        "checkedAt": 1793076197824
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/recheck",
+    "method": "POST",
+    "status": 200,
+    "body": {},
+    "response": {
+      "ok": true,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076198306
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198308,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "jobId": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "running",
+        "created": 1793076198308,
+        "updated": 1793076198308,
+        "summary": "",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [
+          {
+            "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+            "entryId": "e5f59b79",
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339"
+          }
+        ],
+        "changes": []
+      },
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198308,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198308,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198308,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "jobId": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "running",
+        "created": 1793076198308,
+        "updated": 1793076198308,
+        "summary": "",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [
+          {
+            "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+            "entryId": "e5f59b79",
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339"
+          }
+        ],
+        "changes": []
+      },
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198308,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/jobs/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198511,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 850,
+    "path": "/api/reflections/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "jobId": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076198308,
+        "updated": 1793076198511,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198511,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "record": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "jobId": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076198308,
+        "updated": 1793076198511,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+        "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076197864,
+        "created": 1793076197923,
+        "updated": 1793076198511,
+        "runId": "39ed8e6e-2823-4b32-987d-7be4e99f99d0",
+        "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "e5f59b79",
+            "settledAt": 1793076197864,
+            "traceId": "77707c43-daf0-403f-b8f0-6a8432447339",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "544f6f8f-cb81-4cd9-8ae7-f275124168c2",
+          "sessionId": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+          "created": 1793076197923,
+          "updated": 1793076198511,
+          "scheduledAt": 1793076197864,
+          "status": "succeeded",
+          "reflectionSessionId": "593b6579-e584-4746-8af1-5ac22686b7f0",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 128,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076198306
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199065,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "mechanism",
+          "provider": "faux"
+        }
+      ]
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076198999,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "d1002b9f-e965-4f50-a240-f0d3b7ab1405",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076197864,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "e3cc765a-a751-40ef-a572-3c3d9fe2cd55",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "重复环境生命周期机制验证。",
+        "updated": 1793076196577,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "334b702d-f985-4808-91c8-d3ec3f69610f",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "用于观察环境等待和恢复的普通任务。",
+        "updated": 1793076190080,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "169247af-9bf2-437e-a6e6-a9efabb29e3a",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "检查第 1 次隔离任务。",
+        "updated": 1793076189814,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1253
+      },
+      {
+        "id": "3ad8dc5e-cf88-414e-a829-64b43a0dedf1",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/beta",
+        "provider": "faux",
+        "model": "mechanism",
+        "title": "新会话",
+        "updated": 1793076168728,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199065,
+        "runId": null,
+        "status": "waiting_user",
+        "error": "受控机制测试：执行环境不可用",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+          "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+          "created": 1793076199062,
+          "updated": 1793076199065,
+          "scheduledAt": 1793076198999,
+          "status": "waiting_user",
+          "error": "受控机制测试：执行环境不可用",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 129,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": false,
+        "reason": "受控机制测试：执行环境不可用",
+        "checkedAt": 1793076198957
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/recheck",
+    "method": "POST",
+    "status": 200,
+    "body": {},
+    "response": {
+      "ok": true,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076199439
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199440,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "jobId": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "running",
+        "created": 1793076199441,
+        "updated": 1793076199441,
+        "summary": "",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [
+          {
+            "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+            "entryId": "a859bf32",
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc"
+          }
+        ],
+        "changes": []
+      },
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199440,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199440,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199440,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "jobId": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "running",
+        "created": 1793076199441,
+        "updated": 1793076199441,
+        "summary": "",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [
+          {
+            "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+            "entryId": "a859bf32",
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc"
+          }
+        ],
+        "changes": []
+      },
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199440,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "running",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/jobs/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199647,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/reflections/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "record": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "jobId": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076199441,
+        "updated": 1793076199647,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199647,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections/0039c379-0b91-4a65-a116-923e55c13f5d",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "record": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "jobId": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "status": "succeeded",
+        "created": 1793076199441,
+        "updated": 1793076199647,
+        "summary": "环境恢复后已完成检查，本次没有新增发现。",
+        "findings": [],
+        "uncertainties": [],
+        "evidence": [],
+        "changes": []
+      },
+      "job": {
+        "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+        "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-42-46.621Z-command-e6f75887/workspace/prototypes/d6/reflection-lifecycle/.runtime/controlled-1793076168668/alpha",
+        "provider": "faux",
+        "model": "mechanism",
+        "scheduledAt": 1793076198999,
+        "created": 1793076199062,
+        "updated": 1793076199647,
+        "runId": "70e18f06-a1c5-48e7-8d6d-e572d53d2cb5",
+        "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+        "status": "succeeded",
+        "sources": [
+          {
+            "markerEntryId": "a859bf32",
+            "settledAt": 1793076198999,
+            "traceId": "0004a593-2275-458b-9b85-84e2c63c5bdc",
+            "status": "ended"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "path": "/reflections?view=status",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "jobs": [
+        {
+          "id": "0039c379-0b91-4a65-a116-923e55c13f5d",
+          "sessionId": "917a14ee-e6d6-408e-94ee-bba8cd487d03",
+          "created": 1793076199062,
+          "updated": 1793076199647,
+          "scheduledAt": 1793076198999,
+          "status": "succeeded",
+          "reflectionSessionId": "ed84d92f-9bf1-43a7-8790-4f1fea869831",
+          "sourceCount": 1
+        }
+      ],
+      "records": [],
+      "total": 129,
+      "limit": 1,
+      "offset": 0,
+      "pending": 0,
+      "availability": {
+        "available": true,
+        "checkedAt": 1793076199439
+      }
+    }
+  }
+]

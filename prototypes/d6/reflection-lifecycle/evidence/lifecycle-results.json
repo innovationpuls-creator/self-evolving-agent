@@ -1,0 +1,44 @@
+[
+  {
+    "name": "等待环境→重新检查→真实运行→同一Job详情自动出现结论",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "mode": "controlled actual Host availability and scheduling",
+      "before": "running",
+      "after": "succeeded",
+      "sameJob": true,
+      "jobsBefore": 133,
+      "jobsAfter": 133,
+      "checksDoNotCreateJobs": true
+    }
+  },
+  {
+    "name": "等待环境→重新检查→真实运行→同一Job详情自动出现结论",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "mode": "controlled actual Host availability and scheduling",
+      "before": "running",
+      "after": "succeeded",
+      "sameJob": true,
+      "jobsBefore": 134,
+      "jobsAfter": 134,
+      "checksDoNotCreateJobs": true
+    }
+  },
+  {
+    "name": "等待环境→重新检查→真实运行→同一Job详情自动出现结论",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "mode": "controlled actual Host availability and scheduling",
+      "before": "running",
+      "after": "succeeded",
+      "sameJob": true,
+      "jobsBefore": 135,
+      "jobsAfter": 135,
+      "checksDoNotCreateJobs": true
+    }
+  }
+]

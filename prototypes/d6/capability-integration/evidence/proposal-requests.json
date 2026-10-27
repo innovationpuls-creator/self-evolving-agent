@@ -1,0 +1,4190 @@
+[
+  {
+    "width": 390,
+    "path": "/api/suggestions?limit=20&offset=0",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "items": [
+        {
+          "title": "能力整合分页验收 1793011456474-25",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f562cd59-3eda-4778-b316-3d5cacea2b9a",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-24",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "417b1b5c-c1b0-4eaf-846f-57564b4acc4d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-23",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "c8cc858e-2278-4f84-ab49-e3871ce3939e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-21",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "16d998ac-240a-4166-9051-f69087db5f51",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-22",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0d584408-6fd0-4070-b9ad-36aea1a71ad9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-20",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9bebd27a-0d69-454e-81ee-41d667af8fb9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-19",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "4fbf0f18-1a00-4a2b-a4ca-bc85b175c48b",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-18",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "170d6d20-15a5-490c-861a-1643a8d1695f",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-16",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "a3102edf-c137-4586-b88c-f1c558e4514c",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-17",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "7f3eeb2f-84c5-4a71-9345-e710380786f1",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-14",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0a88e23-3d15-48d2-b2f1-88367b426d34",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-13",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0026d06-3e39-4721-bbfc-b530a65b38bd",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-15",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9ed6d8af-3c69-4bf1-a719-d1039fb8a39d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-12",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee818e59-1741-4c86-ab76-35c2d234d9d2",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-11",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee395eb6-0030-4404-b904-720f9f0cb19e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-10",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "5fe8f36a-d3cc-4bf5-9cca-125102c64ede",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-9",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "3b6bae39-5dbe-41a7-b09f-91aa98d471de",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456468,
+          "updated": 1793011456468
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-7",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "579c070e-b1e5-49f3-aeb4-74ce43d69465",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-8",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0305ea6e-9489-4ff0-9b1f-05c390bd13f6",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        },
+        {
+          "title": "能力整合分页验收 1793011456466-6",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "45b122a9-2ce8-42e1-96f6-6e3aa2eed40c",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456466,
+          "updated": 1793011456466
+        }
+      ],
+      "total": 53,
+      "highPriorityPending": 0
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/activities",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "b4a92822-26cb-4697-981d-713e6d3f7d36",
+        "sessionId": "e397cb72-0488-4bd4-a85a-dc19bfc255ee",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574834,
+        "updated": 1793011574999,
+        "releases": []
+      },
+      {
+        "id": "6afa16ba-019d-4c6a-93b7-d6445a18d513",
+        "sessionId": "fc818770-dfd6-48f8-a761-9bb913cfd776",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574268,
+        "updated": 1793011574430,
+        "releases": []
+      },
+      {
+        "id": "583f20ec-da4f-4259-854e-6f91f6931c8e",
+        "sessionId": "71a3123b-8c41-4669-aa84-bd73ad5f1113",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011573595,
+        "updated": 1793011573780,
+        "releases": []
+      },
+      {
+        "id": "27b585eb-6954-4315-9f69-40608d1a3c7e",
+        "sessionId": "61803b3f-25f3-4834-ab28-e51365606dae",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011571921,
+        "updated": 1793011573409,
+        "releases": [
+          {
+            "skillId": "44614162-3a59-4716-bf04-bdc686a52f3b",
+            "version": "4fc64e6d-e22c-469b-8d42-a4ff8388a5fa",
+            "operationId": "44d3ffab-db82-4a3a-9596-a0bb32923ea1"
+          },
+          {
+            "skillId": "95f2634d-5253-4b4b-8962-ed33f2c682da",
+            "version": "88ebb43c-3823-48a6-afd2-785163513a7f",
+            "operationId": "2a43f9df-74c4-43ae-a694-e3ac8011bf37"
+          }
+        ],
+        "grant": {
+          "id": "e85e8ff6-6cb2-4a7d-982b-120df2de5df8",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011572282,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4snbw",
+              "name": "partial-good-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-good-mvp4snbw"
+            },
+            {
+              "key": "partial-fail-mvp4snbw",
+              "name": "partial-fail-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-fail-mvp4snbw"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "c3d4cb9a-652d-4425-834a-063dafeaf9f3",
+        "sessionId": "ba9d3a9a-1beb-4695-b59b-ed3a03e58a5e",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516898,
+        "updated": 1793011517074,
+        "releases": []
+      },
+      {
+        "id": "62a828fe-cf1d-400f-abe7-10749db8b3e4",
+        "sessionId": "121071c8-7234-443a-88ae-586ff49253b5",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516517,
+        "updated": 1793011516716,
+        "releases": []
+      },
+      {
+        "id": "ba3acf85-61f3-43ba-90a4-762c1e6cad58",
+        "sessionId": "e3e842d3-83a2-43ea-8031-ece10a8bc4a1",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516043,
+        "updated": 1793011516207,
+        "releases": []
+      },
+      {
+        "id": "7aea0d5e-f092-4fcb-89ec-9b5f08684491",
+        "sessionId": "ee3034da-fdf5-4ac4-8ef6-4002d26115d3",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011514738,
+        "updated": 1793011516027,
+        "releases": [
+          {
+            "skillId": "4a393eec-98e4-49b0-9d44-8081fd368f45",
+            "version": "3f2bf13a-f64b-4a1e-bb4e-379e577069e1",
+            "operationId": "d0cbd4b6-2a92-4955-adfa-019203c66569"
+          },
+          {
+            "skillId": "0dd03d6e-ee70-4688-abab-2734c8ab955f",
+            "version": "77d432b1-b2d2-41ce-87b9-7bdac85fb568",
+            "operationId": "70ff7cce-3109-422b-8eb3-a4c06e1caad0"
+          }
+        ],
+        "grant": {
+          "id": "ce5da06e-69d3-4c4d-8868-c06a0c10e551",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011515109,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4rf7b",
+              "name": "partial-good-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-good-mvp4rf7b"
+            },
+            {
+              "key": "partial-fail-mvp4rf7b",
+              "name": "partial-fail-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-fail-mvp4rf7b"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "f4758fcd-d4dc-4168-b10d-a04509951279",
+        "sessionId": "4b4354a0-e167-4071-a829-c16634be12a8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011397511,
+        "updated": 1793011398614,
+        "releases": [
+          {
+            "skillId": "b496a27f-2b05-439b-b02d-2366eab269ac",
+            "version": "b3612abd-8950-4307-b3c2-34bb23d64b65",
+            "operationId": "d768d6a3-ddd0-4969-9fa4-d170164fa3d3"
+          }
+        ],
+        "grant": {
+          "id": "6404a8fe-9ef2-45eb-9b58-296175e9984e",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011397920,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4owtj",
+              "name": "accepted-echo-390-mvp4owtj",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f4758fcd-d4dc-4168-b10d-a04509951279/accepted-echo-390-mvp4owtj"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4owtj",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4owtj",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0",
+        "sessionId": "7dcbfae8-a3f9-42f0-9f49-d4bf50a2e63b",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011396031,
+        "updated": 1793011397047,
+        "releases": [
+          {
+            "skillId": "84218f9d-6cbe-4315-9d6f-db144d64d8fa",
+            "version": "a10c6aa8-ea06-46a7-bb2a-305d05301f45",
+            "operationId": "af3c67b9-05eb-45b9-800c-ce77d01e4aca"
+          }
+        ],
+        "grant": {
+          "id": "f473e60c-b07f-451c-9446-7b8bd05dd35a",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011396420,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4ovnu",
+              "name": "accepted-echo-850-mvp4ovnu",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0/accepted-echo-850-mvp4ovnu"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4ovnu",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4ovnu",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "bd038aa4-93e8-4711-9086-97f88864b648",
+        "sessionId": "6a4a61c0-4984-49a5-8d88-f1bd3e5cf582",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011392710,
+        "updated": 1793011393709,
+        "releases": [
+          {
+            "skillId": "d94a0c46-bec9-42a5-b2b4-3ee7181af2c2",
+            "version": "5c234d4c-b791-42bd-a815-276a37357b7f",
+            "operationId": "fa1a327c-e77f-4cb5-8132-955c71ad3b5e"
+          }
+        ],
+        "grant": {
+          "id": "5ca2e89a-d04b-47f2-9480-17b58c8b5e52",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011393119,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4ot47",
+              "name": "accepted-echo-1440-mvp4ot47",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/bd038aa4-93e8-4711-9086-97f88864b648/accepted-echo-1440-mvp4ot47"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4ot47",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4ot47",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "68ebf7fe-43c4-47f1-b346-996f7e555408",
+        "sessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011387837,
+        "updated": 1793011387837,
+        "releases": []
+      },
+      {
+        "id": "2152ba99-a0e9-41f1-92fe-14c42f47e1b6",
+        "sessionId": "d8b7dbfd-4138-437b-8e70-2b0bf0672ac8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "05635f6b-c44b-45bb-a0f5-ad785c0015b4",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011383301,
+        "updated": 1793011383301,
+        "releases": []
+      },
+      {
+        "id": "cb5147af-5c90-4cac-8181-02d3398891e2",
+        "sessionId": "2cb23475-d5ee-43c4-99b1-a830630b90d4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011180535,
+        "updated": 1793011181422,
+        "releases": [
+          {
+            "skillId": "ae88c4b2-a432-4048-9d46-ea2784d782b1",
+            "version": "c68a2a9c-9d2c-4d46-ae70-9e1358d0ded5",
+            "operationId": "308f92b5-5582-45c2-af4e-27632fc62175"
+          }
+        ],
+        "grant": {
+          "id": "680b2deb-9870-462f-b495-c694657b76c9",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011180899,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4k9dm",
+              "name": "accepted-echo-390-mvp4k9dm",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/cb5147af-5c90-4cac-8181-02d3398891e2/accepted-echo-390-mvp4k9dm"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4k9dm",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4k9dm",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "c5ec9426-4ba7-45a5-9b6d-4b487f25d14a",
+        "sessionId": "8568e146-9ab2-41d7-8b99-c423005cc874",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011179161,
+        "updated": 1793011180082,
+        "releases": [
+          {
+            "skillId": "b5744a56-abfa-41a5-bd5a-3030a28e7173",
+            "version": "f262b759-1381-41aa-945a-2d7da269e85e",
+            "operationId": "31e019bb-3501-43b2-8936-4da6bbd07de2"
+          }
+        ],
+        "grant": {
+          "id": "17558e4f-22fa-4c1d-9081-3e2d497fafcb",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011179586,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4k8c6",
+              "name": "accepted-echo-850-mvp4k8c6",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/c5ec9426-4ba7-45a5-9b6d-4b487f25d14a/accepted-echo-850-mvp4k8c6"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4k8c6",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4k8c6",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "0c2b206c-5fc2-4a03-8c9d-2cc388e053d6",
+        "sessionId": "83c8c8b4-9bc0-453d-88cf-337e18470ccf",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011175928,
+        "updated": 1793011176877,
+        "releases": [
+          {
+            "skillId": "75da0df3-0fff-4ba3-8b43-07c71718354a",
+            "version": "36d7bdba-5334-4242-82ce-f7c4f64285e3",
+            "operationId": "412b164f-efe2-4215-a587-50f584b5bd16"
+          }
+        ],
+        "grant": {
+          "id": "c1401130-b8b1-4340-abc4-09146bf873d1",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011176365,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4k5v9",
+              "name": "accepted-echo-1440-mvp4k5v9",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/0c2b206c-5fc2-4a03-8c9d-2cc388e053d6/accepted-echo-1440-mvp4k5v9"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4k5v9",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4k5v9",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "10282275-5076-49aa-b12e-91274bd49f65",
+        "sessionId": "a6082663-98cf-4947-b629-27307b24b080",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011141572,
+        "updated": 1793011142459,
+        "releases": [
+          {
+            "skillId": "ff091e0a-8bb5-4030-b188-26d9cbdd651c",
+            "version": "1bd86a95-9f26-4aff-bd54-eb67e3f013b7",
+            "operationId": "0d8b1353-d978-4c41-8bd8-844e3fbd9352"
+          }
+        ],
+        "grant": {
+          "id": "815e9955-4935-401d-a2d9-2cab777fc42f",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011141988,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4jfc0",
+              "name": "accepted-echo-1440-mvp4jfc0",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/10282275-5076-49aa-b12e-91274bd49f65/accepted-echo-1440-mvp4jfc0"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4jfc0",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4jfc0",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "3e6c0c13-414f-4b7e-9f48-211cee57d965",
+        "sessionId": "c82be12b-b27a-4b1a-ad7c-fbd637d71502",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "d9d5fedb-2016-4349-8eb2-50297dc4f777",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011002112,
+        "updated": 1793011002112,
+        "releases": []
+      },
+      {
+        "id": "f3ce66e1-503b-48d3-8902-1871560042db",
+        "sessionId": "1fcb7444-918d-4226-a330-2cdb2b8b1a23",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "5c73c1e5-8571-421b-9272-394c0eaaab68",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010998392,
+        "updated": 1793010998392,
+        "releases": []
+      },
+      {
+        "id": "c8c96727-9dff-4819-8b1a-f9c7c38dda2f",
+        "sessionId": "0730b6d7-05dc-47d8-b34e-b9cddc5ef0df",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "cb954af4-9ee0-4b9d-919f-3fdf7ec5184a",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010994519,
+        "updated": 1793010994519,
+        "releases": []
+      },
+      {
+        "id": "e6236e2d-d8e0-4d27-8177-f940607d1500",
+        "sessionId": "847a083b-a804-4cd3-a21b-26b9ff939957",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "a527f6e3-be37-49ca-8c92-0cfe9968a74c",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010976343,
+        "updated": 1793010976343,
+        "releases": []
+      },
+      {
+        "id": "66521a7d-33c0-4601-aea7-a2e8ee2c04b4",
+        "sessionId": "e94059b5-20da-4a94-abf3-6f7925371779",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "4ca17f96-d442-4cb4-a8fa-ee93ea1974dd",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010915048,
+        "updated": 1793010915048,
+        "releases": []
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "e397cb72-0488-4bd4-a85a-dc19bfc255ee",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 390",
+        "updated": 1793011574835,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "fc818770-dfd6-48f8-a761-9bb913cfd776",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 850",
+        "updated": 1793011574269,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "71a3123b-8c41-4669-aa84-bd73ad5f1113",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 1440",
+        "updated": 1793011573596,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "61803b3f-25f3-4834-ab28-e51365606dae",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "updated": 1793011572707,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 297
+      },
+      {
+        "id": "ba9d3a9a-1beb-4695-b59b-ed3a03e58a5e",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 390",
+        "updated": 1793011516900,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "121071c8-7234-443a-88ae-586ff49253b5",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 850",
+        "updated": 1793011516518,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "e3e842d3-83a2-43ea-8031-ece10a8bc4a1",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 1440",
+        "updated": 1793011516047,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "ee3034da-fdf5-4ac4-8ef6-4002d26115d3",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "updated": 1793011515500,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 307
+      },
+      {
+        "id": "4b4354a0-e167-4071-a829-c16634be12a8",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "updated": 1793011398201,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 186
+      },
+      {
+        "id": "7dcbfae8-a3f9-42f0-9f49-d4bf50a2e63b",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "updated": 1793011396705,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 194
+      },
+      {
+        "id": "6a4a61c0-4984-49a5-8d88-f1bd3e5cf582",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011393387,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 189
+      },
+      {
+        "id": "b0701620-0ac3-4dc6-ae41-42e864390bc4",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "保留能力变更的精确来源",
+        "updated": 1793011387838,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "d8b7dbfd-4138-437b-8e70-2b0bf0672ac8",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 01",
+        "updated": 1793011383302,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "149ab0a8-fe6f-4c9c-bc37-867a64cc0bb7",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/beta",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334181,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "81e033ba-30da-4525-acb4-50a43e5f03cc",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334161,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "e7748c7b-8f22-4c42-8fff-4fc8a16b5382",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334138,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "2cb23475-d5ee-43c4-99b1-a830630b90d4",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "updated": 1793011181144,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 194
+      },
+      {
+        "id": "8568e146-9ab2-41d7-8b99-c423005cc874",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "updated": 1793011179837,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 193
+      },
+      {
+        "id": "83c8c8b4-9bc0-453d-88cf-337e18470ccf",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011176627,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 201
+      },
+      {
+        "id": "a6082663-98cf-4947-b629-27307b24b080",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011142239,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 201
+      },
+      {
+        "id": "c82be12b-b27a-4b1a-ad7c-fbd637d71502",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 02",
+        "updated": 1793011002114,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "1fcb7444-918d-4226-a330-2cdb2b8b1a23",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 03",
+        "updated": 1793010998394,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "0730b6d7-05dc-47d8-b34e-b9cddc5ef0df",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 04",
+        "updated": 1793010994519,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "847a083b-a804-4cd3-a21b-26b9ff939957",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 05",
+        "updated": 1793010976344,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "e94059b5-20da-4a94-abf3-6f7925371779",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 06",
+        "updated": 1793010915049,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "核对当前项目的文本回声能力，保留实际工具返回。",
+        "updated": 1793010610740,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 96
+      },
+      {
+        "id": "a8785f49-cfad-424a-9a6c-57163c36529a",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/beta",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793010610376,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "093c0bbe-f5e6-4eaf-8d3c-655cfdfd1a39",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793010610342,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 23
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "capability-controlled",
+          "provider": "faux"
+        }
+      ]
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions?limit=20&offset=0",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "items": [
+        {
+          "title": "能力整合分页验收 1793011456474-25",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f562cd59-3eda-4778-b316-3d5cacea2b9a",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-24",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "417b1b5c-c1b0-4eaf-846f-57564b4acc4d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-23",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "c8cc858e-2278-4f84-ab49-e3871ce3939e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-21",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "16d998ac-240a-4166-9051-f69087db5f51",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-22",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0d584408-6fd0-4070-b9ad-36aea1a71ad9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-20",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9bebd27a-0d69-454e-81ee-41d667af8fb9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-19",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "4fbf0f18-1a00-4a2b-a4ca-bc85b175c48b",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-18",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "170d6d20-15a5-490c-861a-1643a8d1695f",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-16",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "a3102edf-c137-4586-b88c-f1c558e4514c",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-17",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "7f3eeb2f-84c5-4a71-9345-e710380786f1",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-14",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0a88e23-3d15-48d2-b2f1-88367b426d34",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-13",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0026d06-3e39-4721-bbfc-b530a65b38bd",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-15",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9ed6d8af-3c69-4bf1-a719-d1039fb8a39d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-12",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee818e59-1741-4c86-ab76-35c2d234d9d2",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-11",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee395eb6-0030-4404-b904-720f9f0cb19e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-10",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "5fe8f36a-d3cc-4bf5-9cca-125102c64ede",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-9",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "3b6bae39-5dbe-41a7-b09f-91aa98d471de",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456468,
+          "updated": 1793011456468
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-7",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "579c070e-b1e5-49f3-aeb4-74ce43d69465",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-8",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0305ea6e-9489-4ff0-9b1f-05c390bd13f6",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        },
+        {
+          "title": "能力整合分页验收 1793011456466-6",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "45b122a9-2ce8-42e1-96f6-6e3aa2eed40c",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456466,
+          "updated": 1793011456466
+        }
+      ],
+      "total": 53,
+      "highPriorityPending": 0
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/activities",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "b4a92822-26cb-4697-981d-713e6d3f7d36",
+        "sessionId": "e397cb72-0488-4bd4-a85a-dc19bfc255ee",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574834,
+        "updated": 1793011574999,
+        "releases": []
+      },
+      {
+        "id": "6afa16ba-019d-4c6a-93b7-d6445a18d513",
+        "sessionId": "fc818770-dfd6-48f8-a761-9bb913cfd776",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574268,
+        "updated": 1793011574430,
+        "releases": []
+      },
+      {
+        "id": "583f20ec-da4f-4259-854e-6f91f6931c8e",
+        "sessionId": "71a3123b-8c41-4669-aa84-bd73ad5f1113",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011573595,
+        "updated": 1793011573780,
+        "releases": []
+      },
+      {
+        "id": "27b585eb-6954-4315-9f69-40608d1a3c7e",
+        "sessionId": "61803b3f-25f3-4834-ab28-e51365606dae",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011571921,
+        "updated": 1793011573409,
+        "releases": [
+          {
+            "skillId": "44614162-3a59-4716-bf04-bdc686a52f3b",
+            "version": "4fc64e6d-e22c-469b-8d42-a4ff8388a5fa",
+            "operationId": "44d3ffab-db82-4a3a-9596-a0bb32923ea1"
+          },
+          {
+            "skillId": "95f2634d-5253-4b4b-8962-ed33f2c682da",
+            "version": "88ebb43c-3823-48a6-afd2-785163513a7f",
+            "operationId": "2a43f9df-74c4-43ae-a694-e3ac8011bf37"
+          }
+        ],
+        "grant": {
+          "id": "e85e8ff6-6cb2-4a7d-982b-120df2de5df8",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011572282,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4snbw",
+              "name": "partial-good-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-good-mvp4snbw"
+            },
+            {
+              "key": "partial-fail-mvp4snbw",
+              "name": "partial-fail-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-fail-mvp4snbw"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "c3d4cb9a-652d-4425-834a-063dafeaf9f3",
+        "sessionId": "ba9d3a9a-1beb-4695-b59b-ed3a03e58a5e",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516898,
+        "updated": 1793011517074,
+        "releases": []
+      },
+      {
+        "id": "62a828fe-cf1d-400f-abe7-10749db8b3e4",
+        "sessionId": "121071c8-7234-443a-88ae-586ff49253b5",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516517,
+        "updated": 1793011516716,
+        "releases": []
+      },
+      {
+        "id": "ba3acf85-61f3-43ba-90a4-762c1e6cad58",
+        "sessionId": "e3e842d3-83a2-43ea-8031-ece10a8bc4a1",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516043,
+        "updated": 1793011516207,
+        "releases": []
+      },
+      {
+        "id": "7aea0d5e-f092-4fcb-89ec-9b5f08684491",
+        "sessionId": "ee3034da-fdf5-4ac4-8ef6-4002d26115d3",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011514738,
+        "updated": 1793011516027,
+        "releases": [
+          {
+            "skillId": "4a393eec-98e4-49b0-9d44-8081fd368f45",
+            "version": "3f2bf13a-f64b-4a1e-bb4e-379e577069e1",
+            "operationId": "d0cbd4b6-2a92-4955-adfa-019203c66569"
+          },
+          {
+            "skillId": "0dd03d6e-ee70-4688-abab-2734c8ab955f",
+            "version": "77d432b1-b2d2-41ce-87b9-7bdac85fb568",
+            "operationId": "70ff7cce-3109-422b-8eb3-a4c06e1caad0"
+          }
+        ],
+        "grant": {
+          "id": "ce5da06e-69d3-4c4d-8868-c06a0c10e551",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011515109,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4rf7b",
+              "name": "partial-good-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-good-mvp4rf7b"
+            },
+            {
+              "key": "partial-fail-mvp4rf7b",
+              "name": "partial-fail-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-fail-mvp4rf7b"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "f4758fcd-d4dc-4168-b10d-a04509951279",
+        "sessionId": "4b4354a0-e167-4071-a829-c16634be12a8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011397511,
+        "updated": 1793011398614,
+        "releases": [
+          {
+            "skillId": "b496a27f-2b05-439b-b02d-2366eab269ac",
+            "version": "b3612abd-8950-4307-b3c2-34bb23d64b65",
+            "operationId": "d768d6a3-ddd0-4969-9fa4-d170164fa3d3"
+          }
+        ],
+        "grant": {
+          "id": "6404a8fe-9ef2-45eb-9b58-296175e9984e",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011397920,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4owtj",
+              "name": "accepted-echo-390-mvp4owtj",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f4758fcd-d4dc-4168-b10d-a04509951279/accepted-echo-390-mvp4owtj"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4owtj",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4owtj",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0",
+        "sessionId": "7dcbfae8-a3f9-42f0-9f49-d4bf50a2e63b",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011396031,
+        "updated": 1793011397047,
+        "releases": [
+          {
+            "skillId": "84218f9d-6cbe-4315-9d6f-db144d64d8fa",
+            "version": "a10c6aa8-ea06-46a7-bb2a-305d05301f45",
+            "operationId": "af3c67b9-05eb-45b9-800c-ce77d01e4aca"
+          }
+        ],
+        "grant": {
+          "id": "f473e60c-b07f-451c-9446-7b8bd05dd35a",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011396420,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4ovnu",
+              "name": "accepted-echo-850-mvp4ovnu",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0/accepted-echo-850-mvp4ovnu"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4ovnu",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4ovnu",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "bd038aa4-93e8-4711-9086-97f88864b648",
+        "sessionId": "6a4a61c0-4984-49a5-8d88-f1bd3e5cf582",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011392710,
+        "updated": 1793011393709,
+        "releases": [
+          {
+            "skillId": "d94a0c46-bec9-42a5-b2b4-3ee7181af2c2",
+            "version": "5c234d4c-b791-42bd-a815-276a37357b7f",
+            "operationId": "fa1a327c-e77f-4cb5-8132-955c71ad3b5e"
+          }
+        ],
+        "grant": {
+          "id": "5ca2e89a-d04b-47f2-9480-17b58c8b5e52",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011393119,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4ot47",
+              "name": "accepted-echo-1440-mvp4ot47",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/bd038aa4-93e8-4711-9086-97f88864b648/accepted-echo-1440-mvp4ot47"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4ot47",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4ot47",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "68ebf7fe-43c4-47f1-b346-996f7e555408",
+        "sessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011387837,
+        "updated": 1793011387837,
+        "releases": []
+      },
+      {
+        "id": "2152ba99-a0e9-41f1-92fe-14c42f47e1b6",
+        "sessionId": "d8b7dbfd-4138-437b-8e70-2b0bf0672ac8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "05635f6b-c44b-45bb-a0f5-ad785c0015b4",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011383301,
+        "updated": 1793011383301,
+        "releases": []
+      },
+      {
+        "id": "cb5147af-5c90-4cac-8181-02d3398891e2",
+        "sessionId": "2cb23475-d5ee-43c4-99b1-a830630b90d4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011180535,
+        "updated": 1793011181422,
+        "releases": [
+          {
+            "skillId": "ae88c4b2-a432-4048-9d46-ea2784d782b1",
+            "version": "c68a2a9c-9d2c-4d46-ae70-9e1358d0ded5",
+            "operationId": "308f92b5-5582-45c2-af4e-27632fc62175"
+          }
+        ],
+        "grant": {
+          "id": "680b2deb-9870-462f-b495-c694657b76c9",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011180899,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4k9dm",
+              "name": "accepted-echo-390-mvp4k9dm",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/cb5147af-5c90-4cac-8181-02d3398891e2/accepted-echo-390-mvp4k9dm"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4k9dm",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4k9dm",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "c5ec9426-4ba7-45a5-9b6d-4b487f25d14a",
+        "sessionId": "8568e146-9ab2-41d7-8b99-c423005cc874",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011179161,
+        "updated": 1793011180082,
+        "releases": [
+          {
+            "skillId": "b5744a56-abfa-41a5-bd5a-3030a28e7173",
+            "version": "f262b759-1381-41aa-945a-2d7da269e85e",
+            "operationId": "31e019bb-3501-43b2-8936-4da6bbd07de2"
+          }
+        ],
+        "grant": {
+          "id": "17558e4f-22fa-4c1d-9081-3e2d497fafcb",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011179586,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4k8c6",
+              "name": "accepted-echo-850-mvp4k8c6",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/c5ec9426-4ba7-45a5-9b6d-4b487f25d14a/accepted-echo-850-mvp4k8c6"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4k8c6",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4k8c6",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "0c2b206c-5fc2-4a03-8c9d-2cc388e053d6",
+        "sessionId": "83c8c8b4-9bc0-453d-88cf-337e18470ccf",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011175928,
+        "updated": 1793011176877,
+        "releases": [
+          {
+            "skillId": "75da0df3-0fff-4ba3-8b43-07c71718354a",
+            "version": "36d7bdba-5334-4242-82ce-f7c4f64285e3",
+            "operationId": "412b164f-efe2-4215-a587-50f584b5bd16"
+          }
+        ],
+        "grant": {
+          "id": "c1401130-b8b1-4340-abc4-09146bf873d1",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011176365,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4k5v9",
+              "name": "accepted-echo-1440-mvp4k5v9",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/0c2b206c-5fc2-4a03-8c9d-2cc388e053d6/accepted-echo-1440-mvp4k5v9"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4k5v9",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4k5v9",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "10282275-5076-49aa-b12e-91274bd49f65",
+        "sessionId": "a6082663-98cf-4947-b629-27307b24b080",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011141572,
+        "updated": 1793011142459,
+        "releases": [
+          {
+            "skillId": "ff091e0a-8bb5-4030-b188-26d9cbdd651c",
+            "version": "1bd86a95-9f26-4aff-bd54-eb67e3f013b7",
+            "operationId": "0d8b1353-d978-4c41-8bd8-844e3fbd9352"
+          }
+        ],
+        "grant": {
+          "id": "815e9955-4935-401d-a2d9-2cab777fc42f",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011141988,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4jfc0",
+              "name": "accepted-echo-1440-mvp4jfc0",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/10282275-5076-49aa-b12e-91274bd49f65/accepted-echo-1440-mvp4jfc0"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4jfc0",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4jfc0",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "3e6c0c13-414f-4b7e-9f48-211cee57d965",
+        "sessionId": "c82be12b-b27a-4b1a-ad7c-fbd637d71502",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "d9d5fedb-2016-4349-8eb2-50297dc4f777",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011002112,
+        "updated": 1793011002112,
+        "releases": []
+      },
+      {
+        "id": "f3ce66e1-503b-48d3-8902-1871560042db",
+        "sessionId": "1fcb7444-918d-4226-a330-2cdb2b8b1a23",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "5c73c1e5-8571-421b-9272-394c0eaaab68",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010998392,
+        "updated": 1793010998392,
+        "releases": []
+      },
+      {
+        "id": "c8c96727-9dff-4819-8b1a-f9c7c38dda2f",
+        "sessionId": "0730b6d7-05dc-47d8-b34e-b9cddc5ef0df",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "cb954af4-9ee0-4b9d-919f-3fdf7ec5184a",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010994519,
+        "updated": 1793010994519,
+        "releases": []
+      },
+      {
+        "id": "e6236e2d-d8e0-4d27-8177-f940607d1500",
+        "sessionId": "847a083b-a804-4cd3-a21b-26b9ff939957",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "a527f6e3-be37-49ca-8c92-0cfe9968a74c",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010976343,
+        "updated": 1793010976343,
+        "releases": []
+      },
+      {
+        "id": "66521a7d-33c0-4601-aea7-a2e8ee2c04b4",
+        "sessionId": "e94059b5-20da-4a94-abf3-6f7925371779",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "4ca17f96-d442-4cb4-a8fa-ee93ea1974dd",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010915048,
+        "updated": 1793010915048,
+        "releases": []
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions",
+    "method": "POST",
+    "status": 201,
+    "body": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal"
+    },
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "pending",
+      "revision": 1,
+      "created": 1793011599799,
+      "updated": 1793011599799
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions?limit=20&offset=0",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "items": [
+        {
+          "title": "用户提出的隔离验证 1793011599703",
+          "goal": "核对用户建议与实际来源",
+          "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+          "value": "保持来源准确",
+          "uncertainty": "没有提出必须开发的代码",
+          "action": "先讨论证据，再独立授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011599799,
+          "updated": 1793011599799
+        },
+        {
+          "title": "能力整合分页验收 1793011456474-25",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f562cd59-3eda-4778-b316-3d5cacea2b9a",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-24",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "417b1b5c-c1b0-4eaf-846f-57564b4acc4d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456474,
+          "updated": 1793011456474
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-23",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "c8cc858e-2278-4f84-ab49-e3871ce3939e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-21",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "16d998ac-240a-4166-9051-f69087db5f51",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456473-22",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0d584408-6fd0-4070-b9ad-36aea1a71ad9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456473,
+          "updated": 1793011456473
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-20",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9bebd27a-0d69-454e-81ee-41d667af8fb9",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456472-19",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "4fbf0f18-1a00-4a2b-a4ca-bc85b175c48b",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-18",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "170d6d20-15a5-490c-861a-1643a8d1695f",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456472,
+          "updated": 1793011456472
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-16",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "a3102edf-c137-4586-b88c-f1c558e4514c",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456471-17",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "7f3eeb2f-84c5-4a71-9345-e710380786f1",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456471,
+          "updated": 1793011456471
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-14",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0a88e23-3d15-48d2-b2f1-88367b426d34",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-13",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "f0026d06-3e39-4721-bbfc-b530a65b38bd",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456470-15",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "9ed6d8af-3c69-4bf1-a719-d1039fb8a39d",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456470,
+          "updated": 1793011456470
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-12",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee818e59-1741-4c86-ab76-35c2d234d9d2",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456469-11",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "ee395eb6-0030-4404-b904-720f9f0cb19e",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-10",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "5fe8f36a-d3cc-4bf5-9cca-125102c64ede",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456469,
+          "updated": 1793011456469
+        },
+        {
+          "title": "能力整合分页验收 1793011456468-9",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "3b6bae39-5dbe-41a7-b09f-91aa98d471de",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456468,
+          "updated": 1793011456468
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-7",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "579c070e-b1e5-49f3-aeb4-74ce43d69465",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        },
+        {
+          "title": "能力整合分页验收 1793011456467-8",
+          "goal": "核对明确目标与独立讨论",
+          "reason": "隔离验证长目录与跨页返回，非自主发现。",
+          "value": "保留真实对象关系",
+          "uncertainty": "此建议是人工测试数据，不表示真实需求。",
+          "action": "先讨论，再另行授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "0305ea6e-9489-4ff0-9b1f-05c390bd13f6",
+          "project": null,
+          "actor": "user",
+          "status": "pending",
+          "revision": 1,
+          "created": 1793011456467,
+          "updated": 1793011456467
+        }
+      ],
+      "total": 54,
+      "highPriorityPending": 0
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/activities",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "b4a92822-26cb-4697-981d-713e6d3f7d36",
+        "sessionId": "e397cb72-0488-4bd4-a85a-dc19bfc255ee",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574834,
+        "updated": 1793011574999,
+        "releases": []
+      },
+      {
+        "id": "6afa16ba-019d-4c6a-93b7-d6445a18d513",
+        "sessionId": "fc818770-dfd6-48f8-a761-9bb913cfd776",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011574268,
+        "updated": 1793011574430,
+        "releases": []
+      },
+      {
+        "id": "583f20ec-da4f-4259-854e-6f91f6931c8e",
+        "sessionId": "71a3123b-8c41-4669-aa84-bd73ad5f1113",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011573595,
+        "updated": 1793011573780,
+        "releases": []
+      },
+      {
+        "id": "27b585eb-6954-4315-9f69-40608d1a3c7e",
+        "sessionId": "61803b3f-25f3-4834-ab28-e51365606dae",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011571921,
+        "updated": 1793011573409,
+        "releases": [
+          {
+            "skillId": "44614162-3a59-4716-bf04-bdc686a52f3b",
+            "version": "4fc64e6d-e22c-469b-8d42-a4ff8388a5fa",
+            "operationId": "44d3ffab-db82-4a3a-9596-a0bb32923ea1"
+          },
+          {
+            "skillId": "95f2634d-5253-4b4b-8962-ed33f2c682da",
+            "version": "88ebb43c-3823-48a6-afd2-785163513a7f",
+            "operationId": "2a43f9df-74c4-43ae-a694-e3ac8011bf37"
+          }
+        ],
+        "grant": {
+          "id": "e85e8ff6-6cb2-4a7d-982b-120df2de5df8",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011572282,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4snbw",
+              "name": "partial-good-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-good-mvp4snbw"
+            },
+            {
+              "key": "partial-fail-mvp4snbw",
+              "name": "partial-fail-mvp4snbw",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/27b585eb-6954-4315-9f69-40608d1a3c7e/partial-fail-mvp4snbw"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4snbw",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4snbw",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "c3d4cb9a-652d-4425-834a-063dafeaf9f3",
+        "sessionId": "ba9d3a9a-1beb-4695-b59b-ed3a03e58a5e",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 390",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516898,
+        "updated": 1793011517074,
+        "releases": []
+      },
+      {
+        "id": "62a828fe-cf1d-400f-abe7-10749db8b3e4",
+        "sessionId": "121071c8-7234-443a-88ae-586ff49253b5",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 850",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516517,
+        "updated": 1793011516716,
+        "releases": []
+      },
+      {
+        "id": "ba3acf85-61f3-43ba-90a4-762c1e6cad58",
+        "sessionId": "e3e842d3-83a2-43ea-8031-ece10a8bc4a1",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离取消验证 1440",
+        "status": "cancelled",
+        "revision": 2,
+        "created": 1793011516043,
+        "updated": 1793011516207,
+        "releases": []
+      },
+      {
+        "id": "7aea0d5e-f092-4fcb-89ec-9b5f08684491",
+        "sessionId": "ee3034da-fdf5-4ac4-8ef6-4002d26115d3",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "status": "failed",
+        "revision": 7,
+        "created": 1793011514738,
+        "updated": 1793011516027,
+        "releases": [
+          {
+            "skillId": "4a393eec-98e4-49b0-9d44-8081fd368f45",
+            "version": "3f2bf13a-f64b-4a1e-bb4e-379e577069e1",
+            "operationId": "d0cbd4b6-2a92-4955-adfa-019203c66569"
+          },
+          {
+            "skillId": "0dd03d6e-ee70-4688-abab-2734c8ab955f",
+            "version": "77d432b1-b2d2-41ce-87b9-7bdac85fb568",
+            "operationId": "70ff7cce-3109-422b-8eb3-a4c06e1caad0"
+          }
+        ],
+        "grant": {
+          "id": "ce5da06e-69d3-4c4d-8868-c06a0c10e551",
+          "goal": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+          "at": 1793011515109,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "partial-good-mvp4rf7b",
+              "name": "partial-good-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-good-mvp4rf7b"
+            },
+            {
+              "key": "partial-fail-mvp4rf7b",
+              "name": "partial-fail-mvp4rf7b",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/7aea0d5e-f092-4fcb-89ec-9b5f08684491/partial-fail-mvp4rf7b"
+            }
+          ]
+        },
+        "result": {
+          "summary": "两个隔离候选已提交，检查结果分别保留。",
+          "packages": [
+            {
+              "target": "partial-good-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_good_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            },
+            {
+              "target": "partial-fail-mvp4rf7b",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "partial_fail_mvp4rf7b",
+                  "args": {
+                    "text": "partial-proof"
+                  },
+                  "expectedText": "partial-proof"
+                }
+              ]
+            }
+          ]
+        },
+        "error": "Extension 加载失败，正式版本未改变"
+      },
+      {
+        "id": "f4758fcd-d4dc-4168-b10d-a04509951279",
+        "sessionId": "4b4354a0-e167-4071-a829-c16634be12a8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011397511,
+        "updated": 1793011398614,
+        "releases": [
+          {
+            "skillId": "b496a27f-2b05-439b-b02d-2366eab269ac",
+            "version": "b3612abd-8950-4307-b3c2-34bb23d64b65",
+            "operationId": "d768d6a3-ddd0-4969-9fa4-d170164fa3d3"
+          }
+        ],
+        "grant": {
+          "id": "6404a8fe-9ef2-45eb-9b58-296175e9984e",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011397920,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4owtj",
+              "name": "accepted-echo-390-mvp4owtj",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f4758fcd-d4dc-4168-b10d-a04509951279/accepted-echo-390-mvp4owtj"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4owtj",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4owtj",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0",
+        "sessionId": "7dcbfae8-a3f9-42f0-9f49-d4bf50a2e63b",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011396031,
+        "updated": 1793011397047,
+        "releases": [
+          {
+            "skillId": "84218f9d-6cbe-4315-9d6f-db144d64d8fa",
+            "version": "a10c6aa8-ea06-46a7-bb2a-305d05301f45",
+            "operationId": "af3c67b9-05eb-45b9-800c-ce77d01e4aca"
+          }
+        ],
+        "grant": {
+          "id": "f473e60c-b07f-451c-9446-7b8bd05dd35a",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011396420,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4ovnu",
+              "name": "accepted-echo-850-mvp4ovnu",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/f0489f1e-01d2-4c7b-8cf4-fe1454e06cd0/accepted-echo-850-mvp4ovnu"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4ovnu",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4ovnu",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "bd038aa4-93e8-4711-9086-97f88864b648",
+        "sessionId": "6a4a61c0-4984-49a5-8d88-f1bd3e5cf582",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011392710,
+        "updated": 1793011393709,
+        "releases": [
+          {
+            "skillId": "d94a0c46-bec9-42a5-b2b4-3ee7181af2c2",
+            "version": "5c234d4c-b791-42bd-a815-276a37357b7f",
+            "operationId": "fa1a327c-e77f-4cb5-8132-955c71ad3b5e"
+          }
+        ],
+        "grant": {
+          "id": "5ca2e89a-d04b-47f2-9480-17b58c8b5e52",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011393119,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4ot47",
+              "name": "accepted-echo-1440-mvp4ot47",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/bd038aa4-93e8-4711-9086-97f88864b648/accepted-echo-1440-mvp4ot47"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4ot47",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4ot47",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "68ebf7fe-43c4-47f1-b346-996f7e555408",
+        "sessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011387837,
+        "updated": 1793011387837,
+        "releases": []
+      },
+      {
+        "id": "2152ba99-a0e9-41f1-92fe-14c42f47e1b6",
+        "sessionId": "d8b7dbfd-4138-437b-8e70-2b0bf0672ac8",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "05635f6b-c44b-45bb-a0f5-ad785c0015b4",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011383301,
+        "updated": 1793011383301,
+        "releases": []
+      },
+      {
+        "id": "cb5147af-5c90-4cac-8181-02d3398891e2",
+        "sessionId": "2cb23475-d5ee-43c4-99b1-a830630b90d4",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011180535,
+        "updated": 1793011181422,
+        "releases": [
+          {
+            "skillId": "ae88c4b2-a432-4048-9d46-ea2784d782b1",
+            "version": "c68a2a9c-9d2c-4d46-ae70-9e1358d0ded5",
+            "operationId": "308f92b5-5582-45c2-af4e-27632fc62175"
+          }
+        ],
+        "grant": {
+          "id": "680b2deb-9870-462f-b495-c694657b76c9",
+          "goal": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+          "at": 1793011180899,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-390-mvp4k9dm",
+              "name": "accepted-echo-390-mvp4k9dm",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/cb5147af-5c90-4cac-8181-02d3398891e2/accepted-echo-390-mvp4k9dm"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-390-mvp4k9dm",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_390_mvp4k9dm",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "c5ec9426-4ba7-45a5-9b6d-4b487f25d14a",
+        "sessionId": "8568e146-9ab2-41d7-8b99-c423005cc874",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011179161,
+        "updated": 1793011180082,
+        "releases": [
+          {
+            "skillId": "b5744a56-abfa-41a5-bd5a-3030a28e7173",
+            "version": "f262b759-1381-41aa-945a-2d7da269e85e",
+            "operationId": "31e019bb-3501-43b2-8936-4da6bbd07de2"
+          }
+        ],
+        "grant": {
+          "id": "17558e4f-22fa-4c1d-9081-3e2d497fafcb",
+          "goal": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+          "at": 1793011179586,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-850-mvp4k8c6",
+              "name": "accepted-echo-850-mvp4k8c6",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/c5ec9426-4ba7-45a5-9b6d-4b487f25d14a/accepted-echo-850-mvp4k8c6"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-850-mvp4k8c6",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_850_mvp4k8c6",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "0c2b206c-5fc2-4a03-8c9d-2cc388e053d6",
+        "sessionId": "83c8c8b4-9bc0-453d-88cf-337e18470ccf",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011175928,
+        "updated": 1793011176877,
+        "releases": [
+          {
+            "skillId": "75da0df3-0fff-4ba3-8b43-07c71718354a",
+            "version": "36d7bdba-5334-4242-82ce-f7c4f64285e3",
+            "operationId": "412b164f-efe2-4215-a587-50f584b5bd16"
+          }
+        ],
+        "grant": {
+          "id": "c1401130-b8b1-4340-abc4-09146bf873d1",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011176365,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4k5v9",
+              "name": "accepted-echo-1440-mvp4k5v9",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/0c2b206c-5fc2-4a03-8c9d-2cc388e053d6/accepted-echo-1440-mvp4k5v9"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4k5v9",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4k5v9",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "10282275-5076-49aa-b12e-91274bd49f65",
+        "sessionId": "a6082663-98cf-4947-b629-27307b24b080",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "status": "completed",
+        "revision": 6,
+        "created": 1793011141572,
+        "updated": 1793011142459,
+        "releases": [
+          {
+            "skillId": "ff091e0a-8bb5-4030-b188-26d9cbdd651c",
+            "version": "1bd86a95-9f26-4aff-bd54-eb67e3f013b7",
+            "operationId": "0d8b1353-d978-4c41-8bd8-844e3fbd9352"
+          }
+        ],
+        "grant": {
+          "id": "815e9955-4935-401d-a2d9-2cab777fc42f",
+          "goal": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+          "at": 1793011141988,
+          "actor": "user",
+          "targets": [
+            {
+              "key": "accepted-echo-1440-mvp4jfc0",
+              "name": "accepted-echo-1440-mvp4jfc0",
+              "directory": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data/evolution/10282275-5076-49aa-b12e-91274bd49f65/accepted-echo-1440-mvp4jfc0"
+            }
+          ]
+        },
+        "result": {
+          "summary": "已完成隔离纯文本回声能力，提交实际原生调用检查。",
+          "packages": [
+            {
+              "target": "accepted-echo-1440-mvp4jfc0",
+              "skillFile": "SKILL.md",
+              "extensions": [
+                "tool.js"
+              ],
+              "knowledgeFiles": [],
+              "probes": [
+                {
+                  "tool": "accepted_echo_1440_mvp4jfc0",
+                  "args": {
+                    "text": "proof-text"
+                  },
+                  "expectedText": "proof-text"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "3e6c0c13-414f-4b7e-9f48-211cee57d965",
+        "sessionId": "c82be12b-b27a-4b1a-ad7c-fbd637d71502",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "d9d5fedb-2016-4349-8eb2-50297dc4f777",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793011002112,
+        "updated": 1793011002112,
+        "releases": []
+      },
+      {
+        "id": "f3ce66e1-503b-48d3-8902-1871560042db",
+        "sessionId": "1fcb7444-918d-4226-a330-2cdb2b8b1a23",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "5c73c1e5-8571-421b-9272-394c0eaaab68",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010998392,
+        "updated": 1793010998392,
+        "releases": []
+      },
+      {
+        "id": "c8c96727-9dff-4819-8b1a-f9c7c38dda2f",
+        "sessionId": "0730b6d7-05dc-47d8-b34e-b9cddc5ef0df",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "cb954af4-9ee0-4b9d-919f-3fdf7ec5184a",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010994519,
+        "updated": 1793010994519,
+        "releases": []
+      },
+      {
+        "id": "e6236e2d-d8e0-4d27-8177-f940607d1500",
+        "sessionId": "847a083b-a804-4cd3-a21b-26b9ff939957",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "a527f6e3-be37-49ca-8c92-0cfe9968a74c",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010976343,
+        "updated": 1793010976343,
+        "releases": []
+      },
+      {
+        "id": "66521a7d-33c0-4601-aea7-a2e8ee2c04b4",
+        "sessionId": "e94059b5-20da-4a94-abf3-6f7925371779",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "goal": "让能力维护时能够追溯实际版本与原始依据",
+        "suggestionId": "4ca17f96-d442-4cb4-a8fa-ee93ea1974dd",
+        "status": "discussion",
+        "revision": 1,
+        "created": 1793010915048,
+        "updated": 1793010915048,
+        "releases": []
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "pending",
+      "revision": 1,
+      "created": 1793011599799,
+      "updated": 1793011599799
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "pending",
+      "revision": 1,
+      "created": 1793011599799,
+      "updated": 1793011599799
+    }
+  },
+  {
+    "path": "/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "pending",
+      "revision": 1,
+      "created": 1793011599799,
+      "updated": 1793011599799
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/manage",
+    "method": "POST",
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+          "baseRevision": 1
+        }
+      ],
+      "status": "ignored"
+    },
+    "response": {
+      "items": [
+        {
+          "title": "用户提出的隔离验证 1793011599703",
+          "goal": "核对用户建议与实际来源",
+          "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+          "value": "保持来源准确",
+          "uncertainty": "没有提出必须开发的代码",
+          "action": "先讨论证据，再独立授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+          "project": null,
+          "actor": "user",
+          "status": "ignored",
+          "revision": 2,
+          "created": 1793011599799,
+          "updated": 1793011599865
+        }
+      ]
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "ignored",
+      "revision": 2,
+      "created": 1793011599799,
+      "updated": 1793011599865
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/manage",
+    "method": "POST",
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+          "baseRevision": 2
+        }
+      ],
+      "status": "archived"
+    },
+    "response": {
+      "items": [
+        {
+          "title": "用户提出的隔离验证 1793011599703",
+          "goal": "核对用户建议与实际来源",
+          "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+          "value": "保持来源准确",
+          "uncertainty": "没有提出必须开发的代码",
+          "action": "先讨论证据，再独立授权。",
+          "evidence": [],
+          "priority": "normal",
+          "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+          "project": null,
+          "actor": "user",
+          "status": "archived",
+          "revision": 3,
+          "created": 1793011599799,
+          "updated": 1793011599914
+        }
+      ]
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "archived",
+      "revision": 3,
+      "created": 1793011599799,
+      "updated": 1793011599914
+    }
+  },
+  {
+    "path": "/suggestions/edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "title": "用户提出的隔离验证 1793011599703",
+      "goal": "核对用户建议与实际来源",
+      "reason": "这是用户明确创建的测试构想，不是 Agent 自主发现。",
+      "value": "保持来源准确",
+      "uncertainty": "没有提出必须开发的代码",
+      "action": "先讨论证据，再独立授权。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "edc0d3f6-f036-4fab-8d6b-6ce24d9ce2b2",
+      "project": null,
+      "actor": "user",
+      "status": "archived",
+      "revision": 3,
+      "created": 1793011599799,
+      "updated": 1793011599914
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "保留能力变更的精确来源",
+      "goal": "让能力维护时能够追溯实际版本与原始依据",
+      "reason": "版本操作后需要区分当前内容、历史修订与执行记录。",
+      "value": "减少在多份相似材料中重复核对的成本。",
+      "uncertainty": "仍需讨论使用频率，以及是否已有足够的现成功能。",
+      "action": "先讨论任务和证据，再决定是否需要授权开发。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+      "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+      "actor": "agent",
+      "source": {
+        "sessionId": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "entryId": "3f51c699",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha"
+      },
+      "status": "adopted",
+      "revision": 2,
+      "created": 1793010610733,
+      "updated": 1793011387884,
+      "discussionSessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4"
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/sessions",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": [
+      {
+        "id": "e397cb72-0488-4bd4-a85a-dc19bfc255ee",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 390",
+        "updated": 1793011574835,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "fc818770-dfd6-48f8-a761-9bb913cfd776",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 850",
+        "updated": 1793011574269,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "71a3123b-8c41-4669-aa84-bd73ad5f1113",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 1440",
+        "updated": 1793011573596,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 4
+      },
+      {
+        "id": "61803b3f-25f3-4834-ab28-e51365606dae",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "updated": 1793011572707,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 297
+      },
+      {
+        "id": "ba9d3a9a-1beb-4695-b59b-ed3a03e58a5e",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 390",
+        "updated": 1793011516900,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "121071c8-7234-443a-88ae-586ff49253b5",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 850",
+        "updated": 1793011516518,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "e3e842d3-83a2-43ea-8031-ece10a8bc4a1",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离取消验证 1440",
+        "updated": 1793011516047,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 8
+      },
+      {
+        "id": "ee3034da-fdf5-4ac4-8ef6-4002d26115d3",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "隔离验证：两个授权目标，第二个检查失败，保留第一个已发布成果。",
+        "updated": 1793011515500,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 307
+      },
+      {
+        "id": "4b4354a0-e167-4071-a829-c16634be12a8",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "updated": 1793011398201,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 186
+      },
+      {
+        "id": "7dcbfae8-a3f9-42f0-9f49-d4bf50a2e63b",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "updated": 1793011396705,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 194
+      },
+      {
+        "id": "6a4a61c0-4984-49a5-8d88-f1bd3e5cf582",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011393387,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 189
+      },
+      {
+        "id": "b0701620-0ac3-4dc6-ae41-42e864390bc4",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "保留能力变更的精确来源",
+        "updated": 1793011387838,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 12
+      },
+      {
+        "id": "d8b7dbfd-4138-437b-8e70-2b0bf0672ac8",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 01",
+        "updated": 1793011383302,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "149ab0a8-fe6f-4c9c-bc37-867a64cc0bb7",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/beta",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334181,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "81e033ba-30da-4525-acb4-50a43e5f03cc",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334161,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "e7748c7b-8f22-4c42-8fff-4fc8a16b5382",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/2026-10-26T10-42-14-128Z/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793011334138,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 1
+      },
+      {
+        "id": "2cb23475-d5ee-43c4-99b1-a830630b90d4",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 390，仅开发纯文本回声。",
+        "updated": 1793011181144,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 194
+      },
+      {
+        "id": "8568e146-9ab2-41d7-8b99-c423005cc874",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 850，仅开发纯文本回声。",
+        "updated": 1793011179837,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 193
+      },
+      {
+        "id": "83c8c8b4-9bc0-453d-88cf-337e18470ccf",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011176627,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 201
+      },
+      {
+        "id": "a6082663-98cf-4947-b629-27307b24b080",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "验证独立授权与实际发布 1440，仅开发纯文本回声。",
+        "updated": 1793011142239,
+        "purpose": "discussion",
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 201
+      },
+      {
+        "id": "c82be12b-b27a-4b1a-ad7c-fbd637d71502",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 02",
+        "updated": 1793011002114,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "1fcb7444-918d-4226-a330-2cdb2b8b1a23",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 03",
+        "updated": 1793010998394,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "0730b6d7-05dc-47d8-b34e-b9cddc5ef0df",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 04",
+        "updated": 1793010994519,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "847a083b-a804-4cd3-a21b-26b9ff939957",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 05",
+        "updated": 1793010976344,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "e94059b5-20da-4a94-abf3-6f7925371779",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/data",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "维护建议 · 06",
+        "updated": 1793010915049,
+        "purpose": "discussion",
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 3
+      },
+      {
+        "id": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "核对当前项目的文本回声能力，保留实际工具返回。",
+        "updated": 1793010610740,
+        "interrupted": false,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 96
+      },
+      {
+        "id": "a8785f49-cfad-424a-9a6c-57163c36529a",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/beta",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793010610376,
+        "stateVersion": 0,
+        "busy": false,
+        "unavailable": false
+      },
+      {
+        "id": "093c0bbe-f5e6-4eaf-8d3c-655cfdfd1a39",
+        "cwd": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+        "provider": "faux",
+        "model": "capability-controlled",
+        "title": "新会话",
+        "updated": 1793010610342,
+        "busy": false,
+        "unavailable": false,
+        "stateVersion": 23
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "path": "/api/models",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "models": [
+        {
+          "id": "capability-controlled",
+          "provider": "faux"
+        }
+      ]
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/suggestions/f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "title": "保留能力变更的精确来源",
+      "goal": "让能力维护时能够追溯实际版本与原始依据",
+      "reason": "版本操作后需要区分当前内容、历史修订与执行记录。",
+      "value": "减少在多份相似材料中重复核对的成本。",
+      "uncertainty": "仍需讨论使用频率，以及是否已有足够的现成功能。",
+      "action": "先讨论任务和证据，再决定是否需要授权开发。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+      "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+      "actor": "agent",
+      "source": {
+        "sessionId": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "entryId": "3f51c699",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha"
+      },
+      "status": "adopted",
+      "revision": 2,
+      "created": 1793010610733,
+      "updated": 1793011387884,
+      "discussionSessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4"
+    }
+  },
+  {
+    "width": 390,
+    "path": "/api/diagnostics/evidence?sessionId=ed86a2a4-000c-4a86-afc2-5183d836d901&entryId=3f51c699&limit=32768",
+    "method": "GET",
+    "status": 200,
+    "body": null,
+    "response": {
+      "onSelectedBranch": true,
+      "sessionId": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+      "entryId": "3f51c699",
+      "source": "checkpoint",
+      "recovered": false,
+      "truncated": false,
+      "total": 1126,
+      "available": true,
+      "nested": false,
+      "content": "{\n  \"type\": \"message\",\n  \"id\": \"3f51c699\",\n  \"parentId\": \"bed2ab0a\",\n  \"timestamp\": \"2026-10-26T10:30:10.695Z\",\n  \"message\": {\n    \"role\": \"assistant\",\n    \"content\": [\n      {\n        \"type\": \"toolCall\",\n        \"id\": \"tool:1793010610625:8yz2qonxlsn\",\n        \"name\": \"suggestion_submit\",\n        \"arguments\": {\n          \"title\": \"保留能力变更的精确来源\",\n          \"goal\": \"让能力维护时能够追溯实际版本与原始依据\",\n          \"reason\": \"版本操作后需要区分当前内容、历史修订与执行记录。\",\n          \"value\": \"减少在多份相似材料中重复核对的成本。\",\n          \"uncertainty\": \"仍需讨论使用频率，以及是否已有足够的现成功能。\",\n          \"action\": \"先讨论任务和证据，再决定是否需要授权开发。\",\n          \"evidence\": [],\n          \"priority\": \"normal\"\n        }\n      }\n    ],\n    \"api\": \"faux:1793010610126:3nmnh83ls68\",\n    \"provider\": \"faux\",\n    \"model\": \"capability-controlled\",\n    \"usage\": {\n      \"input\": 17,\n      \"output\": 61,\n      \"cacheRead\": 9332,\n      \"cacheWrite\": 17,\n      \"totalTokens\": 9427,\n      \"cost\": {\n        \"input\": 0,\n        \"output\": 0,\n        \"cacheRead\": 0,\n        \"cacheWrite\": 0,\n        \"total\": 0\n      }\n    },\n    \"stopReason\": \"toolUse\",\n    \"timestamp\": 1793010610625,\n    \"thinkingLevel\": \"off\"\n  }\n}"
+    }
+  },
+  {
+    "path": "/suggestions/f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+    "method": "GET",
+    "status": 200,
+    "response": {
+      "title": "保留能力变更的精确来源",
+      "goal": "让能力维护时能够追溯实际版本与原始依据",
+      "reason": "版本操作后需要区分当前内容、历史修订与执行记录。",
+      "value": "减少在多份相似材料中重复核对的成本。",
+      "uncertainty": "仍需讨论使用频率，以及是否已有足够的现成功能。",
+      "action": "先讨论任务和证据，再决定是否需要授权开发。",
+      "evidence": [],
+      "priority": "normal",
+      "id": "f9966e80-663f-4536-8f38-ea3e94ff0cf7",
+      "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha",
+      "actor": "agent",
+      "source": {
+        "sessionId": "ed86a2a4-000c-4a86-afc2-5183d836d901",
+        "entryId": "3f51c699",
+        "project": "<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/.runtime/projects/alpha"
+      },
+      "status": "adopted",
+      "revision": 2,
+      "created": 1793010610733,
+      "updated": 1793011387884,
+      "discussionSessionId": "b0701620-0ac3-4dc6-ae41-42e864390bc4"
+    }
+  }
+]

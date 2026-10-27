@@ -17,7 +17,7 @@ export type DiagnosticReader = Pick<DiagnosticHistory, 'search' | 'get' | 'evide
 export class DiagnosticHistory {
   constructor(
     private readCheckpoint: (id: string) => Promise<DiagnosticCheckpoint | undefined>,
-    private index: Pick<DiagnosticService, 'search' | 'get' | 'sessionEvents'>,
+    private index: Pick<DiagnosticService, 'search' | 'get' | 'sessionEvents' | 'sessions'>,
     private sensitive: SensitiveData,
   ) {}
   get(ctx: DiagnosticContext, id: string, input: unknown = {}) {
@@ -31,8 +31,7 @@ export class DiagnosticHistory {
       throw new DiagnosticError('证据不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
     return loaded;
   }
-  async search(ctx: DiagnosticContext, input: unknown) {
-    const q = diagnosticQuery.parse(input);
+  private async branch(ctx: DiagnosticContext, q: ReturnType<typeof diagnosticQuery.parse>) {
     let branch: string[] | undefined;
     if (q.branchLeafId) {
       if (!q.sessionId) throw new DiagnosticError('分支筛选需要 Session', 400, 'DIAGNOSTIC_BRANCH_REQUIRED');
@@ -41,7 +40,15 @@ export class DiagnosticHistory {
       if (!manager.getEntry(q.branchLeafId)) throw new DiagnosticError('分支节点不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
       branch = manager.getBranch(q.branchLeafId).map((e) => e.id);
     }
-    const result = this.index.search(ctx, q, branch);
+    return branch;
+  }
+  async sessions(ctx: DiagnosticContext, input: unknown) {
+    const query = diagnosticQuery.parse(input);
+    return this.index.sessions(ctx, query, await this.branch(ctx, query));
+  }
+  async search(ctx: DiagnosticContext, input: unknown) {
+    const q = diagnosticQuery.parse(input);
+    const result = this.index.search(ctx, q, await this.branch(ctx, q));
     if (q.sessionId) {
       try {
         const loaded = await this.checkpoint(ctx, q.sessionId);

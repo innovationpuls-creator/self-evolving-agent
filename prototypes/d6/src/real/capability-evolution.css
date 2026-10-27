@@ -1,0 +1,241 @@
+.host-product .host-evolution {
+  min-width: 0;
+}
+.host-product .host-evolution-toolbar {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.host-product .host-evolution-toolbar select {
+  max-width: min(100%, 260px);
+}
+.host-product .host-suggestion-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.host-product .host-suggestion-row > input {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 27px;
+  accent-color: var(--accent);
+}
+.host-product .host-suggestion-row .aw-proposal-row {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
+}
+.host-product .host-suggestion-row :is(strong, p),
+.host-product .host-evolution h1 {
+  overflow-wrap: anywhere;
+}
+.host-product .host-suggestion-row p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.host-product .host-evolution-meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0 0 28px;
+}
+.host-product .host-suggestion-reading {
+  max-width: 760px;
+}
+.host-product .host-suggestion-reading > section {
+  margin-top: 28px;
+}
+.host-product .host-suggestion-reading h2 {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+.host-product .host-suggestion-reading .markdown {
+  font-size: 16px;
+  line-height: 1.95;
+}
+.host-product .host-evolution-decisions {
+  margin: 28px 0 12px;
+}
+.host-product .host-evolution-attention {
+  color: var(--warning);
+}
+.host-product .host-activity-history {
+  margin-top: 34px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+.host-product .host-activity-row {
+  width: 100%;
+  display: grid;
+  text-align: left;
+  gap: 7px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.host-product .host-activity-row small {
+  color: var(--muted);
+}
+.host-product .host-proposal-form {
+  max-width: 760px;
+  padding-bottom: 24px;
+}
+.host-product .host-proposal-form textarea,
+.host-grant-dialog textarea {
+  line-height: 1.8;
+  resize: vertical;
+}
+.host-product .host-session-activity {
+  font-size: 13px;
+  margin: 20px 0;
+}
+.host-product .host-session-activity details > form {
+  margin-top: 16px;
+}
+.host-product .host-activity-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.host-product .host-activity-heading > strong {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+}
+.host-product .host-activity-goal {
+  margin: 24px 0;
+  font-size: 18px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.host-product .host-activity-result {
+  margin: 24px 0;
+}
+.host-product .host-activity.compact {
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.host-product .host-activity :is(code, pre),
+.host-grant-dialog code {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.host-product .host-activity li > code {
+  display: block;
+  font-size: 12px;
+}
+.host-product .host-activity-release {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+.host-product .host-activity-release > strong {
+  display: block;
+  font-weight: 500;
+  font-size: 16px;
+}
+.host-product .host-activity-release > p {
+  margin: 8px 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.host-product .host-activity-package {
+  display: grid;
+  gap: 7px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.host-grant-skills {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+}
+.host-grant-skills legend {
+  font-weight: 500;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.host-grant-skills label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.host-grant-skills input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}
+.host-grant-skills label span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.host-grant-skills small {
+  display: block;
+  color: var(--muted);
+}
+.host-grant-dialog .host-technical {
+  font-size: 12px;
+  margin-top: 20px;
+}
+.host-product .host-evolution-batch {
+  margin: 12px 0;
+}
+.host-product .host-evolution .host-pagination {
+  flex-wrap: wrap;
+}
+@media (max-width: 700px) {
+  .host-product .host-evolution .aw-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .host-product .host-evolution-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .host-product .host-evolution-toolbar select {
+    max-width: 100%;
+    width: 100%;
+  }
+  .host-product .host-activity-heading {
+    align-items: flex-start;
+  }
+  .host-product .host-activity-heading .inline-actions {
+    flex-wrap: wrap;
+  }
+  .host-product .host-suggestion-reading .markdown {
+    font-size: 15px;
+  }
+  .host-product .host-suggestion-row {
+    gap: 10px;
+  }
+}
+.host-grant-choices {
+  margin: 20px 0;
+}
+.host-grant-choices > summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+.host-grant-choices .searchbox {
+  margin-top: 16px;
+}
+.host-grant-choices .host-grant-skills {
+  margin-top: 12px;
+  max-height: 300px;
+  overflow: auto;
+}
+.host-grant-choices .host-grant-skills legend {
+  font-size: 12px;
+}

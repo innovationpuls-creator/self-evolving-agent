@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D2 Skill 管理](D2-ACCEPTANCE.md)、[D2 Memory](D2-MEMORY-ACCEPTANCE.md)、[D2 Diagnostic Log](D2-DIAGNOSTIC-ACCEPTANCE.md)、[D2 整体集成](D2-INTEGRATION-ACCEPTANCE.md)、[D3 Reflection](D3-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -91,7 +91,7 @@ npm run test:skills:ui
 
 当前提供 D1～D5 本机能力。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端、诊断、导出及产品落盘的真实凭证传播专项已通过，保护范围和未知秘密限制见 [D5 验收报告](D5-ACCEPTANCE.md)。
 
-D3 Reflection 的真实受限 XPC 及完整业务补验收已通过；运行时仍要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。D5 已通过 30 分钟本机持续负载、恢复和既有 Apple Development 签名包验证；Windows 实机、Developer ID 公证与公开分发没有验证。Windows 受限 Reflection 继续不可用。D6 未启动。
+运行时要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。D5 已通过 30 分钟本机持续负载、恢复和既有 Apple Development 签名包验证；Windows 实机、Developer ID 公证与公开分发没有验证。Windows 受限 Reflection 继续不可用。D6 独立原型正在迭代并等待用户验收；正式 Web/Desktop 改造须待用户确认设计方向。
 
 ## 自主能力进化
 
@@ -112,11 +112,19 @@ npm run test:d4:desktop
 
 Desktop 检查默认使用 `release/Agent-darwin-arm64/Agent.app`，可用 `AGENT_APP_PATH` 指定可执行文件。macOS 使用现有有效签名身份可避免 ad-hoc 包重新触发的钥匙串等待。完整证据与限制见 [D4 验收记录](D4-ACCEPTANCE.md)。
 
+## 能力目录、输入引用与授权
+
+“能力管理”的 Tool 列表展示 Pi 原生定义及会话实际加载的 Tool、描述、来源、参数和可调用状态。普通 Skill 无需执行代码审查；Extension 的代码审查、启用与实际加载分别显示，管理操作仍在对应 Skill 中完成。
+
+会话输入支持 `/skill:` 候选和 `@` 项目文件候选。方向键选择，Enter 或 Tab 插入，Escape 关闭；Shift+Enter 换行，Control/Command+Enter 发送，输入法组词期间不选择或发送。带空格的文件引用使用引号，内容通过当前 Session 的原生 `read` 和权限 Hooks 获取。未知或禁用的 `/skill:` 保持 Pi 原生普通文本行为，不会因此展开或启用禁用能力。
+
+“模型设置”使用 Pi 原生 OAuth/API Key 登录步骤。“退出 Host 授权”仅移除当前 Host 加密保存的独立凭据；环境仍提供授权时，状态会继续显示可用。它不会删除原始 Pi 凭据、修改环境变量或向提供方撤销账号授权。执行中会话、反思、开发活动与能力发布会阻止冲突的授权变更。
+
 ## 长期记忆
 
 “记忆管理”可检索当前项目与 Global 知识，查看、编辑、调整作用域或删除，来源和修订历史按需展开。删除后退出当前检索，历史仍保留。其他窗口同时修改时保留草稿并提示重新读取；修改必须填写依据。
 
-Agent 可按需调用 `memory_search`、`memory_get`、`memory_save`、`memory_revise`、`memory_retire`，区分事实、经验、决定与未经验证的怀疑。项目决定在来源会话回档后退出其他会话的当前检索；通用经验和历史证据保留。已读入模型上下文的旧内容不会被远程擦除，后续判断应重新检索当前认识。Memory 内容不授予执行权限。
+Agent 可按需调用 `memory_search`、`memory_get`、`memory_save`、`memory_revise`、`memory_retire`，区分事实、经验、决定与未经验证的怀疑。项目决定在来源会话回档后退出其他会话的当前检索；通用经验和历史证据保留。已读入模型上下文的旧内容不会被远程擦除，后续判断应重新检索当前认识。Memory 内容不授予执行权限。成功的新增、修正或撤销会在对话中显示当次修订与来源证据；“当前记忆状态”按需读取最新认识，历史执行结果不会冒充当前版本。
 
 Memory 回归命令（客户端检查前先 build，真实模型检查前先 package:desktop）：
 
@@ -129,7 +137,7 @@ npx tsx scripts/memory-ui-smoke.ts
 
 ## 运行诊断与历史证据
 
-“历史日志”查询跨会话运行记录；会话内“运行诊断”限定当前会话。概要可按 Tool、状态、异常、Session、Trace、Entry、分支叶节点和时间筛选；详情按需展开 Turn、调用顺序、耗时、Usage、重复次数、Skill/知识版本和 Memory 来源。Memory 详情中的来源也可直接打开原始 Entry。
+会话内使用“对话 / 轨迹”切换，输入区和执行状态共用当前 Session。轨迹按当前 Pi 分支展示 Trace → Turn → Tool Call，实时更新；首次打开定位最新记录，上滚后暂停跟随。已加载内容支持搜索，参数、结果、错误、耗时、实际记录的 Usage、资源版本与原始证据按需展开。历史会话从会话列表进入，不再提供独立“历史日志”页面或全局目录。Memory、Reflection、Evolution 的来源可定位对应会话和事件；旧分支与受限 Reflection 来源仅通过现有诊断接口只读查看，不改变当前执行分支。
 
 Agent 可自主调用 `diagnostic_search`、`diagnostic_get`、`diagnostic_evidence`，仅访问当前规范化项目内的历史。用户 Bearer 权限沿用产品全局权限。Global Memory 的来源引用不扩大 Agent 的原文访问权限。
 
@@ -146,10 +154,6 @@ HTTP 使用现有 Bearer 认证：
 完整 Prompt、Thinking、参数和结果仍只存在于加密 Pi Session。SQLite 诊断仅存指标及引用，单条元数据上限64KiB、队列上限1000，超限或写入失败标识缺失而不阻止正常任务；已存在指标不会因证据故障消失。异常重启不重放，未结束记录标中断；只有原生确实保存的事实能够补齐，未采集耗时保持未知。上线前历史不补造 Trace，仍可按原生 Entry 取证。
 
 Host System Log 只保存固定故障 code、级别和关联 ID，最多5000条且不超过30天；Trace 详情的 `systemLogs` 提供关联工程故障。诊断历史本身随业务数据保留，未新增自动删除政策。真实双端验收可运行 `npx tsx scripts/diagnostic-ui-smoke.ts`（先打包，会使用模型额度）。
-
-## D2 整体集成验收
-
-打包后执行 `npx tsx scripts/d2-integration-ui-smoke.ts`，使用本机 Pi 授权、macOS Desktop、Chrome 和真实模型额度，在同一项目中连续验证 Skill、知识积累/修正/分支适用性、原生诊断、Host 强杀及重启续接。默认只加载普通 Skill；不能把历史特殊版本批准复用于本轮。收据见 [整体验收报告](D2-INTEGRATION-ACCEPTANCE.md)。
 
 `npx tsx scripts/skills-response-browser-smoke.ts` 在已构建 Web 上验证 10 项异步响应、重连和跨项目状态场景，不使用模型。完整自动化回归使用 `npm test`。
 

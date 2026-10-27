@@ -1,0 +1,38 @@
+[
+  {
+    "name": "原会话空间真实发送、可见流式文本与停止",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "session": "dd615cf2-ec08-4d03-9322-86b025c0a838",
+      "partialLength": 31,
+      "busy": false,
+      "outcome": "aborted",
+      "messageUpdates": 32
+    }
+  },
+  {
+    "name": "原会话空间真实发送、可见流式文本与停止",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "session": "1506a69d-4908-4901-9975-e89dee3d5096",
+      "partialLength": 45,
+      "busy": false,
+      "outcome": "aborted",
+      "messageUpdates": 48
+    }
+  },
+  {
+    "name": "原会话空间真实发送、可见流式文本与停止",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "session": "67454a7e-bf36-4bce-93c9-b9573dcd8c7d",
+      "partialLength": 27,
+      "busy": false,
+      "outcome": "aborted",
+      "messageUpdates": 25
+    }
+  }
+]

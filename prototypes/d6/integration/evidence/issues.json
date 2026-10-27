@@ -1,0 +1,33 @@
+[
+  {
+    "name": "定位来源改变原会话阅读位置",
+    "observed": "原会话 top=299，来源定位后返回 top=1516。自动展开的工具记录改变了高度。",
+    "resolution": "离开定位视图时恢复该分组原先展开状态；来源定位与原会话使用独立阅读锚点。",
+    "verification": "journey-results.json: return to original Session restores reading position and draft; includes reader focus assertion"
+  },
+  {
+    "name": "空 Assistant 段落和拥挤侧栏",
+    "observed": "仅含原生 toolCall 的消息产生空白 Agent 段落；长标题和项目元信息使导航挤出首屏。",
+    "resolution": "保留原生调用/结果并放入现有执行分组；侧栏列表独立滚动，项目元信息不被 flex 压缩重叠。",
+    "verification": "after/session-1440.png; after/located-session-1440.png"
+  },
+  {
+    "name": "读取原始证据先占主体",
+    "observed": "原参考应用直接把协议正文放在主阅读区。",
+    "resolution": "复用原生 MemoryToolFeedback 先展示操作和历史修订链接，完整 Entry 与调用参数可按需展开。",
+    "verification": "after/source-operation-1440.png; after/basis-1440.png"
+  },
+  {
+    "name": "认证请求等待期间的缓存显示边界",
+    "observed": "正式 useHost 的 connecting 状态本身不代表已认证；不能以此解除 401 后的显示锁定。",
+    "resolution": "真实 A 持续锁定受保护内容，直到认证与权威同步 ready；复用正式认证而不绕开。",
+    "verification": "boundary-results.json: failed reauthentication cannot expose retained content during pending request"
+  },
+  {
+    "name": "旧工作空间测试",
+    "observed": "workspace-browser.mjs 寻找 全部修订 tab 超时；前一轮存在同样失败。",
+    "resolution": "保留旧断言与失败记录；独立执行当前工作空间 smoke 和原会话状态套件。",
+    "verification": "regression-results.json; workspace-smoke.json",
+    "status": "existing test mismatch, not closed"
+  }
+]

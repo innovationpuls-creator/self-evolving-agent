@@ -1,0 +1,15 @@
+[
+  {
+    "name": "global import 202 is candidate only; external draft import creates a new immutable version",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "importStatus": 202,
+      "importOperation": "e2f0b65e-0351-4f38-a472-d28aee76348a",
+      "scope": "",
+      "current": null,
+      "initial": "baa0eb47-8b18-4f32-b9cc-d3e15e31bc78",
+      "candidate": "ccb570f4-c8a5-46cd-bde9-1676963bad15"
+    }
+  }
+]

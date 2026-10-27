@@ -1,0 +1,12 @@
+{
+	"extends": ["../biome.json"],
+	"root": false,
+	"files": {
+		"includes": [
+			"scripts/**/*.mjs",
+			"scripts/**/*.ts",
+			"tests/**/*.ts",
+			"*.json"
+		]
+	}
+}

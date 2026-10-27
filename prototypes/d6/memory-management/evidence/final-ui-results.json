@@ -1,0 +1,32 @@
+[
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "scope": "beta retained, then alpha explicitly selected",
+      "longContent": true,
+      "overflow": false
+    }
+  },
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "scope": "beta retained, then alpha explicitly selected",
+      "longContent": true,
+      "overflow": false
+    }
+  },
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "scope": "beta retained, then alpha explicitly selected",
+      "longContent": true,
+      "overflow": false
+    }
+  }
+]

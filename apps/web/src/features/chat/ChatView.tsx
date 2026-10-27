@@ -1,4 +1,8 @@
+import { TrajectoryPanel, type TrajectoryViewState } from '../diagnostics/TrajectoryPanel';
+import type { EvidenceTarget } from '../diagnostics/evidence';
 import { ActivityPanel } from '../evolution/ActivityPanel';
+import { TaskInput } from './TaskInput';
+import { MemoryToolFeedback } from './MemoryToolFeedback';
 import React, { useEffect, useRef, useState } from 'react';
 import { Markdown } from '../../components/Markdown';
 import { ReflectionStatus } from '../reflection/ReflectionStatus';
@@ -57,7 +61,13 @@ export function ChatView({
   onSend,
   onCreate,
   onSettings,
-  onDiagnostics,
+  tab,
+  onTab,
+  trajectoryStates,
+  evidence,
+  onEvidenceDone,
+  onEvidence,
+  onMemory,
   onReflection,
   onOpen,
   onSkill,
@@ -75,7 +85,13 @@ export function ChatView({
   onSend: () => void;
   onCreate: (cwd: string, model: Model) => Promise<void>;
   onSettings: () => void;
-  onDiagnostics: () => void;
+  tab: 'chat' | 'trajectory';
+  onTab: (tab: 'chat' | 'trajectory') => void;
+  trajectoryStates: Map<string, TrajectoryViewState>;
+  evidence?: EvidenceTarget;
+  onEvidenceDone: () => void;
+  onEvidence: (target: EvidenceTarget) => void;
+  onMemory: (id: string, revision?: number, project?: string) => void;
   onReflection: () => void;
   onOpen: (id: string) => Promise<void>;
   onSkill: (id: string) => void;
@@ -99,7 +115,7 @@ export function ChatView({
     if (!model && models[0]) setModel(`${models[0].provider}/${models[0].id}`);
   }, [models, model]);
   useEffect(() => {
-    if (!transcript.current) return;
+    if (!transcript.current || tab !== 'chat') return;
     const el = transcript.current;
     if (currentId.current !== session?.id) {
       currentId.current = session?.id;
@@ -109,7 +125,7 @@ export function ChatView({
       setNewContent(false);
     } else if (follow.current) el.scrollTop = el.scrollHeight;
     else setNewContent(true);
-  }, [session?.id, session?.messages, session?.streamingMessage]);
+  }, [session?.id, session?.messages, session?.streamingMessage, tab]);
   const messages = [
     ...(session?.messages ?? []),
     ...(session?.streamingMessage ? [session.streamingMessage] : []),
@@ -124,9 +140,6 @@ export function ChatView({
         </div>
         {session && (
           <div className="actions">
-            <button type="button" onClick={onDiagnostics}>
-              运行诊断
-            </button>
             <details className="action-menu">
               <summary>会话操作</summary>
               <div>
@@ -161,6 +174,50 @@ export function ChatView({
         )}
       </header>
       {session && (
+        <div
+          className="session-tabs"
+          role="tablist"
+          aria-label="会话视图"
+          onKeyDown={(event) => {
+            if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+            event.preventDefault();
+            const next =
+              event.key === 'Home'
+                ? 'chat'
+                : event.key === 'End'
+                  ? 'trajectory'
+                  : tab === 'chat'
+                    ? 'trajectory'
+                    : 'chat';
+            onTab(next);
+            document.getElementById(next === 'chat' ? 'conversation-tab' : 'trajectory-tab')?.focus();
+          }}
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'chat'}
+            tabIndex={tab === 'chat' ? 0 : -1}
+            aria-controls="conversation-panel"
+            id="conversation-tab"
+            onClick={() => onTab('chat')}
+          >
+            对话
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === 'trajectory'}
+            tabIndex={tab === 'trajectory' ? 0 : -1}
+            aria-controls="trajectory-panel"
+            id="trajectory-tab"
+            onClick={() => onTab('trajectory')}
+          >
+            轨迹
+          </button>
+        </div>
+      )}
+      {session && (
         <ActivityPanel
           key={session.id}
           api={api}
@@ -172,7 +229,18 @@ export function ChatView({
         />
       )}
       <ReflectionStatus api={api} sessionId={session?.id} onOpen={onReflection} />
-      {!session ? (
+      {!session && evidence ? (
+        <div className="chat-content">
+          <p className="notice">来源会话轨迹 · 只读</p>
+          <TrajectoryPanel
+            api={api}
+            active={true}
+            states={trajectoryStates}
+            target={evidence}
+            onTargetDone={() => {}}
+          />
+        </div>
+      ) : !session ? (
         selectedId ? (
           <section className="start">
             <h2>正在同步会话</h2>
@@ -226,143 +294,177 @@ export function ChatView({
         )
       ) : (
         <>
-          <div className="session-tools">
-            <label>
-              模型
-              <select
-                aria-label="当前模型"
-                value={`${session.provider}/${session.model}`}
-                disabled={session.busy || !ready}
-                onChange={(event) => {
-                  const next = models.find((m) => `${m.provider}/${m.id}` === event.target.value);
-                  if (next)
-                    void run(() =>
-                      api(`/sessions/${session.id}/model`, 'POST', { provider: next.provider, value: next.id }),
-                    );
-                }}
-              >
-                {models.map((m) => (
-                  <option key={`${m.provider}/${m.id}`} value={`${m.provider}/${m.id}`}>
-                    {m.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              推理强度
-              <select
-                aria-label="推理强度"
-                disabled={session.busy || !ready}
-                value={session.thinkingLevel}
-                onChange={(event) =>
-                  void run(() => api(`/sessions/${session.id}/thinking`, 'POST', { value: event.target.value }))
-                }
-              >
-                {session.thinkingLevels?.map((level) => (
-                  <option key={level}>{level}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              历史分支
-              <select
-                aria-label="历史分支"
-                disabled={session.busy || !ready}
-                value={session.leafId ?? ''}
-                onChange={(event) =>
-                  void run(() => api(`/sessions/${session.id}/branch`, 'POST', { value: event.target.value }))
-                }
-              >
-                <option value="" disabled>
-                  选择历史节点
-                </option>
-                <option value={session.leafId} hidden>
-                  当前执行位置
-                </option>
-                {nodes(session.tree ?? [])}
-              </select>
-            </label>
-          </div>
-          {(session.error || (session.interrupted && !session.busy)) && (
-            <div className="notice" role="status">
-              {session.error ?? '上次运行已中断。请检查工具结果与实际文件后继续，系统不会自动重放。'}
-            </div>
-          )}
-          {session.skillFailed && (
-            <div className="notice">
-              <button
-                type="button"
-                disabled={!ready}
-                onClick={() => void run(() => api(`/sessions/${session.id}/recover-skills`, 'POST', {}))}
-              >
-                重试恢复能力
-              </button>
-            </div>
-          )}
-          <section
-            className="transcript"
-            ref={transcript}
-            aria-label="会话消息"
-            onScroll={() => {
-              const el = transcript.current;
-              if (!el) return;
-              follow.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
-              positions.set(session.id, el.scrollTop);
-              if (follow.current) setNewContent(false);
-            }}
+          <div
+            className="chat-content"
+            role="tabpanel"
+            id="conversation-panel"
+            aria-labelledby="conversation-tab"
+            hidden={tab !== 'chat'}
           >
-            {!messages.length && (
-              <div className="conversation-empty">
-                <h2>这项工作，从这里开始</h2>
-                <p>描述目标、已有材料，以及你希望得到的结果。</p>
+            <div className="session-tools">
+              <label>
+                模型
+                <select
+                  aria-label="当前模型"
+                  value={`${session.provider}/${session.model}`}
+                  disabled={session.busy || !ready}
+                  onChange={(event) => {
+                    const next = models.find((m) => `${m.provider}/${m.id}` === event.target.value);
+                    if (next)
+                      void run(() =>
+                        api(`/sessions/${session.id}/model`, 'POST', { provider: next.provider, value: next.id }),
+                      );
+                  }}
+                >
+                  {models.map((m) => (
+                    <option key={`${m.provider}/${m.id}`} value={`${m.provider}/${m.id}`}>
+                      {m.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                推理强度
+                <select
+                  aria-label="推理强度"
+                  disabled={session.busy || !ready}
+                  value={session.thinkingLevel}
+                  onChange={(event) =>
+                    void run(() => api(`/sessions/${session.id}/thinking`, 'POST', { value: event.target.value }))
+                  }
+                >
+                  {session.thinkingLevels?.map((level) => (
+                    <option key={level}>{level}</option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                历史分支
+                <select
+                  aria-label="历史分支"
+                  disabled={session.busy || !ready}
+                  value={session.leafId ?? ''}
+                  onChange={(event) =>
+                    void run(() => api(`/sessions/${session.id}/branch`, 'POST', { value: event.target.value }))
+                  }
+                >
+                  <option value="" disabled>
+                    选择历史节点
+                  </option>
+                  <option value={session.leafId} hidden>
+                    当前执行位置
+                  </option>
+                  {nodes(session.tree ?? [])}
+                </select>
+              </label>
+            </div>
+            {(session.error || (session.interrupted && !session.busy)) && (
+              <div className="notice" role="status">
+                {session.error ?? '上次运行已中断。请检查工具结果与实际文件后继续，系统不会自动重放。'}
               </div>
             )}
-            {messages.map((message, index) =>
-              message.role === 'toolResult' ? (
-                <details className="tool-result" key={index}>
-                  <summary>
-                    {message.isError ? '工具失败' : '工具结果'} · {message.toolName}
-                  </summary>
-                  <pre>{messageText(message)}</pre>
-                </details>
-              ) : (
-                <article className={message.role} key={index}>
-                  <span className="message-author">{message.role === 'user' ? '你' : 'Agent'}</span>
-                  <Content message={message} />
-                </article>
-              ),
+            {session.skillFailed && (
+              <div className="notice">
+                <button
+                  type="button"
+                  disabled={!ready}
+                  onClick={() => void run(() => api(`/sessions/${session.id}/recover-skills`, 'POST', {}))}
+                >
+                  重试恢复能力
+                </button>
+              </div>
             )}
-            {!!session.queued && (
-              <p className="working" role="status">
-                等待能力切换完成 · {session.queued} 条消息
-              </p>
-            )}
-            {session.busy && (
-              <p className="working" role="status">
-                {session.execution && !pendingToolNames(session).length
-                  ? `正在执行工具 · ${session.execution.name}`
-                  : session.streamingMessage
-                    ? '正在生成…'
-                    : (() => {
-                        const tools = pendingToolNames(session);
-                        return tools.length ? `正在执行工具 · ${tools.join('、')}` : '正在处理…';
-                      })()}
-              </p>
-            )}
-          </section>
-          {newContent && (
-            <button
-              className="new-content"
-              type="button"
-              onClick={() => {
-                follow.current = true;
-                setNewContent(false);
-                if (transcript.current) transcript.current.scrollTop = transcript.current.scrollHeight;
+            <section
+              className="transcript"
+              ref={transcript}
+              aria-label="会话消息"
+              onScroll={() => {
+                const el = transcript.current;
+                if (!el) return;
+                follow.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+                positions.set(session.id, el.scrollTop);
+                if (follow.current) setNewContent(false);
               }}
             >
-              查看新内容 ↓
-            </button>
-          )}
+              {!messages.length && (
+                <div className="conversation-empty">
+                  <h2>这项工作，从这里开始</h2>
+                  <p>描述目标、已有材料，以及你希望得到的结果。</p>
+                </div>
+              )}
+              {messages.map((message, index) =>
+                message.role === 'toolResult' ? (
+                  <div key={index}>
+                    <MemoryToolFeedback
+                      message={message}
+                      api={api}
+                      project={session.cwd}
+                      onMemory={onMemory}
+                      onEvidence={onEvidence}
+                    />
+                    <details className="tool-result">
+                      <summary>
+                        {message.isError ? '工具失败' : '工具结果'} · {message.toolName}
+                      </summary>
+                      <pre>{messageText(message)}</pre>
+                    </details>
+                  </div>
+                ) : (
+                  <article className={message.role} key={index}>
+                    <span className="message-author">{message.role === 'user' ? '你' : 'Agent'}</span>
+                    <Content message={message} />
+                  </article>
+                ),
+              )}
+              {!!session.queued && (
+                <p className="working" role="status">
+                  等待能力切换完成 · {session.queued} 条消息
+                </p>
+              )}
+              {session.busy && (
+                <p className="working" role="status">
+                  {session.execution && !pendingToolNames(session).length
+                    ? `正在执行工具 · ${session.execution.name}`
+                    : session.streamingMessage
+                      ? '正在生成…'
+                      : (() => {
+                          const tools = pendingToolNames(session);
+                          return tools.length ? `正在执行工具 · ${tools.join('、')}` : '正在处理…';
+                        })()}
+                </p>
+              )}
+            </section>
+            {newContent && (
+              <button
+                className="new-content"
+                type="button"
+                onClick={() => {
+                  follow.current = true;
+                  setNewContent(false);
+                  if (transcript.current) transcript.current.scrollTop = transcript.current.scrollHeight;
+                }}
+              >
+                查看新内容 ↓
+              </button>
+            )}
+          </div>
+          <div
+            className="chat-content"
+            role="tabpanel"
+            id="trajectory-panel"
+            aria-labelledby="trajectory-tab"
+            hidden={tab !== 'trajectory'}
+          >
+            <TrajectoryPanel
+              key={session.id}
+              api={api}
+              session={session}
+              active={tab === 'trajectory'}
+              states={trajectoryStates}
+              target={evidence}
+              onTargetDone={onEvidenceDone}
+            />
+          </div>
           <form
             className="composer"
             onSubmit={(event) => {
@@ -370,20 +472,21 @@ export function ChatView({
               onSend();
             }}
           >
-            <textarea
-              aria-label="任务"
-              placeholder="描述你想完成的任务…"
+            <TaskInput
+              key={session.id}
+              api={api}
+              sessionId={session.id}
               value={draft}
-              onChange={(event) => onDraft(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' && (event.metaKey || event.ctrlKey) && !event.nativeEvent.isComposing) {
-                  event.preventDefault();
-                  onSend();
-                }
-              }}
+              ready={ready}
+              onChange={onDraft}
+              onSend={onSend}
             />
             <div>
-              <small>{ready ? '⌘ / Ctrl + Enter 发送' : '连接恢复后可继续发送，草稿保留在本页。'}</small>
+              <small>
+                {ready
+                  ? '⌘ / Ctrl + Enter 发送 · /skill: 原生指引 · @ 文件内容'
+                  : '连接恢复后可继续发送，草稿保留在本页。'}
+              </small>
               {session.busy ? (
                 <button
                   type="button"

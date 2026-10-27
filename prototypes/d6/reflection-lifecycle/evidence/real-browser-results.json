@@ -1,0 +1,44 @@
+[
+  {
+    "name": "真实模型：会话→无变化反思→实际来源→原始Entry→原会话草稿",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "mode": "real configured model / signed native Worker",
+      "changes": 0,
+      "source": {
+        "sessionId": "16e0d87b-94bb-48dd-a6b0-4b73ee402dc6",
+        "entryId": "58efafc4"
+      },
+      "draftRetained": true
+    }
+  },
+  {
+    "name": "真实模型：会话→无变化反思→实际来源→原始Entry→原会话草稿",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "mode": "real configured model / signed native Worker",
+      "changes": 0,
+      "source": {
+        "sessionId": "16e0d87b-94bb-48dd-a6b0-4b73ee402dc6",
+        "entryId": "58efafc4"
+      },
+      "draftRetained": true
+    }
+  },
+  {
+    "name": "真实模型：会话→无变化反思→实际来源→原始Entry→原会话草稿",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "mode": "real configured model / signed native Worker",
+      "changes": 0,
+      "source": {
+        "sessionId": "16e0d87b-94bb-48dd-a6b0-4b73ee402dc6",
+        "entryId": "58efafc4"
+      },
+      "draftRetained": true
+    }
+  }
+]

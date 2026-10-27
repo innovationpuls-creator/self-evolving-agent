@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import type { EvidenceReference } from '../features/diagnostics/DiagnosticsPanel';
+import type { EvidenceTarget } from '../features/diagnostics/evidence';
 
 export type View =
-  | { kind: 'chat' | 'settings' }
+  | { kind: 'chat'; evidence?: EvidenceTarget }
+  | { kind: 'settings' }
   | { kind: 'skills'; id?: string; project?: string; knowledgeRevision?: string }
   | { kind: 'memory'; id?: string; project?: string; revision?: number }
-  | { kind: 'diagnostics'; session?: { id: string; title: string }; evidence?: EvidenceReference }
   | { kind: 'reflection' | 'suggestions'; id?: string };
 
 const positionSchema = z.object({
@@ -26,7 +26,13 @@ const navigationSchema = z.object({
   revision: z.number().int().positive().optional(),
   knowledgeRevision: z.string().max(128).optional(),
   evidence: z
-    .object({ sessionId: z.string().uuid(), entryId: z.string().max(128), toolCallId: z.string().max(128).optional() })
+    .object({
+      sessionId: z.string().uuid().optional(),
+      traceId: z.string().uuid().optional(),
+      entryId: z.string().max(128).optional(),
+      toolCallId: z.string().max(128).optional(),
+    })
+    .refine((value) => !!value.sessionId || !!value.traceId)
     .optional(),
 });
 function read(key: string): unknown {
@@ -44,13 +50,23 @@ function write(key: string, value: unknown) {
   }
 }
 export function readNavigation() {
-  return navigationSchema.safeParse(read('agent-navigation')).data;
+  const saved = navigationSchema.safeParse(read('agent-navigation')).data;
+  if (saved?.kind === 'diagnostics') {
+    const sessionId = saved.sessionId ?? saved.diagnosticSessionId ?? saved.evidence?.sessionId;
+    return {
+      ...saved,
+      kind: 'chat' as const,
+      sessionId,
+      evidence: saved.evidence ?? (sessionId ? { sessionId } : undefined),
+    };
+  }
+  return saved;
 }
 export function saveNavigation(view: View, sessionId?: string) {
   const value = navigationSchema.parse({
     ...view,
     sessionId,
-    diagnosticSessionId: view.kind === 'diagnostics' ? view.session?.id : undefined,
+    diagnosticSessionId: undefined,
   });
   write('agent-navigation', value);
 }

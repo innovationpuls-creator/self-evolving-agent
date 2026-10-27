@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--import",
+    "tsx",
+    "--test",
+    "prototypes/d6/acceptance/tests/reflection-errors.test.ts"
+  ],
+  "cwd": "",
+  "code": 0,
+  "signal": null,
+  "sourceChanges": []
+}

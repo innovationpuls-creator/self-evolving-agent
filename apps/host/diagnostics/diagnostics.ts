@@ -28,8 +28,11 @@ export const diagnosticPage = z
   .object({
     limit: z.coerce.number().int().min(1).max(200).default(50),
     offset: z.coerce.number().int().min(0).default(0),
+    turnId: z.string().min(1).max(128).optional(),
+    unassigned: z.literal('true').optional(),
   })
-  .strict();
+  .strict()
+  .refine((page) => !(page.turnId && page.unassigned), 'Turn and unassigned filters are mutually exclusive');
 export const evidenceQuery = z
   .object({
     sessionId: z.string().uuid(),
@@ -56,6 +59,15 @@ export interface DiagnosticTrace {
   errorCount: number;
   incomplete: boolean;
   data: Record<string, unknown>;
+}
+export interface DiagnosticSession {
+  sessionId: string;
+  started: number;
+  latest: number;
+  traceCount: number;
+  toolCount: number;
+  errorCount: number;
+  incomplete: boolean;
 }
 export interface DiagnosticTurn {
   id: string;
@@ -366,10 +378,8 @@ export class DiagnosticService {
     }
     return ['', []];
   }
-  search(ctx: DiagnosticContext, input: unknown, branchEntries?: string[]) {
-    this.assertAvailable();
-    const q = diagnosticQuery.parse(input),
-      [scope, params] = this.scope(ctx);
+  private matching(ctx: DiagnosticContext, q: z.infer<typeof diagnosticQuery>, branchEntries?: string[]) {
+    const [scope, params] = this.scope(ctx);
     let where = `1=1${scope}`;
     const add = (sql: string, value: SQLInputValue) => {
       where += ` AND ${sql}`;
@@ -394,6 +404,37 @@ export class DiagnosticService {
         throw new DiagnosticError('分支筛选需要有效的 Session 和叶节点', 400, 'DIAGNOSTIC_BRANCH_REQUIRED');
       add("json_extract(t.data,'$.userEntryId') IN (SELECT value FROM json_each(?))", JSON.stringify(branchEntries));
     }
+    return { where, params };
+  }
+  sessions(ctx: DiagnosticContext, input: unknown, branchEntries?: string[]) {
+    this.assertAvailable();
+    const query = diagnosticQuery.parse(input);
+    const { where, params } = this.matching(ctx, query, branchEntries);
+    try {
+      const total = Number(
+        this.db.prepare(`SELECT count(DISTINCT t.session_id) n FROM diagnostic_traces t WHERE ${where}`).get(...params)
+          ?.n ?? 0,
+      );
+      const rows = this.db
+        .prepare(`SELECT t.session_id sessionId,min(t.started) started,max(t.started) latest,
+        count(*) traceCount,sum(json_extract(t.data,'$.toolCount')) toolCount,
+        sum(json_extract(t.data,'$.errorCount')) errorCount,max(json_extract(t.data,'$.incomplete')) incomplete
+        FROM diagnostic_traces t WHERE ${where} GROUP BY t.session_id
+        ORDER BY latest DESC,t.session_id DESC LIMIT ? OFFSET ?`)
+        .all(...params, query.limit, query.offset);
+      return this.sensitive.copy({
+        items: rows.map((row) => ({ ...row, incomplete: !!row.incomplete })) as unknown as DiagnosticSession[],
+        total,
+        health: { ...this.health },
+      });
+    } catch {
+      throw new DiagnosticError('会话诊断查询未完成');
+    }
+  }
+  search(ctx: DiagnosticContext, input: unknown, branchEntries?: string[]) {
+    this.assertAvailable();
+    const q = diagnosticQuery.parse(input);
+    const { where, params } = this.matching(ctx, q, branchEntries);
     try {
       const total = Number(
         this.db.prepare(`SELECT count(*) n FROM diagnostic_traces t WHERE ${where}`).get(...params)?.n ?? 0,
@@ -418,16 +459,40 @@ export class DiagnosticService {
       [scope, params] = this.scope(ctx);
     const row = this.db.prepare(`SELECT t.data FROM diagnostic_traces t WHERE t.id=?${scope}`).get(id, ...params);
     if (!row) throw new DiagnosticError('诊断不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
-    const read = <T>(table: string) => ({
+    const relation = `(c.assistant_entry IS NOT NULL AND c.assistant_entry=u.entry_id
+      OR c.assistant_entry IS NULL AND json_extract(c.data,'$.data.turnOrdinal')=json_extract(u.data,'$.ordinal'))`;
+    const uniqueTurn = `(SELECT count(*) FROM diagnostic_turns u WHERE u.trace_id=c.trace_id AND ${relation})=1`;
+    if (
+      page.turnId &&
+      !this.db.prepare('SELECT id FROM diagnostic_turns WHERE trace_id=? AND id=?').get(id, page.turnId)
+    )
+      throw new DiagnosticError('Turn 不存在', 404, 'DIAGNOSTIC_NOT_FOUND');
+    const callFilter = page.turnId
+      ? ` AND ${uniqueTurn} AND EXISTS(SELECT 1 FROM diagnostic_turns u WHERE u.trace_id=c.trace_id AND u.id=? AND ${relation})`
+      : page.unassigned
+        ? ` AND NOT (${uniqueTurn})`
+        : '';
+    const read = <T>(table: string, filter = '', values: SQLInputValue[] = [], order = 'rowid') => ({
       items: this.db
-        .prepare(`SELECT data FROM ${table} WHERE trace_id=? ORDER BY rowid LIMIT ? OFFSET ?`)
-        .all(id, page.limit, page.offset)
+        .prepare(`SELECT c.data FROM ${table} c WHERE c.trace_id=?${filter} ORDER BY ${order} LIMIT ? OFFSET ?`)
+        .all(id, ...values, page.limit, page.offset)
         .map((r) => JSON.parse(String(r.data)) as T),
-      total: Number(this.db.prepare(`SELECT count(*) n FROM ${table} WHERE trace_id=?`).get(id)?.n ?? 0),
+      total: Number(
+        this.db.prepare(`SELECT count(*) n FROM ${table} c WHERE c.trace_id=?${filter}`).get(id, ...values)?.n ?? 0,
+      ),
     });
-    const turns = read<DiagnosticTurn>('diagnostic_turns'),
-      calls = read<DiagnosticCall>('diagnostic_calls'),
+    const turns = read<DiagnosticTurn>('diagnostic_turns', '', [], "json_extract(c.data,'$.ordinal'),c.id"),
+      calls = read<DiagnosticCall>(
+        'diagnostic_calls',
+        callFilter,
+        page.turnId ? [page.turnId] : [],
+        "json_extract(c.data,'$.sequence'),c.id",
+      ),
       events = read<DiagnosticEvent>('diagnostic_events');
+    const unassignedCalls = Number(
+      this.db.prepare(`SELECT count(*) n FROM diagnostic_calls c WHERE c.trace_id=? AND NOT (${uniqueTurn})`).get(id)
+        ?.n ?? 0,
+    );
     const sameToolOccurrences = this.db
       .prepare(
         'SELECT tool_name name,count(*) count FROM diagnostic_calls WHERE trace_id=? GROUP BY tool_name ORDER BY count(*) DESC LIMIT 200',
@@ -445,6 +510,7 @@ export class DiagnosticService {
       calls: calls.items,
       events: events.items,
       sameToolOccurrences,
+      unassignedCalls,
       totals: { turns: turns.total, calls: calls.total, events: events.total },
       health: { ...this.health },
     });

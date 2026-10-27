@@ -1,0 +1,50 @@
+[
+  {
+    "name": "unchanged mock A",
+    "width": 1440,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "unchanged mock B",
+    "width": 1440,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "unchanged mock A",
+    "width": 850,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "unchanged mock B",
+    "width": 850,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "unchanged mock A",
+    "width": 390,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "unchanged mock B",
+    "width": 390,
+    "status": "passed",
+    "expected": "identical PNG bytes",
+    "actual": true
+  },
+  {
+    "name": "original A workspace interaction assertions",
+    "status": "passed",
+    "stdout": "{\"passed\":15,\"failed\":0,\"errors\":[]}\n",
+    "stderr": ""
+  }
+]

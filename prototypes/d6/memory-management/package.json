@@ -1,0 +1,22 @@
+{
+  "name": "d6-a-real-memory-management",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node ../acceptance/scripts/run.mjs -- sh -c 'node --import tsx --test tests/*.test.ts'",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test:journey": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/journey.mjs'",
+    "record": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/journey.mjs --record'",
+    "test:browse": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/browse.mjs'",
+    "test:boundaries": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/boundaries.mjs'",
+    "test:sources": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/source-state.mjs'",
+    "test:regression": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/regression.mjs'",
+    "lint": "biome lint scripts tests",
+    "format:check": "biome format scripts tests *.json",
+    "report": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/report.mjs'",
+    "redact": "node ../acceptance/scripts/run.mjs -- sh -c 'python3 scripts/redact.py'",
+    "open": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/open.mjs'",
+    "check": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/check.mjs'",
+    "test:session": "node ../acceptance/scripts/run.mjs -- sh -c 'node scripts/session-regression.mjs'"
+  }
+}

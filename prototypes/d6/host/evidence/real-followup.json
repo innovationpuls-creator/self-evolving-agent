@@ -1,0 +1,95 @@
+{
+  "catalog": {
+    "jobs": [
+      {
+        "id": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+        "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "created": 1792923699059,
+        "updated": 1792923721668,
+        "scheduledAt": 1792923699275,
+        "status": "succeeded",
+        "reflectionSessionId": "26de600a-7603-469a-9a12-dd4a6a035a48",
+        "sourceCount": 1
+      },
+      {
+        "id": "f7f76894-912e-45e3-90e3-ca8e6596f742",
+        "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+        "created": 1792923609166,
+        "updated": 1792923628295,
+        "scheduledAt": 1792923609862,
+        "status": "succeeded",
+        "reflectionSessionId": "7d55d9ad-cd53-452b-b979-93ddb9a00aff",
+        "sourceCount": 1
+      }
+    ],
+    "records": [
+      {
+        "id": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+        "jobId": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+        "summary": "核实到项目记忆所述重试上限为 7 次，与 POLICY.md 记载的当前上限 3 次不一致；该记忆没有列出来源或依据。"
+      },
+      {
+        "id": "f7f76894-912e-45e3-90e3-ca8e6596f742",
+        "jobId": "f7f76894-912e-45e3-90e3-ca8e6596f742",
+        "summary": "本次确认 POLICY.md 记载重试上限为 3 次、旧文档中的 7 次已失效；项目记忆检索（含历史）未找到可对照条目，因此无法确认存在记忆不一致。"
+      }
+    ],
+    "total": 2,
+    "limit": 20,
+    "offset": 0,
+    "pending": 0,
+    "availability": {
+      "available": true,
+      "checkedAt": 1792923700799
+    }
+  },
+  "detail": {
+    "record": {
+      "id": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+      "jobId": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+      "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+      "reflectionSessionId": "26de600a-7603-469a-9a12-dd4a6a035a48",
+      "project": "<D6_HOST>/.runtime/projects/retry-policy",
+      "status": "succeeded",
+      "created": 1792923700799,
+      "updated": 1792923721431,
+      "summary": "核实到项目记忆所述重试上限为 7 次，与 POLICY.md 记载的当前上限 3 次不一致；该记忆没有列出来源或依据。",
+      "findings": [
+        "项目记忆 a59e58a5-acc1-438d-af39-543699d7ee8c（revision 1）记录 7 次，而 POLICY.md 明确 7 次已失效、当前为 3 次。"
+      ],
+      "uncertainties": [],
+      "evidence": [
+        {
+          "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+          "entryId": "e144aff7"
+        },
+        {
+          "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+          "entryId": "f6190e18"
+        }
+      ],
+      "changes": []
+    },
+    "job": {
+      "id": "74e15268-7e15-4c2a-93fd-35a9c2e9e4c1",
+      "sessionId": "d94260ed-8852-4843-b4dc-4694a61f1336",
+      "project": "<D6_HOST>/.runtime/projects/retry-policy",
+      "provider": "openai-codex",
+      "model": "gpt-6-luna",
+      "scheduledAt": 1792923699275,
+      "created": 1792923699059,
+      "updated": 1792923721668,
+      "runId": "f8c5b035-e79d-492d-b6b9-1f1a076271ce",
+      "reflectionSessionId": "26de600a-7603-469a-9a12-dd4a6a035a48",
+      "status": "succeeded",
+      "sources": [
+        {
+          "markerEntryId": "ce3e4e8e",
+          "settledAt": 1792923699013,
+          "traceId": "5196cd8f-7e4c-429a-82d8-39dec438a280",
+          "status": "ended"
+        }
+      ]
+    }
+  }
+}

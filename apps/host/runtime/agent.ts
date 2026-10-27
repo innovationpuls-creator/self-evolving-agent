@@ -24,6 +24,9 @@ import {
 import { InMemoryCredentialStore, type Credential, type CredentialStore } from '@earendil-works/pi-ai';
 import { SkillService, SkillError, type SkillLoadout, type SkillOperation } from '../skills/skills.js';
 import { SkillResourceLoader } from '../skills/skill-loader.js';
+import { toolCatalog } from '../skills/tool-catalog.js';
+import { fileCandidates, prepareFileReferences } from './input-resources.js';
+import { ProviderAuthService } from './provider-auth.js';
 import { EncryptedStore, restore, SensitiveData, snapshot, type Snapshot } from '../storage/storage.js';
 import { MemoryService, MemoryError, type MemoryContext } from '../memory/memory.js';
 import { memoryTools, memoryToolNames } from '../memory/memory-tools.js';
@@ -94,7 +97,8 @@ class Vault implements CredentialStore {
     let result: Credential | undefined;
     const task = this.queue.then(async () => {
       const current = await this.memory.read(id, options);
-      result = await fn(current);
+      result = (await fn(current)) ?? current;
+      options?.signal?.throwIfAborted();
       if (result) this.sensitive.add(result);
       const all: Record<string, Credential> = {};
       for (const entry of await this.memory.list()) {
@@ -110,7 +114,21 @@ class Vault implements CredentialStore {
     return result;
   };
   delete: CredentialStore['delete'] = async (id, options) => {
-    await this.modify(id, async () => undefined, options);
+    const task = this.queue.then(async () => {
+      options?.signal?.throwIfAborted();
+      const all: Record<string, Credential> = {};
+      for (const entry of await this.memory.list()) {
+        if (entry.providerId === id) continue;
+        const value = await this.memory.read(entry.providerId);
+        if (value) all[entry.providerId] = value;
+      }
+      options?.signal?.throwIfAborted();
+      await this.store.write('credentials.enc', all);
+      // The durable commit must be reflected in memory even if the caller cancels now.
+      await this.memory.delete(id);
+    });
+    this.queue = task.catch(() => {});
+    await task;
   };
 }
 
@@ -118,6 +136,8 @@ export class AgentService extends EventEmitter {
   readonly sensitive = new SensitiveData();
   readonly store: EncryptedStore;
   runtime!: ModelRuntime;
+  providerAuth!: ProviderAuthService;
+  private authMutating = false;
   skills!: SkillService;
   memory!: MemoryService;
   diagnostics!: DiagnosticService;
@@ -127,7 +147,7 @@ export class AgentService extends EventEmitter {
   activities!: ActivityService;
   private activityRuns = new Map<string, { controller: AbortController; task: Promise<void> }>();
   private gate?: { promise: Promise<void>; release: () => void };
-  private queued: Array<{ id: string; text: string }> = [];
+  private queued: Array<{ id: string; text: string; files: string[] }> = [];
   private draining = false;
   private drainDone?: Promise<void>;
   private async waitBarrier() {
@@ -244,6 +264,16 @@ export class AgentService extends EventEmitter {
       modelsPath: null,
       modelsStorePath: join(this.dataDir, 'models-cache'),
     });
+    this.providerAuth = new ProviderAuthService(
+      this.runtime,
+      {
+        acquireMutation: () => this.acquireAuthMutation(),
+        onChanged: async () => {
+          this.emit('event', { type: 'models' });
+        },
+      },
+      this.sensitive,
+    );
     // Dispatch boundary: unlike Extension hooks, an exception here prevents the provider call.
     const send = this.runtime.streamSimple.bind(this.runtime);
     this.runtime.streamSimple = (model, context, options) => send(model, this.sensitive.copy(context), options);
@@ -272,6 +302,7 @@ export class AgentService extends EventEmitter {
       records: () => this.records(),
       canRun: () =>
         !this.closing &&
+        !this.authMutating &&
         !this.gate &&
         !this.draining &&
         !this.queued.length &&
@@ -374,8 +405,39 @@ export class AgentService extends EventEmitter {
         ? { type: 'api_key' as const, key }
         : undefined;
     if (!credential) throw new Error('未找到可导入凭据或未提供 API Key');
-    await this.vault.modify(provider, async () => credential);
-    await this.runtime.refresh({ allowNetwork: false });
+    const release = this.acquireAuthMutation();
+    try {
+      await this.vault.modify(provider, async () => credential);
+      await this.runtime.refresh({ allowNetwork: false });
+      this.emit('event', { type: 'models' });
+    } finally {
+      release();
+    }
+  }
+  private assertAuthIdle() {
+    if (this.authMutating) throw new SkillError('模型授权操作进行中，请完成或取消授权后重试');
+  }
+  private acquireAuthMutation() {
+    this.assertAuthIdle();
+    if (
+      this.closing ||
+      this.gate ||
+      this.draining ||
+      this.loading.size ||
+      this.creating.size ||
+      this.activityRuns.size ||
+      this.queued.length ||
+      this.refreshingKnowledge ||
+      [...this.active.values()].some((item) => item.busy || item.session.isStreaming || item.session.isCompacting) ||
+      this.skills.operations().some((operation) => ['checking', 'waiting'].includes(operation.status)) ||
+      this.reflection.jobs.list({ status: 'running' }).length
+    )
+      throw new SkillError('仍有会话或后台任务运行，请等待结束后修改模型授权');
+    this.authMutating = true;
+    return () => {
+      this.authMutating = false;
+      if (!this.closing) this.reflection.wake();
+    };
   }
   private async loadSaved(id: string) {
     let failed = false;
@@ -530,6 +592,7 @@ export class AgentService extends EventEmitter {
   async authorizeActivity(id: string, input: unknown) {
     const a = this.activities.get(id),
       item = await this.get(a.sessionId);
+    this.assertAuthIdle();
     if (item.busy || item.skillFailed || item.storageFailed || item.blocked)
       throw new SkillError('请等待讨论结束并处理会话错误');
     item.busy = true;
@@ -657,6 +720,7 @@ export class AgentService extends EventEmitter {
   async create(cwd: string, provider: string, model: string) {
     await this.waitBarrier();
     while (this.gate) await this.waitBarrier();
+    this.assertAuthIdle();
     if (this.closing) throw new Error('Host 正在退出');
     const task = (async () => {
       const path = await realpath(resolve(cwd));
@@ -1059,20 +1123,37 @@ export class AgentService extends EventEmitter {
   async diagnosticEvidence(ctx: DiagnosticContext, input: unknown) {
     return this.diagnosticHistory.evidence(ctx, input);
   }
-  async prompt(id: string, text: string) {
+  async tools(project?: string) {
+    const canonical = project ? await realpath(resolve(project)) : undefined;
+    return this.sensitive.copy(toolCatalog(this.skills, this.active.values(), canonical));
+  }
+  async inputResources(id: string, kind: 'skills' | 'files', query: string) {
+    const item = await this.get(id);
+    if (kind === 'files') return { files: await fileCandidates(item.record.cwd, query, this.dataDir) };
+    return this.sensitive.copy({
+      skills: item.loader
+        .getSkills()
+        .skills.filter((skill) => skill.name.toLowerCase().startsWith(query.toLowerCase()))
+        .slice(0, 80)
+        .map((skill) => ({ name: skill.name, description: skill.description })),
+    });
+  }
+  async prompt(id: string, text: string, files: string[] = []) {
+    this.assertAuthIdle();
     if (this.closing) throw new Error('Host 正在退出');
     if (this.gate || this.draining) {
-      this.queued.push({ id, text });
+      this.queued.push({ id, text, files });
       const item = this.active.get(id);
       if (item) this.changed(item);
       return;
     }
-    return this.dispatchPrompt(id, text);
+    return this.dispatchPrompt(id, text, files);
   }
-  private async dispatchPrompt(id: string, text: string) {
+  private async dispatchPrompt(id: string, text: string, files: string[] = []) {
     const item = await this.get(id);
+    this.assertAuthIdle();
     if (this.gate) {
-      this.queued.push({ id, text });
+      this.queued.push({ id, text, files });
       this.changed(item);
       return;
     }
@@ -1087,13 +1168,29 @@ export class AgentService extends EventEmitter {
     item.record.updated = Date.now();
     if (item.record.title === '新会话') item.record.title = this.sensitive.text(text.slice(0, 48));
     item.diagnostic.start();
+    let input = text;
+    let images: Awaited<ReturnType<typeof prepareFileReferences>>['images'] = [];
     try {
+      await item.loader.refreshSkills();
+      const command = /^\/skill:([^\s]+)(?:\s|$)/.exec(text);
+      if (files.length) {
+        const references = await prepareFileReferences(
+          item.session,
+          item.record.cwd,
+          files,
+          this.dataDir,
+          this.sensitive,
+          AbortSignal.timeout(15000),
+        );
+        input = `${text}${command && !text.includes(' ') ? ' ' : '\n\n'}${references.text}`;
+        images = references.images;
+      }
       await this.persist(item);
     } catch (error) {
       item.diagnostic.finish('failed');
       item.busy = false;
-      item.storageFailed = true;
-      item.error = '历史保存失败，请检查数据目录';
+      item.storageFailed = !(error instanceof SkillError);
+      item.error = error instanceof SkillError ? error.message : '历史保存失败，请检查数据目录';
       dispatched();
       throw error;
     }
@@ -1114,7 +1211,7 @@ export class AgentService extends EventEmitter {
         } catch {
           this.diagnostics.gap();
         }
-        await item.session.prompt(text);
+        await item.session.prompt(input, { images });
       } catch {
         item.error = '模型请求失败，请检查连接与模型凭据后重试';
         this.diagnostics.system('PROMPT_FAILED', 'error', id, item.diagnostic.traceId);
@@ -1160,6 +1257,7 @@ export class AgentService extends EventEmitter {
   async action(id: string, action: 'compact' | 'branch' | 'model' | 'thinking', value?: string, provider?: string) {
     const item = await this.get(id);
     await this.waitBarrier();
+    this.assertAuthIdle();
     while (this.gate || this.draining) {
       if (this.gate) await this.waitBarrier();
       else await this.drainDone;
@@ -1216,6 +1314,7 @@ export class AgentService extends EventEmitter {
     return this.view(item);
   }
   private async applySkills(next: SkillLoadout, previous: SkillLoadout, op: SkillOperation, commit: () => void) {
+    this.assertAuthIdle();
     const changed = next.records.find((r) => r.id === op.skillId);
     if (!changed) throw new SkillError('Skill 不存在');
     // Validate admitted candidates with native Pi before the formal switch barrier.
@@ -1415,7 +1514,7 @@ export class AgentService extends EventEmitter {
       while (this.queued.length && !this.closing && !this.gate) {
         const q = this.queued.shift()!;
         try {
-          await this.dispatchPrompt(q.id, q.text);
+          await this.dispatchPrompt(q.id, q.text, q.files);
           await this.active.get(q.id)?.run;
         } catch {
           this.emit('event', { type: 'queue_failed', sessionId: q.id, error: '等待消息未执行，请检查会话后重新提交' });
@@ -1515,6 +1614,7 @@ export class AgentService extends EventEmitter {
   async prepareMaintenance(): Promise<void> {
     if (
       this.closing ||
+      this.authMutating ||
       this.externalRequests ||
       this.gate ||
       this.draining ||
@@ -1545,6 +1645,7 @@ export class AgentService extends EventEmitter {
     this.closing = true;
     clearInterval(this.idleTimer);
     try {
+      await this.providerAuth?.dispose();
       await this.releasing;
       await this.reflection?.close().catch(() => this.diagnostics?.system('REFLECTION_CLOSE_FAILED', 'error'));
       await Promise.allSettled(

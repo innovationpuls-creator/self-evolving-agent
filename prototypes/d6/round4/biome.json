@@ -1,0 +1,1 @@
+{"extends":["../../../biome.json"],"root":false,"vcs":{"enabled":false},"files":{"includes":["src/**/*.tsx","src/**/*.css"]},"linter":{"rules":{"style":{"noDescendingSpecificity":"off"}}}}

@@ -87,6 +87,9 @@ header p { margin: 0; font-size: 12px; color: var(--muted); overflow-wrap: anywh
 .composer textarea { width: 100%; resize: vertical; min-height: 92px; max-height: 220px; background: #fbfcf9; }
 .composer > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 9px; }
 .composer small { font-size: 10px; }
+.input-candidates { list-style: none; padding: 4px; margin: 4px 0; max-height: 220px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+.input-candidates [role="option"] { width: 100%; text-align: left; display: flex; flex-direction: column; gap: 3px; padding: 8px; border: 1px solid transparent; border-radius: 6px; cursor: pointer; }
+.input-candidates [aria-selected="true"] { background: var(--surface); border-color: var(--accent); }
 .new-content { position: absolute; bottom: 173px; left: 50%; transform: translateX(-50%); box-shadow: 0 3px 16px #20352018; font-size: 12px; }
 .markdown { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
 .markdown > :first-child { margin-top: 0; }
@@ -131,33 +134,27 @@ details pre { max-height: 420px; overflow: auto; }
 .settings-note h3 { color: #3d4b41; }
 .settings-note p { font-size: 12px; }
 /* Management pages share a reading rhythm; each feature retains its own content. */
-.skill-panel, .memory-panel, .diagnostics-panel, .reflection-panel, .evolution-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; height: 100%; padding: 0; overflow: hidden; }
+.skill-panel, .memory-panel, .reflection-panel, .evolution-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; height: 100%; padding: 0; overflow: hidden; }
 .evolution-panel > header { padding: 25px 32px; margin: 0; align-items: flex-start; }
 .evolution-panel > header h1 { margin: 0 0 5px; }
 .evolution-panel > header p { margin: 0; }
 .eyebrow { display: none; }
-.memory-filters, .diagnostics-filters, .reflection-toolbar, .evolution-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 32px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
+.memory-filters, .reflection-toolbar, .evolution-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 14px 32px; border-bottom: 1px solid var(--line); flex-shrink: 0; }
 .memory-filters input:not([type=checkbox]) { flex: 1; min-width: 150px; }
-.memory-filters label, .diagnostics-filters label, .reflection-toolbar label, .evolution-toolbar label { font-size: 12px; display: flex; align-items: center; gap: 8px; }
-.memory-filters input, .memory-filters select, .diagnostics-filters input, .diagnostics-filters select, .reflection-toolbar select, .evolution-toolbar select { font-size: 12px; padding: 7px 9px; }
-.diagnostics-filters > label { flex-direction: column; align-items: flex-start; gap: 5px; }
-.diagnostics-filters .diagnostics-checkbox { flex-direction: row; align-self: flex-end; padding: 0 0 8px; }
-.diagnostics-advanced { width: 100%; padding: 6px 0 0; background: transparent; border: 0; margin: 0; }
-.diagnostics-filter-fields { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; padding: 16px 0 4px; }
-.diagnostics-filter-fields label { flex-direction: column; align-items: stretch; }
-.diagnostics-filter-fields input { width: 100%; }
-.skill-layout, .memory-layout, .diagnostics-layout, .reflection-layout, .evolution-workspace { display: grid; grid-template-columns: 280px minmax(0,1fr); flex: 1; min-height: 0; overflow: hidden; }
-.skill-list, .memory-list, .diagnostics-list, .reflection-list, .evolution-catalog { padding: 16px 14px; border-right: 1px solid var(--line); overflow: auto; min-width: 0; }
-.skill-item, .memory-item, .diagnostics-item, .reflection-item { display: block; text-align: left; width: 100%; padding: 12px; background: transparent; border-color: transparent; margin-bottom: 6px; }
-.skill-item.selected, .memory-item.selected, .diagnostics-item.selected, .reflection-item.selected, .evolution-row.selected { background: var(--selected); border-color: #d5dfcc; }
-.skill-item b, .memory-item b, .diagnostics-item b { display: block; font-size: 13px; line-height: 1.65; font-weight: 600; margin: 6px 0; overflow-wrap: anywhere; }
-.skill-item span, .memory-item span, .diagnostics-item span { display: block; font-size: 12px; line-height: 1.65; margin: 5px 0; }
-.skill-item small, .memory-item small, .diagnostics-item small { display: block; font-size: 10px; overflow-wrap: anywhere; }
-.skill-detail, .memory-detail, .diagnostics-detail, .reflection-detail, .evolution-detail { padding: 30px 32px 45px; min-width: 0; overflow: auto; }
-.skill-detail h2, .memory-detail h2, .diagnostics-detail h2, .reflection-detail h2, .evolution-detail h2 { font-size: 23px; margin: 10px 0 16px; letter-spacing: -.3px; line-height: 1.55; }
+.memory-filters label, .reflection-toolbar label, .evolution-toolbar label { font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.memory-filters input, .memory-filters select, .reflection-toolbar select, .evolution-toolbar select { font-size: 12px; padding: 7px 9px; }
+.skill-layout, .memory-layout, .reflection-layout, .evolution-workspace { display: grid; grid-template-columns: 280px minmax(0,1fr); flex: 1; min-height: 0; overflow: hidden; }
+.skill-list, .memory-list, .reflection-list, .evolution-catalog { padding: 16px 14px; border-right: 1px solid var(--line); overflow: auto; min-width: 0; }
+.skill-item, .memory-item, .reflection-item { display: block; text-align: left; width: 100%; padding: 12px; background: transparent; border-color: transparent; margin-bottom: 6px; }
+.skill-item.selected, .memory-item.selected, .reflection-item.selected, .evolution-row.selected { background: var(--selected); border-color: #d5dfcc; }
+.skill-item b, .memory-item b{ display: block; font-size: 13px; line-height: 1.65; font-weight: 600; margin: 6px 0; overflow-wrap: anywhere; }
+.skill-item span, .memory-item span{ display: block; font-size: 12px; line-height: 1.65; margin: 5px 0; }
+.skill-item small, .memory-item small{ display: block; font-size: 10px; overflow-wrap: anywhere; }
+.skill-detail, .memory-detail, .reflection-detail, .evolution-detail { padding: 30px 32px 45px; min-width: 0; overflow: auto; }
+.skill-detail h2, .memory-detail h2, .reflection-detail h2, .evolution-detail h2 { font-size: 23px; margin: 10px 0 16px; letter-spacing: -.3px; line-height: 1.55; }
 .skill-source, .memory-source, .diagnostics-id { font: 11px/1.8 ui-monospace, monospace; color: var(--muted); overflow-wrap: anywhere; }
 .skill-controls, .memory-controls, .diagnostics-controls { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 16px 0; }
-.skill-controls button, .memory-controls button, .diagnostics-controls button, .diagnostics-call button { font-size: 12px; }
+.skill-controls button, .memory-controls button, .diagnostics-controls button{ font-size: 12px; }
 .skill-panel label, .memory-detail label { display: block; font-size: 12px; margin: 15px 0; }
 .skill-panel input:not([type=checkbox]), .skill-panel textarea, .skill-panel select, .memory-detail label input, .memory-detail label textarea, .memory-detail label select { display: block; width: 100%; margin-top: 8px; }
 .skill-panel textarea { min-height: 100px; resize: vertical; }
@@ -182,8 +179,6 @@ details pre { max-height: 420px; overflow: auto; }
 .memory-source button { display: block; font-family: inherit; margin-top: 8px; }
 .revision-reference { background: var(--warning); padding: 12px; font-size: 12px; margin: 18px 0; line-height: 1.8; }
 .revision-reference button { display: block; margin-top: 8px; }
-.diagnostics-call { padding: 18px 0; border-bottom: 1px solid var(--line); }
-.diagnostics-call p { font-size: 12px; }
 .diagnostics-evidence { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 20px; }
 .diagnostics-evidence > pre { background: #f0f3eb; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); max-height: 480px; overflow: auto; }
 .reflection-availability { font-size: 12px; padding: 16px 32px; background: var(--warning); }
@@ -207,9 +202,9 @@ details pre { max-height: 420px; overflow: auto; }
 @media (max-width: 1100px) {
   .shell > aside { width: 200px; padding: 24px 12px 16px; }
   header, .evolution-panel > header { padding: 22px 24px; }
-  .skill-layout, .memory-layout, .diagnostics-layout, .reflection-layout, .evolution-workspace { grid-template-columns: 230px minmax(0,1fr); }
-  .skill-detail, .memory-detail, .diagnostics-detail, .reflection-detail, .evolution-detail { padding: 24px; }
-  .memory-filters, .diagnostics-filters, .reflection-toolbar, .evolution-toolbar { padding: 12px 24px; }
+  .skill-layout, .memory-layout, .reflection-layout, .evolution-workspace { grid-template-columns: 230px minmax(0,1fr); }
+  .skill-detail, .memory-detail, .reflection-detail, .evolution-detail { padding: 24px; }
+  .memory-filters, .reflection-toolbar, .evolution-toolbar { padding: 12px 24px; }
   .session-tools { padding: 12px 24px; }
   .session-tools select { max-width: 160px; }
 }
@@ -236,15 +231,13 @@ details pre { max-height: 420px; overflow: auto; }
   .composer { padding: 12px 20px 18px; }
   .composer textarea { min-height: 82px; }
   .composer small { max-width: 60%; }
-  .skill-layout, .memory-layout, .diagnostics-layout, .reflection-layout, .evolution-workspace { display: block; overflow: hidden; }
-  .skill-list, .memory-list, .diagnostics-list, .reflection-list, .evolution-catalog { border: 0; height: 100%; max-height: none; padding: 12px 16px; }
-  .skill-detail, .memory-detail, .diagnostics-detail, .reflection-detail, .evolution-detail { display: none; height: 100%; overflow: auto; padding: 20px; border: 0; }
-  [data-detail=true] > .skill-list, [data-detail=true] > .memory-list, [data-detail=true] > .diagnostics-list, [data-detail=true] > .reflection-list, [data-detail=true] > .evolution-catalog { display: none; }
-  [data-detail=true] > .skill-detail, [data-detail=true] > .memory-detail, [data-detail=true] > .diagnostics-detail, [data-detail=true] > .reflection-detail, [data-detail=true] > .evolution-detail { display: block; }
+  .skill-layout, .memory-layout, .reflection-layout, .evolution-workspace { display: block; overflow: hidden; }
+  .skill-list, .memory-list, .reflection-list, .evolution-catalog { border: 0; height: 100%; max-height: none; padding: 12px 16px; }
+  .skill-detail, .memory-detail, .reflection-detail, .evolution-detail { display: none; height: 100%; overflow: auto; padding: 20px; border: 0; }
+  [data-detail=true] > .skill-list, [data-detail=true] > .memory-list, [data-detail=true] > .reflection-list, [data-detail=true] > .evolution-catalog { display: none; }
+  [data-detail=true] > .skill-detail, [data-detail=true] > .memory-detail, [data-detail=true] > .reflection-detail, [data-detail=true] > .evolution-detail { display: block; }
   .back-to-list { display: block; font-size: 11px; padding: 6px 9px; margin-bottom: 22px; }
-  .memory-filters, .diagnostics-filters, .reflection-toolbar, .evolution-toolbar { padding: 12px 20px; gap: 10px; }
-  .diagnostics-filters input, .diagnostics-filters select { max-width: 145px; }
-  .diagnostics-filter-fields { grid-template-columns: 1fr 1fr; }
+  .memory-filters, .reflection-toolbar, .evolution-toolbar { padding: 12px 20px; gap: 10px; }
   .memory-filters label { font-size: 11px; }
   .reflection-availability { padding: 14px 20px; }
   .connect { margin: 3vh auto; padding: 28px; }

@@ -1,0 +1,48 @@
+{
+  "injectedFailure": "SYNTHETIC_executor-start",
+  "job": {
+    "id": "3e5afe57-96aa-40ca-b862-096d302986ac",
+    "sessionId": "6a43fe9a-5801-4bb1-b2f3-969d3db797f4",
+    "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-20.494Z-command-59f9cf79/tmp/reflection-diagnostics-wdUgP7",
+    "provider": "faux",
+    "model": "diagnostic",
+    "scheduledAt": 1793019622330,
+    "created": 1793019622398,
+    "updated": 1793019622407,
+    "runId": "fb7145c4-1b06-42dd-8497-ab40d334c49d",
+    "reflectionSessionId": "cbd2167e-ed9b-4fc3-8774-b111132549f8",
+    "status": "failed",
+    "error": "反思未完成，请检查模型、沙箱或受控接口状态",
+    "sources": [
+      {
+        "markerEntryId": "b9e6aad2",
+        "settledAt": 1793019622330,
+        "traceId": "41d3519d-ee59-4052-b088-da26faab59cc",
+        "status": "ended"
+      }
+    ]
+  },
+  "record": {
+    "id": "3e5afe57-96aa-40ca-b862-096d302986ac",
+    "jobId": "3e5afe57-96aa-40ca-b862-096d302986ac",
+    "sessionId": "6a43fe9a-5801-4bb1-b2f3-969d3db797f4",
+    "reflectionSessionId": "cbd2167e-ed9b-4fc3-8774-b111132549f8",
+    "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T13-00-20.494Z-command-59f9cf79/tmp/reflection-diagnostics-wdUgP7",
+    "status": "failed",
+    "created": 1793019622406,
+    "updated": 1793019622407,
+    "summary": "",
+    "findings": [],
+    "uncertainties": [],
+    "evidence": [
+      {
+        "sessionId": "6a43fe9a-5801-4bb1-b2f3-969d3db797f4",
+        "entryId": "b9e6aad2",
+        "traceId": "41d3519d-ee59-4052-b088-da26faab59cc"
+      }
+    ],
+    "changes": [],
+    "error": "反思未完成，请检查模型、沙箱或受控接口状态"
+  },
+  "observation": "Persisted failure has no original exception or phase; zero effects is not evidence of a persistence failure"
+}

@@ -1,0 +1,165 @@
+[
+  {
+    "name": "从会话创建项目记忆；空内容不可提交，Host 返回后读取修订",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "id": "7a02a014-af4c-450b-9785-553e2931c28a",
+      "revision": 1,
+      "sources": 0
+    }
+  },
+  {
+    "name": "另一个同项目 Session 可见，实际 Agent 读取并修订生成来源",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "revision": 2,
+      "actor": "agent",
+      "sources": [
+        {
+          "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+          "entryId": "32966076",
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260"
+        }
+      ]
+    }
+  },
+  {
+    "name": "用户修订、真实版本差异与重新确认，不改写原来源归属",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "revision": 4,
+      "operation": "confirm",
+      "usable": true,
+      "sources": 1
+    }
+  },
+  {
+    "name": "撤销退出真实 Agent 普通检索，历史仍保留",
+    "width": 1440,
+    "status": "failed",
+    "actual": "Error: state timeout\n    at poll (file://<D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:7:144)\n    at async session (file://<D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:12:266)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:26:2\n    at async check (file://<D6_MEMORY_MANAGEMENT>/scripts/common.mjs:23:61)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:24:2"
+  },
+  {
+    "name": "历史查询定位原生来源、返回原会话保留草稿，三尺寸不溢出",
+    "width": 1440,
+    "status": "failed",
+    "actual": "locator.click: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.aw-memory-row').first()\u001b[22m\n\n    at <D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:28:176\n    at async check (<D6_MEMORY_MANAGEMENT>/scripts/common.mjs:23:61)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/journey.mjs:27:2"
+  },
+  {
+    "name": "从会话创建项目记忆；空内容不可提交，Host 返回后读取修订",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "id": "a46e0aa5-1329-4aac-a370-2d202d25e511",
+      "revision": 1,
+      "sources": 0
+    }
+  },
+  {
+    "name": "另一个同项目 Session 可见，实际 Agent 读取并修订生成来源",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "revision": 2,
+      "actor": "agent",
+      "sources": [
+        {
+          "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+          "entryId": "0cdeea60",
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260"
+        }
+      ]
+    }
+  },
+  {
+    "name": "用户修订、真实版本差异与重新确认，不改写原来源归属",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "revision": 4,
+      "operation": "confirm",
+      "usable": true,
+      "sources": 1
+    }
+  },
+  {
+    "name": "撤销退出真实 Agent 普通检索，历史仍保留",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "status": 409,
+      "nativeMemoryGetError": true,
+      "history": 5
+    }
+  },
+  {
+    "name": "历史查询定位原生来源、返回原会话保留草稿，三尺寸不溢出",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "draft": "retained",
+      "source": "native Session Entry",
+      "overflow": false
+    }
+  },
+  {
+    "name": "从会话创建项目记忆；空内容不可提交，Host 返回后读取修订",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "id": "b013c2ae-8b6b-4635-b3a2-d98e1ebb8739",
+      "revision": 1,
+      "sources": 0
+    }
+  },
+  {
+    "name": "另一个同项目 Session 可见，实际 Agent 读取并修订生成来源",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "revision": 2,
+      "actor": "agent",
+      "sources": [
+        {
+          "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+          "entryId": "999c2a23",
+          "project": "cd196f2c56886868cf504c6e6214f0324a110fc28eedd251b0069221643c4260"
+        }
+      ]
+    }
+  },
+  {
+    "name": "用户修订、真实版本差异与重新确认，不改写原来源归属",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "revision": 4,
+      "operation": "confirm",
+      "usable": true,
+      "sources": 1
+    }
+  },
+  {
+    "name": "撤销退出真实 Agent 普通检索，历史仍保留",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "status": 409,
+      "nativeMemoryGetError": true,
+      "history": 5
+    }
+  },
+  {
+    "name": "历史查询定位原生来源、返回原会话保留草稿，三尺寸不溢出",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "draft": "retained",
+      "source": "native Session Entry",
+      "overflow": false
+    }
+  }
+]

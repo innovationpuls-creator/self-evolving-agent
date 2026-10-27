@@ -1,0 +1,8 @@
+[
+  {
+    "name": "suggestion → adopt → independent discussion → grant → native development → applied → exact Skill → return suggestion",
+    "width": 1440,
+    "status": "failed",
+    "actual": "locator.click: Error: strict mode violation: locator('.host-technical > summary') resolved to 11 elements:\n    1) <summary>原始调用参数</summary> aka getByText('原始调用参数').first()\n    2) <summary>原始 Tool 结果</summary> aka getByText('原始 Tool 结果').first()\n    3) <summary>原始调用参数</summary> aka getByText('原始调用参数').nth(1)\n    4) <summary>原始 Tool 结果</summary> aka getByText('原始 Tool 结果').nth(1)\n    5) <summary>原始调用参数</summary> aka getByText('原始调用参数').nth(2)\n    6) <summary>原始 Tool 结果</summary> aka getByText('原始 Tool 结果').nth(2)\n    7) <summary>原始调用参数</summary> aka getByText('原始调用参数').nth(3)\n    8) <summary>原始 Tool 结果</summary> aka getByText('原始 Tool 结果').nth(3)\n    9) <summary>原始调用参数</summary> aka getByText('原始调用参数').nth(4)\n    10) <summary>原始 Tool 结果</summary> aka getByText('原始 Tool 结果').nth(4)\n    ...\n\nCall log:\n\u001b[2m  - waiting for locator('.host-technical > summary')\u001b[22m\n\n    at /Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-49-52.623Z-command-f45c693a/workspace/prototypes/d6/capability-integration/scripts/complete-chain.mjs:174:52\n    at async check (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-49-52.623Z-command-f45c693a/workspace/prototypes/d6/capability-integration/scripts/common.mjs:88:20)\n    at async file:///Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-49-52.623Z-command-f45c693a/workspace/prototypes/d6/capability-integration/scripts/complete-chain.mjs:60:3"
+  }
+]

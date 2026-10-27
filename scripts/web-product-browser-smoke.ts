@@ -249,9 +249,9 @@ try {
     await page.getByRole('button', { name: '查看说明', exact: true }).first().click();
     await page.locator('.skill-detail .markdown').waitFor();
     await shot(page, `skills-${width}`);
-    await nav(page, '历史日志');
-    if (width !== 390) await page.locator('.diagnostics-item').first().click();
-    await page.locator('.diagnostics-detail h2').waitFor();
+    await select(a.id);
+    await page.getByRole('tab', { name: '轨迹', exact: true }).click();
+    await page.locator('.trajectory-group').first().waitFor();
     await shot(page, `diagnostics-${width}`);
     await nav(page, '反思记录');
     await page.locator('.reflection-availability').waitFor();
@@ -291,7 +291,6 @@ try {
   const states = [
     { name: 'skills', label: '能力管理', path: 'skills', empty: { skills: [], discovered: [], operations: [] } },
     { name: 'memory', label: '记忆管理', path: 'memory', empty: { items: [], total: 0, unavailable: 0 } },
-    { name: 'diagnostics', label: '历史日志', path: 'diagnostics', empty: { items: [], total: 0 } },
     {
       name: 'reflection',
       label: '反思记录',

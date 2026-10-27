@@ -1,0 +1,46 @@
+{
+  "mode": "controlled formal Host; actual SIGKILL",
+  "before": {
+    "id": "7ff21672-ad3f-4f0b-a138-bb2360699ed1",
+    "changes": [
+      {
+        "kind": "memory",
+        "id": "6c801eae-fd79-4b3f-9e6c-3e93a2056fc5",
+        "revision": 1,
+        "summary": "controlled crash test"
+      }
+    ],
+    "status": "running"
+  },
+  "after": {
+    "id": "7ff21672-ad3f-4f0b-a138-bb2360699ed1",
+    "jobId": "7ff21672-ad3f-4f0b-a138-bb2360699ed1",
+    "sessionId": "70c1609b-8744-4398-8ed9-ae5d48c5f0fc",
+    "reflectionSessionId": "56214fdb-f59a-4789-ab77-25e68ed636e7",
+    "project": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-26-20.967Z-command-de062875/workspace/prototypes/d6/reflection-lifecycle/.runtime/crash-Zq5xhB",
+    "status": "interrupted",
+    "created": 1793075185443,
+    "updated": 1793075185498,
+    "summary": "",
+    "findings": [],
+    "uncertainties": [],
+    "evidence": [
+      {
+        "sessionId": "70c1609b-8744-4398-8ed9-ae5d48c5f0fc",
+        "entryId": "f9a73b53",
+        "traceId": "1034b9ce-02fa-4944-8a43-0413857e842c"
+      }
+    ],
+    "changes": [
+      {
+        "kind": "memory",
+        "id": "6c801eae-fd79-4b3f-9e6c-3e93a2056fc5",
+        "revision": 1,
+        "summary": "controlled crash test"
+      }
+    ],
+    "error": "Host restarted during Reflection; committed effects are not replayed"
+  },
+  "replay": 0,
+  "passed": true
+}

@@ -1,0 +1,145 @@
+{
+  "mode": "controlled formal Host, real Pi native tools, isolated encrypted database; no autonomous model assertion",
+  "requests": [
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/review",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/publish",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/operations/88099b23-8f71-4fe9-b867-1a0a0c10a993",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/review",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/publish",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/operations/08204f45-c306-451a-a9f5-13ba42660d95",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/edit",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/edit",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/publish",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/operations/3e01325d-2d1a-4b05-b316-07e2202a82ec",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/publish",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/operations/b8e4f549-e956-40fa-b662-9c0124f4ec9d",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/rollback",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/operations/a529b357-db85-4e0c-a724-c5a7c93a1b9f",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/enabled",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/enabled",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/knowledge",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/skills/0f513842-4755-4080-9b9e-20a476239605/knowledge",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "path": "/suggestions",
+      "method": "POST",
+      "status": 201
+    },
+    {
+      "path": "/suggestions",
+      "method": "POST",
+      "status": 400
+    },
+    {
+      "path": "/suggestions/manage",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/suggestions/manage",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "path": "/suggestions/41de8ba4-36a0-436d-8794-b54fa4526b91/adopt",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "path": "/activities/8d494f89-1edf-4d8f-a6c1-dc9634c1a554/authorize",
+      "method": "POST",
+      "status": 403
+    },
+    {
+      "path": "/activities/8d494f89-1edf-4d8f-a6c1-dc9634c1a554/authorize",
+      "method": "POST",
+      "status": 409
+    },
+    {
+      "path": "/activities/8d494f89-1edf-4d8f-a6c1-dc9634c1a554/authorize",
+      "method": "POST",
+      "status": 202
+    },
+    {
+      "path": "/skills",
+      "method": "GET",
+      "status": 401
+    },
+    {
+      "path": "/skills",
+      "method": "GET",
+      "status": 403
+    }
+  ]
+}

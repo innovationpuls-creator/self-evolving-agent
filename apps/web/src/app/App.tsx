@@ -2,10 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHost } from './use-host';
 import { readNavigation, saveNavigation, type View } from './view-state';
 import { ChatView } from '../features/chat/ChatView';
+import { referencedFiles } from '../features/chat/input-completion';
 import { ModelSettings } from '../features/models/ModelSettings';
 import { SkillsPanel } from '../features/skills/SkillsPanel';
 import { MemoryPanel } from '../features/memory/MemoryPanel';
-import { DiagnosticsPanel } from '../features/diagnostics/DiagnosticsPanel';
+import type { EvidenceTarget } from '../features/diagnostics/evidence';
+import type { TrajectoryViewState } from '../features/diagnostics/TrajectoryPanel';
 import { ReflectionPanel } from '../features/reflection/ReflectionPanel';
 import { SuggestionsPanel } from '../features/evolution/SuggestionsPanel';
 
@@ -25,17 +27,20 @@ function initialView(): View {
       return { kind: 'memory', id: saved.id, project: saved.project, revision: saved.revision };
     case 'skills':
       return { kind: 'skills', id: saved.id, project: saved.project, knowledgeRevision: saved.knowledgeRevision };
-    case 'diagnostics':
+    case 'chat':
       return {
-        kind: 'diagnostics',
-        evidence: saved.evidence,
-        session: saved.diagnosticSessionId ? { id: saved.diagnosticSessionId, title: '指定会话' } : undefined,
+        kind: 'chat',
+        evidence: saved.evidence?.sessionId
+          ? { ...saved.evidence, sessionId: saved.evidence.sessionId }
+          : saved.evidence?.traceId
+            ? { ...saved.evidence, traceId: saved.evidence.traceId }
+            : undefined,
       };
     case 'suggestions':
     case 'reflection':
       return { kind: saved.kind, id: saved.id };
     default:
-      return { kind: saved.kind };
+      return { kind: saved.kind === 'settings' ? 'settings' : 'chat' };
   }
 }
 export function App() {
@@ -53,6 +58,9 @@ export function App() {
   const [localError, setLocalError] = useState('');
   const memoryDirty = useRef(false),
     skillsDirty = useRef(false);
+  const trajectoryStates = useRef(new Map<string, TrajectoryViewState>());
+  const sessionTabs = useRef(new Map<string, 'chat' | 'trajectory'>());
+  const [tabVersion, setTabVersion] = useState(0);
   const scrollPositions = useRef(new Map<string, number>());
   const drafts = useRef(new Map<string, { text: string; version: number }>());
   const submitting = useRef(new Set<string>());
@@ -91,6 +99,27 @@ export function App() {
     setMenu(false);
     await host.open(id);
   };
+  const openEvidence = (evidence: EvidenceTarget) =>
+    leave(() => {
+      const epoch = navigationEpoch.current;
+      void (async () => {
+        let sessionId = evidence.sessionId;
+        if (!sessionId && evidence.traceId) {
+          const value = await api<{ trace: { sessionId: string } }>(`/diagnostics/${evidence.traceId}`);
+          sessionId = value.trace.sessionId;
+        }
+        if (epoch !== navigationEpoch.current) return;
+        if (sessionId && host.sessions.some((item) => item.id === sessionId && !item.unavailable)) {
+          await host.open(sessionId);
+          if (epoch !== navigationEpoch.current) return;
+          sessionTabs.current.set(sessionId, 'trajectory');
+        } else if (selectedId) sessionTabs.current.set(selectedId, 'trajectory');
+        setView({ kind: 'chat', evidence: { ...evidence, ...(sessionId ? { sessionId } : {}) } });
+        setTabVersion((n) => n + 1);
+      })().catch((reason: unknown) => {
+        if (epoch === navigationEpoch.current) report(reason instanceof Error ? reason.message : '来源读取失败');
+      });
+    });
   useEffect(() => {
     saveNavigation(view, selectedId);
   }, [view, selectedId]);
@@ -125,7 +154,7 @@ export function App() {
     const clearedVersion = drafts.current.get(id)?.version;
     setLocalError('');
     try {
-      await api(`/sessions/${id}/prompt`, 'POST', { text: draft.text });
+      await api(`/sessions/${id}/prompt`, 'POST', { text: draft.text, files: referencedFiles(draft.text) });
     } catch (reason) {
       if (drafts.current.get(id)?.version === clearedVersion) updateDraft(id, draft.text);
       const uncertain = !(reason instanceof Error && 'status' in reason);
@@ -255,7 +284,6 @@ export function App() {
             [
               ['skills', '能力管理'],
               ['memory', '记忆管理'],
-              ['diagnostics', '历史日志'],
               ['reflection', '反思记录'],
               ['suggestions', `进化建议${attention ? ` · ${attention}` : ''}`],
               ['settings', '模型设置'],
@@ -350,15 +378,7 @@ export function App() {
             onDirtyChange={(value) => {
               memoryDirty.current = value;
             }}
-            onEvidence={(evidence) => navigate({ kind: 'diagnostics', evidence })}
-          />
-        ) : view.kind === 'diagnostics' ? (
-          <DiagnosticsPanel
-            key={`${view.session?.id ?? ''}:${view.evidence?.entryId ?? ''}`}
-            api={api}
-            session={view.session}
-            initialEvidence={view.evidence}
-            onClose={back}
+            onEvidence={openEvidence}
           />
         ) : view.kind === 'reflection' ? (
           <ReflectionPanel
@@ -366,7 +386,7 @@ export function App() {
             session={selected}
             initialId={view.id}
             onClose={back}
-            onEvidence={(evidence) => navigate({ kind: 'diagnostics', evidence })}
+            onEvidence={openEvidence}
             onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
             onSkill={(id, _revision, project, knowledgeRevision) =>
               navigate({ kind: 'skills', id, project, knowledgeRevision })
@@ -381,14 +401,34 @@ export function App() {
             session={selected}
             onClose={back}
             onDiscuss={selectSession}
-            onEvidence={(evidence) => navigate({ kind: 'diagnostics', evidence })}
+            onEvidence={openEvidence}
             onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
             onSkill={(id, knowledgeRevision, project) => navigate({ kind: 'skills', id, project, knowledgeRevision })}
             onReflection={(id) => navigate({ kind: 'reflection', id })}
           />
         ) : (
           <ChatView
+            onEvidence={openEvidence}
+            onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
             positions={scrollPositions.current}
+            trajectoryStates={trajectoryStates.current}
+            tab={
+              view.kind === 'chat' && view.evidence
+                ? 'trajectory'
+                : (sessionTabs.current.get(selectedId ?? '') ?? 'chat')
+            }
+            evidence={view.kind === 'chat' ? view.evidence : undefined}
+            onEvidenceDone={() => {
+              if (view.kind === 'chat' && view.evidence) {
+                if (selectedId) sessionTabs.current.set(selectedId, 'trajectory');
+                setView({ kind: 'chat' });
+              }
+            }}
+            onTab={(tab) => {
+              if (selectedId) sessionTabs.current.set(selectedId, tab);
+              setView({ kind: 'chat' });
+              setTabVersion(tabVersion + 1);
+            }}
             api={api}
             session={selected}
             selectedId={selectedId}
@@ -411,9 +451,6 @@ export function App() {
               if (epoch === navigationEpoch.current) await host.open(created.id);
             }}
             onSettings={() => navigate({ kind: 'settings' })}
-            onDiagnostics={() => {
-              if (selected) navigate({ kind: 'diagnostics', session: { id: selected.id, title: selected.title } });
-            }}
             onOpen={selectSession}
             onSkill={(id) => navigate({ kind: 'skills', id })}
             onReflection={() => navigate({ kind: 'reflection' })}

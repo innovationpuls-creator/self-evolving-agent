@@ -1,0 +1,80 @@
+{
+  "mode": "real formal Host + Pi native Tools; deterministic Faux instructions; synthetic canaries",
+  "root": "/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-27T04-26-20.967Z-command-de062875/tmp/activity-boundary-WUk3eb",
+  "beforeGrant": {
+    "role": "toolResult",
+    "toolCallId": "canary-1793075183763-0.9526067270067062",
+    "toolName": "bash",
+    "content": [
+      {
+        "type": "text",
+        "text": "Tool bash not found"
+      }
+    ],
+    "details": {},
+    "isError": true,
+    "timestamp": 1793075183818
+  },
+  "outsideWriteTool": {
+    "role": "toolResult",
+    "toolCallId": "canary-1793075184518-0.06343215580453054",
+    "toolName": "write",
+    "content": [
+      {
+        "type": "text",
+        "text": "只能修改此次授权的候选目录"
+      }
+    ],
+    "details": {},
+    "isError": true,
+    "durationMs": 10,
+    "timestamp": 1793075184614
+  },
+  "shell": {
+    "role": "toolResult",
+    "toolCallId": "canary-1793075184877-0.03204485415613678",
+    "toolName": "bash",
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"before\":\"synthetic-readable-canary\",\"env\":\"synthetic-env-canary\",\"network\":\"synthetic-loopback-canary\",\"uid\":501,\"child\":\"synthetic-env-canary\"}\n"
+      }
+    ],
+    "isError": false,
+    "durationMs": 289,
+    "timestamp": 1793075185318
+  },
+  "detachedSpawn": {
+    "role": "toolResult",
+    "toolCallId": "canary-1793075185575-0.14728802619921788",
+    "toolName": "bash",
+    "content": [
+      {
+        "type": "text",
+        "text": "66162\n"
+      }
+    ],
+    "isError": false,
+    "durationMs": 95,
+    "timestamp": 1793075185785
+  },
+  "afterCancel": {
+    "status": "cancelled",
+    "detachedChildWrote": true
+  },
+  "newCallAfterCancel": {
+    "role": "toolResult",
+    "toolCallId": "canary-1793075187088-0.7975678581908978",
+    "toolName": "bash",
+    "content": [
+      {
+        "type": "text",
+        "text": "Tool bash not found"
+      }
+    ],
+    "details": {},
+    "isError": true,
+    "timestamp": 1793075187141
+  },
+  "conclusion": "write/edit and grant state enforce application checks; shell inherits user filesystem/environment/loopback/subprocess authority; completed-shell detached child outlives Activity cancellation"
+}

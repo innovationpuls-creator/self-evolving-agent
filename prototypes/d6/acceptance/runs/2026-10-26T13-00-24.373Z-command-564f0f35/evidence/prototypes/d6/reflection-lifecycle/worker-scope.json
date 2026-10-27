@@ -1,0 +1,8 @@
+{
+  "mode": "controlled actual formal Host authorizer",
+  "foreignAgentEvidence": 404,
+  "missingEntry": 404,
+  "authenticatedUserMayRead": true,
+  "roleModelAdded": false,
+  "passed": true
+}

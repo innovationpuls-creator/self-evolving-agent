@@ -1,0 +1,41 @@
+[
+  {
+    "name": "本轮管理记录的确切来源定位，返回会话草稿与导航焦点",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "source": {
+        "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+        "entryId": "942c6429"
+      },
+      "exactEntryLocated": true,
+      "draftRetained": true
+    }
+  },
+  {
+    "name": "本轮管理记录的确切来源定位，返回会话草稿与导航焦点",
+    "width": 850,
+    "status": "passed",
+    "actual": {
+      "source": {
+        "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+        "entryId": "0cdeea60"
+      },
+      "exactEntryLocated": true,
+      "draftRetained": true
+    }
+  },
+  {
+    "name": "本轮管理记录的确切来源定位，返回会话草稿与导航焦点",
+    "width": 390,
+    "status": "passed",
+    "actual": {
+      "source": {
+        "sessionId": "16bc23eb-54c4-4441-99fd-9d9ecec1a64d",
+        "entryId": "999c2a23"
+      },
+      "exactEntryLocated": true,
+      "draftRetained": true
+    }
+  }
+]

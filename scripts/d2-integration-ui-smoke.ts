@@ -95,7 +95,7 @@ const flatten = (tree: Tree[]): Tree[] => tree.flatMap((n) => [n, ...flatten(n.c
 const root = await realpath(await mkdtemp(join(tmpdir(), 'd2-integration-ui-')));
 const executable = process.env.AGENT_APP_PATH ?? resolve('release/Agent-darwin-arm64/Agent.app/Contents/MacOS/Agent');
 const model = { provider: 'openai-codex', model: 'gpt-6-luna' };
-const evidenceFile = resolve(process.env.AGENT_ACCEPTANCE_EVIDENCE ?? 'docs/evidence/d2-integration-real-ui.json');
+const evidenceFile = resolve(process.env.AGENT_ACCEPTANCE_EVIDENCE ?? 'release/d2-integration-trajectory/real-ui.json');
 const screenshotDir = resolve(process.env.AGENT_ACCEPTANCE_SCREENSHOTS ?? 'release/d2-integration-evidence');
 await mkdir(dirname(evidenceFile), { recursive: true });
 const approvedDigestArg =
@@ -825,14 +825,19 @@ Do not use bash.`,
 
   console.log('=== Step 9: Active Host Crash, Reconnect and No Replay ===');
   await web.getByRole('button', { name: '返回对话', exact: true }).click();
-  await web.getByRole('button', { name: '历史日志', exact: true }).click();
-  await web
-    .locator('.diagnostics-item')
-    .filter({ hasText: traceA.id.slice(0, 8) })
-    .waitFor();
+  await web.evaluate(
+    ({ sessionId, traceId }) =>
+      sessionStorage.setItem(
+        'agent-navigation',
+        JSON.stringify({ kind: 'chat', sessionId, evidence: { sessionId, traceId } }),
+      ),
+    { sessionId: sessionA.id, traceId: traceA.id },
+  );
+  await web.reload();
+  await web.locator('.trajectory-panel').waitFor();
   let refetches = 0;
   web.on('request', (request) => {
-    if (new URL(request.url()).pathname === '/api/diagnostics') refetches++;
+    if (new URL(request.url()).pathname.startsWith('/api/diagnostics')) refetches++;
   });
   await call(page, `/sessions/${sessionB.id}/prompt`, 'POST', {
     text: "Use native bash exactly once: printf 'started\\n' >> external-effect.txt; sleep 8; printf 'completed\\n' >> external-effect.txt . Do not retry or modify other files.",
@@ -867,10 +872,7 @@ Do not use bash.`,
       undefined,
       { timeout: 30000 },
     );
-  await web
-    .locator('.diagnostics-item')
-    .filter({ hasText: traceA.id.slice(0, 8) })
-    .waitFor();
+  await web.locator('.trajectory-panel').waitFor();
   assert.ok(refetches > refetchesBeforeCrash);
   const recoveredState = await call<SessionState>(page, `/sessions/${sessionB.id}`);
   assert.equal(recoveredState.interrupted, true);

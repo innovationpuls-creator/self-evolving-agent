@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ReflectionJob, ReflectionJobStatus } from '../../../../host/reflection/reflection-jobs';
-import type { ReflectionRecord } from '../../../../host/reflection/reflection-service';
+import type { ReflectionJobStatus } from '../../../../host/reflection/reflection-jobs';
+import type { ReflectionService } from '../../../../host/reflection/reflection-service';
 
 export type ReflectionApi = <T>(path: string, method?: string, data?: unknown, signal?: AbortSignal) => Promise<T>;
-export interface ReflectionCatalog {
-  records: ReflectionRecord[];
-  jobs: ReflectionJob[];
-  availability: { available: boolean; reason?: string };
-}
+export type ReflectionCatalog = ReturnType<ReflectionService['catalog']>;
 export const reflectionStatusLabels: Record<ReflectionJobStatus, string> = {
   pending: '等待中',
   running: '运行中',
@@ -17,8 +13,8 @@ export const reflectionStatusLabels: Record<ReflectionJobStatus, string> = {
   waiting_user: '需要处理',
 };
 
-export function useReflectionCatalog(api: ReflectionApi, sessionId?: string) {
-  const scope = sessionId ?? '';
+export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, offset = 0, statusOnly = false) {
+  const scope = `${sessionId ?? ''}:${offset}:${statusOnly}`;
   const [loaded, setLoaded] = useState<{ scope: string; catalog: ReflectionCatalog }>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,11 +31,19 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string) {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('agent-reflection-changed', refresh);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const changed = () => {
+      timer ??= setTimeout(() => {
+        timer = undefined;
+        refresh();
+      }, 120);
+    };
+    window.addEventListener('agent-reflection-changed', changed);
     window.addEventListener('agent-reconnected', refresh);
     return () => {
       epoch.current++;
-      window.removeEventListener('agent-reflection-changed', refresh);
+      clearTimeout(timer);
+      window.removeEventListener('agent-reflection-changed', changed);
       window.removeEventListener('agent-reconnected', refresh);
     };
   }, [refresh]);
@@ -49,7 +53,7 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string) {
     const controller = new AbortController();
     setLoading(true);
     setError('');
-    const query = sessionId ? `?${new URLSearchParams({ sessionId })}` : '';
+    const query = `?${new URLSearchParams({ view: statusOnly ? 'status' : 'summary', limit: '20', offset: String(offset), ...(sessionId ? { sessionId } : {}) })}`;
     void api<ReflectionCatalog>(`/reflections${query}`, 'GET', undefined, controller.signal)
       .then((catalog) => {
         if (generation === epoch.current) setLoaded({ scope, catalog });
@@ -64,7 +68,7 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string) {
       epoch.current++;
       controller.abort();
     };
-  }, [api, scope, sessionId, revision]);
+  }, [api, scope, sessionId, revision, offset, statusOnly]);
 
   return { catalog: loaded?.scope === scope ? loaded.catalog : undefined, loading, error, revision, refresh };
 }

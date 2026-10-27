@@ -1,0 +1,20 @@
+[
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 1440,
+    "status": "failed",
+    "actual": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('此范围内没有符合条件的记忆', { exact: true }) to be visible\u001b[22m\n\n    at <D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:11:401\n    at async check (<D6_MEMORY_MANAGEMENT>/scripts/common.mjs:23:134)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:10:2"
+  },
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 850,
+    "status": "failed",
+    "actual": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('此范围内没有符合条件的记忆', { exact: true }) to be visible\u001b[22m\n\n    at <D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:11:401\n    at async check (<D6_MEMORY_MANAGEMENT>/scripts/common.mjs:23:134)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:10:2"
+  },
+  {
+    "name": "最终界面保留项目、搜索、分页、编辑和历史上下文",
+    "width": 390,
+    "status": "failed",
+    "actual": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('此范围内没有符合条件的记忆', { exact: true }) to be visible\u001b[22m\n\n    at <D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:11:401\n    at async check (<D6_MEMORY_MANAGEMENT>/scripts/common.mjs:23:134)\n    at async file://<D6_MEMORY_MANAGEMENT>/scripts/final-ui.mjs:10:2"
+  }
+]

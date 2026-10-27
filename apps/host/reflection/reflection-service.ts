@@ -36,6 +36,7 @@ import { evolutionTools } from '../evolution/evolution-tools.js';
 import type { SkillService } from '../skills/skills.js';
 import { ReflectionJobs, type ReflectionJob, type ReflectionRegistration } from './reflection-jobs.js';
 import { NativeReflectionExecutor } from './native-executor.js';
+import { reflectionOutputGuidance } from './reflection-prompt.js';
 
 export const reflectionMarker = 'reflection_settled_v1';
 export interface SessionRecord {
@@ -78,7 +79,7 @@ export interface ReflectionRecord {
   error?: string;
 }
 export interface ReflectionExecutor {
-  available(): Promise<{ available: boolean; reason?: string }>;
+  available(signal?: AbortSignal): Promise<{ available: boolean; reason?: string }>;
   execute(
     start: unknown,
     handle: (operation: string, input: unknown) => Promise<unknown>,
@@ -137,6 +138,12 @@ export class ReflectionService {
   private pumpDone?: Promise<void>;
   private run?: Promise<void>;
   private abort?: AbortController;
+  private environment?: { available: boolean; reason?: string; checkedAt: number };
+  private environmentCheck?: {
+    controller: AbortController;
+    promise: Promise<{ available: boolean; reason?: string }>;
+    waiters: number;
+  };
   constructor(private d: Dependencies) {
     this.jobs = new ReflectionJobs(d.db, d.changed, { delayMs: d.delayMs });
     this.executor = d.executor ?? new NativeReflectionExecutor(d.appBundle);
@@ -185,14 +192,97 @@ export class ReflectionService {
       this.jobs.register(input);
     }
   }
-  async availability() {
-    return this.executor.available();
+  async availability(force = false, signal?: AbortSignal) {
+    signal?.throwIfAborted();
+    if (!force && this.environment && Date.now() - this.environment.checkedAt < 60_000) return this.environment;
+    if (!this.environmentCheck) {
+      const controller = new AbortController();
+      const promise = this.executor.available(controller.signal).then((value) => {
+        controller.signal.throwIfAborted();
+        this.environment = { ...value, checkedAt: Date.now() };
+        return this.environment;
+      });
+      const check = { controller, promise, waiters: 0 };
+      this.environmentCheck = check;
+      void promise
+        .finally(() => {
+          if (this.environmentCheck === check) this.environmentCheck = undefined;
+        })
+        .catch(() => {});
+    }
+    const check = this.environmentCheck;
+    check.waiters++;
+    let cancel: (() => void) | undefined;
+    try {
+      if (!signal) return await check.promise;
+      return await Promise.race([
+        check.promise,
+        new Promise<never>((_resolve, reject) => {
+          cancel = () => reject(signal.reason);
+          signal.addEventListener('abort', cancel, { once: true });
+          if (signal.aborted) cancel();
+        }),
+      ]);
+    } finally {
+      if (cancel) signal?.removeEventListener('abort', cancel);
+      check.waiters--;
+      if (!check.waiters && this.environmentCheck === check) {
+        this.environmentCheck = undefined;
+        check.controller.abort();
+      }
+    }
   }
-  async recheck() {
-    const available = await this.availability();
+  async recheck(signal?: AbortSignal) {
+    const available = await this.availability(true, signal);
     if (available.available) this.jobs.recheck();
     else this.jobs.setUnavailable(available.reason ?? 'Reflection 沙箱不可用');
     this.wake();
+  }
+  catalog(input: { sessionId?: string; limit?: number; offset?: number; statusOnly?: boolean } = {}) {
+    const limit = input.statusOnly ? 1 : (input.limit ?? 20);
+    const offset = input.statusOnly ? 0 : (input.offset ?? 0);
+    if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100 || !Number.isSafeInteger(offset) || offset < 0)
+      throw new ReflectionError('反思分页无效', 400);
+    const where = input.sessionId ? 'WHERE j.session_id=?' : '';
+    const params = input.sessionId ? [input.sessionId] : [];
+    const counts = this.d.db
+      .prepare(`SELECT status,COUNT(*) AS count FROM reflection_jobs j ${where} GROUP BY status`)
+      .all(...params);
+    const total = counts.reduce((sum, row) => sum + Number(row.count), 0);
+    const order = input.statusOnly
+      ? "CASE j.status WHEN 'running' THEN 0 WHEN 'waiting_user' THEN 1 WHEN 'pending' THEN 2 ELSE 3 END,j.updated DESC,j.id DESC"
+      : 'j.created DESC,j.id DESC';
+    const rows = this.d.db
+      .prepare(`SELECT j.id,j.session_id,j.created,j.updated,j.scheduled_at,j.status,j.error,j.reflection_session_id,
+      ${input.statusOnly ? 'NULL AS summary' : "substr(json_extract(r.data,'$.summary'),1,240) AS summary"},
+      (SELECT COUNT(*) FROM reflection_job_sources s WHERE s.job_id=j.id) AS source_count
+      FROM reflection_jobs j ${input.statusOnly ? '' : 'LEFT JOIN reflections r ON r.id=j.id'} ${where}
+      ORDER BY ${order} LIMIT ? OFFSET ?`)
+      .all(...params, limit, offset);
+    return this.d.sensitive.copy({
+      jobs: rows.map((row) => ({
+        id: String(row.id),
+        sessionId: String(row.session_id),
+        created: Number(row.created),
+        updated: Number(row.updated),
+        scheduledAt: Number(row.scheduled_at),
+        status: row.status as ReflectionJob['status'],
+        reflectionSessionId: row.reflection_session_id === null ? undefined : String(row.reflection_session_id),
+        error: row.error === null ? undefined : String(row.error),
+        sourceCount: Number(row.source_count),
+      })),
+      records: rows
+        .filter((row) => row.summary !== null)
+        .map((row) => ({ id: String(row.id), jobId: String(row.id), summary: String(row.summary) })),
+      total,
+      limit,
+      offset,
+      pending: counts.reduce((sum, row) => sum + (row.status === 'pending' ? Number(row.count) : 0), 0),
+      availability: this.environment ?? {
+        available: false,
+        reason: '尚未检查反思环境；有待执行任务时自动检查，也可手动检查。',
+      },
+    });
   }
   list(sessionId?: string) {
     return this.d.db
@@ -235,9 +325,7 @@ export class ReflectionService {
   private schedule() {
     if (this.closing) return;
     clearTimeout(this.timer);
-    const due = this.jobs
-      .list({ status: 'pending' })
-      .reduce((value, j) => Math.min(value, j.scheduledAt), Date.now() + 30000);
+    const due = this.jobs.nextScheduledAt() ?? Date.now() + 30000;
     this.timer = setTimeout(
       () => {
         void this.pump();
@@ -256,6 +344,7 @@ export class ReflectionService {
     let claimed: ReflectionJob | undefined;
     try {
       if (!this.d.canRun()) return;
+      if (!this.jobs.hasDue() && this.environment) return;
       const available = await this.availability();
       if (this.closing) return;
       if (!available.available) {
@@ -296,6 +385,7 @@ export class ReflectionService {
     this.closing = true;
     clearTimeout(this.timer);
     this.abort?.abort();
+    this.environmentCheck?.controller.abort();
     await this.pumpDone;
     await this.run?.catch(() => {
       this.d.diagnostics.system('REFLECTION_RUN_FAILED', 'error');
@@ -613,7 +703,7 @@ export class ReflectionService {
       ),
       tool(
         'reflection_save',
-        'Save what you reviewed, the evidence, findings and remaining uncertainty. Empty findings are valid; no knowledge or suggestion is required.',
+        reflectionOutputGuidance,
         Type.Object(
           {
             summary: Type.String({ minLength: 1, maxLength: 32000 }),
@@ -889,7 +979,7 @@ export class ReflectionService {
           project: job.project,
           model: bridgeModel,
           tools: declarations,
-          prompt: `Review completed task evidence autonomously. Source Session ${job.sessionId}; stable references ${JSON.stringify(job.sources)}. You may inspect other authorized history and past reflections. Save your review and uncertainty; update descriptive knowledge or submit suggestions only when justified.`,
+          prompt: `Review completed task evidence autonomously. Source Session ${job.sessionId}; stable references ${JSON.stringify(job.sources)}. You may inspect other authorized history and past reflections. Update descriptive knowledge or submit suggestions only when justified.\n${reflectionOutputGuidance}`,
         },
         handle,
         signal,

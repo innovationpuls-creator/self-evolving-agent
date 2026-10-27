@@ -1,0 +1,91 @@
+[
+  {
+    "name": "并发修订真实 409，草稿不覆盖；明确采用最新基础后追加修订",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "conflictStatus": 409,
+      "revision": 3,
+      "remoteRevision": 2
+    }
+  },
+  {
+    "name": "真实 POST 已提交但回复丢失：保持结果未确认，不自动重试",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "actualCommit": 2,
+      "automaticRetries": 0,
+      "uncertainUntilExplicitReview": true
+    }
+  },
+  {
+    "name": "已收到提交修订但后续 GET 失败：只核对，不重复写入",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "acknowledged": 2,
+      "authoritativeReadRecovered": true,
+      "writes": 1
+    }
+  },
+  {
+    "name": "创建提交后断开响应，不凭相似记录推断成功；离开返回保留草稿",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "id": "d9636812-5eef-4086-a830-4832a3c10b22",
+      "UIReportsSuccess": false,
+      "automaticRetry": false
+    }
+  },
+  {
+    "name": "跨项目真实 404：读写均拒绝；Global 可见、缩小作用域后旧项目不再可见",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "wrongRead": 404,
+      "wrongWrite": 404,
+      "globalVisibleHistory": 1,
+      "afterNarrowing": 404
+    }
+  },
+  {
+    "name": "实际 Origin 403 拒绝写入，失败反馈且版本未变化",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "status": 403,
+      "revision": 1
+    }
+  },
+  {
+    "name": "真实 WebSocket 断开、离线编辑保留，认证重连后读取权威状态",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "connections": 9,
+      "revision": 2
+    }
+  },
+  {
+    "name": "实际无 Bearer 401 卸载受保护界面，重新认证后草稿恢复",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "status": 401,
+      "draftRetained": true,
+      "revision": 1
+    }
+  },
+  {
+    "name": "移除为逻辑删除：保留历史，Host 拒绝后续修订",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "status": "deleted",
+      "history": 2,
+      "subsequentRevision": 410
+    }
+  }
+]

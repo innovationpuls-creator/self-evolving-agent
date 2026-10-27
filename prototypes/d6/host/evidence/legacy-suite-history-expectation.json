@@ -1,0 +1,7 @@
+{
+  "source": "prototypes/d6/scripts/a-interactions.mjs",
+  "adaptation": "evidence destination; open existing outer execution disclosure before inner tool summary",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "node:internal/modules/run_main:111\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: free input fabricated tools\n\n1 !== 0\n\n    at file://<D6_HOST>/scripts/.legacy-regression.mjs:83:14 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 1,\n  expected: 0,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v26.10.0\n"
+}

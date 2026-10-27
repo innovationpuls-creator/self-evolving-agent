@@ -1,0 +1,21 @@
+[
+  {
+    "name": "suggestion → adopt → independent discussion → grant → native development → applied → exact Skill → return suggestion",
+    "width": 1440,
+    "status": "passed",
+    "actual": {
+      "suggestion": "f034b137-bb1e-480a-bda2-2a2d9c385792",
+      "discussionSession": "ce4bfb86-cd0e-45ee-a0a4-f4c3d25de7ab",
+      "activity": "d5670c76-efd2-4124-9162-ea74650f5b31",
+      "status": "completed",
+      "release": {
+        "skillId": "d5a29fb7-160f-4a30-8487-726f255ad0d4",
+        "version": "9523442c-0090-46a5-9c00-6de71f67485a",
+        "operationId": "f89e77e0-b935-4d9e-8e70-f100e90157df"
+      },
+      "operation": "applied",
+      "current": "9523442c-0090-46a5-9c00-6de71f67485a",
+      "mode": "controlled native Pi; no autonomous real model claim"
+    }
+  }
+]
