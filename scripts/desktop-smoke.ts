@@ -15,7 +15,7 @@ const launch = () =>
   });
 const ready = async (app: ElectronApplication) => {
   const page = await app.firstWindow();
-  await page.locator('.shell').waitFor({ timeout: 30000 });
+  await page.locator('.app.host-product').waitFor({ timeout: 30000 });
   return page;
 };
 const request = (page: Page, path: string, body?: unknown) =>
@@ -111,7 +111,7 @@ try {
     );
   } while ((!newPid || newPid === hostPid) && Date.now() < deadline);
   assert.ok(newPid && newPid !== hostPid);
-  await page.waitForFunction(() => document.querySelector('.connection')?.textContent?.includes('已连接'), {
+  await page.waitForFunction(() => document.querySelector('.sidebar-bottom')?.textContent?.includes('已连接'), {
     timeout: 30000,
   });
   assert.equal((await request(page, `/sessions/${session.id}`)).id, session.id);

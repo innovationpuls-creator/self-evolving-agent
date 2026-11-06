@@ -8,12 +8,14 @@ export function ModelSettings({
   ready,
   onRefresh,
   onClose,
+  embedded = false,
 }: {
   api: ReflectionApi;
   providers: Array<{ id: string }>;
   ready: boolean;
   onRefresh: () => Promise<void>;
   onClose: () => void;
+  embedded?: boolean;
 }) {
   const [provider, setProvider] = useState('openai-codex'),
     [key, setKey] = useState('');
@@ -206,16 +208,18 @@ export function ModelSettings({
     }
   };
   return (
-    <section className="model-panel">
-      <header>
-        <div>
-          <h1>模型设置</h1>
-          <p>管理 Host 使用的模型授权</p>
-        </div>
-        <button type="button" onClick={onClose} disabled={busy || loggingIn}>
-          返回工作区
-        </button>
-      </header>
+    <section className={`model-panel${embedded ? ' model-panel-embedded' : ''}`}>
+      {!embedded && (
+        <header>
+          <div>
+            <h1>模型设置</h1>
+            <p>管理 Host 使用的模型授权</p>
+          </div>
+          <button type="button" onClick={onClose} disabled={busy || loggingIn}>
+            返回工作区
+          </button>
+        </header>
+      )}
       <div className="settings-body">
         <span className="section-kicker">连接模型</span>
         <h2>为工作选择模型</h2>
@@ -385,9 +389,13 @@ export function ModelSettings({
         )}
         <div className="settings-note">
           <p>退出仅移除当前 Host 的独立凭据，不会删除 Pi 的原始授权、清除环境变量或在提供方撤销账号授权。</p>
-          <h3>工作在哪台设备上运行？</h3>
-          <p>模型请求、文件和工具操作都由当前连接的 Host 执行。浏览器负责输入和查看结果。</p>
-          <code>{location.origin}</code>
+          {!embedded && (
+            <>
+              <h3>工作在哪台设备上运行？</h3>
+              <p>模型请求、文件和工具操作都由当前连接的 Host 执行。浏览器负责输入和查看结果。</p>
+              <code>{location.origin}</code>
+            </>
+          )}
         </div>
       </div>
     </section>

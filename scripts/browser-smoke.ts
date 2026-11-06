@@ -36,12 +36,12 @@ try {
   const page = await browser.newPage();
   page.setDefaultTimeout(15000);
   await page.goto(`${host.origin}/#token=${token}`);
-  await page.locator('.shell').waitFor();
-  await page.waitForFunction(() => document.querySelector('.connection')?.textContent?.includes('已连接'));
+  await page.locator('.sidebar').waitFor();
+  await page.waitForFunction(() => document.querySelector('.sidebar-bottom')?.textContent?.includes('已连接'));
   assert.equal(new URL(page.url()).hash, '');
   assert.equal(await page.evaluate(() => localStorage.length), 0);
   await page.reload();
-  await page.locator('.shell').waitFor();
+  await page.locator('.sidebar').waitFor();
   let release!: () => void, started!: () => void;
   const gate = new Promise<void>((ok) => (release = ok)),
     requestStarted = new Promise<void>((ok) => (started = ok));
@@ -50,15 +50,18 @@ try {
     await gate;
     await route.continue();
   });
-  await page.locator('nav button').filter({ hasText: aDir }).click();
+  await page.locator(`.session-list [data-session="${a.id}"]`).click();
   await requestStarted;
-  await page.locator('nav button').filter({ hasText: bDir }).click();
-  await page.waitForFunction((value) => document.querySelector('main header p')?.textContent === value, bDir);
+  await page.locator(`.session-list [data-session="${b.id}"]`).click();
+  await page.waitForFunction(
+    (value) => document.querySelector('.session-heading > span')?.getAttribute('title') === value,
+    bDir,
+  );
   const oldResponse = page.waitForResponse((response) => response.url().endsWith(`/api/sessions/${a.id}`));
   release();
   await oldResponse;
   await page.waitForTimeout(100);
-  assert.equal(await page.locator('main header p').innerText(), bDir);
+  assert.equal(await page.locator('.session-heading > span').getAttribute('title'), bDir);
   await page.unrouteAll({ behavior: 'wait' });
   // A separate local origin must receive neither automatic cookies nor the bearer credential.
   await page.goto(`http://127.0.0.1:${address.port}/api/sessions`);
@@ -70,10 +73,10 @@ try {
   });
   assert.equal(replay.status, 401);
   await page.goto(host.origin);
-  await page.locator('.shell').waitFor();
+  await page.locator('.sidebar').waitFor();
   await page.evaluate(() => sessionStorage.setItem('agent-connection-token', 'revoked-or-invalid-connection-token'));
   await page.reload();
-  await page.getByRole('heading', { name: '连接 Agent', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '连接 Agent Host', exact: true }).waitFor();
   assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-connection-token')), null);
   console.log(
     JSON.stringify({

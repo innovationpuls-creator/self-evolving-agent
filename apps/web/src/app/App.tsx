@@ -1,463 +1,460 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useHost } from './use-host';
-import { readNavigation, saveNavigation, type View } from './view-state';
-import { ChatView } from '../features/chat/ChatView';
-import { referencedFiles } from '../features/chat/input-completion';
-import { ModelSettings } from '../features/models/ModelSettings';
-import { SkillsPanel } from '../features/skills/SkillsPanel';
-import { MemoryPanel } from '../features/memory/MemoryPanel';
-import type { EvidenceTarget } from '../features/diagnostics/evidence';
-import type { TrajectoryViewState } from '../features/diagnostics/TrajectoryPanel';
-import { ReflectionPanel } from '../features/reflection/ReflectionPanel';
-import { SuggestionsPanel } from '../features/evolution/SuggestionsPanel';
-
-const labels = {
-  connecting: '正在连接',
-  syncing: '正在同步',
-  ready: '已连接',
-  offline: '连接恢复中',
-  auth_required: '需要连接',
-  forbidden: '访问被拒绝',
-};
-function initialView(): View {
-  const saved = readNavigation();
-  if (!saved) return { kind: 'chat' };
-  switch (saved.kind) {
-    case 'memory':
-      return { kind: 'memory', id: saved.id, project: saved.project, revision: saved.revision };
-    case 'skills':
-      return { kind: 'skills', id: saved.id, project: saved.project, knowledgeRevision: saved.knowledgeRevision };
-    case 'chat':
-      return {
-        kind: 'chat',
-        evidence: saved.evidence?.sessionId
-          ? { ...saved.evidence, sessionId: saved.evidence.sessionId }
-          : saved.evidence?.traceId
-            ? { ...saved.evidence, traceId: saved.evidence.traceId }
-            : undefined,
-      };
-    case 'suggestions':
-    case 'reflection':
-      return { kind: saved.kind, id: saved.id };
-    default:
-      return { kind: saved.kind === 'settings' ? 'settings' : 'chat' };
-  }
-}
+import { readNavigation, saveNavigation } from './view-state';
+import type { Session } from '../features/chat/session-state';
+import { TrajectoryPanel, type TrajectoryViewState } from '../features/diagnostics/TrajectoryPanel';
+import { Failure } from '../components/reading';
+import { Catalog, ReflectionDetail } from '../features/reflection/Reflection';
+import { Button, Field, Modal, Notice } from '../components/ui';
+import { ShellSurface, type ShellController, type Page } from './Shell';
+import { useProductNavigation } from './navigation';
+import { TaskTitle } from '../components/Title';
+import { SessionRoom, type SessionDraft } from '../features/chat/Session';
+import { MemoryEditor } from '../features/memory/MemoryEditor';
+import { MemoryDrafts } from '../features/memory/memory-management';
+import { MemoryCatalog, MemoryReader } from '../features/memory/Memory';
+import { Settings } from '../features/models/Settings';
+import { Skills } from '../features/skills/Skills';
+import { SkillDrafts } from '../features/skills/skill-management';
+import { EvolutionCatalog, SuggestionDetail, ActivityView } from '../features/evolution/Evolution';
+import { Source } from '../features/diagnostics/Source';
+import type { Host, Route } from './types';
+import '../styles/product.css';
 export function App() {
-  const [view, setView] = useState<View>(initialView);
-  const [returnView, setReturnView] = useState<View>({ kind: 'chat' });
-  const host = useHost(readNavigation()?.sessionId);
-  const { api, selected, selectedId, connection } = host;
-  const ready = connection === 'ready';
-  const navigationEpoch = useRef(0);
-  const currentSessionId = useRef(selectedId);
-  currentSessionId.current = selectedId;
-  const [token, setToken] = useState(''),
-    [menu, setMenu] = useState(false),
-    [attention, setAttention] = useState(0);
-  const [localError, setLocalError] = useState('');
-  const memoryDirty = useRef(false),
-    skillsDirty = useRef(false);
-  const trajectoryStates = useRef(new Map<string, TrajectoryViewState>());
-  const sessionTabs = useRef(new Map<string, 'chat' | 'trajectory'>());
-  const [tabVersion, setTabVersion] = useState(0);
-  const scrollPositions = useRef(new Map<string, number>());
-  const drafts = useRef(new Map<string, { text: string; version: number }>());
-  const submitting = useRef(new Set<string>());
-  const [, renderDraft] = useState(0);
-  const updateDraft = (id: string, text: string) => {
-    const old = drafts.current.get(id);
-    drafts.current.set(id, { text, version: (old?.version ?? 0) + 1 });
-    renderDraft((n) => n + 1);
-  };
-  const leave = (fn: () => void) => {
-    if ((memoryDirty.current || skillsDirty.current) && !window.confirm('当前内容有未保存修改，离开并放弃这些修改？'))
-      return;
-    memoryDirty.current = false;
-    skillsDirty.current = false;
-    setLocalError('');
-    setMenu(false);
-    navigationEpoch.current++;
-    fn();
-  };
-  const navigate = (target: View) =>
-    leave(() => {
-      if (target.kind === 'settings' && view.kind !== 'settings') setReturnView(view);
-      setView(target);
-    });
-  const back = () => navigate({ kind: 'chat' });
-  const report = useCallback((message: string) => setLocalError(message), []);
-  const expedite = (id?: string) => {
-    if (id && ready)
-      void api('/reflections/expedite', 'POST', { sessionId: id }).catch(() =>
-        window.dispatchEvent(new Event('agent-reflection-changed')),
-      );
-  };
-  const selectSession = async (id: string) => {
-    expedite(selectedId !== id ? selectedId : undefined);
-    setView({ kind: 'chat' });
-    setMenu(false);
-    await host.open(id);
-  };
-  const openEvidence = (evidence: EvidenceTarget) =>
-    leave(() => {
-      const epoch = navigationEpoch.current;
-      void (async () => {
-        let sessionId = evidence.sessionId;
-        if (!sessionId && evidence.traceId) {
-          const value = await api<{ trace: { sessionId: string } }>(`/diagnostics/${evidence.traceId}`);
-          sessionId = value.trace.sessionId;
-        }
-        if (epoch !== navigationEpoch.current) return;
-        if (sessionId && host.sessions.some((item) => item.id === sessionId && !item.unavailable)) {
-          await host.open(sessionId);
-          if (epoch !== navigationEpoch.current) return;
-          sessionTabs.current.set(sessionId, 'trajectory');
-        } else if (selectedId) sessionTabs.current.set(selectedId, 'trajectory');
-        setView({ kind: 'chat', evidence: { ...evidence, ...(sessionId ? { sessionId } : {}) } });
-        setTabVersion((n) => n + 1);
-      })().catch((reason: unknown) => {
-        if (epoch === navigationEpoch.current) report(reason instanceof Error ? reason.message : '来源读取失败');
+  const nav = useProductNavigation(),
+    r = nav.route;
+  const routeKey = useRef(nav.key);
+  routeKey.current = nav.key;
+  const createOpen = useRef(false);
+  const host = useHost(r.page === 'session' || r.page === 'trajectory' ? r.sessionId : readNavigation()?.sessionId);
+  const [token, T] = useState(''),
+    [create, C] = useState(false),
+    [cwd, CWD] = useState(''),
+    [model, M] = useState(''),
+    [createError, CE] = useState(''),
+    [creating, CR] = useState(false),
+    [openError, OE] = useState('');
+  createOpen.current = create;
+  const [drafts, D] = useState<Record<string, SessionDraft>>({});
+  const memoryDrafts = useRef(new MemoryDrafts());
+  const skillDrafts = useRef(new SkillDrafts());
+  useEffect(() => {
+    const protect = (e: BeforeUnloadEvent) => {
+      if (
+        memoryDrafts.current.all().some((d) => d.phase !== 'saved') ||
+        skillDrafts.current.all().length ||
+        skillDrafts.current.knowledge.size
+      ) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', protect);
+    return () => window.removeEventListener('beforeunload', protect);
+  }, []);
+  const lastMemoryRoute = useRef<Extract<Route, { page: 'memory' }> | undefined>(undefined);
+  if (r.page === 'memory') lastMemoryRoute.current = r;
+  const lastReflectionRoute = useRef<Extract<Route, { page: 'reflections' }> | undefined>(undefined);
+  if (r.page === 'reflections') lastReflectionRoute.current = r;
+  const lastEvolutionRoute = useRef<Extract<Route, { page: 'evolution' }> | undefined>(undefined);
+  if (r.page === 'evolution') lastEvolutionRoute.current = r;
+  const lastSkillsRoute = useRef<Extract<Route, { page: 'skills' }> | undefined>(undefined);
+  if (r.page === 'skills') lastSkillsRoute.current = r;
+  const pendingId = useRef<string | undefined>(undefined),
+    lastId = useRef<string | undefined>(readNavigation()?.sessionId),
+    states = useRef(new Map<string, TrajectoryViewState>());
+  const hostRef = useRef(host);
+  hostRef.current = host;
+  const authorizationBlocked = useRef(false);
+  if (['auth_required', 'forbidden'].includes(host.connection)) authorizationBlocked.current = true;
+  else if (host.connection === 'ready') authorizationBlocked.current = false;
+  const locked = authorizationBlocked.current;
+  const id = r.page === 'session' || r.page === 'trajectory' ? r.sessionId : undefined;
+  if (id) lastId.current = id;
+  useEffect(() => {
+    saveNavigation({ kind: 'chat' }, lastId.current);
+  }, [id]);
+  useEffect(() => {
+    let active = true;
+    OE('');
+    if (id && host.connection === 'ready' && hostRef.current.selected?.id !== id)
+      void hostRef.current.open(id).catch((e) => {
+        if (active) OE(e instanceof Error ? e.message : '会话读取失败');
       });
-    });
-  useEffect(() => {
-    saveNavigation(view, selectedId);
-  }, [view, selectedId]);
-  useEffect(() => {
-    if (!ready) return;
-    let alive = true,
-      epoch = 0;
-    const refresh = () => {
-      const current = ++epoch;
-      void api<{ highPriorityPending: number }>('/suggestions?limit=1')
-        .then((value) => {
-          if (alive && current === epoch) setAttention(value.highPriorityPending);
-        })
-        .catch(() => {});
-    };
-    refresh();
-    window.addEventListener('agent-suggestions-changed', refresh);
-    window.addEventListener('agent-reconnected', refresh);
     return () => {
-      alive = false;
-      window.removeEventListener('agent-suggestions-changed', refresh);
-      window.removeEventListener('agent-reconnected', refresh);
+      active = false;
     };
-  }, [ready, api]);
-  const send = async () => {
-    if (!selected || !ready || selected.busy || submitting.current.has(selected.id)) return;
-    const id = selected.id,
-      draft = drafts.current.get(id);
-    if (!draft?.text.trim()) return;
-    submitting.current.add(id);
-    updateDraft(id, '');
-    const clearedVersion = drafts.current.get(id)?.version;
-    setLocalError('');
-    try {
-      await api(`/sessions/${id}/prompt`, 'POST', { text: draft.text, files: referencedFiles(draft.text) });
-    } catch (reason) {
-      if (drafts.current.get(id)?.version === clearedVersion) updateDraft(id, draft.text);
-      const uncertain = !(reason instanceof Error && 'status' in reason);
-      setLocalError(
-        `${selected.title}：${uncertain ? '提交结果尚未确认，请检查会话记录后决定是否再次发送。' : reason instanceof Error ? reason.message : '提交失败'}`,
+  }, [id, host.connection]);
+  const selected = host.selected;
+  const retained = useRef<Session | undefined>(undefined);
+  if (selected) retained.current = selected;
+  const viewSession = selected || retained.current;
+  const routeSession = r.page === 'reflections' ? r.sessionId : r.page === 'reflection' ? r.originSession : undefined;
+  const context = host.sessions.find((s) => s.id === (id || routeSession || lastId.current)) || selected;
+  const page: Page =
+    r.page === 'activity'
+      ? 'evolution'
+      : r.page === 'memory-edit'
+        ? 'memory'
+        : r.page === 'session'
+          ? 'chat'
+          : r.page === 'trajectory'
+            ? 'trace'
+            : r.page === 'source'
+              ? nav.workspace || 'reflection'
+              : r.page === 'reflections' || r.page === 'reflection'
+                ? 'reflection'
+                : r.page === 'result'
+                  ? r.target.kind === 'memory'
+                    ? 'memory'
+                    : r.target.kind === 'skill'
+                      ? 'skills'
+                      : 'evolution'
+                  : r.page;
+  const workspaceProject =
+    r.page === 'memory' || r.page === 'memory-edit'
+      ? r.project
+      : r.page === 'result' && r.target.kind === 'memory'
+        ? r.target.project
+        : r.page === 'result' && r.project !== undefined
+          ? r.project
+          : r.page === 'source'
+            ? r.project
+            : r.page === 'reflections' || r.page === 'reflection'
+              ? host.sessions.find((s) => s.id === routeSession)?.cwd
+              : context?.cwd;
+  const goPage = (page: Page) => {
+    const sid = pendingId.current || lastId.current || host.sessions[0]?.id;
+    pendingId.current = undefined;
+    if (page === 'chat') nav.go({ page: 'session', sessionId: sid });
+    else if (page === 'trace' && sid) nav.go({ page: 'trajectory', sessionId: sid });
+    else if (page === 'reflection') nav.go(lastReflectionRoute.current || { page: 'reflections', offset: 0 });
+    else if (page === 'memory')
+      nav.go(
+        r.page === 'session' || r.page === 'trajectory'
+          ? { page: 'memory', project: context?.cwd }
+          : lastMemoryRoute.current || { page: 'memory', project: context?.cwd },
       );
-      if (currentSessionId.current === id) void host.open(id).catch(() => {});
+    else if (page === 'evolution') nav.go(lastEvolutionRoute.current || { page: 'evolution', project: context?.cwd });
+    else if (page === 'skills') nav.go(lastSkillsRoute.current || { page: 'skills', project: context?.cwd });
+    else if (page === 'settings') nav.go({ page });
+  };
+  const shellSession = (s: Session) => ({
+    id: s.id,
+    title: s.title || '未命名会话',
+    project: s.cwd,
+    run: s.busy ? ('running' as const) : ('idle' as const),
+    unavailable: s.unavailable,
+    error: s.error,
+  });
+  const x: ShellController = {
+    page,
+    sid: id || '',
+    session: context
+      ? { ...shellSession(context), project: workspaceProject || '' }
+      : { id: '', title: '会话', project: workspaceProject || '', run: 'idle' },
+    sessions: host.sessions.map(shellSession),
+    connected: host.connection === 'ready',
+    history: nav.depth ? [nav.depth] : [],
+    go: goPage,
+    back: nav.back,
+    setSid: (value) => {
+      pendingId.current = value;
+    },
+  };
+  const assistSkill = lastId.current || host.sessions.find((s) => !s.unavailable)?.id;
+  const onAssist = assistSkill
+    ? (text: string) => {
+        D((old) => ({ ...old, [assistSkill]: { text, files: [] } }));
+        nav.go({ page: 'session', sessionId: assistSkill });
+      }
+    : undefined;
+  const createSession = async () => {
+    const choice = host.models.find((m) => `${m.provider}:${m.id}` === model);
+    if (!choice) return;
+    const owner = nav.key;
+    CR(true);
+    CE('');
+    try {
+      const session = await host.api<Session>('/sessions', 'POST', {
+        cwd,
+        provider: choice.provider,
+        model: choice.id,
+      });
+      await host.refresh();
+      if (owner === routeKey.current && createOpen.current) {
+        C(false);
+        nav.go({ page: 'session', sessionId: session.id });
+      }
+    } catch (e) {
+      CE(e instanceof Error ? e.message : '创建失败');
     } finally {
-      submitting.current.delete(id);
-      renderDraft((n) => n + 1);
+      CR(false);
     }
   };
-  if (
-    connection === 'auth_required' ||
-    connection === 'forbidden' ||
-    ((connection === 'connecting' || connection === 'offline') && !sessionStorage.getItem('agent-connection-token'))
-  )
+  if (locked || (host.connection !== 'ready' && !sessionStorage.getItem('agent-connection-token')))
     return (
-      <main className="connect">
-        <div className="connect-brand">
-          Agent<span>个人工作空间</span>
-        </div>
-        <span className="section-kicker">连接工作区</span>
-        <h1>连接 Agent</h1>
-        <p>打开正在运行的 Agent Host，连接已有会话与后台任务。</p>
-        <div className="host-address">
-          <span>当前 Host</span>
-          <code>{location.origin}</code>
-        </div>
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            if (!token.trim() || connection === 'connecting') return;
-            void host
-              .connect(token.trim())
-              .then(() => setToken(''))
-              .catch(() => {});
-          }}
-        >
-          <label>
-            连接令牌
-            <input
-              aria-label="连接令牌"
-              type="password"
-              value={token}
-              onChange={(event) => setToken(event.target.value)}
-              autoComplete="off"
-              required
-            />
-          </label>
-          <button className="primary" type="submit" disabled={!token.trim() || connection === 'connecting'}>
-            {connection === 'connecting' ? '正在连接…' : '连接 Agent'}
-          </button>
-        </form>
-        {host.error && (
-          <p role="alert" className="notice error">
-            {host.error}
-          </p>
-        )}
-        <details className="connection-help">
-          <summary>如何连接已有 Host？</summary>
-          <p>桌面端：从 Agent 菜单选择“在浏览器打开”，会自动连接同一个 Host。</p>
-          <p>独立 Web：先启动 Host，再输入启动时设置的连接令牌。浏览器关闭后，Host 仍会继续已提交的任务。</p>
-        </details>
-      </main>
-    );
-  const currentDraft = selectedId ? (drafts.current.get(selectedId)?.text ?? '') : '';
-  const project = selected?.cwd ?? '';
-  return (
-    <div className="shell" data-view={view.kind}>
-      <div className="mobile-bar">
-        <button type="button" aria-label="打开导航" aria-expanded={menu} onClick={() => setMenu(!menu)}>
-          ☰
-        </button>
-        <span>Agent</span>
-        <small>{labels[connection]}</small>
+      <div className="app quiet product-view host-product">
+        <main className="host-connect">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              void host
+                .connect(token.trim())
+                .then(() => T(''))
+                .catch(() => {});
+            }}
+          >
+            <h1>连接 Agent Host</h1>
+            {host.error && <p role="alert">{host.error}</p>}
+            <Field label="连接令牌">
+              <input type="password" value={token} onChange={(e) => T(e.target.value)} autoComplete="off" />
+            </Field>
+            <Button
+              type="submit"
+              kind="primary"
+              disabled={!token || ['connecting', 'syncing'].includes(host.connection)}
+            >
+              连接
+            </Button>
+          </form>
+        </main>
       </div>
-      {menu && <button type="button" className="sidebar-scrim" aria-label="关闭导航" onClick={() => setMenu(false)} />}
-      <aside className={menu ? 'open' : ''}>
-        <div className="brand">
-          Agent<span>个人工作空间</span>
-        </div>
-        <button
-          className="new-session"
-          type="button"
-          onClick={() =>
-            leave(() => {
-              expedite(selectedId);
-              host.clearSelection();
-              setView({ kind: 'chat' });
-            })
-          }
-        >
-          ＋ 新会话
-        </button>
-        <div className="nav-caption">会话</div>
-        <nav aria-label="会话列表">
-          {host.sessions.map((item) => (
-            <button
-              type="button"
-              className={item.id === selectedId && view.kind === 'chat' ? 'selected' : ''}
-              key={item.id}
-              disabled={item.unavailable}
-              title={item.error ?? item.cwd}
-              onClick={() =>
-                leave(() => {
-                  void selectSession(item.id).catch((reason) =>
-                    report(reason instanceof Error ? reason.message : '会话读取失败'),
-                  );
-                })
-              }
-            >
-              <b>
-                {item.busy && <span className="running-dot" />}
-                {item.title}
-              </b>
-              <small>
-                {item.unavailable ? item.error : item.busy ? '正在处理' : item.interrupted ? '上次运行中断' : item.cwd}
-              </small>
-            </button>
-          ))}
-          {!host.sessions.length && <p className="nav-empty">你的会话会保留在这里</p>}
-        </nav>
-        <div className="workspace-navigation">
-          <div className="nav-caption">工作区</div>
-          {(
-            [
-              ['skills', '能力管理'],
-              ['memory', '记忆管理'],
-              ['reflection', '反思记录'],
-              ['suggestions', `进化建议${attention ? ` · ${attention}` : ''}`],
-              ['settings', '模型设置'],
-            ] as const
-          ).map(([kind, label]) => (
-            <button
-              type="button"
-              className={view.kind === kind ? 'active' : ''}
-              aria-current={view.kind === kind ? 'page' : undefined}
-              key={kind}
-              onClick={() => navigate({ kind })}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <div className="connection" data-connection={connection}>
-          <span className="connection-dot" />
-          {labels[connection]}
-          {connection === 'offline' && (
-            <button type="button" onClick={host.retry}>
-              重试
-            </button>
+    );
+  return (
+    <ShellSurface
+      x={x}
+      host={{
+        connection:
+          host.connection === 'ready' ? '已连接' : host.connection === 'syncing' ? '正在同步' : '等待重新连接',
+        retry: host.retry,
+        create: () => {
+          CWD(workspaceProject || context?.cwd || '');
+          M(
+            context
+              ? `${context.provider}:${context.model}`
+              : host.models[0]
+                ? `${host.models[0].provider}:${host.models[0].id}`
+                : '',
+          );
+          CE('');
+          C(true);
+        },
+        dialogs: (
+          <Modal
+            open={create}
+            onClose={() => C(false)}
+            title="开始一段新会话"
+            description="任务在 Host 项目目录中执行。"
+          >
+            <Field label="Host 工作目录">
+              <input value={cwd} onChange={(e) => CWD(e.target.value)} placeholder="项目绝对路径" />
+            </Field>
+            <Field label="模型">
+              <select value={model} onChange={(e) => M(e.target.value)}>
+                {host.models.map((m) => (
+                  <option key={`${m.provider}:${m.id}`} value={`${m.provider}:${m.id}`}>
+                    {m.name} · {m.provider}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            {!host.models.length && (
+              <Notice title="尚未配置模型">
+                <Button
+                  onClick={() => {
+                    C(false);
+                    nav.go({ page: 'settings' });
+                  }}
+                >
+                  配置模型授权
+                </Button>
+              </Notice>
+            )}
+            {createError && <p role="alert">{createError}</p>}
+            <div className="modal-footer">
+              <Button onClick={() => C(false)}>取消</Button>
+              <Button
+                kind="primary"
+                disabled={!cwd || !model || creating || host.connection !== 'ready'}
+                onClick={() => void createSession()}
+              >
+                {creating ? '正在创建…' : '创建会话'}
+              </Button>
+            </div>
+          </Modal>
+        ),
+      }}
+    >
+      <div className="host-views">
+        {host.error && (
+          <Notice
+            title="操作未完成"
+            tone="warn"
+            action={
+              <Button kind="ghost" onClick={() => host.setError('')}>
+                关闭提示
+              </Button>
+            }
+          >
+            <p role="alert">{host.error}</p>
+          </Notice>
+        )}
+        <div hidden={r.page !== 'session' || !r.sessionId} className="host-conversation">
+          {openError && (
+            <Failure
+              error={openError}
+              retry={() => {
+                OE('');
+                if (id) void host.open(id).catch((e) => OE(String(e)));
+              }}
+            />
+          )}
+          {viewSession ? (
+            <div className="host-retained-session" hidden={r.page === 'session' && r.sessionId !== viewSession.id}>
+              <SessionRoom
+                host={host}
+                session={viewSession}
+                active={r.page === 'session' && !!r.sessionId && viewSession.id === r.sessionId}
+                route={r.page === 'session' ? r : { page: 'session', sessionId: viewSession.id }}
+                draft={drafts[viewSession.id] || { text: '', files: [] }}
+                onDraft={(sid, value) =>
+                  D((old) => ({
+                    ...old,
+                    [sid]: typeof value === 'function' ? value(old[sid] || { text: '', files: [] }) : value,
+                  }))
+                }
+                go={nav.go}
+              />
+            </div>
+          ) : (
+            !openError && (
+              <p className="host-loading" role="status">
+                正在读取会话…
+              </p>
+            )
           )}
         </div>
-      </aside>
-      <main>
-        {connection !== 'ready' && (
-          <div className="connection-banner" role="status">
-            <span>{labels[connection]} · 正在恢复 Host 状态，已提交任务不会重复执行。</span>
-            <button type="button" onClick={host.retry}>
-              重新连接
-            </button>
+        <div hidden={r.page === 'session' && !!r.sessionId} className="host-workspace-view">
+          <div className={`aw host-reading ${r.page === 'trajectory' ? 'host-trajectory' : ''}`} data-aw-page={page}>
+            {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} />}
+            {r.page === 'reflections' && <Catalog api={host.api} sessions={host.sessions} route={r} go={nav.go} />}
+            {r.page === 'reflection' && (
+              <ReflectionDetail api={host.api} sessions={host.sessions} route={r} go={nav.go} back={nav.back} />
+            )}
+            {r.page === 'source' && (
+              <Source
+                key={JSON.stringify(r.reference)}
+                api={host.api}
+                route={r}
+                go={nav.go}
+                back={nav.back}
+                sessionIds={host.sessions.map((session) => session.id)}
+              />
+            )}
+            {r.page === 'result' &&
+              (r.target.kind === 'memory' ? (
+                <MemoryReader host={host} route={r} go={nav.go} back={nav.back} />
+              ) : r.target.kind === 'skill' ? (
+                <Skills
+                  host={host}
+                  route={r}
+                  store={skillDrafts.current}
+                  onAssist={onAssist}
+                  project={r.project ?? lastSkillsRoute.current?.project ?? context?.cwd ?? ''}
+                  go={nav.go}
+                  back={nav.back}
+                />
+              ) : (
+                <SuggestionDetail
+                  key={r.target.id}
+                  host={host}
+                  id={r.target.id}
+                  project={lastEvolutionRoute.current?.project || context?.cwd}
+                  go={nav.go}
+                  back={nav.back}
+                />
+              ))}
+            {r.page === 'memory' && (
+              <MemoryCatalog
+                store={memoryDrafts.current}
+                host={host}
+                route={r}
+                go={nav.go}
+                replace={(route) => nav.go(route, true)}
+              />
+            )}
+            {r.page === 'memory-edit' && (
+              <MemoryEditor
+                key={JSON.stringify(r)}
+                host={host}
+                route={r}
+                store={memoryDrafts.current}
+                go={(route) => nav.go(route, true)}
+                back={nav.back}
+              />
+            )}
+            {r.page === 'skills' && (
+              <Skills
+                host={host}
+                route={r}
+                store={skillDrafts.current}
+                onAssist={onAssist}
+                project={r.project ?? context?.cwd ?? ''}
+                go={nav.go}
+                back={nav.back}
+              />
+            )}
+            {r.page === 'evolution' && <EvolutionCatalog host={host} route={r} go={nav.go} />}
+            {r.page === 'activity' && <ActivityView key={r.id} host={host} id={r.id} go={nav.go} back={nav.back} />}
+            {r.page === 'settings' && <Settings host={host} back={nav.back} />}
+            {r.page === 'trajectory' && (
+              <>
+                <Button
+                  kind="ghost"
+                  className="aw-return"
+                  onClick={() => nav.go({ page: 'session', sessionId: r.sessionId })}
+                >
+                  回到对话
+                </Button>
+                <TrajectoryPanel
+                  key={r.sessionId}
+                  api={host.api}
+                  session={selected?.id === r.sessionId ? selected : undefined}
+                  active={r.page === 'trajectory'}
+                  states={states.current}
+                  onTargetDone={() => {}}
+                />
+              </>
+            )}
           </div>
-        )}
-        {(localError || host.error) && (
-          <div role="alert" className="notice error global-error">
-            <span>{localError || host.error}</span>
-            <button
-              type="button"
-              aria-label="关闭提示"
-              onClick={() => {
-                setLocalError('');
-                host.setError('');
-              }}
-            >
-              ×
-            </button>
-          </div>
-        )}
-        {view.kind === 'settings' ? (
-          <ModelSettings
-            api={api}
-            providers={host.providers}
-            ready={ready}
-            onRefresh={host.refresh}
-            onClose={() => navigate(returnView)}
-          />
-        ) : view.kind === 'skills' ? (
-          <SkillsPanel
-            api={api}
-            initialId={view.id}
-            initialKnowledgeRevision={view.knowledgeRevision}
-            project={view.project ?? project}
-            onClose={back}
-            onActivity={(id) => {
-              void api<{ sessionId: string }>(`/activities/${id}`)
-                .then((a) => selectSession(a.sessionId))
-                .catch((e) => report(e.message));
-            }}
-            onDirtyChange={(value) => {
-              skillsDirty.current = value;
-            }}
-            onAssist={(value) =>
-              leave(() => {
-                if (!selectedId) {
-                  report('先创建或选择用于讨论的会话，再从能力管理发起讨论。');
-                  return;
-                }
-                updateDraft(selectedId, value);
-                setView({ kind: 'chat' });
-              })
-            }
-          />
-        ) : view.kind === 'memory' ? (
-          <MemoryPanel
-            api={api}
-            initialId={view.id}
-            initialRevision={view.revision}
-            project={view.project ?? project}
-            onClose={back}
-            onDirtyChange={(value) => {
-              memoryDirty.current = value;
-            }}
-            onEvidence={openEvidence}
-          />
-        ) : view.kind === 'reflection' ? (
-          <ReflectionPanel
-            api={api}
-            session={selected}
-            initialId={view.id}
-            onClose={back}
-            onEvidence={openEvidence}
-            onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
-            onSkill={(id, _revision, project, knowledgeRevision) =>
-              navigate({ kind: 'skills', id, project, knowledgeRevision })
-            }
-            onSuggestion={(id) => navigate({ kind: 'suggestions', id })}
-            onReflection={(id) => navigate({ kind: 'reflection', id })}
-          />
-        ) : view.kind === 'suggestions' ? (
-          <SuggestionsPanel
-            api={api}
-            initialId={view.id}
-            session={selected}
-            onClose={back}
-            onDiscuss={selectSession}
-            onEvidence={openEvidence}
-            onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
-            onSkill={(id, knowledgeRevision, project) => navigate({ kind: 'skills', id, project, knowledgeRevision })}
-            onReflection={(id) => navigate({ kind: 'reflection', id })}
-          />
-        ) : (
-          <ChatView
-            onEvidence={openEvidence}
-            onMemory={(id, revision, project) => navigate({ kind: 'memory', id, revision, project })}
-            positions={scrollPositions.current}
-            trajectoryStates={trajectoryStates.current}
-            tab={
-              view.kind === 'chat' && view.evidence
-                ? 'trajectory'
-                : (sessionTabs.current.get(selectedId ?? '') ?? 'chat')
-            }
-            evidence={view.kind === 'chat' ? view.evidence : undefined}
-            onEvidenceDone={() => {
-              if (view.kind === 'chat' && view.evidence) {
-                if (selectedId) sessionTabs.current.set(selectedId, 'trajectory');
-                setView({ kind: 'chat' });
-              }
-            }}
-            onTab={(tab) => {
-              if (selectedId) sessionTabs.current.set(selectedId, tab);
-              setView({ kind: 'chat' });
-              setTabVersion(tabVersion + 1);
-            }}
-            api={api}
-            session={selected}
-            selectedId={selectedId}
-            models={host.models}
-            ready={ready}
-            draft={currentDraft}
-            sending={selectedId ? submitting.current.has(selectedId) : false}
-            onDraft={(text) => {
-              if (selectedId) updateDraft(selectedId, text);
-            }}
-            onSend={() => void send()}
-            onCreate={async (cwd, model) => {
-              const epoch = navigationEpoch.current;
-              const created = await api<{ id: string }>('/sessions', 'POST', {
-                cwd,
-                provider: model.provider,
-                model: model.id,
-              });
-              await host.refresh();
-              if (epoch === navigationEpoch.current) await host.open(created.id);
-            }}
-            onSettings={() => navigate({ kind: 'settings' })}
-            onOpen={selectSession}
-            onSkill={(id) => navigate({ kind: 'skills', id })}
-            onReflection={() => navigate({ kind: 'reflection' })}
-            onError={report}
-          />
-        )}
-      </main>
-    </div>
+        </div>
+      </div>
+    </ShellSurface>
+  );
+}
+function SessionPicker({ host, go }: { host: Host; go: (route: Route) => void }) {
+  return (
+    <>
+      <header className="aw-heading">
+        <h1 tabIndex={-1}>会话</h1>
+      </header>
+      {host.connection !== 'ready' && <p role="status">正在同步 Host…</p>}
+      <div className="host-session-picker">
+        {host.sessions.map((s) => (
+          <button
+            type="button"
+            key={s.id}
+            data-session={s.id}
+            data-focus={s.id}
+            onClick={() => go({ page: 'session', sessionId: s.id })}
+          >
+            <TaskTitle title={s.title || '未命名会话'} />
+            <small>{s.cwd}</small>
+          </button>
+        ))}
+      </div>
+      {host.connection === 'ready' && !host.sessions.length && <p>还没有会话。可以从导航中新建。</p>}
+    </>
   );
 }

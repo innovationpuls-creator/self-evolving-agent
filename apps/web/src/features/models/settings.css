@@ -1,0 +1,164 @@
+.d6-settings {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: var(--paper);
+}
+
+.d6-settings-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px max(32px, calc((100% - 1040px) / 2));
+  border-bottom: 1px solid var(--line);
+}
+
+.d6-settings-heading h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+  letter-spacing: -0.025em;
+}
+
+.d6-settings-heading p,
+.d6-settings p {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+.d6-quiet-action,
+.d6-connection-control button {
+  flex: 0 0 auto;
+  background: transparent;
+}
+
+.d6-settings-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 32px 64px;
+}
+
+.d6-host-connection {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.d6-host-connection h2 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.d6-host-origin {
+  margin-bottom: 8px;
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+  overflow-wrap: anywhere;
+}
+
+.d6-host-summary {
+  max-width: 590px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.d6-connection-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 3px;
+}
+
+.d6-connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.d6-connection-status i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ae8950;
+}
+
+.d6-connection-status.is-ready {
+  color: #35553f;
+}
+
+.d6-connection-status.is-ready i {
+  background: var(--accent);
+}
+
+.d6-settings-notice {
+  margin: 20px 0 0;
+  padding: 11px 13px;
+  background: var(--warning);
+  color: #71583b !important;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.d6-settings .model-panel-embedded {
+  overflow: visible;
+}
+
+.d6-settings .settings-body {
+  max-width: none;
+  margin: 0;
+  padding: 32px 0 0;
+}
+
+.d6-settings .settings-body > h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  letter-spacing: -0.015em;
+}
+
+.d6-settings .settings-body > .section-kicker {
+  display: none;
+}
+
+.d6-settings .settings-body > p {
+  max-width: 620px;
+  margin-bottom: 22px;
+}
+
+.d6-settings .settings-actions {
+  flex-wrap: wrap;
+}
+
+.d6-settings .settings-note {
+  max-width: 700px;
+}
+
+.d6-settings [aria-label="提供方登录"] {
+  max-width: 700px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 767px) {
+  .d6-settings-heading {
+    padding: 22px 20px;
+  }
+
+  .d6-settings-content {
+    padding: 0 20px 48px;
+  }
+
+  .d6-host-connection {
+    display: grid;
+    gap: 15px;
+  }
+
+  .d6-connection-control {
+    padding-top: 0;
+  }
+}

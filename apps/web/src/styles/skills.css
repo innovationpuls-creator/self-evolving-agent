@@ -1,0 +1,407 @@
+/* Skill lifecycle: file tools, candidates and trust have different surfaces. */
+.skills-filter {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--line);
+}
+.skills-filter .tabbar {
+  border-bottom: 0;
+}
+.skills-filter .search-box {
+  align-self: start;
+  width: 230px;
+  margin-bottom: 10px;
+}
+.skill-library {
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  gap: 32px;
+}
+.skill-index {
+  padding-top: 20px;
+}
+.skill-index > button {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 17px 10px;
+  border-left: 2px solid transparent;
+  border-bottom: 1px solid var(--line);
+}
+.skill-index > button.selected {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+}
+.skill-index svg {
+  margin-top: 4px;
+  color: #909e83;
+}
+.skill-index strong {
+  font-size: var(--xs);
+  font-weight: 500;
+}
+.skill-index small {
+  display: block;
+  font-size: 11px;
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+.skill-index .tiny-dot {
+  margin: 8px 0 0 auto;
+}
+.tiny-dot.enabled {
+  background: #7a9a7e;
+}
+.skill-detail {
+  padding-top: 27px;
+  min-width: 0;
+}
+.skill-detail-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 25px;
+}
+.skill-monogram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #e8ebdf;
+  color: #7b8c68;
+  border-radius: 8px;
+  border: 1px solid #d9decb;
+  flex-shrink: 0;
+}
+.skill-detail-head .eyebrow {
+  font-size: 11px;
+}
+.skill-detail-head h2 {
+  margin: 5px 0 7px;
+}
+.skill-detail-head p {
+  font-size: var(--xs);
+  color: var(--muted);
+}
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.skill-overview dl {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  margin: 23px 0;
+  font-size: var(--xs);
+}
+.skill-doc {
+  border-top: 1px solid var(--line);
+  padding: 20px 0 5px;
+}
+.skill-doc .prose h1 {
+  font-size: var(--subtitle);
+  margin: 0 0 13px;
+}
+.skill-doc .prose h2 {
+  font-size: var(--body);
+}
+.skill-doc .prose {
+  font-size: var(--xs);
+  line-height: 1.85;
+}
+.file-browser {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 24px;
+  padding: 24px 0;
+}
+.file-browser > div {
+  border-right: 1px solid var(--line);
+  padding-right: 15px;
+}
+.file-browser > div > button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.file-browser > div > button svg:last-child {
+  margin-left: auto;
+}
+.file-browser > div > button.selected {
+  color: var(--accent);
+}
+.file-browser section {
+  min-width: 0;
+}
+.file-browser section .status {
+  margin: 13px 0;
+}
+.file-browser h3 {
+  margin: 12px 0 8px;
+}
+.file-browser p {
+  font-size: var(--xs);
+  color: var(--muted);
+  margin: 12px 0 18px;
+}
+.demo-option {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 18px;
+}
+.source-editor {
+  font:
+    13px / 1.9 "SFMono-Regular",
+    monospace;
+  min-height: 360px;
+  tab-size: 2;
+}
+.tool-ownership {
+  padding-top: 25px;
+}
+.tool-ownership p {
+  color: var(--muted);
+  font-size: var(--xs);
+  margin: 12px 0 20px;
+}
+.tool-owned {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 18px 0;
+  border-block: 1px solid var(--line);
+  text-align: left;
+}
+.tool-owned > span:nth-child(2) {
+  flex: 1;
+}
+.tool-owned strong {
+  font-weight: 500;
+  font-size: var(--xs);
+  display: block;
+}
+.tool-owned small {
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+}
+.tool-owned .status {
+  font-size: 11px;
+}
+.dependency-tree {
+  font-size: var(--xs);
+  margin: 25px 0;
+}
+.dependency-tree summary {
+  cursor: pointer;
+  color: var(--muted);
+}
+.dependency-tree summary svg {
+  margin: 0 5px;
+}
+.tree-line {
+  font: 11px / 2.2 monospace;
+  margin: 17px 0;
+  color: var(--muted);
+}
+.tree-line > div {
+  padding-left: 18px;
+}
+.tree-line > div > div {
+  padding-left: 18px;
+}
+.trust-summary {
+  display: flex;
+  gap: 13px;
+  margin: 27px 0;
+  color: var(--muted);
+}
+.trust-summary h3 {
+  font-size: var(--xs);
+  color: var(--ink);
+  margin-bottom: 9px;
+}
+.trust-summary p {
+  font-size: var(--xs);
+  line-height: 1.85;
+}
+.version-list > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.version-list > div > div {
+  flex: 1;
+}
+.version-node {
+  width: 29px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--muted);
+}
+.version-list strong {
+  font-size: var(--xs);
+  font-weight: 500;
+}
+.version-current {
+  font-size: 10px;
+  color: var(--accent);
+  margin-left: 9px;
+}
+.version-list p {
+  font-size: var(--xs);
+  color: var(--muted);
+  margin: 8px 0;
+}
+.version-list small {
+  font-size: 11px;
+}
+.import-manifest {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--faint);
+  padding: 18px;
+  margin: 25px 0;
+}
+.import-manifest strong {
+  font-weight: 500;
+  font-size: var(--xs);
+  display: block;
+}
+.import-manifest small {
+  font-size: 11px;
+  display: block;
+  margin-top: 5px;
+}
+.capability-matrix {
+  border-bottom: 1px solid var(--line);
+}
+.capability-matrix > button {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 18px 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.capability-matrix > button.selected {
+  background: var(--accent-soft);
+  box-shadow: inset 2px 0 var(--accent);
+}
+.capability-matrix > button > div {
+  flex: 1;
+  min-width: 0;
+}
+.capability-matrix strong {
+  font-size: var(--xs);
+  font-weight: 600;
+}
+.capability-matrix p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.capability-matrix > button > span:not(.status) {
+  font-size: 11px;
+  color: var(--muted);
+}
+.capability-matrix .status {
+  font-size: 11px;
+}
+.capability-matrix small {
+  font: 11px / 1 monospace;
+  min-width: 20px;
+}
+.matrix-detail {
+  padding: 28px 0 0 28px;
+  margin-left: 27px;
+  border-left: 1px solid var(--line);
+  max-width: 920px;
+}
+.studio .skill-monogram {
+  background: #edf1f8;
+  border-color: #dbe3ed;
+  color: #778eaa;
+}
+.tool-directory {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 36px;
+  margin-top: 25px;
+}
+.tool-list > button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  padding: 17px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.tool-list > button.selected {
+  background: var(--accent-soft);
+}
+.tool-list > button > span {
+  flex: 1;
+}
+.tool-list strong {
+  font-size: var(--xs);
+  display: block;
+  font-weight: 500;
+}
+.tool-list small {
+  font-size: 11px;
+  display: block;
+  margin-top: 4px;
+}
+.tool-catalog-detail {
+  min-width: 0;
+}
+.tool-catalog-detail h2 {
+  margin: 8px 0 15px;
+}
+.tool-catalog-detail > p {
+  color: var(--muted);
+  font-size: var(--xs);
+}
+.availability-ladder {
+  margin: 24px 0;
+}
+.availability-ladder > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--xs);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.availability-ladder svg {
+  color: var(--good);
+}
+.availability-ladder small {
+  margin-left: auto;
+  font-size: 11px;
+}

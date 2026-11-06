@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type RefObject, type ComponentProps } from 'react';
 import type { ReflectionApi } from '../reflection/reflection-state';
 import { inputQuery } from './input-completion';
 
@@ -15,6 +15,8 @@ export function TaskInput({
   ready,
   onChange,
   onSend,
+  inputRef,
+  inputProps,
 }: {
   api: ReflectionApi;
   sessionId: string;
@@ -22,8 +24,11 @@ export function TaskInput({
   ready: boolean;
   onChange: (value: string) => void;
   onSend: () => void;
+  inputRef?: RefObject<HTMLTextAreaElement | null>;
+  inputProps?: Omit<ComponentProps<'textarea'>, 'ref' | 'value' | 'onChange'>;
 }) {
-  const textarea = useRef<HTMLTextAreaElement>(null);
+  const fallback = useRef<HTMLTextAreaElement>(null);
+  const textarea = inputRef ?? fallback;
   const listId = useId();
   const [cursor, setCursor] = useState(value.length);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -98,9 +103,10 @@ export function TaskInput({
   return (
     <>
       <textarea
-        ref={textarea}
         aria-label="任务"
-        placeholder="描述任务，输入 /skill: 选择能力，@ 引用项目文件…"
+        {...inputProps}
+        ref={textarea}
+        placeholder={inputProps?.placeholder ?? '描述任务，输入 /skill: 选择能力，@ 引用项目文件…'}
         value={value}
         aria-controls={candidates.length ? listId : undefined}
         aria-autocomplete="list"
@@ -110,8 +116,13 @@ export function TaskInput({
           setCursor(event.target.selectionStart);
           setDismissed(false);
         }}
-        onSelect={(event) => setCursor(event.currentTarget.selectionStart)}
+        onSelect={(event) => {
+          setCursor(event.currentTarget.selectionStart);
+          inputProps?.onSelect?.(event);
+        }}
         onKeyDown={(event) => {
+          inputProps?.onKeyDown?.(event);
+          if (event.defaultPrevented) return;
           if (event.nativeEvent.isComposing) return;
           if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
             event.preventDefault();

@@ -1,0 +1,227 @@
+/* Reflection: conclusion, evidence, uncertainty, then effects. */
+.reflection-journal {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: 40px;
+  padding-top: 26px;
+}
+.journal-index button {
+  display: flex;
+  gap: 10px;
+  text-align: left;
+  padding: 16px 8px;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  color: var(--muted);
+  border-left: 2px solid transparent;
+}
+.journal-index button.selected {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+}
+.journal-index svg {
+  margin-top: 4px;
+}
+.journal-index small {
+  font-size: 11px;
+  display: block;
+  margin-bottom: 7px;
+}
+.journal-index strong {
+  display: block;
+  color: var(--ink);
+  font-size: var(--xs);
+  font-weight: 500;
+  line-height: 1.8;
+}
+.reflection-document {
+  max-width: 760px;
+  min-width: 0;
+}
+.reflection-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 3px 0 18px;
+}
+.reflection-source time {
+  font-size: 11px;
+  color: var(--muted);
+}
+.reflection-conclusion {
+  font-size: var(--subtitle);
+  max-width: 550px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.reflection-standfirst {
+  line-height: 1.85;
+  color: #5a6352;
+}
+.reflection-sections {
+  margin: 28px 0;
+}
+.reflection-sections section {
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.finding-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--xs);
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: var(--good);
+}
+.reflection-sections p {
+  font-size: var(--xs);
+  line-height: 1.85;
+  color: var(--muted);
+  padding-left: 24px;
+}
+.reflection-sections .text-link {
+  margin-left: 24px;
+  margin-top: 10px;
+}
+.reflection-sections .uncertainty {
+  background: #f7f2e8;
+  padding: 17px 18px;
+  border: 0;
+  border-radius: 4px;
+}
+.uncertainty .finding-label {
+  color: var(--warning);
+}
+.reflection-outcomes > .eyebrow {
+  margin-bottom: 10px;
+}
+.reflection-outcomes > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  width: 100%;
+}
+.change-marker {
+  font-size: 10px;
+  padding: 3px 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 3px;
+}
+.reflection-outcomes strong {
+  font-size: var(--xs);
+  font-weight: 500;
+  display: block;
+}
+.reflection-outcomes small {
+  font-size: 11px;
+  display: block;
+  margin-top: 5px;
+}
+.reflection-outcomes svg {
+  margin-left: auto;
+  color: var(--muted);
+}
+.reflection-boundary {
+  font-size: 11px;
+  color: #737b6a;
+  margin: 25px 0;
+}
+.reflection-bottom {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+.no-finding {
+  max-width: 510px;
+  padding: 16px 0;
+}
+.quiet-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--faint);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+.no-finding p {
+  font-size: var(--xs);
+  color: var(--muted);
+  margin: 14px 0 28px;
+}
+.no-finding dl {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 13px;
+  font-size: var(--xs);
+  padding: 18px 0;
+  border-block: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+.reflection-ledger {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 36px;
+  margin-top: 28px;
+}
+.reflection-dates {
+  border-right: 1px solid var(--line);
+  padding-right: 20px;
+}
+.reflection-dates > button {
+  display: block;
+  padding: 15px 12px;
+  border-left: 2px solid transparent;
+  width: 100%;
+  text-align: left;
+  margin-top: 13px;
+}
+.reflection-dates > button.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.reflection-dates time {
+  font-size: 11px;
+  color: var(--muted);
+}
+.reflection-dates strong {
+  font-weight: 500;
+  font-size: var(--xs);
+  display: block;
+  margin: 7px 0 10px;
+}
+.reflection-dates .status {
+  font-size: 11px;
+}
+.studio .reflection-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.studio .reflection-sections section {
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+}
+.studio .reflection-sections .uncertainty {
+  border-top: 1px solid #d8c396;
+  background: none;
+  border-radius: 0;
+}
+.studio .reflection-sections p {
+  padding-left: 0;
+}
+.studio .reflection-sections .text-link {
+  margin-left: 0;
+}
+.studio .reflection-standfirst {
+  color: #536374;
+}

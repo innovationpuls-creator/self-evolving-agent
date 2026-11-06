@@ -4,7 +4,7 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)。
+验收记录：[D1](D1-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)、[D6 正式客户端](D6-CLIENT-DELIVERY.md)。
 
 工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
 
@@ -18,7 +18,7 @@ npm run build
 npm run desktop
 ```
 
-桌面端自动启动独立 Host，以系统安全存储保护数据密钥。首次使用进入“模型设置”，保存 Provider API Key，或导入本机 Pi 已有授权，然后选择工作目录和模型创建会话。凭据导入为加密副本，产品不改写原 Pi 授权文件。
+桌面端自动启动独立 Host，以系统安全存储保护数据密钥。首次使用进入“模型与连接”，保存 Provider API Key，或导入本机 Pi 已有授权，然后新建会话，选择工作目录和模型。凭据导入为加密副本，产品不改写原 Pi 授权文件。
 
 启动时先显示本地状态页；系统安全存储等待超过 15 秒会显示等待说明，可继续等待或退出。安全存储失败后需重新启动；已解锁后的服务失败可重试启动。首次就绪前关闭窗口退出应用；正常运行后关闭窗口继续后台运行；从托盘或 Dock 重新打开；选择“退出 Agent”才停止 Host。菜单中的“在浏览器打开”让 Web 连接同一个 Host 和会话。异常中断后的会话保留历史，不自动重放工具操作。
 
@@ -68,7 +68,7 @@ npm run test:ui
 
 ## Skill 管理
 
-Web 与 Desktop 共用“能力管理”。普通 Skill 从原生 `.pi/skills`、`~/.pi/agent/skills`、`~/.agents/skills` 及项目祖先 `.agents/skills` 发现。纳入管理后可查看文件、编辑候选、检查生效、启停和回退；同名来源分别管理，运行时保留 Pi 原生命名冲突规则。
+Web 与 Desktop 共用“技能与工具”。普通 Skill 从原生 `.pi/skills`、`~/.pi/agent/skills`、`~/.agents/skills` 及项目祖先 `.agents/skills` 发现。纳入管理后可查看文件、编辑候选、检查生效、启停和回退；同名来源分别管理，运行时保留 Pi 原生命名冲突规则。
 
 可导入本地目录、`npm:` 或 `git:` Package。特殊 Package 必须明确填写 Skill 与独占 Extension 的路径绑定；不能以文本发现批准项目 Extension。候选获取不运行安装脚本、入口、自检或构建；远程获取需要本机 npm/Git。需要依赖的本地候选须先在产品外准备完整依赖与 `package-lock.json`，未锁定或越出快照的依赖无法批准。
 

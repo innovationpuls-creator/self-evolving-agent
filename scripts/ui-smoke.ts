@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, writeFile, rm } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { _electron, chromium, type ElectronApplication, type Page } from 'playwright-core';
 import type { AgentService } from '../apps/host/runtime/agent.js';
 
@@ -18,7 +18,7 @@ let desktop: ElectronApplication | undefined;
 let browser: Awaited<ReturnType<typeof chromium.launch>> | undefined;
 async function ready(app: ElectronApplication) {
   const page = await app.firstWindow();
-  await page.locator('.shell').waitFor({ timeout: 30000 });
+  await page.locator('.app.host-product').waitFor({ timeout: 30000 });
   return page;
 }
 async function state(page: Page): ReturnType<AgentService['viewSession']> {
@@ -28,12 +28,19 @@ async function state(page: Page): ReturnType<AgentService['viewSession']> {
     return (await fetch(`/api/sessions/${list[0].id}`, { headers })).json();
   });
 }
-async function idle(page: Page) {
+async function stateAt(origin: string, token: string): Promise<Awaited<ReturnType<AgentService['viewSession']>>> {
+  const headers = { Authorization: `Bearer ${token}` };
+  const sessions = await (await fetch(`${origin}/api/sessions`, { headers })).json();
+  const response = await fetch(`${origin}/api/sessions/${sessions[0].id}`, { headers });
+  assert.equal(response.ok, true, `Host returned ${response.status}`);
+  return response.json();
+}
+async function idle(getState: () => Promise<Awaited<ReturnType<AgentService['viewSession']>>>) {
   const deadline = Date.now() + 180000;
   let current: Awaited<ReturnType<typeof state>>;
   do {
     await new Promise((ok) => setTimeout(ok, 400));
-    current = await state(page);
+    current = await getState();
   } while (current.busy && Date.now() < deadline);
   assert.equal(current.busy, false);
   const lastMessage = current.messages.at(-1);
@@ -45,62 +52,80 @@ async function idle(page: Page) {
   return current;
 }
 async function submit(page: Page, prompt: string) {
-  await page.getByLabel('任务', { exact: true }).fill(prompt);
-  await page.getByRole('button', { name: '发送 ↑' }).click();
-  await page.getByRole('button', { name: '停止', exact: true }).waitFor();
+  await page.getByLabel('发送给 Agent', { exact: true }).fill(prompt);
+  await page.getByLabel('发送任务', { exact: true }).click();
+  await page.getByLabel('停止当前执行', { exact: true }).waitFor();
+}
+
+async function openSession(page: Page) {
+  const session = page.locator('.session-list [data-session]').first();
+  await session.waitFor();
+  await session.click();
+  await page.getByLabel('发送给 Agent', { exact: true }).waitFor();
 }
 try {
   desktop = await launch();
   let page = await ready(desktop);
   const origin = new URL(page.url()).origin;
+  const token = await page.evaluate(() => sessionStorage.getItem('agent-connection-token'));
+  if (!token) throw new Error('Desktop did not receive the Host connection token');
   assert.equal(await page.evaluate(() => typeof (window as unknown as { require?: unknown }).require), 'undefined');
-  await page.getByRole('button', { name: '模型设置', exact: true }).click();
+  await page.getByLabel('模型与连接', { exact: true }).click();
   await page.getByLabel('模型提供方').selectOption('openai-codex');
   await page.getByRole('button', { name: '导入 Pi 授权' }).click();
   await page.getByRole('status').filter({ hasText: '已导入 Pi 授权' }).waitFor();
   await page.getByRole('button', { name: '返回工作区', exact: true }).click();
-  await page
-    .locator('.start select option[value="openai-codex/gpt-6-luna"]')
+  await page.getByRole('button', { name: '新会话', exact: true }).click();
+  const create = page.getByRole('dialog', { name: '开始一段新会话' });
+  await create
+    .getByLabel('模型')
+    .locator('option[value="openai-codex:gpt-6-luna"]')
     .waitFor({ state: 'attached', timeout: 30000 });
-  await page.getByPlaceholder('工作目录的绝对路径').fill(root);
-  await page.locator('.start select').selectOption('openai-codex/gpt-6-luna');
-  await page.getByRole('button', { name: '创建会话 →' }).click();
+  await create.getByLabel('Host 工作目录').fill(root);
+  await create.getByLabel('模型').selectOption('openai-codex:gpt-6-luna');
+  await create.getByRole('button', { name: '创建会话', exact: true }).click();
   await submit(
     page,
     'Use the native write tool to create ui-acceptance.txt in the current directory with exactly UI real model success. Then read it with the native read tool. Do not use bash or modify any other file.',
   );
-  await desktop.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]!.close());
-  assert.equal(await desktop.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]!.isVisible()), false);
-  await idle(page);
+  const hidden = await desktop.evaluate(({ BrowserWindow }) => {
+    const window = BrowserWindow.getAllWindows()[0];
+    if (!window) return undefined;
+    window.close();
+    return window.isVisible();
+  });
+  assert.equal(hidden, false, 'Desktop window did not hide after close');
+  await idle(() => stateAt(origin, token));
   assert.equal((await readFile(join(root, 'ui-acceptance.txt'), 'utf8')).trim(), 'UI real model success');
-  await desktop.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]!.show());
+  await desktop.evaluate(({ BrowserWindow }) => {
+    const window = BrowserWindow.getAllWindows()[0];
+    if (!window) throw new Error('Desktop window disappeared after close');
+    window.show();
+  });
   await page.reload();
-  await page.locator('.shell').waitFor();
-  await page.locator('nav button').first().click();
-  await page.getByLabel('任务', { exact: true }).waitFor();
+  await page.locator('.app.host-product').waitFor();
+  await openSession(page);
   assert.ok((await page.locator('details').count()) >= 2);
   browser = await chromium.launch({
     executablePath: process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless: true,
   });
   const web = await browser.newPage({ acceptDownloads: true });
-  const token = await page.evaluate(() => sessionStorage.getItem('agent-connection-token'));
-  await web.goto(`${origin}/#token=${encodeURIComponent(token!)}`);
-  await web.locator('.shell').waitFor();
-  await web.locator('nav button').first().click();
+  await web.goto(`${origin}/#token=${encodeURIComponent(token)}`);
+  await web.locator('.app.host-product').waitFor();
+  await openSession(web);
   await writeFile(join(root, 'ui-acceptance.txt'), 'UI real model success\npassword="mac acceptance phrase"\n');
   await submit(
     web,
     'Continue this session. Read ui-acceptance.txt with the native read tool and report its content. Do not modify files.',
   );
-  await idle(page);
-  await web.getByRole('button', { name: '发送 ↑' }).waitFor({ timeout: 180000 });
-  assert.ok((await web.locator('.assistant').last().innerText()).includes('UI real model success'));
+  await idle(() => state(web));
+  await web.getByLabel('发送任务', { exact: true }).waitFor({ timeout: 180000 });
+  assert.ok((await web.getByLabel('Agent 回复').last().innerText()).includes('UI real model success'));
   assert.ok(!(await web.locator('main').innerText()).includes('mac acceptance phrase'));
-  await web.locator('summary').filter({ hasText: '会话操作' }).click();
   const [download] = await Promise.all([
     web.waitForEvent('download'),
-    web.getByRole('button', { name: '导出', exact: true }).click(),
+    web.getByLabel('导出会话', { exact: true }).click(),
   ]);
   const exportPath = join(root, 'export.json');
   await download.saveAs(exportPath);
@@ -136,7 +161,7 @@ try {
   } while ((!recoveredPid || recoveredPid === hostPid) && Date.now() < recoveryDeadline);
   assert.ok(recoveredPid && recoveredPid !== hostPid);
   for (const client of [page, web])
-    await client.waitForFunction(() => document.querySelector('.connection')?.textContent?.includes('已连接'), {
+    await client.waitForFunction(() => document.querySelector('.sidebar-bottom')?.textContent?.includes('已连接'), {
       timeout: 30000,
     });
   const interrupted = await state(page);
@@ -153,8 +178,7 @@ try {
   desktop = undefined;
   desktop = await launch();
   page = await ready(desktop);
-  await page.locator('nav button').first().click();
-  await page.getByLabel('任务', { exact: true }).waitFor();
+  await openSession(page);
   const reopened = await state(page);
   assert.equal(reopened.id, interrupted.id);
   assert.equal(reopened.interrupted, true);
@@ -163,7 +187,7 @@ try {
     page,
     'Read crash-once.txt with the native read tool. Report what it contains. Do not run bash, retry the previous operation, or modify any file.',
   );
-  await idle(page);
+  await idle(() => state(page));
   assert.equal(await readFile(marker, 'utf8'), markerBefore);
   console.log(
     JSON.stringify({
