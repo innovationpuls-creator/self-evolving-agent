@@ -9,6 +9,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && vite build --config apps/web/vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.check.json",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build",
     "lint": "biome lint",
     "format": "biome format --write",
     "format:check": "biome format",

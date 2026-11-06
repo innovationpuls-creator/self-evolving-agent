@@ -18,3 +18,4 @@ host.lock
 *.log
 .DS_Store
 prototypes
+.claude/settings.local.json
