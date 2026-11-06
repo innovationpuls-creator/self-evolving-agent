@@ -52,10 +52,7 @@
   margin: 5px 0;
 }
 .prose code:not(pre code) {
-  font:
-    12.8px / 1.7 "SFMono-Regular",
-    Consolas,
-    monospace;
+  font: 12.8px / 1.7 "SFMono-Regular", Consolas, monospace;
   background: #eef0e8;
   color: #59694e;
   padding: 2px 5px;
@@ -70,15 +67,6 @@
   height: 13px;
   margin-right: 6px;
   vertical-align: middle;
-}
-.prose .contains-task-list {
-  list-style: none;
-  padding-left: 0;
-  font-size: 13px;
-}
-.table-scroll {
-  overflow: auto;
-  max-width: 100%;
 }
 .prose table {
   width: 100%;
@@ -107,6 +95,55 @@
   width: 20%;
   white-space: nowrap;
 }
+:is(.quiet, .quiet-surface) .prose {
+  font-size: 16px;
+  line-height: 1.75;
+}
+:is(.quiet, .quiet-surface) .prose > h2 {
+  font-size: 20px;
+  margin: 26px 0 12px;
+}
+:is(.quiet, .quiet-surface) .prose > h2:first-child {
+  margin-top: 0;
+}
+:is(.quiet, .quiet-surface) .prose > h3 {
+  margin: 24px 0 10px;
+}
+:is(.quiet, .quiet-surface) .prose > p {
+  margin: 10px 0 16px;
+}
+:is(.quiet, .quiet-surface) .prose table {
+  font-size: 13px;
+}
+:is(.quiet, .quiet-surface) .prose :is(th, td) {
+  padding: 9px 12px;
+}
+:is(.quiet, .quiet-surface) .prose th {
+  background: var(--faint);
+  color: var(--muted);
+  border-color: var(--control-line);
+}
+:is(.quiet, .quiet-surface) .prose blockquote {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 20px 0;
+  border-color: var(--control-line);
+}
+:is(.quiet, .quiet-surface) .prose code:not(pre code) {
+  color: var(--ink);
+  background: #efeee8;
+  font-family: var(--font-code);
+  font-size: 13px;
+}
+.prose .contains-task-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 13px;
+}
+.table-scroll {
+  overflow: auto;
+  max-width: 100%;
+}
 .code-view {
   border: 1px solid var(--line);
   border-radius: 5px;
@@ -122,10 +159,7 @@
   align-items: center;
   padding: 8px 11px;
   border-bottom: 1px solid var(--line);
-  font:
-    11px / 1.5 -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
+  font: 11px / 1.5 -apple-system, BlinkMacSystemFont, sans-serif;
   color: #8a9380;
   background: #f8f9f4;
   gap: 15px;
@@ -161,18 +195,32 @@
   tab-size: 2;
   white-space: pre;
 }
-.code-view pre.wrap {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
 .code-view code {
-  font:
-    12.5px / 1.85 "SFMono-Regular",
-    Consolas,
-    monospace;
+  font: 12.5px / 1.85 "SFMono-Regular", Consolas, monospace;
   color: #46523d;
   display: block;
   min-width: max-content;
+}
+.json-view > .code-view {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+.diff-view > .code-view {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+:is(.quiet, .quiet-surface) .code-view > header button {
+  min-height: 28px;
+}
+:is(.quiet, .quiet-surface) .code-view code {
+  color: #363d36;
+  font: 13px / 1.8 var(--font-code);
+}
+.code-view pre.wrap {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .code-view pre.wrap code {
   min-width: 0;
@@ -194,6 +242,11 @@
   left: 0;
   background: #f3f4ef;
 }
+:is(.quiet, .quiet-surface) .line-number {
+  background: #f6f5f1;
+  color: #75796f;
+  font-size: 12px;
+}
 .hljs-keyword,
 .hljs-selector-tag {
   color: #795779;
@@ -213,6 +266,9 @@
 .hljs-comment {
   color: #99a28d;
 }
+:is(.quiet, .quiet-surface) .hljs-comment {
+  color: #737a6b;
+}
 .hljs-params {
   color: #7f856c;
 }
@@ -222,6 +278,10 @@
   margin: 22px 0;
   overflow: hidden;
   min-width: 0;
+}
+:is(.quiet, .quiet-surface) :is(.code-view, .diff-view, .json-view) {
+  border-radius: 6px;
+  background: #f6f5f1;
 }
 .json-toolbar {
   display: flex;
@@ -239,6 +299,12 @@
   align-items: center;
   gap: 7px;
 }
+:is(.quiet, .quiet-surface) :is(.code-view > header, .diff-view > header, .json-toolbar) {
+  background: var(--faint);
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+}
 .json-toolbar .tabbar {
   border: 0;
   gap: 16px;
@@ -246,6 +312,20 @@
 .json-toolbar .tabbar > button {
   font-size: 11px;
   padding: 10px 0 8px;
+}
+.diff-view .tabbar {
+  border: 0;
+  gap: 15px;
+  font-size: 11px;
+}
+.diff-view .tabbar > button {
+  padding: 9px 0 7px;
+}
+:is(.quiet, .quiet-surface) :is(.code-view > header button, .diff-view .tabbar, .json-toolbar .tabbar > button) {
+  font-size: 12px;
+}
+:is(.quiet, .quiet-surface) .json-toolbar .tabbar {
+  font-size: 12px;
 }
 .json-view > .json-node {
   padding: 11px;
@@ -257,18 +337,21 @@
   text-align: left;
   padding: 7px 0;
   max-width: 100%;
-  font:
-    12.5px / 1.7 "SFMono-Regular",
-    Consolas,
-    monospace;
+  font: 12.5px / 1.7 "SFMono-Regular", Consolas, monospace;
   overflow-wrap: anywhere;
 }
 .json-node small {
-  font:
-    10px / 1.5 -apple-system,
-    sans-serif;
+  font: 10px / 1.5 -apple-system, sans-serif;
   color: #9aa38e;
   margin-left: 6px;
+}
+:is(.quiet, .quiet-surface) .json-node > button,
+:is(.quiet, .quiet-surface) .json-leaf {
+  font: 13px / 1.7 var(--font-code);
+}
+:is(.quiet, .quiet-surface) .json-node small {
+  font-size: 12px;
+  color: var(--muted);
 }
 .json-children {
   margin-left: 7px;
@@ -281,10 +364,7 @@
   gap: 12px;
   padding: 6px 0;
   align-items: flex-start;
-  font:
-    12.5px / 1.8 "SFMono-Regular",
-    Consolas,
-    monospace;
+  font: 12.5px / 1.8 "SFMono-Regular", Consolas, monospace;
   min-width: 0;
 }
 .json-key {
@@ -292,6 +372,9 @@
   flex-shrink: 0;
   max-width: 45%;
   overflow-wrap: anywhere;
+}
+:is(.quiet, .quiet-surface) .json-key {
+  color: #5b6655;
 }
 .json-value {
   color: #88977a;
@@ -308,10 +391,8 @@
 .json-value.boolean {
   color: #87688c;
 }
-.json-view > .code-view {
-  margin: 0;
-  border: 0;
-  border-radius: 0;
+:is(.quiet, .quiet-surface) .json-value {
+  color: #535c4c;
 }
 .diff-view {
   border: 1px solid var(--line);
@@ -335,19 +416,8 @@
   align-items: center;
   gap: 7px;
 }
-.diff-view .tabbar {
-  border: 0;
-  gap: 15px;
-  font-size: 11px;
-}
-.diff-view .tabbar > button {
-  padding: 9px 0 7px;
-}
 .diff-lines {
-  font:
-    12.8px / 1.9 "SFMono-Regular",
-    "PingFang SC",
-    monospace;
+  font: 12.8px / 1.9 "SFMono-Regular", "PingFang SC", monospace;
 }
 .diff-lines > div {
   display: flex;
@@ -368,10 +438,22 @@
   min-width: 0;
   flex: 1;
 }
+:is(.quiet, .quiet-surface) .diff-lines {
+  font: 13px / 1.8 var(--font-code);
+}
+:is(.quiet, .quiet-surface) .diff-lines > div > span {
+  color: #75796f;
+  font-size: 12px;
+}
 .diff-context {
   color: #a4aa9a;
   background: #f8f9f4;
   font-size: 11px;
+}
+:is(.quiet, .quiet-surface) .diff-context {
+  color: var(--muted);
+  background: #f6f5f1;
+  font-size: 13px;
 }
 .removed {
   background: #fbefeb;
@@ -381,72 +463,27 @@
   background: #edf4e8;
   color: #55774a;
 }
-.diff-view > .code-view {
-  margin: 0;
-  border: 0;
-  border-radius: 0;
+.diff-fold {
+  width: 100%;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  background: var(--faint);
+  color: var(--muted);
+  font: 12px / 1.6 -apple-system, sans-serif;
+  border-block: 1px solid var(--line);
 }
-.evidence > p {
-  font-size: var(--xs);
-  margin: 11px 0 7px;
+.diff-fold:hover {
+  color: var(--accent);
+  background: var(--accent-soft);
 }
-.evidence .btn.ghost {
-  padding-left: 0;
+.diff-originals {
+  padding: 0 14px;
 }
-.studio .code-view {
-  background: #f3f5f8;
-}
-.studio .code-view > header {
-  background: #f8f9fb;
-  color: #8795a7;
-}
-.studio .line-number {
-  background: #f3f5f8;
-  color: #b2bdca;
-}
-.studio .code-view code {
-  color: #46576c;
-}
-.studio .prose th {
-  background: #f0f3f7;
-  color: #627388;
-  border-color: #ccd6e1;
-}
-.studio .prose blockquote {
-  border-color: #bacadd;
-  color: #7a8c9e;
-}
-.studio .json-key {
-  color: #5e7b9a;
-}
-.studio .json-value.string {
-  color: #536b7f;
-}
-.studio .prose code:not(pre code) {
-  background: #edf1f6;
-  color: #526d89;
-}
-.studio .prose {
-  font-size: 13px;
-  line-height: 1.95;
-}
-.studio .prose h2 {
-  font-size: 20px;
-}
-.studio .prose h3 {
-  font-size: 16px;
-}
-.studio .prose td {
-  padding: 12px;
-}
-.studio .prose table {
-  min-width: 440px;
-}
-.studio .prose blockquote {
-  font-size: 12.8px;
-}
-.studio .prose p {
-  margin-top: 11px;
+.diff-lines > div > .diff-sign {
+  width: 17px;
 }
 @media (max-width: 700px) {
   .prose {
@@ -518,129 +555,6 @@
   .json-toolbar > span {
     font-size: 10px;
   }
-}
-
-.diff-fold {
-  width: 100%;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-  background: var(--faint);
-  color: var(--muted);
-  font:
-    12px / 1.6 -apple-system,
-    sans-serif;
-  border-block: 1px solid var(--line);
-}
-.diff-fold:hover {
-  color: var(--accent);
-  background: var(--accent-soft);
-}
-.diff-originals {
-  padding: 0 14px;
-}
-
-/* A reading and inspection typography; the compact ledger has its own metrics. */
-:is(.quiet, .quiet-surface) .prose {
-  font-size: 16px;
-  line-height: 1.75;
-}
-:is(.quiet, .quiet-surface) .prose > h2 {
-  font-size: 20px;
-  margin: 26px 0 12px;
-}
-:is(.quiet, .quiet-surface) .prose > h2:first-child {
-  margin-top: 0;
-}
-:is(.quiet, .quiet-surface) .prose > h3 {
-  margin: 24px 0 10px;
-}
-:is(.quiet, .quiet-surface) .prose > p {
-  margin: 10px 0 16px;
-}
-:is(.quiet, .quiet-surface) .prose table {
-  font-size: 13px;
-}
-:is(.quiet, .quiet-surface) .prose :is(th, td) {
-  padding: 9px 12px;
-}
-:is(.quiet, .quiet-surface) .prose th {
-  background: var(--faint);
-  color: var(--muted);
-  border-color: var(--control-line);
-}
-:is(.quiet, .quiet-surface) .prose blockquote {
-  color: var(--muted);
-  font-size: 14px;
-  margin: 20px 0;
-  border-color: var(--control-line);
-}
-:is(.quiet, .quiet-surface) .prose code:not(pre code) {
-  color: var(--ink);
-  background: #efeee8;
-  font-family: var(--font-code);
-  font-size: 13px;
-}
-:is(.quiet, .quiet-surface) :is(.code-view, .diff-view, .json-view) {
-  border-radius: 6px;
-  background: #f6f5f1;
-}
-:is(.quiet, .quiet-surface) :is(.code-view > header, .diff-view > header, .json-toolbar) {
-  background: var(--faint);
-  color: var(--muted);
-  font-family: var(--font-ui);
-  font-size: 12px;
-}
-:is(.quiet, .quiet-surface) :is(.code-view > header button, .diff-view .tabbar, .json-toolbar .tabbar > button) {
-  font-size: 12px;
-}
-:is(.quiet, .quiet-surface) .code-view > header button {
-  min-height: 28px;
-}
-:is(.quiet, .quiet-surface) .code-view code {
-  color: #363d36;
-  font: 13px / 1.8 var(--font-code);
-}
-:is(.quiet, .quiet-surface) .line-number {
-  background: #f6f5f1;
-  color: #75796f;
-  font-size: 12px;
-}
-:is(.quiet, .quiet-surface) .hljs-comment {
-  color: #737a6b;
-}
-:is(.quiet, .quiet-surface) .diff-lines {
-  font: 13px / 1.8 var(--font-code);
-}
-:is(.quiet, .quiet-surface) .diff-context {
-  color: var(--muted);
-  background: #f6f5f1;
-  font-size: 13px;
-}
-:is(.quiet, .quiet-surface) .diff-lines > div > span {
-  color: #75796f;
-  font-size: 12px;
-}
-:is(.quiet, .quiet-surface) .json-node > button,
-:is(.quiet, .quiet-surface) .json-leaf {
-  font: 13px / 1.7 var(--font-code);
-}
-:is(.quiet, .quiet-surface) .json-node small {
-  font-size: 12px;
-  color: var(--muted);
-}
-:is(.quiet, .quiet-surface) .json-key {
-  color: #5b6655;
-}
-:is(.quiet, .quiet-surface) .json-value {
-  color: #535c4c;
-}
-:is(.quiet, .quiet-surface) .json-toolbar .tabbar {
-  font-size: 12px;
-}
-@media (max-width: 700px) {
   :is(.quiet, .quiet-surface) .code-view > header {
     flex-wrap: wrap;
     gap: 4px;

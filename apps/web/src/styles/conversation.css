@@ -1,22 +1,4 @@
-/* Conversation. The result is typography, not a stack of cards. */
-.conversation {
-  padding: 30px 40px 0;
-}
-.conversation > .tabbar,
-.conversation > [data-orientation] {
-  max-width: 790px;
-  margin: auto;
-}
-.send {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--accent);
-  color: white;
-  width: 29px;
-  height: 29px;
-  border-radius: 6px;
-}
+/* Conversation tool activity, execution summary and picker rows. */
 .picker-row {
   display: flex;
   align-items: center;
@@ -35,26 +17,10 @@
   margin-top: 4px;
   font-size: 11px;
 }
-.studio .conversation {
-  padding: 26px 28px 0;
-}
-.studio .conversation > [data-orientation] {
-  max-width: none;
-}
-
-/* A: stable reading column, compact execution evidence, persistent input. */
-.quiet .conversation {
-  padding-top: 16px;
-}
-.quiet .send {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-}
 .quiet .tool-activity {
   border-block: 1px solid var(--line);
-  margin: 0 0 24px;
-  padding: 8px 0 4px;
+  margin: 0 0 28px;
+  padding: 8px 0;
 }
 .quiet .tool-activity > header {
   display: flex;
@@ -72,7 +38,7 @@
   align-items: center;
   gap: 8px;
   min-height: 36px;
-  padding: 6px 8px;
+  padding: 8px;
   list-style: none;
   cursor: pointer;
   font-size: 13px;
@@ -92,12 +58,35 @@
 .quiet .tool-activity summary > svg {
   color: var(--muted);
 }
+.quiet .execution-summary .tool-activity {
+  border: 0;
+  margin: 0;
+}
 .quiet .tool-activity > .btn {
   font-size: 13px;
   padding-inline: 8px;
 }
-@media (max-width: 700px) {
-  .quiet .conversation {
-    padding-top: 12px;
-  }
+.quiet .execution-summary {
+  margin: 12px 0 28px;
+  border-block: 1px solid var(--line);
+}
+.quiet .execution-summary > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  padding: 13px 4px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.quiet .execution-summary > summary::-webkit-details-marker {
+  display: none;
+}
+.quiet .execution-summary[open] > summary > svg {
+  transform: rotate(90deg);
+}
+.quiet .execution-gap {
+  color: var(--warning);
+  margin-left: auto;
 }

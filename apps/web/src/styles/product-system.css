@@ -1,14 +1,7 @@
 @import "./foundation.css";
 @import "../components/ui.css";
-@import "./chrome.css";
-@import "./conversation.css";
-@import "./evolution.css";
-@import "./surfaces.css";
-@import "./responsive.css";
 @import "../components/content.css";
-
-@import "./a-navigation.css";
-
-@import "./a-product.css";
-
-@import "./workspace.css";
+@import "./shell.css";
+@import "./conversation.css";
+@import "./surfaces.css";
+@import "./module-pages.css";

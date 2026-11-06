@@ -4,8 +4,6 @@
 .host-product .host-evolution-toolbar {
   flex-wrap: wrap;
   gap: 12px;
-}
-.host-product .host-evolution-toolbar {
   justify-content: flex-start;
 }
 .host-product .host-evolution-toolbar select {
@@ -27,11 +25,6 @@
   margin-top: 27px;
   accent-color: var(--accent);
 }
-.host-product .host-suggestion-row .aw-proposal-row {
-  flex: 1;
-  min-width: 0;
-  border-bottom: 0;
-}
 .host-product .host-suggestion-row :is(strong, p),
 .host-product .host-evolution h1 {
   overflow-wrap: anywhere;
@@ -41,6 +34,11 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.host-product .host-suggestion-row .aw-proposal-row {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
 }
 .host-product .host-evolution-meta {
   color: var(--muted);
@@ -190,6 +188,14 @@
   display: block;
   color: var(--muted);
 }
+.host-grant-choices .host-grant-skills {
+  margin-top: 12px;
+  max-height: 300px;
+  overflow: auto;
+}
+.host-grant-choices .host-grant-skills legend {
+  font-size: 12px;
+}
 .host-grant-dialog .host-technical {
   font-size: 12px;
   margin-top: 20px;
@@ -199,6 +205,14 @@
 }
 .host-product .host-evolution .host-pagination {
   flex-wrap: wrap;
+}
+.host-grant-choices {
+  margin: 20px 0;
+}
+.host-grant-choices > summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
 }
 @media (max-width: 700px) {
   .host-product .host-evolution .aw-heading {
@@ -220,20 +234,4 @@
   .host-product .host-suggestion-row {
     gap: 10px;
   }
-}
-.host-grant-choices {
-  margin: 20px 0;
-}
-.host-grant-choices > summary {
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-}
-.host-grant-choices .host-grant-skills {
-  margin-top: 12px;
-  max-height: 300px;
-  overflow: auto;
-}
-.host-grant-choices .host-grant-skills legend {
-  font-size: 12px;
 }

@@ -1,3 +1,4 @@
+/* Tokens, element defaults and base controls. */
 :root {
   --canvas: #fcfbf8;
   --paper: #fffefa;
@@ -22,12 +23,7 @@
 }
 body {
   margin: 0;
-  font:
-    var(--body) / 1.6 -apple-system,
-    BlinkMacSystemFont,
-    "PingFang SC",
-    "Microsoft YaHei",
-    sans-serif;
+  font: var(--body) / 1.6 -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   color: var(--ink);
   background: var(--canvas);
 }
@@ -40,6 +36,8 @@ select {
 }
 button {
   cursor: pointer;
+  border: 0;
+  background: none;
 }
 button,
 summary,
@@ -48,10 +46,6 @@ input,
 textarea,
 select {
   -webkit-tap-highlight-color: transparent;
-}
-button {
-  border: 0;
-  background: none;
 }
 button:disabled {
   cursor: not-allowed;
@@ -183,10 +177,7 @@ dd {
   margin: 0;
 }
 code {
-  font:
-    var(--xs) / 1.6 "SFMono-Regular",
-    Consolas,
-    monospace;
+  font: var(--xs) / 1.6 "SFMono-Regular", Consolas, monospace;
 }
 hr {
   border: 0;
@@ -220,9 +211,7 @@ hr {
   font-weight: 500;
   line-height: 1.4;
   white-space: nowrap;
-  transition:
-    background 100ms,
-    color 100ms;
+  transition: background 100ms, color 100ms;
 }
 .btn.secondary {
   background: var(--paper);
@@ -256,6 +245,9 @@ hr {
 }
 .btn.danger:hover {
   background: #f9ebe8;
+}
+.section-head > .btn {
+  margin-top: 8px;
 }
 .icon-btn {
   display: inline-flex;
@@ -367,33 +359,33 @@ hr {
   font-size: var(--xs);
   line-height: 1.65;
 }
-.notice-icon {
-  padding-top: 2px;
-  color: var(--muted);
-}
 .notice strong {
   font-weight: 600;
 }
-.notice-copy {
-  color: var(--muted);
-  margin-top: 3px;
-}
 .notice.warn {
   background: #f6f0e3;
+}
+.notice.bad {
+  background: #faeeeb;
+}
+.notice.good {
+  background: var(--accent-soft);
+}
+.notice-icon {
+  padding-top: 2px;
+  color: var(--muted);
 }
 .notice.warn .notice-icon,
 .notice.warn strong {
   color: var(--warning);
 }
-.notice.bad {
-  background: #faeeeb;
+.notice-copy {
+  color: var(--muted);
+  margin-top: 3px;
 }
 .notice.bad strong,
 .notice.bad .notice-icon {
   color: var(--danger);
-}
-.notice.good {
-  background: var(--accent-soft);
 }
 .notice-action {
   margin-top: 10px;
@@ -413,9 +405,6 @@ hr {
   color: var(--muted);
   margin-top: 10px;
   max-width: 620px;
-}
-.section-head > .btn {
-  margin-top: 8px;
 }
 .search-box {
   display: flex;
@@ -444,4 +433,13 @@ hr {
 }
 .back {
   margin-bottom: 12px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none;
+    transition: none;
+    scroll-behavior: auto;
+  }
 }

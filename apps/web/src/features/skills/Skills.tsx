@@ -11,7 +11,6 @@ import { Failure, date, projectName } from '../../components/reading';
 import { useRead, type Host, type Route, type SkillDetail } from '../../app/types';
 import { type SkillDrafts, operationApplied, reviewed } from './skill-management';
 import './skills.css';
-import './capability-skills.css';
 type Catalog = Awaited<ReturnType<AgentService['skills']['discover']>>;
 type Tools = ReturnType<typeof toolCatalog>;
 type Go = (r: Route) => void;

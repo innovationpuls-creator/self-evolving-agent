@@ -1,4 +1,4 @@
-/* A control contract. B retains the original foundation metrics. */
+/* Control metrics, form states and focus inside the app and its floating surfaces. */
 :is(.quiet, .quiet-surface) {
   --font-ui: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-code: "SFMono-Regular", Consolas, "PingFang SC", monospace;
@@ -13,31 +13,6 @@
   --radius-menu: 8px;
   --radius-dialog: 12px;
   font-family: var(--font-ui);
-}
-:is(.quiet, .quiet-surface) .btn {
-  min-height: 34px;
-  border-radius: var(--radius-control);
-  padding: 7px 12px;
-  font-size: 14px;
-  transition:
-    background 120ms var(--ease),
-    border-color 120ms var(--ease),
-    color 120ms var(--ease),
-    box-shadow 120ms var(--ease);
-}
-:is(.quiet, .quiet-surface) .btn.secondary {
-  border-color: var(--control-line);
-}
-:is(.quiet, .quiet-surface) .btn.ghost {
-  color: var(--muted);
-}
-:is(.quiet, .quiet-surface) .btn:active:not(:disabled) {
-  box-shadow: inset 0 1px 3px #0002;
-}
-:is(.quiet, .quiet-surface) .icon-btn {
-  min-width: 32px;
-  min-height: 32px;
-  border-radius: var(--radius-control);
 }
 :is(.quiet, .quiet-surface) button:disabled {
   opacity: 0.55;
@@ -59,6 +34,45 @@
 :is(.quiet, .quiet-surface) :is(input, textarea, select)[aria-invalid="true"] {
   border-color: var(--danger);
 }
+.quiet-surface.modal {
+  border-radius: var(--radius-dialog);
+  font-family: var(--font-ui);
+}
+.quiet-surface.modal.drawer {
+  border-radius: 0;
+}
+.quiet-surface.dropdown {
+  border-color: var(--control-line);
+  border-radius: var(--radius-menu);
+  padding: 5px;
+  color: var(--ink);
+  background: var(--paper);
+}
+.quiet-surface.tooltip {
+  font-size: 12px;
+  border-radius: 5px;
+}
+:is(.quiet, .quiet-surface) .btn {
+  min-height: 34px;
+  border-radius: var(--radius-control);
+  padding: 7px 12px;
+  font-size: 14px;
+  transition: background 120ms var(--ease), border-color 120ms var(--ease), color 120ms var(--ease), box-shadow 120ms var(--ease);
+}
+:is(.quiet, .quiet-surface) .btn.secondary {
+  border-color: var(--control-line);
+}
+:is(.quiet, .quiet-surface) .btn.ghost {
+  color: var(--muted);
+}
+:is(.quiet, .quiet-surface) .btn:active:not(:disabled) {
+  box-shadow: inset 0 1px 3px #0002;
+}
+:is(.quiet, .quiet-surface) .icon-btn {
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: var(--radius-control);
+}
 :is(.quiet, .quiet-surface) .field {
   gap: 7px;
 }
@@ -70,7 +84,15 @@
   font-size: 12px;
   line-height: 1.6;
 }
+.field > label {
+  font-size: var(--xs);
+  font-weight: 600;
+}
 :is(.quiet, .quiet-surface) .field-error {
+  color: var(--danger);
+}
+.quiet-surface .field-error {
+  font-size: 13px;
   color: var(--danger);
 }
 :is(.quiet, .quiet-surface) .search-box {
@@ -85,9 +107,7 @@
   font-size: 14px;
 }
 :is(.quiet, .quiet-surface) .tabbar > button {
-  transition:
-    color 120ms,
-    border-color 120ms;
+  transition: color 120ms, border-color 120ms;
 }
 :is(.quiet, .quiet-surface) .status {
   font-size: 13px;
@@ -103,26 +123,33 @@
 }
 .quiet .section-head {
   align-items: center;
-  margin-bottom: 24px;
 }
 .quiet .section-head h1 {
-  font-size: 24px;
   margin: 0;
-  letter-spacing: -0.4px;
-}
-.quiet .section-head p {
-  font-size: 13px;
-  margin-top: 8px;
 }
 .quiet [hidden] {
   display: none;
 }
-.quiet-surface.modal {
-  border-radius: var(--radius-dialog);
-  font-family: var(--font-ui);
+.quiet {
+  --canvas: #fdfcfa;
+  --paper: #ffffff;
+  --sidebar: #f2f1ed;
+  --ink: #292d29;
+  --muted: #62695f;
+  --line: #e1e3dc;
+  --faint: #f4f5f1;
+  --accent: #32634e;
+  --accent-soft: #e6ede6;
+  --xs: 13px;
 }
-.quiet-surface.modal.drawer {
-  border-radius: 0;
+.quiet ::selection,
+.quiet-surface ::selection {
+  background: #d8e7db;
+  color: #243c2d;
+}
+.quiet input,
+.quiet textarea {
+  caret-color: var(--accent);
 }
 .quiet-surface .modal-head {
   padding: 20px 24px 16px;
@@ -144,13 +171,6 @@
   background: var(--paper);
   border-radius: 0 0 var(--radius-dialog) var(--radius-dialog);
 }
-.quiet-surface.dropdown {
-  border-color: var(--control-line);
-  border-radius: var(--radius-menu);
-  padding: 5px;
-  color: var(--ink);
-  background: var(--paper);
-}
 .quiet-surface.dropdown [role="menuitem"] {
   min-height: 34px;
   font-size: 14px;
@@ -161,14 +181,7 @@
 .quiet-surface.dropdown [role="menuitem"][data-highlighted] {
   background: var(--accent-soft);
 }
-.quiet-surface.tooltip {
-  font-size: 12px;
-  border-radius: 5px;
-}
 @media (max-width: 700px) {
-  .quiet .section-head {
-    margin-bottom: 20px;
-  }
   .quiet-surface .modal-head {
     padding: 16px 20px;
   }
@@ -178,17 +191,44 @@
   .quiet-surface .modal-actions {
     padding: 12px 20px;
   }
+  .section-head {
+    gap: 12px;
+    margin-bottom: 23px;
+  }
+  .section-head h1 {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  .section-head p {
+    line-height: 1.8;
+  }
+  .section-head > .btn {
+    font-size: 11px;
+    padding: 7px 9px;
+    margin-top: 7px;
+  }
+  .section-head > .btn svg {
+    width: 13px;
+  }
+  .notice {
+    padding: 13px;
+    font-size: var(--xs);
+  }
 }
-/* Explicit component selectors beat each component's animation declaration. */
 @media (prefers-reduced-motion: reduce) {
+  /* Explicit component selectors beat each component's animation declaration. */
   :is(.quiet, .quiet-surface) :is(.spin, .live-dot, .skeleton-block),
   .quiet-surface.modal,
   .quiet-surface.modal-overlay,
   .quiet-surface.dropdown {
     animation: none;
   }
-  :is(.quiet, .quiet-surface)
-    :is(.btn, .tabbar > button, .revision-history button, .revision-context, .tool-activity summary) {
+  :is(.quiet, .quiet-surface) :is(.btn, .tabbar > button, .revision-history button, .revision-context, .tool-activity summary) {
     transition: none;
+  }
+}
+@media (max-width: 1200px) {
+  .tabbar {
+    gap: 19px;
   }
 }

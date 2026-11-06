@@ -19,7 +19,6 @@ import { SkillDrafts } from '../features/skills/skill-management';
 import { EvolutionCatalog, SuggestionDetail, ActivityView } from '../features/evolution/Evolution';
 import { Source } from '../features/diagnostics/Source';
 import type { Host, Route } from './types';
-import '../styles/product.css';
 import './onboarding.css';
 export function App() {
   const nav = useProductNavigation(),

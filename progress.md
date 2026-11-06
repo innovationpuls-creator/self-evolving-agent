@@ -4,23 +4,24 @@
 
 ## 当前任务
 
-### 界面遗留问题收尾（2026-11-06）
+### 待做清单开发（2026-11-06）
 
-- 目标：处理上一任务实际结果中列出的已知缺口。
-- 依据：“去除多余次级标签与说明”实际结果的未验证/已知缺口清单；用户“继续”。
-- 范围：`apps/web/src` 展示层与 `scripts/*smoke*.ts`；不改 Host API 与业务语义（Host 侧文案另需授权）。
-- 完成标准：每条缺口已修复或在实际结果中说明原因；`npm run verify`、`npm run test:d6:ui` 通过；带数据时 1440/850/390px 无横向溢出。
+- 目标：完成 DECISIONS.md「未通过或待做」中用户选定的各项。
+- 依据：用户选择：样式按功能整合、JS 拆包、清理 lint 警告、Host 环境变化事件（含 Host 侧错误文案）、定位 Reflection 偶发失败、重做 D4 真实验收；提交并开 PR。
+- 范围：`apps/web/src`、`apps/host`（仅环境事件、错误文案与 Reflection 失败修复）、`scripts`、`tests`、DECISIONS.md。不做 Windows、公证、自动更新；不实现未授权的 D2–D5 新需求。
+- 完成标准：每步 pass 或 blocked；`npm run verify`、`npm run test:d6:ui` 通过；1440/850/390px 外观与拆分前一致；性能结论有量化数据。
 
 | # | 步骤 | 验证方式 | 状态 | 尝试 | 证据 |
 |---|---|---|---|---|---|
-| 1 | 记忆“确认仍然有效”：按 Host revise/confirm 与 basis 规则核对依据只含其他项目来源时的可见性，按实际效果修正 | 引用 Host 代码说明各状态；对应状态下按钮可见性与 Host 行为一致；typecheck + 相关测试 | pass | 1 | verifier PASS（无代码改动）：Host 所有写入路径（用户/Agent 工具/复盘）的来源项目均等于记忆项目，跨项目依据不可达；按钮条件与 confirm 实际效果一致（用户编辑且无依据/非项目决定时 confirm 只生成相同修订）；memory/web-state 19/19、typecheck |
-| 2 | 自动复盘“尚未检查/暂不可用”提示：环境状态变化后提示随 Host 数据更新，不残留过时文案 | 说明数据来源与刷新事件；状态变化后提示更新；typecheck + 相关测试 | pass | 1 | verifier PASS（含一次小修）：Host 环境变化不发事件，网页层在未检查时每 5s 轮询（仅已连接且页面可见）、focus/visibilitychange 刷新、重新检查失败也刷新；同范围刷新保留错误直至成功，消除闪烁；两句提示各自只覆盖对应状态；新增 tests/reflection-notice.test.ts，相关测试 29/29、typecheck、build。限制：其他客户端重新检查且无等待任务时，本窗口要到聚焦/切回才更新 |
-| 3 | 会话完整标题在窄屏/触屏可达（标题非首条消息前缀时） | 390px 下可通过触控或可聚焦元素看到完整标题；typecheck + build | pass | 1 | verifier PASS：标题改为可点/可聚焦按钮，390px 触控点开换行显示全文、再点收起，两种视图无横向溢出；无新增可见文字，标题仍是 heading 名；1440/850/390 收起态页头高度与 HEAD 一致；顺带修复执行过程视图 850/390 下切换按钮被挤压；换会话自动收起；typecheck、build、biome |
-| 4 | 删除 product.css、a-product.css、workspace.css 等文件中无引用的死 CSS | 删除的选择器在 `apps/web/src` 无引用；build 产物样式无回归（test:d6:ui） | pass | 1 | verifier PASS：独立解析 1,233 个删除选择器，类/ID 在源码中全部无引用；keyframes 与变量无残留使用；8 个空文件已删且无引用；带数据 46 个页面状态（1440/390）逐元素计算样式与位置 diffs=0；构建 CSS 199→88 kB；typecheck/lint/format/build/test:d6:ui 通过 |
-| 5 | skills-ui-smoke 按当前界面更新并运行 | `npm run test:skills:ui` 通过，断言未削弱 | pass | 1 | verifier PASS：skills-ui-smoke（打包 Desktop + 真实模型一轮）与 skills-browser-smoke 均通过；逐条核对删除/改动断言均为等价或更强替换（过期编辑器改为只读、新增双窗口未保存草稿、离开确认改为草稿保留 + beforeunload、审查重置改为跨窗口）；导入范围显式选全局与旧默认一致。未跑：需人工审查摘要的特殊技能分支 |
-| 6 | 回归：带数据的三宽度溢出检查、`test:d6:ui`、`npm run verify` | 命令全部通过 | pass | 1 | verifier PASS：顺带修复自动复盘行内项目名与状态粘连（仅 CSS，flex + 12px 间距）；带数据 15 个页面状态 1440/850/390 无横向溢出；`test:d6:ui` 全部 true；`npm run verify` exit 0（219：218 pass/1 skip） |
+| 1 | Host 在复盘环境检查结果变化时推送事件，Web 据此更新；Host 侧错误文案按 Learned rules 改写 | 另一客户端重新检查（无等待任务）后本窗口无需聚焦即更新；host/web 相关测试 + typecheck | pass | 1 | verifier PASS：每次环境检查完成后经既有 `/events` 广播 `{type:'reflection'}`；Web 去掉 5s 轮询与 focus/visibility 刷新（断线由 agent-reconnected 重读）；双客户端 WebSocket 测试与双 Chrome 实测 B 在 227ms 内更新、无聚焦事件、0 任务；4 处 Host 文案按覆盖状态改写；npm test 220（219 pass/1 skip）、typecheck、format |
+| 2 | 剩余样式文件按功能整合（去 a-*/层叠命名） | 带数据页面状态 1440/850/390 逐元素计算样式与位置 diffs=0；build | pass | 1 | verifier PASS：7 个层叠文件（a-navigation、a-product、chrome、evolution、product、responsive、workspace）与 capability-skills 合入 shell.css、module-pages.css 及各功能 css；删除被同选择器覆盖的声明与无产生者的类（逐一核对 TSX）；基线与 HEAD 构建字节一致；26 个状态 ×1440/850/390 diffs=0，另加焦点、授权对话框、复盘详情、技能发布等状态及 1440x700/1000x720 均 0；源 CSS 21→15 文件，dist 88.6→83.7 kB；build、format、test:d6:ui 通过 |
+| 3 | 清理 Biome lint 警告，不改行为 | `npm run lint` 0 警告（或逐条说明保留原因）；`npm test` 通过 | pending | 0 | |
+| 4 | Web JS 按页面懒加载拆包 | 构建 chunk 体积与首屏加载时间前后量化对比；test:d6:ui 通过 | pending | 0 | |
+| 5 | 定位并修复 Reflection 偶发失败 | 给出可复现的原因与证据；修复后相关测试与多次运行通过 | pass | 1 | verifier PASS：原失败运行库中项目 Memory 键（sha256 hex）含 `18384912946`，被手机号规则脱敏；首次 Tool 结果经 sensitive.copy、重放不经过，内容不一致→任务 failed、stages=[]（随机路径约 0.33% 触发）。HEAD 下强制复现 3/3 失败，修复后 10/10 通过；重放改走同一脱敏。另修：canRun 增加 isStreaming/isCompacting；执行前原生组件不可用改为 waiting_user；固定阶段/类别诊断码、模型超时单独编码。tests/reflection-failures.test.ts 6 项 HEAD 失败、修复后通过；反思测试 ×20 全过；npm test 226（225 pass/1 skip） |
+| 6 | 重做 D4 真实模型完整验收 | `test:d4:real`（及 `test:d4:desktop`）通过 | pending | 0 | |
+| 7 | 回归与文档：verify、test:d6:ui、DECISIONS.md 更新 | 命令全部通过；DECISIONS.md 待做清单与实际一致 | pending | 0 | |
 
-- 实际结果：6 步全部 pass，无 blocked。`npm run verify` exit 0（219：218 pass/1 skip），`npm run test:d6:ui` 通过；skills-ui-smoke（打包 Desktop + 真实模型）与 skills-browser-smoke 通过。改动：自动复盘环境提示随 Host 状态更新（未检查时轮询，聚焦/切回刷新，失败也刷新，不闪烁）；会话标题可点开看全文；删除约 1,600 条无引用 CSS 与 8 个空文件（CSS 199→88 kB，46 个页面状态计算样式无差异）；技能 smoke 同步新界面；复盘行项目名与状态间距。记忆确认按钮经核对无需改动。未提升新规则。未验证：需人工审查摘要的特殊技能分支；真机 iOS/Android；部分对话框与运行中/失败状态未做逐像素对比；Desktop 未用本轮代码重新打包；Host 侧错误文案与环境变化事件未改（需授权）。未提交。
+- 实际结果：
 
 ## 失败记录
 
@@ -34,6 +35,8 @@
 | refresh: manual reload removed where host emits no change event for that data | 1 | R2-6 | 观察中 |
 
 ## 已完成任务
+
+- 2026-11-06 界面遗留问题收尾：6 步全部 pass，`npm run verify`、`test:d6:ui`、技能 smoke 通过；CSS 199→88 kB（`1250860`）。
 
 - 2026-11-06 去除多余次级标签与说明：7 步全部 pass，`npm run verify`、`test:d6:ui`、`test:ui`（打包 Desktop + 真实模型）通过；提升 visibility、copy 两条规则（`6e6b1fa`）。
 

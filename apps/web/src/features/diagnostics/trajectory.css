@@ -1,38 +1,255 @@
-[hidden] { display: none !important; }
-.trajectory-panel { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
-.trajectory-toolbar { display: flex; gap: 8px; padding: 10px 24px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-.trajectory-toolbar button, .trajectory-toolbar input { font-size: 12px; }
-.trajectory-toolbar input { margin-left: auto; }
-.trajectory-workspace { display: flex; flex: 1; min-height: 0; overflow: hidden; }
-.trajectory-ledger { flex: 1; min-width: 0; overflow: auto; padding: 14px 24px; overflow-anchor: none; }
-.trajectory-group { border-bottom: 1px solid var(--line); padding: 8px 0 12px; }
-.trajectory-group-heading { display: flex; gap: 5px; align-items: flex-start; }
-.trajectory-group-heading button { background: transparent; border-color: transparent; text-align: left; }
-.trajectory-group-heading button:last-child { flex: 1; min-width: 0; }
-.trajectory-group-heading span { display: block; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trajectory-turn { margin-left: 24px; }
-.trajectory-row { display: block; text-align: left; width: 100%; background: transparent; border-color: transparent; padding: 8px 10px; margin: 3px 0; }
-.trajectory-row small { display: block; font-size: 11px; }
-.trajectory-row span { display: block; font-size: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.trajectory-turn-line { display: flex; align-items: stretch; }
-.trajectory-turn-line .trajectory-row { flex: 1; min-width: 0; min-height: 28px; }
-.trajectory-fold { flex: 0 0 22px; font-size: 11px; background: transparent; border: 0; padding: 0; margin: 3px 0; color: var(--muted); }
-.trajectory-call { margin-left: 22px; width: calc(100% - 22px); }
-.trajectory-row em { font-style: normal; }
-.trajectory-ledger .inline-error, .trajectory-inspector .inline-error { color: var(--danger); }
-.trajectory-ledger [aria-current="true"] { background: var(--selected); border-color: var(--line); }
-.trajectory-inspector { flex: 0 0 42%; max-width: 580px; min-width: 280px; padding: 18px 22px; border-left: 1px solid var(--line); overflow: auto; }
-.trajectory-inspector h2 { font-size: 18px; margin: 18px 0; overflow-wrap: anywhere; }
-.trajectory-inspector > .icon-btn { display: flex; margin-left: auto; }
-.trajectory-inspector pre { max-height: 380px; overflow: auto; }
-.trajectory-new { position: sticky; bottom: 10px; display: block; margin: 10px auto; }
-@media (max-width: 760px) {
-  .trajectory-toolbar, .trajectory-ledger { padding: 10px 16px; }
-  .trajectory-toolbar input { width: 100%; }
-  .trajectory-workspace[data-detail="true"] > .trajectory-ledger { display: none; }
-  .trajectory-inspector { flex: 1; min-width: 0; max-width: none; border: 0; }
+[hidden] {
+  display: none !important;
 }
-
-.trajectory-metrics dl { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-.trajectory-metrics dt { color: var(--muted); font-size: 11px; }
-.trajectory-metrics dd { margin: 4px 0; font-variant-numeric: tabular-nums; }
+.trajectory-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.host-product .trajectory-panel {
+  min-height: 0;
+  flex: 1;
+}
+.trajectory-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.trajectory-toolbar button,
+.trajectory-toolbar input {
+  font-size: 12px;
+}
+.trajectory-toolbar input {
+  margin-left: auto;
+}
+.host-product .trajectory-toolbar {
+  padding: 6px 12px;
+  align-items: center;
+  gap: 6px;
+}
+.host-product .trajectory-toolbar input {
+  width: 180px;
+  max-width: 100%;
+  height: 30px;
+  padding: 5px 8px;
+}
+.host-product .trajectory-toolbar button {
+  padding: 5px 8px;
+  border-radius: 4px;
+  color: var(--muted);
+}
+.host-product .trajectory-toolbar button:hover,
+.host-product .trajectory-fold:hover {
+  background: var(--faint);
+}
+.trajectory-workspace {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.trajectory-ledger {
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  padding: 14px 24px;
+  overflow-anchor: none;
+}
+.trajectory-ledger [aria-current="true"] {
+  background: var(--selected);
+  border-color: var(--line);
+}
+.host-product .trajectory-ledger {
+  padding: 4px 12px;
+  font-size: 12px;
+}
+.trajectory-group {
+  border-bottom: 1px solid var(--line);
+  padding: 8px 0 12px;
+}
+.trajectory-group-heading {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+}
+.trajectory-group-heading button {
+  background: transparent;
+  border-color: transparent;
+  text-align: left;
+}
+.trajectory-group-heading button:last-child {
+  flex: 1;
+  min-width: 0;
+}
+.trajectory-group-heading span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.host-product .trajectory-group-heading > button {
+  padding: 8px 4px;
+}
+.trajectory-turn {
+  margin-left: 24px;
+}
+.trajectory-row {
+  display: block;
+  text-align: left;
+  width: 100%;
+  background: transparent;
+  border-color: transparent;
+  padding: 8px 10px;
+  margin: 3px 0;
+}
+.trajectory-row small {
+  display: block;
+  font-size: 11px;
+}
+.trajectory-row span {
+  display: block;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.trajectory-turn-line .trajectory-row {
+  flex: 1;
+  min-width: 0;
+  min-height: 28px;
+}
+.trajectory-row em {
+  font-style: normal;
+}
+.host-product .trajectory-row {
+  padding: 6px 10px;
+  line-height: 1.45;
+  border-radius: 4px;
+}
+.host-product .trajectory-row span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.host-product .trajectory-row[aria-current="true"] {
+  background: var(--accent-soft);
+}
+.host-product .trajectory-row:hover {
+  background: var(--faint);
+}
+.trajectory-turn-line {
+  display: flex;
+  align-items: stretch;
+}
+.trajectory-fold {
+  flex: 0 0 22px;
+  font-size: 11px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 3px 0;
+  color: var(--muted);
+}
+.trajectory-call {
+  margin-left: 22px;
+  width: calc(100% - 22px);
+}
+.host-product .trajectory-call small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.trajectory-ledger .inline-error,
+.trajectory-inspector .inline-error {
+  color: var(--danger);
+}
+.trajectory-inspector {
+  flex: 0 0 42%;
+  max-width: 580px;
+  min-width: 280px;
+  padding: 18px 22px;
+  border-left: 1px solid var(--line);
+  overflow: auto;
+}
+.trajectory-inspector h2 {
+  font-size: 18px;
+  margin: 18px 0;
+  overflow-wrap: anywhere;
+}
+.trajectory-inspector pre {
+  max-height: 380px;
+  overflow: auto;
+}
+.host-product .trajectory-inspector {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.host-product .trajectory-inspector button {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.trajectory-inspector > .icon-btn {
+  display: flex;
+  margin-left: auto;
+}
+.trajectory-new {
+  position: sticky;
+  bottom: 10px;
+  display: block;
+  margin: 10px auto;
+}
+.trajectory-metrics dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+.trajectory-metrics dt {
+  color: var(--muted);
+  font-size: 11px;
+}
+.trajectory-metrics dd {
+  margin: 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+.host-product .diagnostics-id {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+  color: var(--muted);
+}
+.host-product .diagnostics-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 12px;
+}
+.host-product .host-source-person {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+@media (max-width: 760px) {
+  .trajectory-toolbar,
+  .trajectory-ledger {
+    padding: 10px 16px;
+  }
+  .trajectory-toolbar input {
+    width: 100%;
+  }
+  .trajectory-workspace[data-detail="true"] > .trajectory-ledger {
+    display: none;
+  }
+  .trajectory-inspector {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    border: 0;
+  }
+}

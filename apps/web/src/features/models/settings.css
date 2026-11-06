@@ -2,18 +2,25 @@
   margin-top: 0;
   color: var(--muted);
 }
-
+.d6-settings form fieldset {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+.d6-settings [aria-label="提供方登录"] {
+  max-width: 700px;
+  padding: 22px 0;
+  border-top: 1px solid var(--line);
+}
 .d6-connection-control button {
   flex: 0 0 auto;
   background: transparent;
 }
-
 .d6-connection-control {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-
 .d6-connection-status {
   display: inline-flex;
   align-items: center;
@@ -22,14 +29,12 @@
   font-size: 12px;
   white-space: nowrap;
 }
-
 .d6-connection-status i {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: #ae8950;
 }
-
 .d6-settings-notice {
   margin: 0 0 20px;
   padding: 11px 13px;
@@ -38,17 +43,14 @@
   font-size: 12px;
   line-height: 1.75;
 }
-
 .d6-settings .model-panel-embedded {
   overflow: visible;
 }
-
 .d6-settings .settings-body {
   max-width: 700px;
   margin: 0;
   padding: 0;
 }
-
 .d6-settings .settings-actions {
   display: flex;
   flex-wrap: wrap;
@@ -56,13 +58,11 @@
   gap: 8px 14px;
   margin: 12px 0 18px;
 }
-
 .d6-settings .model-connected {
   list-style: none;
   margin: 0 0 8px;
   padding: 0;
 }
-
 .d6-settings .model-connected li {
   display: flex;
   align-items: center;
@@ -71,7 +71,6 @@
   padding: 8px 0;
   border-bottom: 1px solid var(--line);
 }
-
 .d6-settings .model-connected span::before {
   content: "";
   display: inline-block;
@@ -82,23 +81,14 @@
   background: var(--accent);
   vertical-align: middle;
 }
-
 .d6-settings .model-connected button {
   background: transparent;
 }
-
 .d6-settings .model-key-entry summary {
   cursor: pointer;
   color: var(--muted);
   margin-bottom: 12px;
 }
-
-.d6-settings form fieldset {
-  border-top: 0;
-  margin-top: 0;
-  padding-top: 0;
-}
-
 .d6-settings .settings-actions .primary {
   background: var(--accent);
   border: 1px solid var(--accent);
@@ -106,13 +96,6 @@
   padding: 7px 14px;
   color: white;
 }
-
 .d6-settings .settings-actions .primary:disabled {
   opacity: 0.55;
-}
-
-.d6-settings [aria-label="提供方登录"] {
-  max-width: 700px;
-  padding: 22px 0;
-  border-top: 1px solid var(--line);
 }
