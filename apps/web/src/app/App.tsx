@@ -2,24 +2,47 @@ import { useEffect, useRef, useState } from 'react';
 import { useHost } from './use-host';
 import { readNavigation, saveNavigation } from './view-state';
 import type { Session } from '../features/chat/session-state';
-import { TrajectoryPanel, type TrajectoryViewState } from '../features/diagnostics/TrajectoryPanel';
+import type { TrajectoryViewState } from '../features/diagnostics/TrajectoryPanel';
 import { Failure } from '../components/reading';
-import { Catalog, ReflectionDetail } from '../features/reflection/Reflection';
 import { Button, Field, Modal, Notice } from '../components/ui';
 import { ShellSurface, folderName, type ShellController, type Page } from './Shell';
 import { useProductNavigation } from './navigation';
 import { TaskTitle } from '../components/Title';
-import { SessionRoom, type SessionDraft } from '../features/chat/Session';
-import { MemoryEditor } from '../features/memory/MemoryEditor';
+import type { SessionDraft } from '../features/chat/Session';
 import { MemoryDrafts } from '../features/memory/memory-management';
-import { MemoryCatalog, MemoryReader } from '../features/memory/Memory';
-import { Settings } from '../features/models/Settings';
-import { Skills } from '../features/skills/Skills';
 import { SkillDrafts } from '../features/skills/skill-management';
-import { EvolutionCatalog, SuggestionDetail, ActivityView } from '../features/evolution/Evolution';
-import { Source } from '../features/diagnostics/Source';
+import { lazyPage, PageBoundary, preloadPages } from './lazy-page';
 import type { Host, Route } from './types';
+// Page styles stay in the first-screen stylesheet in their original cascade order; only page code loads lazily.
+import '../features/diagnostics/trajectory.css';
+import '../features/evolution/capability-evolution.css';
+import '../features/chat/session-room.css';
+import '../features/chat/session-dialogs.css';
+import '../features/models/settings.css';
+import '../features/skills/skills.css';
 import './onboarding.css';
+const TrajectoryPanel = lazyPage(() =>
+  import('../features/diagnostics/TrajectoryPanel').then((m) => m.TrajectoryPanel),
+);
+const Catalog = lazyPage(() => import('../features/reflection/Reflection').then((m) => m.Catalog));
+const ReflectionDetail = lazyPage(() => import('../features/reflection/Reflection').then((m) => m.ReflectionDetail));
+const SessionRoom = lazyPage(
+  () => import('../features/chat/Session').then((m) => m.SessionRoom),
+  <p className="host-loading" role="status">
+    正在读取会话…
+  </p>,
+);
+const MemoryEditor = lazyPage(() => import('../features/memory/MemoryEditor').then((m) => m.MemoryEditor));
+const MemoryCatalog = lazyPage(() => import('../features/memory/Memory').then((m) => m.MemoryCatalog));
+const MemoryReader = lazyPage(() => import('../features/memory/Memory').then((m) => m.MemoryReader));
+const Settings = lazyPage(() => import('../features/models/Settings').then((m) => m.Settings));
+const Skills = lazyPage(() => import('../features/skills/Skills').then((m) => m.Skills));
+const EvolutionCatalog = lazyPage(() => import('../features/evolution/Evolution').then((m) => m.EvolutionCatalog));
+const SuggestionDetail = lazyPage(() => import('../features/evolution/Evolution').then((m) => m.SuggestionDetail));
+const ActivityView = lazyPage(() => import('../features/evolution/Evolution').then((m) => m.ActivityView));
+const Source = lazyPage(() => import('../features/diagnostics/Source').then((m) => m.Source));
+// A restored conversation renders as soon as its session arrives; fetch its code while the app starts.
+if (readNavigation()?.sessionId) SessionRoom.preload();
 export function App() {
   const nav = useProductNavigation(),
     r = nav.route;
@@ -63,6 +86,13 @@ export function App() {
   const pendingId = useRef<string | undefined>(undefined),
     lastId = useRef<string | undefined>(readNavigation()?.sessionId),
     states = useRef(new Map<string, TrajectoryViewState>());
+  const hostReady = host.connection === 'ready';
+  useEffect(() => {
+    if (!hostReady) return;
+    // Fetch the remaining pages once the first screen is up, so a first visit does not wait on code.
+    const idle = requestIdleCallback(preloadPages, { timeout: 2000 });
+    return () => cancelIdleCallback(idle);
+  }, [hostReady]);
   const hostRef = useRef(host);
   hostRef.current = host;
   const authorizationBlocked = useRef(false);
@@ -309,20 +339,22 @@ export function App() {
           )}
           {viewSession ? (
             <div className="host-retained-session" hidden={r.page === 'session' && r.sessionId !== viewSession.id}>
-              <SessionRoom
-                host={host}
-                session={viewSession}
-                active={r.page === 'session' && !!r.sessionId && viewSession.id === r.sessionId}
-                route={r.page === 'session' ? r : { page: 'session', sessionId: viewSession.id }}
-                draft={drafts[viewSession.id] || { text: '', files: [] }}
-                onDraft={(sid, value) =>
-                  D((old) => ({
-                    ...old,
-                    [sid]: typeof value === 'function' ? value(old[sid] || { text: '', files: [] }) : value,
-                  }))
-                }
-                go={nav.go}
-              />
+              <PageBoundary>
+                <SessionRoom
+                  host={host}
+                  session={viewSession}
+                  active={r.page === 'session' && !!r.sessionId && viewSession.id === r.sessionId}
+                  route={r.page === 'session' ? r : { page: 'session', sessionId: viewSession.id }}
+                  draft={drafts[viewSession.id] || { text: '', files: [] }}
+                  onDraft={(sid, value) =>
+                    D((old) => ({
+                      ...old,
+                      [sid]: typeof value === 'function' ? value(old[sid] || { text: '', files: [] }) : value,
+                    }))
+                  }
+                  go={nav.go}
+                />
+              </PageBoundary>
             </div>
           ) : (
             !openError && (
@@ -334,89 +366,91 @@ export function App() {
         </div>
         <div hidden={r.page === 'session' && !!r.sessionId} className="host-workspace-view">
           <div className={`aw host-reading ${r.page === 'trajectory' ? 'host-trajectory' : ''}`} data-aw-page={page}>
-            {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} create={openCreate} />}
-            {r.page === 'reflections' && <Catalog api={host.api} sessions={host.sessions} route={r} go={nav.go} />}
-            {r.page === 'reflection' && (
-              <ReflectionDetail api={host.api} sessions={host.sessions} route={r} go={nav.go} back={nav.back} />
-            )}
-            {r.page === 'source' && (
-              <Source
-                key={JSON.stringify(r.reference)}
-                api={host.api}
-                route={r}
-                go={nav.go}
-                back={nav.back}
-                showBack={!nav.depth}
-                sessionIds={host.sessions.map((session) => session.id)}
-              />
-            )}
-            {r.page === 'result' &&
-              (r.target.kind === 'memory' ? (
-                <MemoryReader host={host} route={r} go={nav.go} back={nav.back} showBack={!nav.depth} />
-              ) : r.target.kind === 'skill' ? (
+            <PageBoundary key={r.page}>
+              {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} create={openCreate} />}
+              {r.page === 'reflections' && <Catalog api={host.api} sessions={host.sessions} route={r} go={nav.go} />}
+              {r.page === 'reflection' && (
+                <ReflectionDetail api={host.api} sessions={host.sessions} route={r} go={nav.go} back={nav.back} />
+              )}
+              {r.page === 'source' && (
+                <Source
+                  key={JSON.stringify(r.reference)}
+                  api={host.api}
+                  route={r}
+                  go={nav.go}
+                  back={nav.back}
+                  showBack={!nav.depth}
+                  sessionIds={host.sessions.map((session) => session.id)}
+                />
+              )}
+              {r.page === 'result' &&
+                (r.target.kind === 'memory' ? (
+                  <MemoryReader host={host} route={r} go={nav.go} back={nav.back} showBack={!nav.depth} />
+                ) : r.target.kind === 'skill' ? (
+                  <Skills
+                    host={host}
+                    route={r}
+                    store={skillDrafts.current}
+                    onAssist={onAssist}
+                    project={r.project ?? lastSkillsRoute.current?.project ?? context?.cwd ?? ''}
+                    go={nav.go}
+                    back={nav.back}
+                  />
+                ) : (
+                  <SuggestionDetail
+                    key={r.target.id}
+                    host={host}
+                    id={r.target.id}
+                    project={lastEvolutionRoute.current?.project || context?.cwd}
+                    go={nav.go}
+                    back={nav.back}
+                  />
+                ))}
+              {r.page === 'memory' && (
+                <MemoryCatalog
+                  store={memoryDrafts.current}
+                  host={host}
+                  route={r}
+                  go={nav.go}
+                  replace={(route) => nav.go(route, true)}
+                />
+              )}
+              {r.page === 'memory-edit' && (
+                <MemoryEditor
+                  key={JSON.stringify(r)}
+                  host={host}
+                  route={r}
+                  store={memoryDrafts.current}
+                  go={(route) => nav.go(route, true)}
+                  back={nav.back}
+                  showBack={!nav.depth}
+                />
+              )}
+              {r.page === 'skills' && (
                 <Skills
                   host={host}
                   route={r}
                   store={skillDrafts.current}
                   onAssist={onAssist}
-                  project={r.project ?? lastSkillsRoute.current?.project ?? context?.cwd ?? ''}
+                  project={r.project ?? context?.cwd ?? ''}
                   go={nav.go}
                   back={nav.back}
                 />
-              ) : (
-                <SuggestionDetail
-                  key={r.target.id}
-                  host={host}
-                  id={r.target.id}
-                  project={lastEvolutionRoute.current?.project || context?.cwd}
-                  go={nav.go}
-                  back={nav.back}
+              )}
+              {r.page === 'evolution' && <EvolutionCatalog host={host} route={r} go={nav.go} />}
+              {r.page === 'activity' && <ActivityView key={r.id} host={host} id={r.id} go={nav.go} back={nav.back} />}
+              {r.page === 'settings' && <Settings host={host} back={nav.back} />}
+              {r.page === 'trajectory' && (
+                <TrajectoryPanel
+                  key={r.sessionId}
+                  api={host.api}
+                  session={selected?.id === r.sessionId ? selected : undefined}
+                  active={r.page === 'trajectory'}
+                  states={states.current}
+                  onTargetDone={() => {}}
                 />
-              ))}
-            {r.page === 'memory' && (
-              <MemoryCatalog
-                store={memoryDrafts.current}
-                host={host}
-                route={r}
-                go={nav.go}
-                replace={(route) => nav.go(route, true)}
-              />
-            )}
-            {r.page === 'memory-edit' && (
-              <MemoryEditor
-                key={JSON.stringify(r)}
-                host={host}
-                route={r}
-                store={memoryDrafts.current}
-                go={(route) => nav.go(route, true)}
-                back={nav.back}
-                showBack={!nav.depth}
-              />
-            )}
-            {r.page === 'skills' && (
-              <Skills
-                host={host}
-                route={r}
-                store={skillDrafts.current}
-                onAssist={onAssist}
-                project={r.project ?? context?.cwd ?? ''}
-                go={nav.go}
-                back={nav.back}
-              />
-            )}
-            {r.page === 'evolution' && <EvolutionCatalog host={host} route={r} go={nav.go} />}
-            {r.page === 'activity' && <ActivityView key={r.id} host={host} id={r.id} go={nav.go} back={nav.back} />}
-            {r.page === 'settings' && <Settings host={host} back={nav.back} />}
-            {r.page === 'trajectory' && (
-              <TrajectoryPanel
-                key={r.sessionId}
-                api={host.api}
-                session={selected?.id === r.sessionId ? selected : undefined}
-                active={r.page === 'trajectory'}
-                states={states.current}
-                onTargetDone={() => {}}
-              />
-            )}
+              )}
+            </PageBoundary>
           </div>
         </div>
       </div>
