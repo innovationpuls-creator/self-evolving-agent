@@ -35,7 +35,7 @@ import {
 import { evolutionTools } from '../evolution/evolution-tools.js';
 import type { SkillService } from '../skills/skills.js';
 import { ReflectionJobs, type ReflectionJob, type ReflectionRegistration } from './reflection-jobs.js';
-import { NativeReflectionExecutor } from './native-executor.js';
+import { NativeReflectionExecutor, ReflectionExecutorError } from './native-executor.js';
 import { reflectionOutputGuidance } from './reflection-prompt.js';
 
 export const reflectionMarker = 'reflection_settled_v1';
@@ -119,6 +119,57 @@ const recordInput = z
     evidence: z.array(evolutionEvidence).max(100),
   })
   .strict();
+/** Fixed diagnostic vocabulary for a failed run; never derived from error text, provider output or stderr. */
+type ReflectionStage =
+  | 'prepare'
+  | 'start'
+  | 'model'
+  | 'checkpoint'
+  | 'tool'
+  | 'diagnostic'
+  | 'complete'
+  | 'worker'
+  | 'finish';
+type ReflectionFailureCategory =
+  | 'timeout'
+  | 'cancelled'
+  | 'provider'
+  | 'invalid'
+  | 'denied'
+  | 'stale'
+  | 'storage'
+  | 'unavailable'
+  | 'incomplete'
+  | 'executor'
+  | 'unknown';
+const operationStages: Record<string, ReflectionStage> = {
+  model: 'model',
+  checkpoint: 'checkpoint',
+  tool: 'tool',
+  diagnostic: 'diagnostic',
+  complete: 'complete',
+};
+function failureCategory(error: unknown, stage: ReflectionStage): ReflectionFailureCategory {
+  if (error instanceof ReflectionExecutorError)
+    return error.category === 'unavailable' ? 'unavailable' : error.category === 'cancelled' ? 'cancelled' : 'executor';
+  if (error instanceof ReflectionError) {
+    if (error.code === 'REFLECTION_MODEL_TIMEOUT') return 'timeout';
+    if (error.code === 'REFLECTION_MODEL_CANCELLED') return 'cancelled';
+    if (error.code === 'REFLECTION_STALE_RUN') return 'stale';
+    if (error.code === 'REFLECTION_INCOMPLETE') return 'incomplete';
+    if (error.status === 403) return 'denied';
+    if (error.status === 400 || error.status === 413) return 'invalid';
+    if (error.status === 503) return 'unavailable';
+  }
+  if (error instanceof z.ZodError) return 'invalid';
+  if ((error as { name?: unknown })?.name === 'AbortError') return 'cancelled';
+  if ((error as { code?: unknown })?.code === 'ERR_SQLITE_ERROR') return 'storage';
+  if (stage === 'checkpoint') return 'storage';
+  if (stage === 'model') return 'provider';
+  return 'unknown';
+}
+const failureCode = (stage: ReflectionStage, category: ReflectionFailureCategory) =>
+  `REFLECTION_FAILED_${stage}_${category}`.toUpperCase();
 export class ReflectionError extends Error {
   constructor(
     message: string,
@@ -463,11 +514,19 @@ export class ReflectionService {
       })),
       changes: [],
     };
-    this.save(record);
+    try {
+      this.save(record);
+    } catch (error) {
+      // The scheduler marks the claimed Job failed; this keeps the stage and category.
+      this.d.diagnostics.system(failureCode('prepare', failureCategory(error, 'prepare')), 'warn', sessionId, traceId);
+      throw error;
+    }
     let manager: SessionManager | undefined;
     let committed: Snapshot | undefined;
     let completed = false;
     let revoked = false;
+    let operations = 0;
+    let lastFailure: { stage: ReflectionStage; category: ReflectionFailureCategory } | undefined;
     const calls = new Map<string, ToolCall>();
     const invocationEvidence = new Map<string, Awaited<ReturnType<ReflectionService['authorizeEvidence']>>>();
     const diagnosticIds = new Map<string, string>();
@@ -753,7 +812,7 @@ export class ReflectionService {
       maxTokens: approvedModel?.maxTokens ?? 8192,
     };
     const controllers = new Map<string, AbortController>();
-    const handle = async (operation: string, raw: unknown): Promise<unknown> => {
+    const operate = async (operation: string, raw: unknown): Promise<unknown> => {
       if (operation === 'cancel') {
         revoked = true;
         for (const c of controllers.values()) c.abort();
@@ -779,10 +838,18 @@ export class ReflectionService {
         const requestId = randomUUID(),
           controller = new AbortController();
         controllers.set(requestId, controller);
-        const timeout = setTimeout(() => controller.abort(), this.d.modelTimeoutMs ?? 120000);
+        let timedOut = false;
+        const timeout = setTimeout(() => {
+          timedOut = true;
+          controller.abort();
+        }, this.d.modelTimeoutMs ?? 120000);
         timeout.unref();
         const combined = AbortSignal.any([signal, controller.signal]);
         let rejectAborted: (() => void) | undefined;
+        const aborted = () =>
+          timedOut
+            ? new ReflectionError('模型请求超时', 504, 'REFLECTION_MODEL_TIMEOUT')
+            : new ReflectionError('模型请求已取消', 504, 'REFLECTION_MODEL_CANCELLED');
         try {
           const response = await Promise.race([
             this.d.runtime.completeSimple(
@@ -793,11 +860,18 @@ export class ReflectionService {
               },
             ),
             new Promise<never>((_, reject) => {
-              rejectAborted = () => reject(new ReflectionError('模型请求取消或超时', 504));
-              if (combined.aborted) reject(new ReflectionError('模型请求取消或超时', 504));
+              rejectAborted = () => reject(aborted());
+              if (combined.aborted) reject(aborted());
               else combined.addEventListener('abort', rejectAborted, { once: true });
             }),
           ]);
+          // A Provider may report failure as a response instead of throwing; the Worker then ends failed.
+          if (response.stopReason === 'error')
+            lastFailure = { stage: 'model', category: timedOut ? 'timeout' : 'provider' };
+          else if (response.stopReason === 'aborted')
+            lastFailure = { stage: 'model', category: timedOut ? 'timeout' : 'cancelled' };
+          // An earlier rejected operation did not end a run that reached another model response.
+          else lastFailure = undefined;
           live();
           const safe = this.d.sensitive.copy({
             ...response,
@@ -895,7 +969,8 @@ export class ReflectionService {
           throw new ReflectionError('ToolCall 不在本次授权内', 403);
         validateToolArguments(definition as Tool, call);
         const old = effect(call.id);
-        if (old) return JSON.parse(String(old.result));
+        // A replay crosses the same boundary projection as the first result, so both return identical content.
+        if (old) return this.d.sensitive.copy(JSON.parse(String(old.result)));
         const args = z.record(z.string(), z.unknown()).parse(input.args);
         const knowledge = args.knowledge as Record<string, unknown> | undefined;
         const refs = z
@@ -974,6 +1049,16 @@ export class ReflectionService {
       }
       throw new ReflectionError('IPC 操作未授权', 403, 'REFLECTION_OPERATION_DENIED');
     };
+    const handle = async (operation: string, raw: unknown): Promise<unknown> => {
+      if (operation !== 'cancel') operations++;
+      try {
+        return await operate(operation, raw);
+      } catch (error) {
+        const stage = operationStages[operation] ?? 'worker';
+        lastFailure = { stage, category: failureCategory(error, stage) };
+        throw error;
+      }
+    };
     try {
       await this.executor.execute(
         {
@@ -989,20 +1074,51 @@ export class ReflectionService {
         handle,
         signal,
       );
-      if (!completed) throw new ReflectionError('Worker 未完成保存');
-      this.jobs.finish(job.id, runId, 'succeeded');
-    } catch {
+      if (!completed) {
+        lastFailure = { stage: 'complete', category: 'incomplete' };
+        throw new ReflectionError('Worker 未完成保存', 409, 'REFLECTION_INCOMPLETE');
+      }
+      try {
+        this.jobs.finish(job.id, runId, 'succeeded');
+      } catch (error) {
+        lastFailure = { stage: 'finish', category: failureCategory(error, 'finish') };
+        throw error;
+      }
+    } catch (error) {
+      // Nothing ran yet: the environment changed after scheduling, so the Job waits for a recheck like any other.
+      if (error instanceof ReflectionExecutorError && error.category === 'unavailable' && !operations) {
+        this.environment = { available: false, reason: error.message, checkedAt: Date.now() };
+        record.error = error.message;
+        try {
+          this.save(record);
+        } finally {
+          this.jobs.finish(job.id, runId, 'waiting_user', error.message);
+        }
+        this.d.diagnostics.system(failureCode('start', 'unavailable'), 'warn', sessionId, traceId);
+        return;
+      }
+      const failure = signal.aborted
+        ? { stage: lastFailure?.stage ?? (operations ? 'worker' : 'start'), category: 'cancelled' as const }
+        : (lastFailure ?? {
+            stage: operations ? ('worker' as const) : ('start' as const),
+            category: failureCategory(error, operations ? 'worker' : 'start'),
+          });
       const status = signal.aborted ? 'interrupted' : 'failed';
-      const error = signal.aborted
+      const message = signal.aborted
         ? '反思已中断；已提交成果保留，不自动重放'
-        : '反思未完成，请检查模型、沙箱或受控接口状态';
-      record.error = error;
+        : failure.category === 'timeout'
+          ? '模型请求超时，反思未完成；已提交成果保留，不自动重放'
+          : '反思未完成，请检查模型、沙箱或受控接口状态';
+      record.error = message;
       try {
         this.save(record);
       } finally {
-        this.jobs.finish(job.id, runId, status, error);
+        this.jobs.finish(job.id, runId, status, message);
       }
       this.d.diagnostics.system('REFLECTION_RUN_FAILED', 'warn', sessionId, traceId);
+      this.d.diagnostics.system(failureCode(failure.stage, failure.category), 'warn', sessionId, traceId);
+      if (error instanceof ReflectionExecutorError)
+        this.d.diagnostics.system(`REFLECTION_EXECUTOR_${error.category.toUpperCase()}`, 'warn', sessionId, traceId);
     } finally {
       for (const c of controllers.values()) c.abort();
       this.d.changed();

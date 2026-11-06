@@ -308,7 +308,8 @@ export class AgentService extends EventEmitter {
         !this.queued.length &&
         !this.loading.size &&
         !this.creating.size &&
-        ![...this.active.values()].some((i) => i.busy),
+        // Pi Extensions can start a turn or compaction without Host dispatch, so busy alone is not enough.
+        ![...this.active.values()].some((i) => i.busy || i.session.isStreaming || i.session.isCompacting),
       changed: () => this.emit('event', { type: 'reflection' }),
       refreshKnowledge: () => this.refreshSkillKnowledge(),
       executor: this.options.reflectionExecutor,

@@ -16,6 +16,26 @@ interface ProtocolMessage {
   error?: string;
 }
 
+/** Fixed executor failure categories. Never carries provider text, paths or native stderr. */
+export type ReflectionExecutorFailure =
+  | 'unavailable'
+  | 'spawn'
+  | 'ipc'
+  | 'protocol'
+  | 'disconnected'
+  | 'exit'
+  | 'cancelled'
+  | 'worker_model'
+  | 'worker';
+export class ReflectionExecutorError extends Error {
+  constructor(
+    readonly category: ReflectionExecutorFailure,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
 export class NativeReflectionExecutor {
   constructor(private readonly appBundle?: string) {}
   private bundle() {
@@ -111,12 +131,14 @@ export class NativeReflectionExecutor {
   ): Promise<void> {
     signal.throwIfAborted();
     const availability = await this.available(signal);
-    if (!availability.available) throw new Error(availability.reason);
+    if (!availability.available)
+      throw new ReflectionExecutorError('unavailable', availability.reason ?? 'Reflection 原生组件不可用');
     const bundle = this.bundle();
-    if (!bundle) throw new Error('Reflection 原生组件不可用');
+    if (!bundle) throw new ReflectionExecutorError('unavailable', 'Reflection 原生组件不可用');
     const paths = this.paths(bundle);
     const initial = JSON.stringify(start);
-    if (Buffer.byteLength(initial) > maxLineBytes) throw new Error('Reflection 启动消息过大');
+    if (Buffer.byteLength(initial) > maxLineBytes)
+      throw new ReflectionExecutorError('protocol', 'Reflection 启动消息过大');
     await new Promise<void>((done, reject) => {
       const child = spawn(paths.helper, [], { stdio: ['pipe', 'pipe', 'pipe'], env: { PATH: '/usr/bin:/bin' } });
       let buffer = Buffer.alloc(0),
@@ -143,15 +165,17 @@ export class NativeReflectionExecutor {
         if (child.stdin.writable) child.stdin.write('{"kind":"cancel"}\n');
         close();
       };
-      const abort = () => fail(new Error('Reflection 已取消'));
+      const abort = () => fail(new ReflectionExecutorError('cancelled', 'Reflection 已取消'));
       signal.addEventListener('abort', abort, { once: true });
       child.stderr.resume(); // Never retain or forward provider/native diagnostics.
-      child.stdin.on('error', () => fail(new Error('Reflection IPC 写入失败')));
-      child.on('error', () => fail(new Error('Reflection 原生组件启动失败')));
+      child.stdin.on('error', () => fail(new ReflectionExecutorError('ipc', 'Reflection IPC 写入失败')));
+      child.on('error', () => fail(new ReflectionExecutorError('spawn', 'Reflection 原生组件启动失败')));
       child.on('close', (code) => {
         if (killTimer) clearTimeout(killTimer);
         if (!failure && (!finished || code !== 0))
-          failure = new Error(finished ? 'Reflection 原生组件异常退出' : 'Reflection Worker 已断开');
+          failure = finished
+            ? new ReflectionExecutorError('exit', 'Reflection 原生组件异常退出')
+            : new ReflectionExecutorError('disconnected', 'Reflection Worker 已断开');
         if (failure) {
           try {
             void Promise.resolve(handle('cancel', {})).catch(() => {});
@@ -165,7 +189,7 @@ export class NativeReflectionExecutor {
       });
       child.stdout.on('data', (chunk: Buffer) => {
         if (finished) {
-          fail(new Error('Reflection 结束后仍发送消息'));
+          fail(new ReflectionExecutorError('protocol', 'Reflection 结束后仍发送消息'));
           return;
         }
         buffer = Buffer.concat([buffer, chunk]);
@@ -173,7 +197,7 @@ export class NativeReflectionExecutor {
           const end = buffer.indexOf(10);
           if (end < 0) break;
           if (end > maxLineBytes) {
-            fail(new Error('Reflection IPC 消息过大'));
+            fail(new ReflectionExecutorError('protocol', 'Reflection IPC 消息过大'));
             break;
           }
           const line = buffer.subarray(0, end);
@@ -182,29 +206,31 @@ export class NativeReflectionExecutor {
           try {
             message = JSON.parse(line.toString('utf8')) as ProtocolMessage;
           } catch {
-            fail(new Error('Reflection IPC 消息无效'));
+            fail(new ReflectionExecutorError('protocol', 'Reflection IPC 消息无效'));
             break;
           }
           if (!message || typeof message !== 'object' || Array.isArray(message)) {
-            fail(new Error('Reflection IPC 消息无效'));
+            fail(new ReflectionExecutorError('protocol', 'Reflection IPC 消息无效'));
             break;
           }
           if (message.kind === 'ready') continue;
           if (message.kind === 'finished') {
             if (requests.size) {
-              fail(new Error('Reflection 在受控操作结束前退出'));
+              fail(new ReflectionExecutorError('protocol', 'Reflection 在受控操作结束前退出'));
               break;
             }
             finished = true;
             if (message.ok !== true) {
-              const code =
-                typeof message.error === 'string' && /^[a-z][a-z0-9_]{0,80}$/.test(message.error)
-                  ? ` (${message.error})`
-                  : '';
-              fail(new Error(`Reflection Worker 执行失败${code}`));
+              // The Worker reports only fixed codes; anything else is an unspecified Worker failure.
+              fail(
+                new ReflectionExecutorError(
+                  message.error === 'REFLECTION_MODEL_FAILED' ? 'worker_model' : 'worker',
+                  'Reflection Worker 执行失败',
+                ),
+              );
               break;
             }
-            if (buffer.length) fail(new Error('Reflection 结束后仍发送消息'));
+            if (buffer.length) fail(new ReflectionExecutorError('protocol', 'Reflection 结束后仍发送消息'));
             else close();
             break;
           }
@@ -217,7 +243,7 @@ export class NativeReflectionExecutor {
             seenRequests.has(message.requestId) ||
             requests.size >= 32
           ) {
-            fail(new Error('Reflection IPC 请求无效'));
+            fail(new ReflectionExecutorError('protocol', 'Reflection IPC 请求无效'));
             break;
           }
           const requestId = message.requestId;
@@ -229,11 +255,11 @@ export class NativeReflectionExecutor {
             try {
               encoded = JSON.stringify(response);
             } catch {
-              fail(new Error('Reflection IPC 响应无效'));
+              fail(new ReflectionExecutorError('protocol', 'Reflection IPC 响应无效'));
               return;
             }
             if (Buffer.byteLength(encoded) > maxLineBytes) {
-              fail(new Error('Reflection IPC 响应过大'));
+              fail(new ReflectionExecutorError('protocol', 'Reflection IPC 响应过大'));
               return;
             }
             child.stdin.write(`${encoded}\n`);
@@ -252,7 +278,7 @@ export class NativeReflectionExecutor {
             });
           inFlight.add(task);
         }
-        if (buffer.length > maxLineBytes) fail(new Error('Reflection IPC 消息过大'));
+        if (buffer.length > maxLineBytes) fail(new ReflectionExecutorError('protocol', 'Reflection IPC 消息过大'));
       });
       child.once('spawn', () => {
         if (!settled) child.stdin.write(`${initial}\n`);
