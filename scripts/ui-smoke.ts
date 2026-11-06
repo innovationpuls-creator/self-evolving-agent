@@ -72,16 +72,16 @@ try {
   assert.equal(await page.evaluate(() => typeof (window as unknown as { require?: unknown }).require), 'undefined');
   await page.getByLabel('模型与连接', { exact: true }).click();
   await page.getByLabel('模型提供方').selectOption('openai-codex');
-  await page.getByRole('button', { name: '导入 Pi 授权' }).click();
-  await page.getByRole('status').filter({ hasText: '已导入 Pi 授权' }).waitFor();
-  await page.getByRole('button', { name: '返回工作区', exact: true }).click();
+  await page.getByRole('button', { name: '从本机导入已有登录' }).click();
+  await page.getByRole('status').filter({ hasText: '已导入本机已有登录' }).waitFor();
+  await page.getByRole('button', { name: '返回上一个位置', exact: true }).click();
   await page.getByRole('button', { name: '新会话', exact: true }).click();
   const create = page.getByRole('dialog', { name: '开始一段新会话' });
   await create
     .getByLabel('模型')
     .locator('option[value="openai-codex:gpt-6-luna"]')
     .waitFor({ state: 'attached', timeout: 30000 });
-  await create.getByLabel('Host 工作目录').fill(root);
+  await create.getByLabel('项目文件夹').fill(root);
   await create.getByLabel('模型').selectOption('openai-codex:gpt-6-luna');
   await create.getByRole('button', { name: '创建会话', exact: true }).click();
   await submit(

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowRight, ChevronRight, RefreshCw } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useReflectionCatalog, reflectionStatusLabels as labels } from './reflection-state';
 import type { Session } from '../chat/session-state';
 import type { ReflectionJob } from '../../../../host/reflection/reflection-jobs';
@@ -50,11 +50,7 @@ export function Catalog({
     <>
       {route.sessionId && <Back back={() => go({ page: 'session', sessionId: route.sessionId })}>返回会话</Back>}
       <header className="aw-heading">
-        <h1 tabIndex={-1}>反思记录</h1>
-        <Button onClick={refresh} disabled={loading}>
-          <RefreshCw size={14} />
-          刷新
-        </Button>
+        <h1 tabIndex={-1}>自动复盘</h1>
       </header>
       <div className="aw-toolbar">
         <select
@@ -64,26 +60,27 @@ export function Catalog({
         >
           <option value="">所有会话</option>
           {sessions.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.title || '未命名会话'} · {s.cwd}
+            <option key={s.id} value={s.id} title={s.cwd}>
+              {s.title || '未命名会话'} · {projectName(s.cwd)}
             </option>
           ))}
         </select>
       </div>
       {error && <Failure error={error} retry={refresh} />}
-      {loading && <p role="status">正在读取反思记录…</p>}
+      {loading && <p role="status">正在读取自动复盘…</p>}
       {catalog && !error && (
         <>
           {!catalog.availability.available && (
-            <Notice title={!('checkedAt' in catalog.availability) ? '反思环境尚未检查' : '反思环境不可用'} tone="warn">
-              <p>
-                {catalog.availability.reason || '受限执行环境尚不可用。'} 已保存的记录仍可阅读。环境可用时，会恢复 Host
-                内等待环境的检查任务。
-              </p>
+            <Notice title={'checkedAt' in catalog.availability ? '自动复盘暂不可用' : '尚未检查自动复盘环境'}>
               <Button onClick={() => void recheck()} disabled={checking}>
-                {checking ? '正在检查…' : '检查环境并恢复等待任务'}
+                {checking ? '正在检查…' : '重新检查'}
               </Button>
             </Notice>
+          )}
+          {catalog.availability.available && catalog.jobs.some((job) => job.status === 'waiting_user') && (
+            <Button onClick={() => void recheck()} disabled={checking}>
+              {checking ? '正在检查…' : '重新检查'}
+            </Button>
           )}
           {checkError && <p role="alert">{checkError}</p>}
           <div className="aw-journal">
@@ -109,19 +106,15 @@ export function Catalog({
                     }
                   >
                     <span>
-                      {record?.summary ? (
-                        <p className="host-check-summary">{record.summary}</p>
-                      ) : (
-                        <strong>{labels[job.status]}的检查</strong>
-                      )}
+                      {record?.summary && <p className="host-check-summary">{record.summary}</p>}
                       <TaskTitle title={session?.title || '来源会话未返回'} />
                       <span className="aw-muted" title={session?.cwd}>
                         {projectName(session?.cwd)}
-                        {record?.summary && job.status !== 'succeeded' && ` · ${labels[job.status]}`}
                       </span>
-                      {job.error && <p className="live-error">{job.error}</p>}
-                      {!record?.summary && !job.error && (
-                        <p className="aw-muted">{record ? '未保存摘要' : '尚无已保存的检查结论'}</p>
+                      {job.status !== 'succeeded' && (
+                        <span className={job.status === 'failed' ? 'live-error' : 'aw-muted'}>
+                          {labels[job.status]}
+                        </span>
                       )}
                     </span>
                     <ChevronRight size={17} />
@@ -132,16 +125,12 @@ export function Catalog({
           </div>
           {!catalog.jobs.length && (
             <div className="aw-empty">
-              <h2>{catalog.total ? '这一页已没有记录' : '还没有反思记录'}</h2>
-              {catalog.total ? (
-                <Button onClick={() => go({ ...route, offset: 0 })}>返回第一页</Button>
-              ) : (
-                <p>任务结束后的检查记录会保存在这里。</p>
-              )}
+              <h2>{catalog.total ? '这一页已没有记录' : '还没有自动复盘'}</h2>
+              {!!catalog.total && <Button onClick={() => go({ ...route, offset: 0 })}>返回第一页</Button>}
             </div>
           )}
           {catalog.total > catalog.limit && (
-            <nav className="live-pagination" aria-label="反思分页">
+            <nav className="live-pagination" aria-label="自动复盘分页">
               <Button
                 disabled={!route.offset || loading}
                 onClick={() => go({ ...route, offset: Math.max(0, route.offset - catalog.limit) })}
@@ -208,7 +197,7 @@ export function ReflectionDetail({
   }, [job]);
   return (
     <>
-      <Back back={back}>反思记录</Back>
+      <Back back={back}>自动复盘</Back>
       <header className="aw-heading host-reflection-heading">
         <div className="aw-review-heading">
           <h1 tabIndex={-1}>{job ? `${date(job.created)} 的检查` : '检查记录'}</h1>
@@ -218,10 +207,6 @@ export function ReflectionDetail({
             </span>
           )}
         </div>
-        <Button kind="ghost" onClick={read.refresh} disabled={read.loading}>
-          <RefreshCw size={14} />
-          刷新
-        </Button>
       </header>
       {session && (
         <details className="host-reflection-task">
@@ -234,7 +219,7 @@ export function ReflectionDetail({
       {checkError && <p role="alert">{checkError}</p>}
       {job?.status === 'waiting_user' && (
         <Button disabled={checking} onClick={() => void recheck()}>
-          {checking ? '正在检查…' : '检查环境并恢复等待任务'}
+          {checking ? '正在检查…' : '重新检查'}
         </Button>
       )}
       {job && (
@@ -242,7 +227,10 @@ export function ReflectionDetail({
           <article className="aw-review-article">
             {(job.error || record?.error) && (
               <Notice title="检查未完成" tone="warn">
-                <p>{job.error || record?.error}</p>
+                <details className="host-reflection-error">
+                  <summary>详细信息</summary>
+                  <p>{job.error || record?.error}</p>
+                </details>
                 {!!record?.changes.length && <p>下列变化已保存；检查中断或失败不会撤销这些成果。</p>}
               </Notice>
             )}
@@ -330,18 +318,19 @@ export function ReflectionDetail({
                 <References record={record} job={job} go={go} originSession={route.originSession} />
               </>
             ) : (
-              <p>
-                {
+              job.status !== 'waiting_user' && (
+                <p>
                   {
-                    pending: '等待后台检查。',
-                    running: '正在检查，尚未保存结论。',
-                    waiting_user: '等待反思环境恢复；检查尚未执行。',
-                    succeeded: '检查已结束，尚无可读取的结论。',
-                    failed: '尚无已保存的检查结论。',
-                    interrupted: '尚无已保存的检查结论。',
-                  }[job.status]
-                }
-              </p>
+                    {
+                      pending: '等待后台检查。',
+                      running: '正在检查，尚未保存结论。',
+                      succeeded: '检查已结束，尚无可读取的结论。',
+                      failed: '尚无已保存的检查结论。',
+                      interrupted: '尚无已保存的检查结论。',
+                    }[job.status]
+                  }
+                </p>
+              )
             )}
           </article>
           <aside className="aw-context">

@@ -6,10 +6,13 @@ export function EvidenceView({
   api,
   reference,
   refresh = 0,
+  titled = true,
 }: {
   api: Api;
   reference: EvidenceReference;
   refresh?: number;
+  /** False when an enclosing disclosure already names the record. */
+  titled?: boolean;
 }) {
   const [offset, setOffset] = useState(0);
   const [value, setValue] = useState<Evidence>();
@@ -27,7 +30,7 @@ export function EvidenceView({
         if (active) setValue(result);
       })
       .catch((reason: unknown) => {
-        if (active) setError(reason instanceof Error ? reason.message : '证据读取失败');
+        if (active) setError(reason instanceof Error ? reason.message : '原始记录读取失败，请重试。');
       })
       .finally(() => {
         if (active) setBusy(false);
@@ -38,25 +41,25 @@ export function EvidenceView({
     };
   }, [api, reference.sessionId, reference.entryId, reference.toolCallId, offset, refresh, retry]);
   return (
-    <section className="diagnostics-evidence" aria-label="原始执行证据" aria-busy={busy}>
-      <h3>原始执行证据</h3>
+    <section className="diagnostics-evidence" aria-label="原始记录" aria-busy={busy}>
+      {titled && <h3>原始记录</h3>}
       <p className="diagnostics-id">
-        Session {reference.sessionId}
+        会话 {reference.sessionId}
         <br />
-        Entry {reference.entryId}
+        记录 {reference.entryId}
         {reference.toolCallId && (
           <>
             <br />
-            Tool Call {reference.toolCallId}
+            步骤 {reference.toolCallId}
           </>
         )}
       </p>
-      {busy && !value && <p role="status">正在读取原始证据…</p>}
+      {busy && !value && <p role="status">正在读取原始记录…</p>}
       {error && (
         <p className="notice error" role="alert">
           {error}{' '}
           <button type="button" onClick={() => setRetry((n) => n + 1)}>
-            重试证据
+            重新读取
           </button>
         </p>
       )}
@@ -66,11 +69,11 @@ export function EvidenceView({
             <p className="notice">来自上一有效检查点，可能缺少最新执行进度。</p>
           )}
           {value.onSelectedBranch === false && <p className="notice">此证据来自历史分支；查看不会切换当前执行分支。</p>}
-          {value.nested && <p>嵌套调用仅保留原生摘要，完整子调用结果未单独保存。</p>}
+          {value.nested && <p>内部步骤只保留了摘要，完整结果没有单独保存。</p>}
           {!value.available && (
             <p className="notice">
               {value.reason === 'not_persisted_native'
-                ? 'Pi 原生历史未保存这项完整结果。'
+                ? '这一步的完整结果没有被保存。'
                 : `证据暂不可用：${value.reason ?? '未知原因'}`}
             </p>
           )}
@@ -84,7 +87,7 @@ export function EvidenceView({
                 setValue(undefined);
               }}
             >
-              前一段证据
+              上一段
             </button>
             <small>
               {value.total ? offset + 1 : 0}–{Math.min(offset + (value.content?.length ?? 0), value.total)} /{' '}
@@ -100,7 +103,7 @@ export function EvidenceView({
                 }
               }}
             >
-              后一段证据
+              下一段
             </button>
           </div>
         </>

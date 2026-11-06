@@ -1,7 +1,7 @@
 import { TaskInput } from './TaskInput';
 import { referencedFiles } from './input-completion';
 import { SessionActivity } from '../evolution/Evolution';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
   ArrowDown,
@@ -22,12 +22,12 @@ import {
 } from 'lucide-react';
 import type { Session as HostSession } from './session-state';
 import { messageText } from './session-state';
-import { presentSession } from './session-presentation';
+import { presentSession, type SessionBlock } from './session-presentation';
 import { useReflectionCatalog, reflectionStatusLabels } from '../reflection/reflection-state';
 import { useSessionViewport } from './useSessionViewport';
 import { Button, IconButton, Modal, Field, Notice, Status, SearchBox } from '../../components/ui';
 import { Markdown } from '../../components/content';
-import { ToolResult, ToolCalls } from './ToolResult';
+import { ToolResult, ToolCalls, toolCalls } from './ToolResult';
 import { Source } from '../diagnostics/Source';
 import { useRead, type Host, type Route } from '../../app/types';
 import { SessionHistory } from './SessionHistory';
@@ -66,6 +66,12 @@ export function SessionRoom({
   currentId.current = session.id;
   const blocks = presentSession(session);
   const rows = blocks.flatMap((b) => b.entries);
+  const firstUser = rows.findIndex((e) => e.message.role === 'user');
+  // Hide the session tail only in a session that has no content, no turn finished and no activity;
+  // discussion and authorized development sessions carry their activity from the Host and may have no user message.
+  const turnDone =
+    rows.length > 0 &&
+    (!session.busy || (firstUser >= 0 && rows.slice(firstUser + 1).some((e) => e.message.role === 'user')));
   const v = useSessionViewport({
     key: `${session.id}:${route.entryId || 'conversation'}`,
     active,
@@ -180,12 +186,12 @@ export function SessionRoom({
           <div className="session-column">
             {session.unavailable && (
               <Notice title="会话暂不可恢复" tone="warn">
-                不能将空内容解释为没有历史。
+                历史记录暂时读不出来，请稍后重新打开这个会话。
               </Notice>
             )}
             {session.interrupted && !session.busy && (
               <Notice title="执行曾中断" tone="warn">
-                已保存历史仍可阅读，不会自动重放。
+                已保存的内容仍可阅读；需要继续时请重新发送。
               </Notice>
             )}
             {session.error && (
@@ -194,7 +200,7 @@ export function SessionRoom({
               </Notice>
             )}
             {session.skillFailed && (
-              <Notice title="能力需要恢复" tone="warn">
+              <Notice title="技能加载失败" tone="warn">
                 <Button
                   disabled={host.connection !== 'ready'}
                   onClick={() =>
@@ -203,7 +209,7 @@ export function SessionRoom({
                       .catch((e) => setError(e instanceof Error ? e.message : '恢复未完成'))
                   }
                 >
-                  重试恢复能力
+                  重新加载技能
                 </Button>
               </Notice>
             )}
@@ -220,6 +226,7 @@ export function SessionRoom({
                   }}
                   go={go}
                   back={() => go({ page: 'session', sessionId: session.id })}
+                  showBack
                 />
               </section>
             )}
@@ -230,47 +237,15 @@ export function SessionRoom({
             )}
             {blocks.map((block, index) =>
               block.kind === 'tools' ? (
-                <details className="execution-summary" key={`${session.id}:tools:${block.entries[0]?.id ?? index}`}>
-                  <summary>
-                    <ChevronRight size={14} />
-                    <span>
-                      {block.entries.some((e) => e.message.role === 'toolResult')
-                        ? `${block.entries.filter((e) => e.message.role === 'toolResult').length} 次工具返回`
-                        : '工具调用'}
-                    </span>
-                    {block.entries.some((e) => e.message?.isError) && (
-                      <span className="execution-gap">包含调用失败</span>
-                    )}
-                  </summary>
-                  <div className="tool-activity">
-                    {block.entries.map((entry) => (
-                      <div
-                        key={entry.id}
-                        data-entry={
-                          !entry.id.startsWith('projection:') && !entry.id.startsWith('live:') ? entry.id : undefined
-                        }
-                        tabIndex={route.entryId === entry.id ? -1 : undefined}
-                        className={route.entryId === entry.id ? 'host-located-message' : ''}
-                      >
-                        {entry.message.role === 'assistant' ? (
-                          <ToolCalls message={entry.message} />
-                        ) : (
-                          <ToolResult
-                            message={entry.message}
-                            api={host.api}
-                            project={session.cwd}
-                            originSession={session.id}
-                            go={go}
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <Button kind="ghost" onClick={() => go({ page: 'trajectory', sessionId: session.id })}>
-                    查看执行记录
-                    <ArrowUpRight size={14} />
-                  </Button>
-                </details>
+                <ToolBlock
+                  key={`${session.id}:tools:${block.entries[0]?.id ?? index}`}
+                  block={block}
+                  host={host}
+                  session={session}
+                  running={session.busy && index === blocks.length - 1}
+                  located={route.entryId}
+                  go={go}
+                />
               ) : (
                 block.entries.map((entry) => {
                   const m = entry.message;
@@ -283,7 +258,6 @@ export function SessionRoom({
                       tabIndex={route.entryId === entry.id ? -1 : undefined}
                       aria-label={m.role === 'user' ? '你的消息' : 'Agent 回复'}
                     >
-                      {m.role === 'assistant' && <div className="session-author">Agent</div>}
                       <Markdown text={messageText(m)} />
                       {m.errorMessage && <p role="alert">{m.errorMessage}</p>}
                     </article>
@@ -296,8 +270,10 @@ export function SessionRoom({
                 <Status tone="busy">{session.execution ? `正在执行 ${session.execution.name}` : '正在处理请求'}</Status>
               </div>
             )}
-            {active && <SessionActivity key={session.id} host={host} session={session} go={go} />}
-            {active && <SessionReflection host={host} id={session.id} go={go} />}
+            {active && (turnDone || !!session.activity) && (
+              <SessionActivity key={session.id} host={host} session={session} go={go} />
+            )}
+            {active && turnDone && <SessionReflection host={host} id={session.id} go={go} />}
           </div>
         </section>
         <div className="session-dock" ref={v.dock}>
@@ -376,7 +352,7 @@ export function SessionRoom({
                   <Paperclip size={18} />
                 </IconButton>
                 <IconButton
-                  label="引用 Skill"
+                  label="引用技能"
                   disabled={!ready}
                   onClick={() => {
                     setQuery('');
@@ -416,7 +392,8 @@ export function SessionRoom({
             </div>
             {(!ready || error) && (
               <div className="session-compose-error" role={error ? 'alert' : 'status'}>
-                {error || (!ready && host.connection !== 'ready' ? '连接中断，草稿已保留。' : '当前会话尚不可执行。')}
+                {error ||
+                  (!ready && host.connection !== 'ready' ? '连接中断，草稿已保留。' : '当前会话暂时无法发送消息。')}
               </div>
             )}
           </div>
@@ -425,8 +402,8 @@ export function SessionRoom({
       <Modal
         open={!!picker}
         onClose={() => setPicker(undefined)}
-        title={picker === 'files' ? '引用项目文件' : '引用 Skill'}
-        description={picker === 'files' ? undefined : '指引不会改变执行权限。'}
+        title={picker === 'files' ? '引用项目文件' : '引用技能'}
+        description={picker === 'files' ? undefined : '技能不会改变 Agent 的操作权限。'}
         className="host-resources-dialog"
         footer={
           picker === 'files' && (
@@ -471,17 +448,79 @@ export function SessionRoom({
     </>
   );
 }
+function ToolBlock({
+  block,
+  host,
+  session,
+  running,
+  located,
+  go,
+}: {
+  block: SessionBlock;
+  host: Host;
+  session: HostSession;
+  running: boolean;
+  located?: string;
+  go: (route: Route) => void;
+}) {
+  // A call and its result are one step: show the result with the call's readable arguments,
+  // and show the call alone only while it has no result in this block.
+  const calls = new Map(
+    block.entries.flatMap((e) => toolCalls(e.message).flatMap((c) => (c.id ? [[c.id, c] as const] : []))),
+  );
+  const settled = new Set(
+    block.entries.flatMap((e) =>
+      e.message.role === 'toolResult' && e.message.toolCallId ? [e.message.toolCallId] : [],
+    ),
+  );
+  const steps = block.entries.filter((e) => e.message.role === 'toolResult').length;
+  return (
+    <details className="execution-summary">
+      <summary>
+        <ChevronRight size={14} />
+        <span>{steps ? `${steps} 个执行步骤` : '执行步骤'}</span>
+        {block.entries.some((e) => e.message?.isError) && <span className="execution-gap">有步骤失败</span>}
+      </summary>
+      <div className="tool-activity">
+        {block.entries.map((entry) => (
+          <div
+            key={entry.id}
+            data-entry={!entry.id.startsWith('projection:') && !entry.id.startsWith('live:') ? entry.id : undefined}
+            tabIndex={located === entry.id ? -1 : undefined}
+            className={located === entry.id ? 'host-located-message' : undefined}
+          >
+            {entry.message.role === 'assistant' ? (
+              <ToolCalls message={entry.message} settled={settled} status={running ? '执行中' : '未完成'} />
+            ) : (
+              <ToolResult
+                message={entry.message}
+                call={entry.message.toolCallId ? calls.get(entry.message.toolCallId) : undefined}
+                api={host.api}
+                project={session.cwd}
+                originSession={session.id}
+                go={go}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+    </details>
+  );
+}
 function SessionReflection({ host, id, go }: { host: Host; id: string; go: (route: Route) => void }) {
   const read = useReflectionCatalog(host.api, id, 0, true),
     job = read.catalog?.jobs[0];
   return (
-    <nav className="session-related" aria-label="关联工作空间">
+    <nav className="session-related" aria-label="相关页面">
       <button
         type="button"
         data-focus="session-reflections"
         onClick={() => go({ page: 'reflections', sessionId: id, offset: 0 })}
       >
-        反思记录{job && !['succeeded'].includes(job.status) && <span> · {reflectionStatusLabels[job.status]}</span>}
+        自动复盘
+        {job && ['failed', 'interrupted', 'waiting_user'].includes(job.status) && (
+          <span> · {reflectionStatusLabels[job.status]}</span>
+        )}
         <ArrowUpRight size={13} />
       </button>
       {read.error && (
@@ -530,7 +569,7 @@ function Resources({
     <>
       {kind === 'files' && (
         <div className="host-resource-location">
-          <Button kind="ghost" disabled={!directory} onClick={() => navigate(parent)} aria-label="返回上级目录">
+          <Button kind="ghost" disabled={!directory} onClick={() => navigate(parent)} aria-label="返回上级文件夹">
             <ArrowLeft size={15} />
           </Button>
           <span title={session.cwd + (directory ? `/${directory}` : '')}>
@@ -538,15 +577,15 @@ function Resources({
           </span>
           {directory && (
             <Button kind="ghost" onClick={() => navigate('')}>
-              项目根目录
+              项目文件夹
             </Button>
           )}
         </div>
       )}
-      <SearchBox value={query} onChange={onQuery} placeholder={kind === 'files' ? '搜索当前目录' : '搜索 Skill'} />
+      <SearchBox value={query} onChange={onQuery} placeholder={kind === 'files' ? '搜索当前文件夹' : '搜索技能'} />
       {read.loading && <p role="status">正在读取…</p>}
       {read.error && (
-        <Notice title="候选读取失败" tone="warn">
+        <Notice title="列表读取失败" tone="warn">
           {read.error}
           <Button onClick={read.refresh}>重新读取</Button>
         </Notice>
@@ -575,7 +614,7 @@ function Resources({
           </span>
         </button>
       ))}
-      {read.value && !(files?.length || read.value.skills?.length) && <p>没有匹配的候选。</p>}
+      {read.value && !(files?.length || read.value.skills?.length) && <p>没有匹配的结果。</p>}
     </>
   );
 }

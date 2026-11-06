@@ -33,14 +33,13 @@ export function SessionHistory({
     const message = entry.message;
     if (!message) return [];
     const calls = Array.isArray(message.content)
-      ? message.content.filter((part) => part.type === 'toolCall').map((part) => part.name || 'Tool')
+      ? message.content.filter((part) => part.type === 'toolCall').map((part) => part.name || '工具')
       : [];
     const role =
-      { user: '用户', assistant: 'Agent', toolResult: `工具 · ${message.toolName || 'Tool'}`, system: '系统' }[
+      { user: '用户', assistant: 'Agent', toolResult: `执行步骤 · ${message.toolName || '工具'}`, system: '系统' }[
         message.role
       ] || message.role;
-    const text =
-      messageText(message) || message.errorMessage || (calls.length ? `调用 ${calls.join('、')}` : '没有可显示的文本');
+    const text = messageText(message) || message.errorMessage || (calls.length ? `调用 ${calls.join('、')}` : '');
     return [{ entry, role, text }];
   });
   const matches = entries.filter(({ entry, role, text }) => matchesSearch(`${role} ${text} ${entry.id}`, query));
@@ -64,11 +63,10 @@ export function SessionHistory({
       open
       onClose={close}
       title="会话历史与分支"
-      description="查看历史不会切换执行位置。"
       className="host-history-dialog"
       footer={
         <div className="host-history-footer">
-          <span>{selected ? `${selected.role} · ${selected.entry.id}` : '选择一条消息查看原文'}</span>
+          <span>{selected?.role}</span>
           <Button
             kind="primary"
             disabled={!selected || !!busy}
@@ -110,30 +108,30 @@ export function SessionHistory({
             <span className="host-history-message">
               <span className="host-history-meta">
                 <strong>{role}</strong>
-                <span>{current.size ? (current.has(entry.id) ? '当前分支' : '历史分支') : '分支位置未知'}</span>
-                {entry.message?.isError && <span className="host-history-error">调用失败</span>}
+                {current.size > 0 && !current.has(entry.id) && <span>历史分支</span>}
+                {entry.message?.isError && <span className="host-history-error">失败</span>}
               </span>
-              <span className="host-history-excerpt">{text}</span>
+              {text.trim() && <span className="host-history-excerpt">{text}</span>}
             </span>
           </label>
         ))}
         {!matches.length && (
           <p className="empty-search" role="status">
-            {nodes.length ? '没有匹配的消息，试试其他关键词。' : '还没有保存的历史消息。'}
+            {entries.length ? '没有匹配的消息。' : '还没有保存的历史消息。'}
           </p>
         )}
       </fieldset>
       <details className="host-history-actions">
-        <summary>调整执行位置与上下文</summary>
-        <Notice title="切换执行位置会影响来源决定" tone="warn">
-          来源分支变化可能撤销已有项目决定。查看原始证据不会切换分支。
+        <summary>从某条消息继续或整理上下文</summary>
+        <Notice title="从所选消息继续会改变后续对话" tone="warn">
+          之后的对话会从所选消息接着进行，基于原来对话做出的项目决定可能被撤销。
         </Notice>
         <div className="inline-actions">
           <Button disabled={!selected || blocked} onClick={() => void act('branch')}>
-            {busy === 'branch' ? '正在切换…' : '切换到所选位置'}
+            {busy === 'branch' ? '正在切换…' : '从所选消息继续'}
           </Button>
           <Button kind="ghost" disabled={blocked} onClick={() => void act('compact')}>
-            {busy === 'compact' ? '正在压缩…' : '压缩当前上下文'}
+            {busy === 'compact' ? '正在整理…' : '整理上下文'}
           </Button>
         </div>
         {session.busy && <p role="status">会话正在执行，结束后可调整。</p>}

@@ -113,7 +113,7 @@ export function projectTrajectory(session: Session): TrajectoryGroup[] {
 }
 
 export function turnText(turn: TrajectoryTurn) {
-  return messageText(turn.message) || (turn.live ? '正在生成…' : '模型调用');
+  return messageText(turn.message) || (turn.live ? '正在生成…' : '');
 }
 export function matchesSearch(text: string, query: string) {
   const haystack = text.toLocaleLowerCase();

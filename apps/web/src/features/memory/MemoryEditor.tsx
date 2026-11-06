@@ -4,14 +4,14 @@ import type { Host, Route, MemoryDetail } from '../../app/types';
 import { useRead } from '../../app/types';
 import { Button, Field, Notice, Modal } from '../../components/ui';
 import { Diff } from '../../components/structured-content';
-import { Failure, projectName } from '../../components/reading';
+import { Failure } from '../../components/reading';
 import { type MemoryDrafts, memoryKey, newMemoryDraft, reconcileMemory, submitMemory } from './memory-management';
 const actions = {
   create: '新建记忆',
   revise: '编辑记忆',
-  confirm: '重新确认认识',
-  retire: '撤销记忆',
-  delete: '移除记忆',
+  confirm: '确认仍然有效',
+  retire: '停用记忆',
+  delete: '删除记忆',
 };
 const kinds = { fact: '事实', experience: '经验', decision: '决定', hypothesis: '怀疑 · 未验证' };
 export function MemoryEditor({
@@ -20,12 +20,15 @@ export function MemoryEditor({
   store,
   go,
   back,
+  showBack,
 }: {
   host: Host;
   route: Extract<Route, { page: 'memory-edit' }>;
   store: MemoryDrafts;
   go: (r: Route) => void;
   back: () => void;
+  /** False when the shell header already offers the same back control. */
+  showBack: boolean;
 }) {
   const project = route.project || '',
     action = route.action,
@@ -117,16 +120,14 @@ export function MemoryEditor({
   const latest = draft.latest?.current;
   return (
     <>
-      <Button kind="ghost" className="aw-return" onClick={back}>
-        <ArrowLeft size={15} />
-        返回上一页
-      </Button>
+      {showBack && (
+        <Button kind="ghost" className="aw-return" onClick={back}>
+          <ArrowLeft size={15} />
+          返回上一页
+        </Button>
+      )}
       <header className="aw-heading">
         <h1 tabIndex={-1}>{actions[action]}</h1>
-        <span className="aw-muted" title={project}>
-          {project ? `${projectName(project)} 项目` : '全局'}
-          {draft.base ? ` · 基于修订 ${draft.base.revision}` : ''}
-        </span>
       </header>
       {host.connection !== 'ready' && (
         <Notice title="连接尚未恢复" tone="warn">
@@ -135,13 +136,13 @@ export function MemoryEditor({
       )}
       {read.error && draft.phase !== 'uncertain' && <Failure error={read.error} retry={read.refresh} />}
       {read.value?.current?.status === 'deleted' && (
-        <Notice title="此记忆已移除" tone="warn">
+        <Notice title="此记忆已删除" tone="warn">
           可保留或复制本地草稿，不能继续修改这条记录。
         </Notice>
       )}
       {read.value?.current?.unavailable && action !== 'delete' && (
         <Notice title="来源暂不可用" tone="warn">
-          当前认识暂不参与检索，待 Host 确认来源后才能继续修改。
+          Agent 暂不会参考这条记忆，来源确认后才能继续修改。
         </Notice>
       )}
       {draft.phase === 'conflict' && (
@@ -187,14 +188,15 @@ export function MemoryEditor({
         <section className="host-memory-comparison">
           <h2>最新修订 {latest?.revision}</h2>
           <p>
-            {latest?.title} · {latest && kinds[latest.kind]} · {latest?.scope === 'global' ? '全局' : '此项目'} ·{' '}
+            {latest?.title} · {latest && kinds[latest.kind]} ·{' '}
+            {latest?.scope === 'global' ? '所有项目通用' : '仅此项目'} ·{' '}
             {latest?.status === 'current'
               ? latest.usable
-                ? '可用于当前检索'
+                ? 'Agent 会参考'
                 : '来源暂不可用'
               : latest?.status === 'withdrawn'
-                ? '已撤销'
-                : '已移除'}
+                ? '已停用'
+                : '已删除'}
           </p>
           <Diff file="当前正文与本地草稿" before={latest?.content || ''} after={draft.knowledge.content} />
           {!draft.receipt && latest && (
@@ -227,15 +229,15 @@ export function MemoryEditor({
               <h2>{draft.knowledge.title}</h2>
               <p>
                 {action === 'delete'
-                  ? '移除后不再参与当前检索，历史仍可查询，不能重新确认此记录。'
-                  : '撤销后不再参与当前检索；来源和历史保留，可另行重新确认。'}
+                  ? '删除后 Agent 不再参考，历史仍可查询，不能再恢复此记录。'
+                  : '停用后 Agent 不再参考；来源和历史保留，之后可以确认仍然有效来恢复。'}
               </p>
             </>
           ) : (
             <>
-              <Field label="记忆标题">
+              <Field label="标题">
                 <input
-                  aria-label="记忆标题"
+                  aria-label="标题"
                   required
                   maxLength={240}
                   value={draft.knowledge.title}
@@ -245,7 +247,7 @@ export function MemoryEditor({
               <div className="host-memory-fields">
                 <Field label="性质">
                   <select
-                    aria-label="知识性质"
+                    aria-label="性质"
                     value={draft.knowledge.kind}
                     onChange={(e) =>
                       update({ knowledge: { ...draft.knowledge, kind: e.target.value as typeof draft.knowledge.kind } })
@@ -258,24 +260,24 @@ export function MemoryEditor({
                     ))}
                   </select>
                 </Field>
-                <Field label="作用域">
+                <Field label="适用范围">
                   <select
-                    aria-label="记忆作用域"
+                    aria-label="适用范围"
                     value={draft.knowledge.scope}
                     onChange={(e) =>
                       update({ knowledge: { ...draft.knowledge, scope: e.target.value as 'global' | 'project' } })
                     }
                   >
-                    <option value="global">Global · 跨项目</option>
+                    <option value="global">所有项目通用</option>
                     <option value="project" disabled={!project}>
-                      Project · 此项目
+                      仅此项目
                     </option>
                   </select>
                 </Field>
               </div>
               <Field label="正文">
                 <textarea
-                  aria-label="知识内容"
+                  aria-label="正文"
                   required
                   maxLength={32000}
                   rows={8}
@@ -285,9 +287,9 @@ export function MemoryEditor({
               </Field>
             </>
           )}
-          <Field label={action === 'create' ? '保存依据' : '修改依据'}>
+          <Field label={action === 'create' ? '保存原因' : '修改原因'}>
             <textarea
-              aria-label="修改依据"
+              aria-label={action === 'create' ? '保存原因' : '修改原因'}
               required
               maxLength={4000}
               rows={3}
@@ -295,10 +297,9 @@ export function MemoryEditor({
               onChange={(e) => update({ reason: e.target.value })}
             />
           </Field>
-          {action === 'confirm' && <p>重新确认将以此正文建立当前认识及适用依据，旧来源与历史保留。</p>}
           {action === 'revise' && draft.base?.status === 'withdrawn' && (
-            <Notice title="此记忆已撤销" tone="warn">
-              普通修订不会恢复检索；需要另行重新确认。
+            <Notice title="此记忆已停用" tone="warn">
+              修改内容不会恢复使用；需要另行确认仍然有效。
             </Notice>
           )}
           <div className="host-memory-actions">
@@ -317,12 +318,11 @@ export function MemoryEditor({
                     ? '保存修订'
                     : actions[action]}
             </Button>
-            <Button onClick={back}>暂时离开</Button>
             {draft.phase !== 'saving' && (
               <Button
                 kind="ghost"
                 onClick={() => {
-                  if (window.confirm('放弃这份本地草稿？此操作不会更改 Host 记录。')) {
+                  if (window.confirm('放弃这份本地草稿？已保存的记忆不会改变。')) {
                     store.remove(key);
                     back();
                   }
@@ -346,9 +346,9 @@ export function MemoryEditor({
             : management
               ? actions[action]
               : draft.knowledge.scope !== draft.base?.scope && draft.base
-                ? '确认调整作用域'
+                ? '确认调整适用范围'
                 : action === 'confirm'
-                  ? '重新确认认识'
+                  ? '确认仍然有效'
                   : '确认保存'
         }
       >
@@ -356,16 +356,16 @@ export function MemoryEditor({
           {draft.phase === 'uncertain'
             ? '上次请求的结果尚未确认。重新提交可能创建重复记忆；继续编辑将采用刚读取的当前版本。'
             : draft.knowledge.scope === 'global' && draft.base?.scope === 'project'
-              ? '这份内容将可被所有项目读取；原项目历史与来源仍按 Host 权限过滤。'
+              ? '这份内容将用于所有项目；原项目的历史与来源仍只在原项目中可见。'
               : draft.base && draft.base.scope !== draft.knowledge.scope && draft.knowledge.scope === 'project'
-                ? '这条记忆将仅适用于当前项目；其他项目不能再读取，历史也按当前作用域限制。'
+                ? '这条记忆将仅适用于当前项目；其他项目不能再读取，历史也只在此项目中可见。'
                 : action === 'delete'
-                  ? '移除后不能重新确认。历史仍然保留。'
+                  ? '删除后不能恢复。历史仍然保留。'
                   : action === 'retire'
-                    ? '撤销后 Agent 普通检索不再返回这条记忆。'
+                    ? '停用后 Agent 不再参考这条记忆。'
                     : action === 'confirm'
-                      ? '这会重新建立当前认识及适用依据。'
-                      : '内容和依据将追加为 Host 中的一个修订。'}
+                      ? '这会把此正文确认为当前有效的内容。'
+                      : '内容和修改原因将保存为一个新修订。'}
         </p>
         <div className="modal-footer">
           <Button onClick={() => C(false)}>取消</Button>

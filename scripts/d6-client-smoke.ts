@@ -71,10 +71,10 @@ try {
   await page.getByLabel('引用项目文件').click();
   await page.getByRole('dialog', { name: '引用项目文件' }).waitFor();
   await page.getByRole('button', { name: /notes/ }).click();
-  const query = page.getByPlaceholder('搜索当前目录');
+  const query = page.getByPlaceholder('搜索当前文件夹');
   await query.fill('alpha');
   await page.getByRole('button', { name: /alpha.txt/ }).waitFor();
-  await page.getByLabel('返回上级目录').click();
+  await page.getByLabel('返回上级文件夹').click();
   await page.getByRole('button', { name: /src/ }).waitFor();
   assert.equal(await query.inputValue(), '', 'directory navigation must clear the file keyword');
   await page.getByRole('button', { name: '关闭' }).click();
@@ -87,14 +87,14 @@ try {
   await page.getByRole('button', { name: /返回/ }).first().waitFor();
   await page.getByRole('button', { name: /返回/ }).first().click();
   await page.getByLabel('发送给 Agent').waitFor();
-  await page.getByRole('button', { name: '轨迹' }).click();
-  await page.locator('[aria-label="会话轨迹"]').waitFor();
+  await page.getByRole('button', { name: '执行过程' }).click();
+  await page.locator('[aria-label="执行过程"]').waitFor();
   await page.getByRole('button', { name: '记忆' }).click();
   await page.getByRole('heading', { name: '已保存的记忆' }).waitFor();
   await page.getByRole('button', { name: '新建记忆' }).click();
-  await page.getByLabel('记忆标题').fill('D6 受控记忆');
-  await page.getByLabel('知识内容').fill('初始可检索正文。');
-  await page.getByLabel('修改依据').fill('隔离验收创建。');
+  await page.getByLabel('标题', { exact: true }).fill('D6 受控记忆');
+  await page.getByLabel('正文', { exact: true }).fill('初始可检索正文。');
+  await page.getByLabel('保存原因').fill('隔离验收创建。');
   await page.getByRole('button', { name: '保存记忆' }).click();
   await page.waitForTimeout(800);
   const memoryFailure = page.getByRole('alert');
@@ -103,8 +103,8 @@ try {
   // The formal editor immediately projects a confirmed write to the read-only record.
   await page.getByRole('heading', { name: 'D6 受控记忆' }).waitFor();
   await page.getByRole('button', { name: '编辑记忆' }).click();
-  await page.getByLabel('知识内容').fill('修订后的可检索正文。');
-  await page.getByLabel('修改依据').fill('隔离验收修订。');
+  await page.getByLabel('正文', { exact: true }).fill('修订后的可检索正文。');
+  await page.getByLabel('修改原因').fill('隔离验收修订。');
   await page.getByRole('button', { name: '保存修订' }).click();
   await page.getByRole('heading', { name: 'D6 受控记忆' }).waitFor();
   await page.getByRole('button', { name: /修订历史/ }).click();
@@ -124,7 +124,7 @@ try {
   });
   await page.getByRole('button', { name: /D6 受控记忆/ }).click();
   await page.getByRole('heading', { name: 'D6 受控记忆' }).waitFor();
-  await page.getByRole('button', { name: '返回上一页' }).click();
+  await page.getByRole('button', { name: '返回上一个位置', exact: true }).click();
   await memorySearch.waitFor();
   assert.equal(await memorySearch.inputValue(), 'D6', '同页返回必须保留仅内存中的记忆查询');
   await page.reload();
@@ -135,7 +135,7 @@ try {
   await page.getByRole('button', { name: '导入技能' }).click();
   const skillDialog = page.getByRole('dialog', { name: '导入技能' });
   await skillDialog.getByLabel('Skill 来源').fill(skillSource);
-  await skillDialog.getByText('Extension 与知识文件归属').click();
+  await skillDialog.getByText('代码扩展与知识文件归属').click();
   await skillDialog
     .getByLabel('Skill 绑定')
     .fill('[{"skill":"SKILL.md","extensions":[],"knowledgeFiles":["knowledge.md"]}]');
@@ -162,8 +162,8 @@ try {
   await page.locator(`.session-list [data-session="${first.id}"]`).click();
   const skillInput = page.locator('.host-retained-session:not([hidden])').getByLabel('发送给 Agent');
   await skillInput.fill('保留这段任务描述');
-  await page.getByLabel('引用 Skill').click();
-  const skillPicker = page.getByRole('dialog', { name: '引用 Skill' });
+  await page.getByLabel('引用技能').click();
+  const skillPicker = page.getByRole('dialog', { name: '引用技能' });
   await skillPicker.getByRole('button', { name: /d6-controlled-skill/ }).click();
   assert.equal(
     await skillInput.inputValue(),
@@ -198,8 +198,8 @@ try {
   assert.equal(await restoredInput.inputValue(), '失败后仍需保留的草稿');
   await page.getByRole('alert').filter({ hasText: '受控提交失败' }).waitFor();
   await page.unrouteAll({ behavior: 'wait' });
-  await page.locator('.sidebar').getByRole('button', { name: '反思记录', exact: true }).click();
-  await page.getByRole('heading', { name: '反思记录' }).waitFor();
+  await page.locator('.sidebar').getByRole('button', { name: '自动复盘', exact: true }).click();
+  await page.getByRole('heading', { name: '自动复盘' }).waitFor();
   assert.ok(host.service.reflection.jobs.list().length >= 1, '会话完成后没有登记真实 Reflection 工作');
   assert.equal(host.service.reflection.list().length, 0, '受控 Host 未配置 native Reflection，不应伪造反思记录');
   await page.getByRole('button', { name: '改进建议' }).click();
@@ -215,7 +215,7 @@ try {
   await page.getByRole('heading', { name: 'D6 受控建议' }).waitFor();
   await page.getByRole('button', { name: '采纳并讨论' }).click();
   await page.locator('.host-retained-session:not([hidden])').getByLabel('发送给 Agent').waitFor();
-  const activityPanel = page.getByLabel('能力目标与开发活动');
+  const activityPanel = page.getByLabel('能力目标与改进进度');
   await activityPanel.waitFor();
   await activityPanel.getByText('讨论中').waitFor();
   await activityPanel.getByRole('button', { name: '审阅开发授权' }).click();
@@ -245,9 +245,9 @@ try {
   const fileTrigger = page.getByLabel('引用项目文件');
   await fileTrigger.click();
   const fileDialog = page.getByRole('dialog', { name: '引用项目文件' });
-  await fileDialog.getByPlaceholder('搜索当前目录').waitFor();
+  await fileDialog.getByPlaceholder('搜索当前文件夹').waitFor();
   await fileDialog.getByRole('button', { name: /notes/ }).click();
-  await fileDialog.getByPlaceholder('搜索当前目录').fill('alpha');
+  await fileDialog.getByPlaceholder('搜索当前文件夹').fill('alpha');
   await fileDialog.getByRole('button', { name: /alpha.txt/ }).waitFor();
   await assertNoHorizontalOverflow(850);
   await fileDialog.getByRole('button', { name: '关闭' }).click();
@@ -259,7 +259,7 @@ try {
   await page.locator('.sidebar.shown').locator(`[data-session="${first.id}"]`).click();
   await page.locator('.host-retained-session:not([hidden])').getByLabel('发送给 Agent').waitFor();
   await page.getByLabel('引用项目文件').click();
-  await page.getByRole('dialog', { name: '引用项目文件' }).getByPlaceholder('搜索当前目录').waitFor();
+  await page.getByRole('dialog', { name: '引用项目文件' }).getByPlaceholder('搜索当前文件夹').waitFor();
   await assertNoHorizontalOverflow(390);
   await page.getByRole('dialog', { name: '引用项目文件' }).getByRole('button', { name: '关闭' }).click();
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === '引用项目文件', undefined, {

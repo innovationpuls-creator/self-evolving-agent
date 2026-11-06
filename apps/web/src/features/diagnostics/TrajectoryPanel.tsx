@@ -1,3 +1,4 @@
+import { X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type {
   DiagnosticCall,
@@ -5,6 +6,7 @@ import type {
   DiagnosticTrace,
   DiagnosticTurn,
 } from '../../../../host/diagnostics/diagnostics';
+import { IconButton } from '../../components/ui';
 import { messageText, type Session } from '../chat/session-state';
 import { EvidenceView } from './EvidenceView';
 import type { Api, EvidenceReference, EvidenceTarget } from './evidence';
@@ -15,6 +17,7 @@ import {
   turnText,
   type TrajectoryCall,
   type TrajectoryGroup,
+  type TrajectoryTurn,
 } from './trajectory-state';
 import './trajectory.css';
 
@@ -114,7 +117,7 @@ export function TrajectoryPanel({
         }
       })
       .catch((reason: unknown) => {
-        if (live) setError(reason instanceof Error ? reason.message : '轨迹读取失败');
+        if (live) setError(reason instanceof Error ? reason.message : '执行过程读取失败，请重试。');
       });
     return () => {
       live = false;
@@ -300,24 +303,64 @@ export function TrajectoryPanel({
         : selectedGroup?.user && !selectedGroup.user.id.startsWith('live:')
           ? { sessionId: session.id, entryId: selectedGroup.user.id }
           : undefined;
-  const showStatus = (g: TrajectoryGroup) =>
+  // Only exceptional states are labelled; a normally ended execution or call needs no status.
+  const groupStatus = (g: TrajectoryGroup): string | undefined =>
     g.complete
-      ? (({ ...statuses } as Record<string, string>)[g.status ?? 'ended'] ?? '执行已结束')
+      ? g.status && g.status !== 'ended'
+        ? (statuses as Record<string, string>)[g.status]
+        : undefined
       : g === groups.at(-1) && session.busy
         ? '运行中'
         : g.traceId
           ? '当前分支片段'
-          : '原生历史';
-  const callStatus = (item: TrajectoryCall) =>
+          : undefined;
+  const groupTitle = (g: TrajectoryGroup) =>
+    (g.user?.message && messageText(g.user.message)) || (g.traceId ? '执行' : g.turns.length ? '早期历史' : '会话事件');
+  const callStatus = (item: TrajectoryCall, g: TrajectoryGroup | undefined): string | undefined =>
     item.result
       ? item.result.isError
         ? '调用失败'
-        : '调用完成'
-      : session.busy && selectedGroup === groups.at(-1)
+        : undefined
+      : session.busy && g === groups.at(-1)
         ? '等待结果'
         : '当前分支未包含结果';
+  const turnModel = (t: TrajectoryTurn) => t.message.model ?? (t.live ? session.model : undefined);
+  // Each rendered group names its first Turn's model, then only a change within the group.
+  const shownModel = (g: TrajectoryGroup, ordinal: number) => {
+    const model = turnModel(g.turns[ordinal] as TrajectoryTurn);
+    const previous = g.turns
+      .slice(0, ordinal)
+      .map(turnModel)
+      .findLast((value) => !!value);
+    return model && model !== previous ? model : undefined;
+  };
+  const entryLabel = (e: TrajectoryGroup['entries'][number]) =>
+    e.message?.toolName ??
+    (e.message?.role === 'system' ? '系统提示' : undefined) ??
+    (
+      {
+        compaction: '整理上下文',
+        model_change: '模型设置',
+        thinking_level_change: '推理强度调整',
+        custom_message: '运行消息',
+      } as Record<string, string>
+    )[e.type] ??
+    '运行记录';
+  const entryText = (e: TrajectoryGroup['entries'][number]) => {
+    if (e.message) return messageText(e.message);
+    const fields = e as Record<string, unknown>;
+    const value =
+      e.type === 'model_change'
+        ? fields.modelId
+        : e.type === 'thinking_level_change'
+          ? fields.thinkingLevel
+          : undefined;
+    return typeof value === 'string' ? value : e.timestamp ? date(Date.parse(e.timestamp)) : '';
+  };
+  const knownDuration = (value: number | undefined | null) => (value == null ? undefined : duration(value));
+  const join = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(' · ');
   return (
-    <section className="trajectory-panel" aria-label="会话轨迹">
+    <section className="trajectory-panel" aria-label="执行过程">
       <div className="trajectory-toolbar">
         <button type="button" onClick={() => update({ collapsed: ui.collapsed.length ? [] : groups.map((g) => g.id) })}>
           {ui.collapsed.length ? '展开轮次' : '折叠轮次'}
@@ -331,8 +374,8 @@ export function TrajectoryPanel({
           {ui.callsCollapsed.length ? '展开调用' : '折叠调用'}
         </button>
         <input
-          aria-label="搜索已加载轨迹"
-          placeholder="搜索已加载轨迹"
+          aria-label="搜索执行过程"
+          placeholder="搜索执行过程"
           value={ui.query}
           onChange={(e) => update({ query: e.target.value })}
         />
@@ -341,7 +384,7 @@ export function TrajectoryPanel({
         <p className="notice error" role="alert">
           {error}{' '}
           <button type="button" onClick={() => setRefresh((n) => n + 1)}>
-            重试轨迹
+            重新读取
           </button>
         </p>
       )}
@@ -359,7 +402,7 @@ export function TrajectoryPanel({
         >
           {groups.length > ui.count && (
             <button type="button" onClick={() => update({ count: ui.count + 30, follow: false })}>
-              加载更早轨迹
+              加载更早的记录
             </button>
           )}
           {!groups.length && <p className="diagnostics-muted">此会话尚无执行记录。</p>}
@@ -381,65 +424,70 @@ export function TrajectoryPanel({
                     aria-current={selection?.group === g.id && !selection.turn && !selection.entry ? 'true' : undefined}
                     onClick={() => choose({ group: g.id })}
                   >
-                    <b>
-                      {g.traceId ? 'Trace' : g.turns.length ? '早期历史' : '会话事件'} · {showStatus(g)}
-                    </b>
-                    <span>
-                      {g.user?.message ? messageText(g.user.message) : '执行概要'} · {g.turns.length} 个模型轮次 ·{' '}
-                      {g.turns.reduce((n, t) => n + t.calls.length, 0)} 次 Tool
-                    </span>
+                    <b>{groupTitle(g)}</b>
+                    {groupStatus(g) && <span>{groupStatus(g)}</span>}
                   </button>
                 </div>
                 {!ui.collapsed.includes(g.id) && (
                   <>
-                    {g.turns.map((t, ordinal) => (
-                      <div className="trajectory-turn" key={t.id} data-turn-id={t.entryId}>
-                        <button
-                          type="button"
-                          className="trajectory-row"
-                          aria-current={selection?.turn === t.id && !selection.call ? 'true' : undefined}
-                          onClick={() => choose({ group: g.id, turn: t.id })}
-                        >
-                          <small>
-                            Turn {ordinal + 1} · {t.message.model ?? (t.live ? session.model : '模型未知')}
-                          </small>
-                          <span>{turnText(t)}</span>
-                          {t.message.errorMessage && <span className="inline-error">{t.message.errorMessage}</span>}
-                        </button>
-                        {!!t.calls.length && (
-                          <button
-                            type="button"
-                            className="trajectory-fold"
-                            onClick={() => toggle('callsCollapsed', t.id)}
-                          >
-                            {ui.callsCollapsed.includes(t.id) ? '展开' : '收起'} {t.calls.length} 次调用
-                          </button>
-                        )}
-                        {!ui.callsCollapsed.includes(t.id) &&
-                          t.calls.map((c) => (
+                    {g.turns.map((t, ordinal) => {
+                      const text = turnText(t);
+                      const model = shownModel(g, ordinal);
+                      const blank = !text && !model && !t.message.errorMessage;
+                      const open = !ui.callsCollapsed.includes(t.id);
+                      return (
+                        <div className="trajectory-turn" key={t.id} data-turn-id={t.entryId}>
+                          <div className="trajectory-turn-line">
+                            {t.calls.length ? (
+                              <button
+                                type="button"
+                                className="trajectory-fold"
+                                aria-label={`切换调用 ${t.id}`}
+                                aria-expanded={open}
+                                onClick={() => toggle('callsCollapsed', t.id)}
+                              >
+                                {open ? '▾' : '▸'}
+                              </button>
+                            ) : (
+                              <span className="trajectory-fold" aria-hidden="true" />
+                            )}
                             <button
                               type="button"
-                              key={c.id}
-                              data-call-id={c.id}
-                              className="trajectory-row trajectory-call"
-                              aria-current={selection?.call === c.id ? 'true' : undefined}
-                              onClick={() => choose({ group: g.id, turn: t.id, call: c.id })}
+                              className="trajectory-row"
+                              aria-current={selection?.turn === t.id && !selection.call ? 'true' : undefined}
+                              onClick={() => choose({ group: g.id, turn: t.id })}
                             >
-                              <small>
-                                Tool · {c.name} ·{' '}
-                                {c.result
-                                  ? c.result.isError
-                                    ? '调用失败'
-                                    : '调用完成'
-                                  : session.busy && g === groups.at(-1)
-                                    ? '等待结果'
-                                    : '当前分支未包含结果'}
-                              </small>
-                              <span>{c.result ? messageText(c.result) : JSON.stringify(c.args)}</span>
+                              {model && <small>{model}</small>}
+                              {blank && <small>模型轮次 {ordinal + 1}</small>}
+                              {text && <span>{text}</span>}
+                              {t.message.errorMessage && <span className="inline-error">{t.message.errorMessage}</span>}
                             </button>
-                          ))}
-                      </div>
-                    ))}
+                          </div>
+                          {open &&
+                            t.calls.map((c) => {
+                              const status = callStatus(c, g);
+                              return (
+                                <button
+                                  type="button"
+                                  key={c.id}
+                                  data-call-id={c.id}
+                                  className="trajectory-row trajectory-call"
+                                  aria-current={selection?.call === c.id ? 'true' : undefined}
+                                  onClick={() => choose({ group: g.id, turn: t.id, call: c.id })}
+                                >
+                                  <small>
+                                    {c.name}
+                                    {status && (
+                                      <em className={c.result?.isError ? 'inline-error' : undefined}> · {status}</em>
+                                    )}
+                                  </small>
+                                  <span>{c.result ? messageText(c.result) : JSON.stringify(c.args)}</span>
+                                </button>
+                              );
+                            })}
+                        </div>
+                      );
+                    })}
                     {g.entries
                       .filter(
                         (e) =>
@@ -449,40 +497,26 @@ export function TrajectoryPanel({
                               e.message.role !== 'assistant' &&
                               !g.turns.some((t) => t.calls.some((c) => c.resultEntryId === e.id)))),
                       )
-                      .map((e) => (
-                        <button
-                          type="button"
-                          key={e.id}
-                          className="trajectory-row"
-                          aria-current={selection?.entry === e.id ? 'true' : undefined}
-                          onClick={() => choose({ group: g.id, entry: e.id })}
-                        >
-                          <small>
-                            {e.message?.toolName ??
-                              (
-                                {
-                                  compaction: '上下文压缩',
-                                  model_change: '模型设置',
-                                  thinking_level_change: '推理强度调整',
-                                  custom_message: '运行消息',
-                                } as Record<string, string>
-                              )[e.type] ??
-                              e.type}
-                          </small>
-                          <span>
-                            {e.message
-                              ? messageText(e.message)
-                              : date(e.timestamp ? Date.parse(e.timestamp) : undefined)}
-                          </span>
-                        </button>
-                      ))}
+                      .map((e) => {
+                        const text = entryText(e);
+                        return (
+                          <button
+                            type="button"
+                            key={e.id}
+                            className="trajectory-row"
+                            aria-current={selection?.entry === e.id ? 'true' : undefined}
+                            onClick={() => choose({ group: g.id, entry: e.id })}
+                          >
+                            <small>{entryLabel(e)}</small>
+                            {text && <span>{text}</span>}
+                          </button>
+                        );
+                      })}
                   </>
                 )}
               </section>
             ))}
-          {ui.query && !visible.some((g) => matchesSearch(JSON.stringify(g), ui.query)) && (
-            <p>已加载轨迹中没有匹配记录。</p>
-          )}
+          {ui.query && !visible.some((g) => matchesSearch(JSON.stringify(g), ui.query)) && <p>没有匹配的记录。</p>}
           {newContent && (
             <button
               className="trajectory-new"
@@ -498,20 +532,20 @@ export function TrajectoryPanel({
           )}
         </div>
         {(selection || source) && (
-          <aside className="trajectory-inspector" aria-label="轨迹详情">
-            <button
-              type="button"
+          <aside className="trajectory-inspector" aria-label="步骤详情">
+            <IconButton
+              label="关闭详情"
               onClick={() => {
                 update({ selection: undefined });
                 setSource(undefined);
                 setSourceTarget(undefined);
               }}
             >
-              关闭详情
-            </button>
+              <X size={16} />
+            </IconButton>
             {source ? (
               <>
-                <h2>来源会话轨迹</h2>
+                <h2>来源会话的执行过程</h2>
                 <p className="diagnostics-id">Session {source.sessionId}</p>
                 <p>只读查看来源；当前执行分支保持不变。</p>
                 {source.error ? (
@@ -527,17 +561,21 @@ export function TrajectoryPanel({
               </>
             ) : (
               <>
-                <h2>{call ? call.name : turn ? '模型轮次' : '执行概要'}</h2>
+                <h2>{call ? call.name : turn ? '模型轮次' : selectedGroup ? groupTitle(selectedGroup) : '执行概要'}</h2>
                 {call ? (
                   <>
-                    <p>
-                      {callStatus(call)} ·{' '}
-                      {duration(
-                        call.result && recordedCall?.resultEntryId === call.resultEntryId
-                          ? recordedCall?.durationMs
-                          : call.result?.durationMs,
-                      )}
-                    </p>
+                    {(() => {
+                      const status = callStatus(call, selectedGroup);
+                      const line = join(
+                        status,
+                        knownDuration(
+                          call.result && recordedCall?.resultEntryId === call.resultEntryId
+                            ? recordedCall?.durationMs
+                            : call.result?.durationMs,
+                        ),
+                      );
+                      return line && <p className={call.result?.isError ? 'inline-error' : undefined}>{line}</p>;
+                    })()}
                     <details>
                       <summary>参数</summary>
                       <pre>{JSON.stringify(call.args, null, 2)}</pre>
@@ -553,12 +591,14 @@ export function TrajectoryPanel({
                 ) : turn ? (
                   <>
                     <p>
-                      {turn.message.model ?? (turn.live ? session.model : '模型未知')} ·{' '}
-                      {turn.message.provider ?? (turn.live ? session.provider : 'Provider 未知')} ·{' '}
-                      {duration(
-                        recordedTurn?.ended != null && recordedTurn.started != null
-                          ? recordedTurn.ended - recordedTurn.started
-                          : turn.message.durationMs,
+                      {join(
+                        turnModel(turn),
+                        turn.message.provider ?? (turn.live ? session.provider : undefined),
+                        knownDuration(
+                          recordedTurn?.ended != null && recordedTurn.started != null
+                            ? recordedTurn.ended - recordedTurn.started
+                            : turn.message.durationMs,
+                        ),
                       )}
                     </p>
                     {turn.message.errorMessage && <p role="alert">{turn.message.errorMessage}</p>}
@@ -569,11 +609,15 @@ export function TrajectoryPanel({
                 ) : (
                   selectedGroup && (
                     <>
-                      <p>
-                        {showStatus(selectedGroup)} · {selectedGroup.turns.length} 个模型轮次 ·{' '}
-                        {selectedGroup.turns.reduce((n, t) => n + t.calls.length, 0)} 次 Tool
-                      </p>
-                      {selectedGroup.user?.message && <p>{messageText(selectedGroup.user.message)}</p>}
+                      {(() => {
+                        const steps = selectedGroup.turns.reduce((n, t) => n + t.calls.length, 0);
+                        const line = join(
+                          groupStatus(selectedGroup),
+                          !!selectedGroup.turns.length && `${selectedGroup.turns.length} 个模型轮次`,
+                          !!steps && `${steps} 个执行步骤`,
+                        );
+                        return line && <p>{line}</p>;
+                      })()}
                       {selectedGroup.complete && nativeDetail && (
                         <>
                           <p>
@@ -605,21 +649,22 @@ export function TrajectoryPanel({
                         </>
                       )}
                       {nativeDetail?.health && (!nativeDetail.health.available || nativeDetail.health.dropped > 0) && (
-                        <p className="notice">诊断索引不完整；以原始会话证据为准。</p>
+                        <p className="notice">部分统计缺失；以原始记录为准。</p>
                       )}
-                      {nativeDetail?.trace.incomplete && <p className="notice">部分诊断记录缺失。</p>}
+                      {nativeDetail?.trace.incomplete && <p className="notice">部分统计记录缺失。</p>}
                     </>
                   )
                 )}
                 {reference && (
                   <details open={rawOpen} onToggle={(event) => setRawOpen(event.currentTarget.open)}>
-                    <summary>查看原始证据</summary>
+                    <summary>原始记录</summary>
                     {rawOpen && (
                       <EvidenceView
                         key={`${reference.entryId}:${reference.toolCallId ?? ''}`}
                         api={api}
                         reference={reference}
                         refresh={refresh}
+                        titled={false}
                       />
                     )}
                   </details>
@@ -632,6 +677,8 @@ export function TrajectoryPanel({
     </section>
   );
 }
+
+const normalCall = new Set(['succeeded', 'success', 'completed', 'ok']);
 
 function SourceTrace({
   api,
@@ -717,7 +764,13 @@ function SourceTrace({
         open={c.resultEntryId === source.reference?.entryId || c.toolCallId === source.reference?.toolCallId}
       >
         <summary>
-          {c.toolName} · {callStatuses[c.status]} · {duration(c.durationMs)}
+          {[
+            c.toolName,
+            !normalCall.has(c.status) && callStatuses[c.status],
+            c.durationMs != null && duration(c.durationMs),
+          ]
+            .filter(Boolean)
+            .join(' · ')}
         </summary>
         {c.assistantEntryId && (
           <button
@@ -742,12 +795,12 @@ function SourceTrace({
     ));
   return (
     <>
-      {busy && <p role="status">正在读取来源轨迹…</p>}
+      {busy && <p role="status">正在读取来源执行过程…</p>}
       {error && (
         <p role="alert">
           {error}{' '}
           <button type="button" onClick={() => setRetry((n) => n + 1)}>
-            重试来源轨迹
+            重新读取来源
           </button>
         </p>
       )}
@@ -761,10 +814,10 @@ function SourceTrace({
               data-trace-id={trace.id}
               onClick={() => setTraceId(trace.id)}
             >
-              Trace · {statuses[trace.status]} · {date(trace.started)}
+              {[date(trace.started), trace.status !== 'ended' && statuses[trace.status]].filter(Boolean).join(' · ')}
             </button>
           ))}
-          {!catalog.items.length && <p>此来源没有 Trace 索引；原始 Entry 仍可按引用查看。</p>}
+          {!catalog.items.length && <p>此来源没有执行索引，仍可查看引用的原始记录。</p>}
           <div className="diagnostics-controls">
             <button type="button" disabled={busy || !offset} onClick={() => setOffset(Math.max(0, offset - 30))}>
               来源上一页
@@ -788,15 +841,15 @@ function SourceTrace({
               setDetail(undefined);
             }}
           >
-            返回来源会话轨迹
+            返回来源会话的执行过程
           </button>
-          <h3>Trace · {statuses[detail.trace.status]}</h3>
+          <h3>{detail.trace.status === 'ended' ? '执行' : `执行 · ${statuses[detail.trace.status]}`}</h3>
           <p className="diagnostics-id">{detail.trace.id}</p>
           <p>
             {date(detail.trace.started)} ·{' '}
             {duration(detail.trace.ended == null ? null : detail.trace.ended - detail.trace.started)}
           </p>
-          {detail.trace.incomplete && <p className="notice">部分诊断记录缺失。</p>}
+          {detail.trace.incomplete && <p className="notice">部分统计记录缺失。</p>}
           <Metrics value={detail.trace.data} />
           {detail.turns.slice(0, limit).map((t) => (
             <details
@@ -812,7 +865,7 @@ function SourceTrace({
               }
             >
               <summary>
-                Turn {t.ordinal} · {t.model ?? '模型未知'}
+                第 {t.ordinal} 轮 · {t.model ?? '模型未知'}
               </summary>
               <Metrics value={t.usage} />
               {t.assistantEntryId && (

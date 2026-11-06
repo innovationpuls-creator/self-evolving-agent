@@ -149,20 +149,6 @@
 .session-list > button.selected strong {
   font-weight: 500;
 }
-.project-path {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: var(--xs);
-  padding: 6px 9px;
-  flex-wrap: wrap;
-}
-.project-path small {
-  display: block;
-  width: 100%;
-  padding-left: 21px;
-  font-size: 11px;
-}
 .folder-icon {
   font-size: 20px;
   line-height: 1;
@@ -255,6 +241,36 @@
 }
 .breadcrumbs > .icon-btn {
   display: none;
+}
+/* Module pages: place controls float over the page's top padding instead of a header band. */
+.workspace-corner {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  flex: none;
+  display: flex;
+  gap: 8px;
+  height: 0;
+  padding: 8px 12px 0;
+  pointer-events: none;
+}
+.workspace-corner > .icon-btn {
+  display: none;
+  pointer-events: auto;
+  background: var(--canvas);
+}
+.workspace.expanded .workspace-corner > .icon-btn,
+.workspace-corner > .icon-btn[aria-label="返回上一个位置"] {
+  display: inline-flex;
+}
+@media (max-width: 700px) {
+  .workspace-corner {
+    position: static;
+    height: auto;
+  }
+  .workspace-corner > .icon-btn {
+    display: inline-flex;
+  }
 }
 .head-actions {
   display: flex;

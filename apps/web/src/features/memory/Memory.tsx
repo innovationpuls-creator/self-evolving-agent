@@ -36,7 +36,12 @@ export function MemoryCatalog({
   else params.set('scope', 'global');
   if (route.project && route.scope) params.set('scope', route.scope);
   const read = useRead<ReturnType<MemoryService['search']>>(host.api, `/memory?${params}`, ['agent-memory-changed']);
-  const projects = [...new Set(host.sessions.map((s) => s.cwd))];
+  const projects = [...new Set([...host.sessions.map((s) => s.cwd), ...(route.project ? [route.project] : [])])];
+  // One control over the existing route fields (project, scope). Without a project the request is always
+  // scope=global, so scope is ignored there; with a project every scope value has its own option.
+  const range = (project?: string, scope?: 'global' | 'project') =>
+    JSON.stringify(project ? [project, scope ?? ''] : ['', '']);
+  const groups = (['project', 'global'] as const).filter((scope) => read.value?.items.some((m) => m.scope === scope));
   return (
     <>
       <header className="aw-heading">
@@ -44,9 +49,7 @@ export function MemoryCatalog({
         <Button
           kind="primary"
           data-focus="memory-create"
-          onClick={() =>
-            go({ page: 'memory-edit', project: route.project, action: 'create', originSession: host.selected?.id })
-          }
+          onClick={() => go({ page: 'memory-edit', project: route.project, action: 'create' })}
         >
           新建记忆
         </Button>
@@ -55,16 +58,27 @@ export function MemoryCatalog({
         <FolderOpen size={19} />
         <select
           aria-label="浏览范围"
-          title={route.project || '全局记忆'}
-          value={route.project || ''}
-          onChange={(e) => go({ ...route, project: e.target.value || undefined, offset: 0, scope: undefined })}
+          title={route.project || '所有项目通用'}
+          value={range(route.project, route.scope)}
+          onChange={(e) => {
+            const [project, scope] = JSON.parse(e.target.value) as [string, '' | 'global' | 'project'];
+            const next = { ...route, project: project || undefined, scope: scope || undefined, offset: 0 };
+            if (next.project === route.project) replace(next);
+            else go(next);
+          }}
         >
-          <option value="">仅全局记忆</option>
-          {projects.map((p) => (
-            <option value={p} key={p}>
-              {projectName(p)} · {p}
-            </option>
-          ))}
+          <option value={range()}>所有项目通用</option>
+          {projects.map((p) => [
+            <option value={range(p)} key={p} title={p}>
+              {projectName(p)}
+            </option>,
+            <option value={range(p, 'project')} key={`${p}:project`} title={p}>
+              {projectName(p)} · 仅此项目
+            </option>,
+            <option value={range(p, 'global')} key={`${p}:global`} title={p}>
+              {projectName(p)} · 仅通用
+            </option>,
+          ])}
         </select>
       </div>
       {pending.length > 0 && (
@@ -81,19 +95,6 @@ export function MemoryCatalog({
         </div>
       )}
       <div className="aw-toolbar aw-memory-toolbar">
-        {route.project && (
-          <select
-            aria-label="记忆作用域筛选"
-            value={route.scope || ''}
-            onChange={(e) =>
-              replace({ ...route, scope: (e.target.value as 'global' | 'project') || undefined, offset: 0 })
-            }
-          >
-            <option value="">项目与全局</option>
-            <option value="project">仅此项目</option>
-            <option value="global">仅全局</option>
-          </select>
-        )}
         <Button
           kind="ghost"
           aria-pressed={history}
@@ -116,11 +117,11 @@ export function MemoryCatalog({
       {read.error && <Failure error={read.error} retry={read.refresh} />}
       {read.value && (
         <div className="aw-memory-collection">
-          {(['project', 'global'] as const).map((scope) => (
+          {groups.map((scope) => (
             <section key={scope}>
-              {read.value?.items.some((m) => m.scope === scope) && (
-                <h2 className="aw-group-title">
-                  {scope === 'project' ? `${projectName(route.project)} 项目` : '全局记忆'}
+              {groups.length > 1 && (
+                <h2 className="aw-group-title" title={scope === 'project' ? route.project : undefined}>
+                  {scope === 'project' ? projectName(route.project) : '所有项目通用'}
                 </h2>
               )}
               {read.value?.items
@@ -129,13 +130,12 @@ export function MemoryCatalog({
                   <button
                     type="button"
                     className="aw-memory-row"
-                    aria-label={`${m.title} · 修订 ${m.revision}${!m.isCurrent ? ' · 历史' : m.status === 'withdrawn' ? ' · 已撤销' : m.status === 'deleted' ? ' · 已移除' : m.unavailable ? ' · 来源不可用' : ''}`}
+                    aria-label={`${m.title}${history ? ` · 修订 ${m.revision}` : ''}${!m.isCurrent ? ' · 历史' : m.status === 'withdrawn' ? ' · 已停用' : m.status === 'deleted' ? ' · 已删除' : m.unavailable ? ' · 来源不可用' : ''}`}
                     key={`${m.id}:${m.revision}`}
                     data-focus={`${m.id}:${m.revision}`}
                     onClick={() =>
                       go({
                         page: 'result',
-                        originSession: host.selected?.id,
                         target: {
                           kind: 'memory',
                           id: m.id,
@@ -150,11 +150,12 @@ export function MemoryCatalog({
                       <strong title={m.title}>{m.title}</strong>
                       <p>{m.content}</p>
                       <small>
-                        {date(m.created)} · 修订 {m.revision}
+                        {date(m.created)}
+                        {history ? ` · 修订 ${m.revision}` : ''}
                         {!m.isCurrent
                           ? ' · 历史修订'
                           : !m.usable
-                            ? ` · ${m.status === 'withdrawn' ? '已撤销' : m.status === 'deleted' ? '已移除' : m.isCurrent ? '来源不可用' : '历史'}`
+                            ? ` · ${m.status === 'withdrawn' ? '已停用' : m.status === 'deleted' ? '已删除' : '来源不可用'}`
                             : ''}
                       </small>
                     </span>
@@ -163,7 +164,12 @@ export function MemoryCatalog({
                 ))}
             </section>
           ))}
-          {!read.value.items.length && <p className="empty-search">此范围内没有符合条件的记忆</p>}
+          {!read.value.items.length &&
+            (query || history || route.scope || read.value.total ? (
+              <p className="empty-search">此范围内没有符合条件的记忆</p>
+            ) : (
+              <p className="aw-empty">还没有记忆</p>
+            ))}
           {!!read.value.unavailable && <p>有 {read.value.unavailable} 项记忆的来源暂不可用，可通过历史查询阅读。</p>}
           {read.value.total > 30 && (
             <nav className="host-pagination" aria-label="记忆分页">
@@ -194,11 +200,14 @@ export function MemoryReader({
   route,
   go,
   back,
+  showBack,
 }: {
   host: Host;
   route: Extract<Route, { page: 'result' }>;
   go: (route: Route) => void;
   back: () => void;
+  /** False when the shell header already offers the same back control. */
+  showBack: boolean;
 }) {
   const target = route.target,
     read = useRead<MemoryDetail>(host.api, resultPath(target), ['agent-memory-changed']);
@@ -221,12 +230,17 @@ export function MemoryReader({
         (v, i, all) => all.findIndex((a) => a.sessionId === v.sessionId && a.entryId === v.entryId) === i,
       )
     : [];
+  // A user-authored source-less revision needs no source panel; Agent/system revisions keep the
+  // "no visible source" line because it bears on trust.
+  const showSources = !!rev && (refs.length > 0 || rev.actor !== 'user' || !!route.originSession);
   return (
     <>
-      <Button kind="ghost" className="aw-return" onClick={back}>
-        <ArrowLeft size={15} />
-        返回上一页
-      </Button>
+      {showBack && (
+        <Button kind="ghost" className="aw-return" onClick={back}>
+          <ArrowLeft size={15} />
+          返回上一页
+        </Button>
+      )}
       {read.loading && <p role="status">正在读取记忆…</p>}
       {read.error && <Failure error={read.error} retry={read.refresh} />}
       {value && !rev && (
@@ -241,9 +255,10 @@ export function MemoryReader({
               <h1 ref={heading} tabIndex={-1}>
                 {rev.title}
               </h1>
-              <span className="aw-muted">
-                {rev.scope === 'project' ? `${projectName(target.project)} 项目` : '全局'} · {kinds[rev.kind]} · 修订{' '}
-                {rev.revision} · {date(rev.created)}
+              <span className="aw-muted" title={rev.scope === 'project' ? target.project : undefined}>
+                {rev.scope === 'project' ? projectName(target.project) : '所有项目通用'} · {kinds[rev.kind]} ·{' '}
+                {m && m.revision !== rev.revision ? `修订 ${rev.revision} · ` : ''}
+                {date(rev.created)}
               </span>
             </div>
             <div className="aw-document-controls">
@@ -264,10 +279,12 @@ export function MemoryReader({
                   编辑记忆
                 </Button>
               )}
-              <Button kind="ghost" aria-pressed={history} onClick={() => H((v) => !v)}>
-                <Clock3 size={14} />
-                修订历史 · {value?.history.length}
-              </Button>
+              {(value?.history.length ?? 0) > 1 && (
+                <Button kind="ghost" aria-pressed={history} onClick={() => H((v) => !v)}>
+                  <Clock3 size={14} />
+                  修订历史
+                </Button>
+              )}
             </div>
           </header>
           <div className="aw-document-layout">
@@ -275,8 +292,8 @@ export function MemoryReader({
               {m && m.revision !== rev.revision && (
                 <Notice title="历史修订">
                   当前已是修订 {m.revision}
-                  {m.status === 'withdrawn' ? '（已撤销）' : m.status === 'deleted' ? '（已移除）' : ''}
-                  ，此处保留引用时的内容，不参与当前检索。
+                  {m.status === 'withdrawn' ? '（已停用）' : m.status === 'deleted' ? '（已删除）' : ''}
+                  ，此处保留引用时的内容，Agent 不会参考。
                   <Button kind="ghost" onClick={() => go({ ...route, target: { ...target, revision: undefined } })}>
                     查看当前认识
                   </Button>
@@ -297,9 +314,6 @@ export function MemoryReader({
                   </select>
                 </Field>
               )}
-              {history && rev.previousRevision && !previous && (
-                <p className="aw-muted">上一修订不在当前可见历史中，以下显示此修订正文。</p>
-              )}
               {history && previous ? (
                 <section>
                   <h2>实际变化</h2>
@@ -313,33 +327,39 @@ export function MemoryReader({
                 <Markdown text={rev.content} />
               )}
               {m?.revision === rev.revision && (
-                <section className="host-memory-state" aria-label="检索状态">
-                  <p>
-                    {m.usable
-                      ? '可用于 Agent 当前检索'
-                      : m.status === 'withdrawn'
-                        ? '已撤销，不参与当前检索'
+                <section className="host-memory-state" aria-label="使用状态">
+                  {!m.usable && (
+                    <p>
+                      {m.status === 'withdrawn'
+                        ? '已停用，Agent 不会参考'
                         : m.status === 'deleted'
-                          ? '已移除，不参与当前检索'
-                          : '来源暂不可确认，不参与当前检索'}
-                    {m.kind === 'hypothesis' ? ' · 未验证的怀疑' : ''}
-                  </p>
+                          ? '已删除，Agent 不会参考'
+                          : '来源暂不可确认，Agent 不会参考'}
+                    </p>
+                  )}
                   {m.status !== 'deleted' && (
                     <div className="host-memory-actions">
-                      <Button
-                        disabled={host.connection !== 'ready' || m.unavailable}
-                        onClick={() =>
-                          go({
-                            page: 'memory-edit',
-                            id: m.id,
-                            project: target.project,
-                            action: 'confirm',
-                            originSession: route.originSession,
-                          })
-                        }
-                      >
-                        重新确认认识
-                      </Button>
+                      {/* Offered where Host revise({confirm}) has an effect for a user: it restores a withdrawn
+                          memory, records a user check of an Agent/system revision, and resets the basis of a
+                          project decision (a plain edit keeps it). Otherwise it would add an identical revision. */}
+                      {(m.status === 'withdrawn' ||
+                        m.actor !== 'user' ||
+                        (m.kind === 'decision' && m.scope === 'project' && m.basis.length > 0)) && (
+                        <Button
+                          disabled={host.connection !== 'ready' || m.unavailable}
+                          onClick={() =>
+                            go({
+                              page: 'memory-edit',
+                              id: m.id,
+                              project: target.project,
+                              action: 'confirm',
+                              originSession: route.originSession,
+                            })
+                          }
+                        >
+                          确认仍然有效
+                        </Button>
+                      )}
                       {m.status === 'current' && (
                         <Button
                           disabled={host.connection !== 'ready' || m.unavailable}
@@ -353,7 +373,7 @@ export function MemoryReader({
                             })
                           }
                         >
-                          撤销记忆
+                          停用
                         </Button>
                       )}
                       <Button
@@ -369,64 +389,64 @@ export function MemoryReader({
                           })
                         }
                       >
-                        移除记忆
+                        删除
                       </Button>
                     </div>
                   )}
                 </section>
               )}
               <section className="host-revision-reason">
-                <h2>修订依据</h2>
+                <h2>{rev.operation === 'create' ? '保存原因' : '修改原因'}</h2>
                 <p>{rev.reason}</p>
-                <small>
-                  {rev.actor === 'user' ? '用户维护' : rev.actor === 'agent' ? 'Agent 操作' : '系统变更'} ·{' '}
-                  {
+                {rev.actor !== 'user' && (
+                  <small>
+                    {rev.actor === 'agent' ? 'Agent 操作' : '系统变更'} ·{' '}
                     {
-                      create: '创建',
-                      revise: '修订',
-                      confirm: '重新确认',
-                      retire: '撤销',
-                      delete: '移除',
-                      scope: '调整作用域',
-                      branch: '来源回档',
-                    }[rev.operation]
-                  }
-                </small>
+                      {
+                        create: '创建',
+                        revise: '修订',
+                        confirm: '确认仍然有效',
+                        retire: '停用',
+                        delete: '删除',
+                        scope: '调整适用范围',
+                        branch: '来源回档',
+                      }[rev.operation]
+                    }
+                  </small>
+                )}
               </section>
             </article>
-            <aside className="aw-context">
-              <h2>来源</h2>
-              {refs.map((r, i) => (
-                <Button
-                  key={`${r.sessionId}:${r.entryId}`}
-                  data-focus={`memory-source-${i}`}
-                  onClick={() =>
-                    go({
-                      page: 'source',
-                      reference: { sessionId: r.sessionId, entryId: r.entryId },
-                      project: target.project,
-                      originSession: route.originSession,
-                    })
-                  }
-                >
-                  记忆来源 {i + 1}
-                  <ArrowRight size={14} />
-                </Button>
-              ))}
-              {!refs.length && (
-                <p>
-                  {rev.actor === 'user' ? '由用户手动维护，未附加来源引用。' : '此修订没有当前范围内可见的来源引用。'}
-                </p>
-              )}
-              {route.originSession && (
-                <Button
-                  data-focus="origin-session"
-                  onClick={() => go({ page: 'session', sessionId: route.originSession })}
-                >
-                  返回原会话
-                </Button>
-              )}
-            </aside>
+            {showSources && (
+              <aside className="aw-context">
+                <h2>来源</h2>
+                {refs.map((r, i) => (
+                  <Button
+                    key={`${r.sessionId}:${r.entryId}`}
+                    data-focus={`memory-source-${i}`}
+                    onClick={() =>
+                      go({
+                        page: 'source',
+                        reference: { sessionId: r.sessionId, entryId: r.entryId },
+                        project: target.project,
+                        originSession: route.originSession,
+                      })
+                    }
+                  >
+                    记忆来源 {i + 1}
+                    <ArrowRight size={14} />
+                  </Button>
+                ))}
+                {!refs.length && rev.actor !== 'user' && <p>此修订没有当前范围内可见的来源引用。</p>}
+                {route.originSession && (
+                  <Button
+                    data-focus="origin-session"
+                    onClick={() => go({ page: 'session', sessionId: route.originSession })}
+                  >
+                    返回原会话
+                  </Button>
+                )}
+              </aside>
+            )}
           </div>
         </>
       )}

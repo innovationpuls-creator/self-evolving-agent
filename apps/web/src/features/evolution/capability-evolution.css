@@ -5,7 +5,13 @@
   flex-wrap: wrap;
   gap: 12px;
 }
+.host-product .host-evolution-toolbar {
+  justify-content: flex-start;
+}
 .host-product .host-evolution-toolbar select {
+  flex: 1 1 160px;
+  width: auto;
+  min-width: 0;
   max-width: min(100%, 260px);
 }
 .host-product .host-suggestion-row {
@@ -199,13 +205,8 @@
     align-items: flex-start;
     flex-wrap: wrap;
   }
-  .host-product .host-evolution-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
   .host-product .host-evolution-toolbar select {
     max-width: 100%;
-    width: 100%;
   }
   .host-product .host-activity-heading {
     align-items: flex-start;

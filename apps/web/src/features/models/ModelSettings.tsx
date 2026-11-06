@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ProviderAuthFlow, ProviderAuthStatus } from '../../../../host/runtime/provider-auth';
 import type { ReflectionApi } from '../reflection/reflection-state';
+import { groupProviders, providerName } from './provider-names';
 
 export function ModelSettings({
   api,
@@ -32,6 +33,11 @@ export function ModelSettings({
   const selected = catalog.find((item) => item.id === provider);
   const loggingIn = flow?.status === 'running';
   const locked = busy || loggingIn || !ready;
+  const catalogName = (id: string) => catalog.find((item) => item.id === id)?.name;
+  const nameOf = (id: string) => providerName(id, catalogName(id));
+  const groups = groupProviders(providers, catalogName);
+  const connected = catalog.filter((item) => item.stored || item.configured);
+  const hasOAuth = !!selected?.methods.some((method) => method.type === 'oauth');
 
   useEffect(() => {
     if (!ready) return;
@@ -75,7 +81,7 @@ export function ModelSettings({
           setAnswer('');
           if (next.status === 'failed') setError(next.error ?? '登录未完成');
           if (next.status === 'cancelled') setNotice('登录已取消。');
-          if (next.status === 'succeeded') setNotice('登录完成，授权已保存在当前 Host。');
+          if (next.status === 'succeeded') setNotice('登录完成，可以开始使用。');
           try {
             setCatalog(await api<ProviderAuthStatus[]>('/provider-auth', 'GET', undefined, controller.signal));
             await refreshRef.current();
@@ -171,18 +177,18 @@ export function ModelSettings({
     }
   };
 
-  const logout = async () => {
+  const logout = async (id: string) => {
     if (locked) return;
     setBusy(true);
     setError('');
     setNotice('');
     setKey('');
     try {
-      const result = await api<ProviderAuthStatus>('/provider-auth/logout', 'POST', { provider });
+      const result = await api<ProviderAuthStatus>('/provider-auth/logout', 'POST', { provider: id });
       setNotice(
         result.configured
-          ? 'Host 保存的凭据已移除；该提供方仍可使用环境或配置中的授权。'
-          : '已移除当前 Host 保存的凭据。',
+          ? '已退出登录，只移除了这里保存的凭据；该提供方仍会使用环境变量或配置文件中的授权。'
+          : '已退出登录，只移除了这里保存的凭据，提供方账号和本机其他授权不受影响。',
       );
       await reload();
     } catch (reason) {
@@ -200,20 +206,51 @@ export function ModelSettings({
       await api('/credentials', 'POST', importExisting ? { provider, importExisting: true } : { provider, key });
       setKey('');
       await reload();
-      setNotice(importExisting ? '已导入 Pi 授权，可返回创建或继续会话。' : '模型凭据已保存，可返回选择模型。');
+      setNotice(importExisting ? '已导入本机已有登录，可以开始会话。' : 'API Key 已保存，可以开始会话。');
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : '模型设置未完成');
     } finally {
       setBusy(false);
     }
   };
+  const keyEntry = (
+    <>
+      <label>
+        API Key
+        <input
+          aria-label="API Key"
+          type="password"
+          autoComplete="off"
+          value={key}
+          onChange={(event) => setKey(event.target.value)}
+          placeholder="输入该提供方的 API Key"
+        />
+      </label>
+      <div className="settings-actions">
+        <button className={hasOAuth ? undefined : 'primary'} type="submit" disabled={!key.trim()}>
+          保存 Key
+        </button>
+        {selected?.methods
+          .filter((method) => method.type !== 'oauth')
+          .map((method) => (
+            <button type="button" key={method.type} onClick={() => void login(method.type)}>
+              配置 {method.label}
+            </button>
+          ))}
+        {!hasOAuth && !selected?.stored && (
+          <button type="button" onClick={() => void save(true)}>
+            从本机导入已有登录
+          </button>
+        )}
+      </div>
+    </>
+  );
   return (
     <section className={`model-panel${embedded ? ' model-panel-embedded' : ''}`}>
       {!embedded && (
         <header>
           <div>
             <h1>模型设置</h1>
-            <p>管理 Host 使用的模型授权</p>
           </div>
           <button type="button" onClick={onClose} disabled={busy || loggingIn}>
             返回工作区
@@ -221,17 +258,24 @@ export function ModelSettings({
         </header>
       )}
       <div className="settings-body">
-        <span className="section-kicker">连接模型</span>
-        <h2>为工作选择模型</h2>
-        <p>凭据加密保存在 Host。本机 Pi 已有的授权可以导入为独立副本。</p>
-        {selected && (
-          <p role="status">
-            {selected.stored
-              ? `Host 已保存 ${selected.stored === 'oauth' ? 'OAuth' : 'API Key'} 凭据`
-              : selected.configured
-                ? '正在使用环境或配置中的授权'
-                : 'Host 尚未配置授权'}
-          </p>
+        {connected.length > 0 && (
+          <ul className="model-connected" aria-label="已连接的提供方">
+            {connected.map((item) => (
+              <li key={item.id} title={item.stored ? undefined : '环境变量或配置文件'}>
+                <span>{nameOf(item.id)}</span>
+                {item.stored && (
+                  <button
+                    type="button"
+                    aria-label={`退出登录 ${nameOf(item.id)}`}
+                    disabled={locked}
+                    onClick={() => void logout(item.id)}
+                  >
+                    退出登录
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
         )}
         <form
           onSubmit={(event) => {
@@ -252,46 +296,56 @@ export function ModelSettings({
                   setNotice('');
                 }}
               >
-                {providers.map((item) => (
-                  <option key={item.id}>{item.id}</option>
-                ))}
+                {groups.common.length > 0 && (
+                  <optgroup label="常用">
+                    {groups.common.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+                {groups.other.length > 0 && (
+                  <optgroup label="其他">
+                    {groups.other.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             </label>
-            <label>
-              API Key
-              <input
-                aria-label="API Key"
-                type="password"
-                autoComplete="off"
-                value={key}
-                onChange={(event) => setKey(event.target.value)}
-                placeholder="输入该提供方的 API Key"
-              />
-            </label>
-            <div className="settings-actions">
-              <button className="primary" type="submit" disabled={!key.trim()}>
-                保存 Key
-              </button>
-              <button type="button" onClick={() => void save(true)}>
-                导入 Pi 授权
-              </button>
-            </div>
-            <div className="settings-actions">
-              {selected?.methods.map((method) => (
-                <button type="button" key={method.type} onClick={() => void login(method.type)}>
-                  {method.type === 'oauth' ? method.label : `配置 ${method.label}`}
-                </button>
-              ))}
-              <button type="button" disabled={!selected?.stored} onClick={() => void logout()}>
-                退出 Host 授权
-              </button>
-            </div>
+            {hasOAuth && (
+              <div className="settings-actions">
+                {selected?.methods
+                  .filter((method) => method.type === 'oauth')
+                  .map((method) => (
+                    <button className="primary" type="button" key={method.type} onClick={() => void login(method.type)}>
+                      登录 {method.label}
+                    </button>
+                  ))}
+                {!selected?.stored && (
+                  <button type="button" onClick={() => void save(true)}>
+                    从本机导入已有登录
+                  </button>
+                )}
+              </div>
+            )}
+            {hasOAuth ? (
+              <details className="model-key-entry">
+                <summary>使用 API Key</summary>
+                {keyEntry}
+              </details>
+            ) : (
+              keyEntry
+            )}
           </fieldset>
         </form>
         {loggingIn && (
           <section aria-label="提供方登录" aria-live="polite">
-            <h3>登录 {flow.provider}</h3>
-            <p>在浏览器完成授权；若使用远程 Host，可按提示粘贴最终重定向地址或授权码。</p>
+            <h3>登录 {nameOf(flow.provider)}</h3>
+            <p>在浏览器中完成授权；页面没有自动返回时，按提示粘贴最终地址或授权码。</p>
             {flow.events.map((event, index) => (
               <div key={`${event.type}-${index}`}>
                 {event.type === 'auth_url' && (
@@ -387,16 +441,6 @@ export function ModelSettings({
             {notice}
           </p>
         )}
-        <div className="settings-note">
-          <p>退出仅移除当前 Host 的独立凭据，不会删除 Pi 的原始授权、清除环境变量或在提供方撤销账号授权。</p>
-          {!embedded && (
-            <>
-              <h3>工作在哪台设备上运行？</h3>
-              <p>模型请求、文件和工具操作都由当前连接的 Host 执行。浏览器负责输入和查看结果。</p>
-              <code>{location.origin}</code>
-            </>
-          )}
-        </div>
       </div>
     </section>
   );

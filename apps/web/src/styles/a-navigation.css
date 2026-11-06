@@ -1,7 +1,6 @@
 /* A keeps the desk palette; navigation follows everyday tasks. */
-.quiet .navigation-divider {
-  border-top: 1px solid var(--line);
-  margin: 22px 9px 14px;
+.quiet .module-group + .module-group {
+  margin-top: 20px;
 }
 .quiet .module-nav {
   gap: 3px;
@@ -19,15 +18,9 @@
   gap: 11px;
 }
 .quiet .module-nav button svg,
-.quiet .session-list > button > svg,
-.quiet .project-path > svg {
+.quiet .session-list > button > svg {
   flex-shrink: 0;
   stroke-width: 1.6;
-}
-.quiet .module-nav .secondary-entry {
-  margin-top: 10px;
-  font-size: 12px;
-  color: var(--muted);
 }
 .quiet .module-nav .selected {
   color: #2f463a;
@@ -53,8 +46,14 @@
   border-top: 1px solid var(--line);
   padding: 16px 6px 4px;
 }
-.quiet .project-path small {
-  padding-left: 22px;
+.quiet .sidebar-bottom > button.offline small {
+  color: #a0612b;
+  font-weight: 500;
+}
+.quiet .sidebar-bottom > button.offline .connection-dot {
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 0 3px #bd875033;
 }
 .quiet .sidebar button:focus-visible {
   outline: 2px solid var(--accent);
@@ -97,8 +96,8 @@
   .quiet .session-list {
     margin-bottom: 16px;
   }
-  .quiet .navigation-divider {
-    margin-top: 16px;
+  .quiet .module-group + .module-group {
+    margin-top: 14px;
   }
   .quiet .sidebar-bottom {
     padding-top: 16px;

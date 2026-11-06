@@ -3,15 +3,42 @@ import { messageText } from './session-state';
 import { MemoryToolFeedback } from './MemoryToolFeedback';
 import { Code, Markdown } from '../../components/content';
 import type { Api, Route } from '../../app/types';
+
+type ToolCall = Extract<Message['content'], unknown[]>[number];
+
+const readableArguments = { title: '标题', content: '正文', knowledge: '正文', reason: '依据' } as const;
+
+function CallArguments({ call }: { call?: ToolCall }) {
+  const args = call?.arguments && typeof call.arguments === 'object' ? (call.arguments as Record<string, unknown>) : {};
+  return (
+    <>
+      {(Object.keys(readableArguments) as Array<keyof typeof readableArguments>).map((key) =>
+        typeof args[key] === 'string' ? (
+          <div key={key}>
+            <h3>{readableArguments[key]}</h3>
+            <Markdown text={args[key] as string} />
+          </div>
+        ) : null,
+      )}
+    </>
+  );
+}
+
+export function toolCalls(message: Message): ToolCall[] {
+  return Array.isArray(message.content) ? message.content.filter((p) => p.type === 'toolCall') : [];
+}
+
 export function ToolResult({
   message,
+  call,
   api,
   project,
   originSession,
   go,
-  technical = true,
+  technical = false,
 }: {
   message: Message;
+  call?: ToolCall;
   api: Api;
   project: string;
   originSession?: string;
@@ -25,9 +52,10 @@ export function ToolResult({
   return (
     <section className="host-tool" data-tool={message.toolName}>
       <div className="host-tool-heading">
-        <strong>{message.toolName || 'Tool'}</strong>
-        <span>{message.isError ? '调用失败' : '已返回'}</span>
+        <strong>{message.toolName || call?.name || '工具'}</strong>
+        {message.isError && <span>失败</span>}
       </div>
+      <CallArguments call={call} />
       {memory ? (
         <MemoryToolFeedback
           message={message}
@@ -40,46 +68,36 @@ export function ToolResult({
         />
       ) : (
         <details className="host-tool-output">
-          <summary>查看调用结果</summary>
-          <pre>{messageText(message) || '原生结果未包含文本。'}</pre>
-        </details>
-      )}
-      {technical && (
-        <details className="host-technical">
-          <summary>原始 Tool 结果</summary>
-          <Code text={JSON.stringify(message, null, 2)} language="json" />
+          <summary>查看结果</summary>
+          <pre>{messageText(message) || '这一步没有文字结果。'}</pre>
+          {technical && <Code text={JSON.stringify(message, null, 2)} language="json" />}
         </details>
       )}
     </section>
   );
 }
 
-export function ToolCalls({ message }: { message: Message }) {
-  const calls = Array.isArray(message.content) ? message.content.filter((p) => p.type === 'toolCall') : [];
+/** Renders tool calls that have no result in view; `status` marks them as running or unfinished. */
+export function ToolCalls({
+  message,
+  settled,
+  status,
+}: {
+  message: Message;
+  settled?: ReadonlySet<string>;
+  status?: string;
+}) {
   return (
     <>
-      {calls.map((call, i) => {
-        const args =
-          call.arguments && typeof call.arguments === 'object' ? (call.arguments as Record<string, unknown>) : {};
-        return (
+      {toolCalls(message)
+        .filter((call) => !call.id || !settled?.has(call.id))
+        .map((call, i) => (
           <section className="host-tool-request" key={call.id || i}>
             <h2>{call.name}</h2>
-            <span className="aw-muted">操作请求</span>
-            {['title', 'content', 'knowledge', 'reason'].map((key) =>
-              typeof args[key] === 'string' ? (
-                <div key={key}>
-                  <h3>{{ title: '标题', content: '正文', knowledge: '正文', reason: '依据' }[key]}</h3>
-                  <Markdown text={args[key] as string} />
-                </div>
-              ) : null,
-            )}
-            <details className="host-technical">
-              <summary>原始调用参数</summary>
-              <Code text={JSON.stringify(call.arguments, null, 2)} language="json" />
-            </details>
+            {status && <span>{status}</span>}
+            <CallArguments call={call} />
           </section>
-        );
-      })}
+        ))}
     </>
   );
 }

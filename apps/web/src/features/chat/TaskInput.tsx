@@ -64,12 +64,13 @@ export function TaskInput({
               : (result.files ?? []).map((file) => ({
                   value: file.path,
                   directory: file.directory,
-                  description: file.directory ? '目录 · 继续选择文件' : '文件内容将通过当前会话的 read 权限读取',
+                  description: file.directory ? '文件夹 · 继续选择文件' : '发送后 Agent 会读取这个文件',
                 })),
           );
         })
         .catch((reason: unknown) => {
-          if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : '候选读取失败');
+          if (!controller.signal.aborted)
+            setError(reason instanceof Error ? reason.message : '文件列表读取失败，请重试。');
         });
     }, 120);
     return () => {
@@ -106,7 +107,7 @@ export function TaskInput({
         aria-label="任务"
         {...inputProps}
         ref={textarea}
-        placeholder={inputProps?.placeholder ?? '描述任务，输入 /skill: 选择能力，@ 引用项目文件…'}
+        placeholder={inputProps?.placeholder ?? '描述任务，输入 /skill: 选择技能，@ 引用项目文件…'}
         value={value}
         aria-controls={candidates.length ? listId : undefined}
         aria-autocomplete="list"
@@ -152,7 +153,7 @@ export function TaskInput({
         }}
       />
       {!!candidates.length && (
-        <div id={listId} className="input-candidates" role="listbox" aria-label="输入候选">
+        <div id={listId} className="input-candidates" role="listbox" aria-label="可选项">
           {candidates.map((candidate, index) => (
             <div
               key={candidate.value}

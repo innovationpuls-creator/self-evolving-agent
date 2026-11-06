@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
-import { ArrowUpRight, RefreshCw, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck } from 'lucide-react';
 import type {
   EvolutionCatalog as SuggestionCatalog,
   EvolutionEvidence,
@@ -141,15 +141,9 @@ export function EvolutionCatalog({ host, route, go }: { host: Host; route: Evolu
     <section className="host-evolution">
       <header className="aw-heading">
         <h1 tabIndex={-1}>改进建议</h1>
-        <div className="inline-actions">
-          <Button onClick={refresh} disabled={read.loading}>
-            <RefreshCw size={14} />
-            刷新
-          </Button>
-          <Button onClick={() => setCreate(!create)} aria-expanded={create}>
-            提出建议
-          </Button>
-        </div>
+        <Button onClick={() => setCreate(!create)} aria-expanded={create}>
+          提出建议
+        </Button>
       </header>
       {create && <CreateSuggestion host={host} go={go} close={() => setCreate(false)} />}
       <div className="aw-toolbar host-evolution-toolbar">
@@ -172,8 +166,8 @@ export function EvolutionCatalog({ host, route, go }: { host: Host; route: Evolu
         >
           <option value="">所有项目</option>
           {projects.map((project) => (
-            <option key={project} value={project}>
-              {projectName(project)} · {project}
+            <option key={project} value={project} title={project}>
+              {projectName(project)}
             </option>
           ))}
         </select>
@@ -195,7 +189,16 @@ export function EvolutionCatalog({ host, route, go }: { host: Host; route: Evolu
             ))}
         </select>
       </div>
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <div className="inline-actions">
+          <p role="alert">{error}</p>
+          {uncertain && (
+            <Button onClick={refresh} disabled={read.loading}>
+              刷新
+            </Button>
+          )}
+        </div>
+      )}
       {read.error && <Failure error={read.error} retry={refresh} />}
       {read.loading && <p role="status">正在读取建议…</p>}
       {read.value && (
@@ -256,39 +259,37 @@ export function EvolutionCatalog({ host, route, go }: { host: Host; route: Evolu
           </div>
           {!read.value.items.length && (
             <p className="empty-search">
-              {offset
-                ? '这一页已没有建议。'
-                : status === 'pending'
-                  ? '目前没有需要处理的建议。'
-                  : '没有符合条件的建议。'}
+              {offset ? '这一页已没有建议。' : status === 'pending' ? '没有待处理的建议。' : '没有符合条件的建议。'}
             </p>
           )}
-          <nav className="host-pagination" aria-label="建议分页">
-            <Button
-              disabled={read.loading || !offset}
-              onClick={() => go({ ...route, offset: Math.max(0, offset - pageSize) })}
-            >
-              上一页
-            </Button>
-            <span>
-              {read.value.items.length
-                ? `${offset + 1}–${offset + read.value.items.length} / ${read.value.total}`
-                : `共 ${read.value.total} 项`}
-            </span>
-            <Button
-              disabled={read.loading || offset + pageSize >= read.value.total}
-              onClick={() => go({ ...route, offset: offset + pageSize })}
-            >
-              下一页
-            </Button>
-            {offset >= read.value.total && offset > 0 && (
-              <Button onClick={() => go({ ...route, offset: 0 })}>返回第一页</Button>
-            )}
-          </nav>
+          {(read.value.total > 0 || offset > 0) && (
+            <nav className="host-pagination" aria-label="建议分页">
+              <Button
+                disabled={read.loading || !offset}
+                onClick={() => go({ ...route, offset: Math.max(0, offset - pageSize) })}
+              >
+                上一页
+              </Button>
+              <span>
+                {read.value.items.length
+                  ? `${offset + 1}–${offset + read.value.items.length} / ${read.value.total}`
+                  : `共 ${read.value.total} 项`}
+              </span>
+              <Button
+                disabled={read.loading || offset + pageSize >= read.value.total}
+                onClick={() => go({ ...route, offset: offset + pageSize })}
+              >
+                下一页
+              </Button>
+              {offset >= read.value.total && offset > 0 && (
+                <Button onClick={() => go({ ...route, offset: 0 })}>返回第一页</Button>
+              )}
+            </nav>
+          )}
         </>
       )}
       <details className="host-technical host-activity-history">
-        <summary>开发活动{history.length ? ` · ${history.length}` : ''}</summary>
+        <summary>改进进度{history.length ? ` · ${history.length}` : ''}</summary>
         {activities.error && <Failure error={activities.error} retry={activities.refresh} />}
         {activities.loading && <p role="status">正在读取活动…</p>}
         {history.map((a) => (
@@ -305,7 +306,7 @@ export function EvolutionCatalog({ host, route, go }: { host: Host; route: Evolu
             </small>
           </button>
         ))}
-        {activities.value && !history.length && <p>还没有开发活动。</p>}
+        {activities.value && !history.length && <p>还没有改进记录。</p>}
       </details>
     </section>
   );
@@ -381,7 +382,6 @@ function CreateSuggestion({ host, go, close }: { host: Host; go: Go; close: () =
         void save();
       }}
     >
-      <p className="aw-muted">你提出的建议会保存在所有项目中；此处不会开始开发。</p>
       {fields.map(([key, label]) => (
         <Field label={label} key={key}>
           {key === 'title' ? (
@@ -431,7 +431,7 @@ function CreateSuggestion({ host, go, close }: { host: Host; go: Go; close: () =
               if (receipt) go({ page: 'result', target: { kind: 'suggestion', id: receipt } });
             }}
           >
-            查看 Host 返回的建议
+            查看已保存的建议
           </Button>
         )}
         {uncertain && (
@@ -440,7 +440,7 @@ function CreateSuggestion({ host, go, close }: { host: Host; go: Go; close: () =
             <Button
               kind="ghost"
               onClick={() => {
-                if (!window.confirm('放弃本地草稿不会删除 Host 中可能已经保存的建议。继续？')) return;
+                if (!window.confirm('放弃本地草稿不会删除可能已经保存的建议。继续？')) return;
                 proposalDrafts.delete(host.api);
                 updateDraft(initialProposal);
                 updateUncertain(false);
@@ -486,7 +486,7 @@ export function SuggestionDetail({
         });
         const current = await host.api<EvolutionSuggestion>(`/suggestions/${adopted.id}`);
         if (!live.current) return;
-        if (!current.discussionSessionId || current.status !== 'adopted') throw new Error('Host 尚未确认讨论会话');
+        if (!current.discussionSessionId || current.status !== 'adopted') throw new Error('讨论会话尚未确认');
         go({ page: 'session', sessionId: current.discussionSessionId });
       } else {
         await host.api('/suggestions/manage', 'POST', {
@@ -525,12 +525,17 @@ export function SuggestionDetail({
       <Back back={back}>返回建议</Back>
       <header className="aw-heading">
         <h1 tabIndex={-1}>{read.value?.title || '改进建议'}</h1>
-        <Button disabled={read.loading || busy} onClick={() => void reload()}>
-          <RefreshCw size={14} />
-          刷新
-        </Button>
       </header>
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <div className="inline-actions">
+          <p role="alert">{error}</p>
+          {uncertain && (
+            <Button disabled={read.loading || busy} onClick={() => void reload()}>
+              刷新
+            </Button>
+          )}
+        </div>
+      )}
       {read.error && <Failure error={read.error} retry={read.refresh} />}
       {read.loading && <p role="status">正在读取建议…</p>}
       {read.value && (
@@ -664,7 +669,7 @@ function EvidenceLink({ reference, project, go }: { reference: EvolutionEvidence
             go({ page: 'reflection', jobId: reference.reflectionId, recordId: reference.reflectionId })
           }
         >
-          查看反思
+          查看自动复盘
         </Button>
       )}
     </div>
@@ -677,11 +682,7 @@ export function ActivityView({ host, id, go, back }: { host: Host; id: string; g
     <section className="host-evolution">
       <Back back={back}>返回</Back>
       <header className="aw-heading">
-        <h1 tabIndex={-1}>开发活动</h1>
-        <Button disabled={read.loading} onClick={read.refresh}>
-          <RefreshCw size={14} />
-          刷新
-        </Button>
+        <h1 tabIndex={-1}>改进进度</h1>
       </header>
       {read.error && <Failure error={read.error} retry={read.refresh} />}
       {read.loading && <p role="status">正在读取活动…</p>}
@@ -744,7 +745,7 @@ export function SessionActivity({ host, session, go }: { host: Host; session: Se
     }
   };
   return (
-    <section className="host-session-activity" aria-label="能力目标与开发活动">
+    <section className="host-session-activity" aria-label="能力目标与改进进度">
       {activities.error && <Failure error={activities.error} retry={activities.refresh} />}
       {activity ? (
         <ActivityBody
@@ -758,32 +759,32 @@ export function SessionActivity({ host, session, go }: { host: Host; session: Se
       ) : (
         activities.value && (
           <details>
-            <summary>发起能力改进讨论</summary>
+            <summary>让 Agent 改进这类任务</summary>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 void create();
               }}
             >
-              <Field label="希望获得的能力">
-                <textarea
-                  rows={3}
-                  maxLength={8000}
-                  required
-                  disabled={busy}
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                />
-              </Field>
-              <p className="aw-muted">另开讨论会话，保留这里的工作；讨论本身不会授予开发权限。</p>
+              <textarea
+                aria-label="希望获得的能力"
+                placeholder="希望获得的能力"
+                rows={3}
+                maxLength={8000}
+                required
+                disabled={busy}
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+              />
+              <p className="aw-muted">讨论不会授予开发权限。</p>
               {error && <p role="alert">{error}</p>}
               {uncertain && (
                 <div className="inline-actions">
-                  <Button onClick={() => go({ page: 'evolution', status: '' })}>核对开发活动</Button>
+                  <Button onClick={() => go({ page: 'evolution', status: '' })}>核对改进进度</Button>
                   <Button
                     kind="ghost"
                     onClick={() => {
-                      if (!window.confirm('放弃本地草稿不会删除 Host 中可能已经创建的讨论活动。继续？')) return;
+                      if (!window.confirm('放弃本地草稿不会删除可能已经创建的讨论。继续？')) return;
                       drafts.delete(session.id);
                       updateGoal('');
                       updateUncertain(false);
@@ -801,7 +802,7 @@ export function SessionActivity({ host, session, go }: { host: Host; session: Se
                     if (receipt) go({ page: 'activity', id: receipt });
                   }}
                 >
-                  查看 Host 返回的活动
+                  查看已创建的改进
                 </Button>
               )}
               <Button
@@ -1129,7 +1130,7 @@ function ActivityBody({
             {error && <p role="alert">{error}</p>}
             <details className="host-technical">
               <summary>授权绑定</summary>
-              <p>Activity 修订 {grant.baseRevision}</p>
+              <p>修订 {grant.baseRevision}</p>
               <code>{activity.id}</code>
             </details>
           </>
@@ -1138,7 +1139,7 @@ function ActivityBody({
       <Modal
         open={cancel}
         onClose={() => !busy && setCancel(false)}
-        title="取消开发活动"
+        title="取消改进"
         footer={
           <>
             <Button disabled={busy} onClick={() => setCancel(false)}>

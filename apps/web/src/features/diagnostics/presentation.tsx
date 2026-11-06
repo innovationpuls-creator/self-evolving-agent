@@ -30,13 +30,13 @@ export function Metrics({ value }: { value: unknown }) {
   const usage = data?.usage && typeof data.usage === 'object' ? (data.usage as Record<string, unknown>) : data;
   const cost = usage?.cost && typeof usage.cost === 'object' ? (usage.cost as Record<string, unknown>) : undefined;
   const fields: [string, unknown][] = [
-    ['Input Tokens', usage?.input],
-    ['Output Tokens', usage?.output],
-    ['Cache Read', usage?.cacheRead],
-    ['Cache Write', usage?.cacheWrite],
-    ['Reasoning Tokens', usage?.reasoning],
-    ['压缩前 Tokens', data?.tokensBefore],
-    ['压缩后 Tokens（估算）', data?.estimatedTokensAfter],
+    ['输入 Tokens', usage?.input],
+    ['输出 Tokens', usage?.output],
+    ['缓存读取 Tokens', usage?.cacheRead],
+    ['缓存写入 Tokens', usage?.cacheWrite],
+    ['推理 Tokens', usage?.reasoning],
+    ['整理前 Tokens', data?.tokensBefore],
+    ['整理后 Tokens（估算）', data?.estimatedTokensAfter],
   ];
   return value && typeof value === 'object' && Object.keys(value).length ? (
     <div className="trajectory-metrics">
@@ -50,10 +50,8 @@ export function Metrics({ value }: { value: unknown }) {
             </div>
           ))}
       </dl>
-      {fields.some(([, amount]) => typeof amount === 'number') && (
-        <small>Token 数值来自 Pi 归一化记录；Provider 是否实际报告未知，零值不代表实际消耗为零。</small>
-      )}
-      {typeof cost?.total === 'number' && cost.total > 0 && <p>目录估算费用：${cost.total.toFixed(6)}（非账单金额）</p>}
+      {fields.some(([, amount]) => amount === 0) && <small>Token 数为统计值，显示 0 不代表没有消耗。</small>}
+      {typeof cost?.total === 'number' && cost.total > 0 && <p>估算费用：${cost.total.toFixed(6)}（非账单金额）</p>}
       <details>
         <summary>详细指标与关联</summary>
         <pre>{JSON.stringify(value, null, 2)}</pre>

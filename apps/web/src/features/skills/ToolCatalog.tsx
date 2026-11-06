@@ -3,7 +3,7 @@ import type { toolCatalog } from '../../../../host/skills/tool-catalog';
 import type { ReflectionApi } from '../reflection/reflection-state';
 type Catalog = ReturnType<typeof toolCatalog>;
 const status: Record<string, string> = {
-  provided: 'Pi 可提供 · 尚未加载',
+  provided: '内置 · 尚无会话加载',
   available: '可调用',
   disabled: '未启用',
   enabled: '已启用',
@@ -36,7 +36,7 @@ export function ToolCatalog({
           }
         })
         .catch((reason: unknown) => {
-          if (!signal.aborted) setError(reason instanceof Error ? reason.message : 'Tool 列表读取失败');
+          if (!signal.aborted) setError(reason instanceof Error ? reason.message : '工具列表读取失败');
         });
     };
     load();
@@ -52,11 +52,7 @@ export function ToolCatalog({
   }, [api, project, revision]);
   return (
     <details>
-      <summary>Tool 列表与来源{catalog ? ` · ${catalog.tools.length}` : ''}</summary>
-      <p>
-        普通 Skill 是按需读取的指引，不一定提供执行 Tool。这里只展示原生 Tool 和会话已加载的
-        Tool；未审查的来源不会为了展示而加载代码。
-      </p>
+      <summary>工具列表与来源{catalog ? ` · ${catalog.tools.length}` : ''}</summary>
       {error && (
         <p role="alert">
           {error}{' '}
@@ -81,7 +77,7 @@ export function ToolCatalog({
           </p>
           {tool.skillId && (
             <button type="button" onClick={() => onSkill(tool.skillId ?? '')}>
-              管理对应 Skill
+              管理对应技能
             </button>
           )}
           <details>
@@ -97,18 +93,18 @@ export function ToolCatalog({
           </button>{' '}
           · {source.status === 'disabled' ? '已禁用' : status[source.status]} ·{' '}
           {source.review === 'not_required'
-            ? '普通 Skill · 无执行 Extension，无需代码审查'
+            ? '普通技能 · 不含代码，无需审查'
             : source.review === 'approved'
               ? '当前代码已审查'
               : source.review === 'evolution'
-                ? '开发活动授权版本'
+                ? '改进授权版本'
                 : '执行代码尚未通过审查'}
           <p>
             {source.extensions.length
               ? source.loaded
-                ? '执行 Tool 已加载，见上方列表'
-                : 'Extension 尚未加载，不能读取运行时 Tool 参数'
-              : '按需读取原生指引'}
+                ? '工具已加载，见上方列表'
+                : '代码扩展尚未加载，暂时无法读取工具参数'
+              : '按需读取说明'}
           </p>
         </div>
       ))}

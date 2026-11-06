@@ -64,7 +64,6 @@ export function MemoryToolFeedback({
   return (
     <section className="memory-tool-feedback" aria-label="记忆操作结果">
       <p>{feedback.message}</p>
-      <small>以上是本次操作保存的修订，后续修正不会改写这条执行记录。</small>
       <div className="actions">
         <button type="button" onClick={() => onMemory(feedback.id, feedback.revision, project)}>
           查看本次修订
@@ -86,9 +85,9 @@ export function MemoryToolFeedback({
             {current.status === 'deleted'
               ? '已删除'
               : current.status === 'withdrawn'
-                ? '已撤销'
+                ? '已停用'
                 : current.usable
-                  ? '当前认识'
+                  ? '生效中'
                   : '来源不可用'}{' '}
             · 最新修订 #{current.revision}
             {current.revision !== feedback.revision ? ' · 本次操作的修订已成为历史' : ''}
@@ -104,7 +103,7 @@ export function MemoryToolFeedback({
           </p>
         )}
         <button type="button" onClick={() => onMemory(feedback.id, undefined, project)}>
-          查看当前认识
+          查看当前记忆
         </button>
       </details>
     </section>

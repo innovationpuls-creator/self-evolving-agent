@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, FileCode, FileText, Plus, Terminal } from 'lucide-react';
+import { ArrowLeft, FileCode, FileText, Plus, RefreshCw } from 'lucide-react';
 import type { AgentService } from '../../../../host/runtime/agent';
 import type { SkillOperation, SkillVersion } from '../../../../host/skills/skills';
 import type { toolCatalog } from '../../../../host/skills/tool-catalog';
-import { Button, Field, Modal, Notice, SearchBox } from '../../components/ui';
+import { Button, Field, IconButton, Modal, Notice, SearchBox } from '../../components/ui';
 import { Code, Markdown } from '../../components/content';
 import { Diff, Evidence } from '../../components/structured-content';
 import { ViewTabs, ViewPanel } from '../../components/controls';
-import { Failure, date } from '../../components/reading';
+import { Failure, date, projectName } from '../../components/reading';
 import { useRead, type Host, type Route, type SkillDetail } from '../../app/types';
 import { type SkillDrafts, operationApplied, reviewed } from './skill-management';
 import './skills.css';
@@ -82,44 +82,47 @@ export function Skills({
         </Button>
       </header>
       <div className="aw-toolbar">
-        <Field label="项目">
-          <select
-            aria-label="技能项目"
-            value={project}
-            onChange={(e) => go({ page: 'skills', project: e.target.value })}
-          >
-            <option value="">Host 默认项目</option>
-            {projects.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Button
-          kind="ghost"
+        <select
+          aria-label="技能项目"
+          value={project}
+          title={project || undefined}
+          onChange={(e) => go({ page: 'skills', project: e.target.value })}
+        >
+          <option value="">默认项目</option>
+          {projects.map((p) => (
+            <option key={p} value={p} title={p}>
+              {projectName(p)}
+            </option>
+          ))}
+        </select>
+        <IconButton
+          label="刷新"
           onClick={() => {
             catalog.refresh();
             tools.refresh();
           }}
         >
-          刷新
-        </Button>
+          <RefreshCw size={15} />
+        </IconButton>
       </div>
       <div className="asm-manager" data-detail={!!id}>
         <aside className="asm-library" aria-label="能力目录">
           <ViewTabs items={['技能', '工具']} value={tab} onChange={T} label="能力类型" id="real-capability-kind" />
-          <SearchBox value={query} onChange={Q} placeholder={tab === '技能' ? '搜索技能' : '搜索工具'} />
+          {(tab === '技能' ? !!catalog.value?.skills.length : !!tools.value?.tools.length) && (
+            <SearchBox value={query} onChange={Q} placeholder={tab === '技能' ? '搜索技能' : '搜索工具'} />
+          )}
           {catalog.error && <Failure error={catalog.error} retry={catalog.refresh} />}
           {tab === '技能' ? (
             <>
-              <div className="asm-filters">
-                {['全部', '已启用', '候选'].map((v) => (
-                  <button type="button" key={v} aria-pressed={filter === v} onClick={() => F(v)}>
-                    {v}
-                  </button>
-                ))}
-              </div>
+              {!!catalog.value?.skills.length && (
+                <div className="asm-filters">
+                  {['全部', '已启用', '待发布'].map((v) => (
+                    <button type="button" key={v} aria-pressed={filter === v} onClick={() => F(v)}>
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              )}
               {catalog.loading && !catalog.value && <p role="status">正在读取技能…</p>}
               <div className="asm-items">
                 {catalog.value?.skills
@@ -128,7 +131,7 @@ export function Skills({
                       (!query || `${s.name} ${s.description}`.toLowerCase().includes(query.toLowerCase())) &&
                       (filter === '全部' ||
                         (filter === '已启用' && !!s.current && s.enabled) ||
-                        (filter === '候选' && s.latest !== s.current)),
+                        (filter === '待发布' && s.latest !== s.current)),
                   )
                   .map((s) => (
                     <button
@@ -143,23 +146,17 @@ export function Skills({
                       <span className="asm-item-text">
                         <strong>{s.name}</strong>
                         <span>{s.description}</span>
-                        <small>
-                          {!s.current
-                            ? '尚未生效'
-                            : !s.enabled
-                              ? '已禁用'
-                              : s.latest !== s.current
-                                ? '有新候选'
-                                : '已启用'}
-                        </small>
+                        {(!s.current || !s.enabled || s.latest !== s.current) && (
+                          <small>{!s.current ? '尚未生效' : !s.enabled ? '已禁用' : '有待发布版本'}</small>
+                        )}
                       </span>
                     </button>
                   ))}
               </div>
-              {catalog.value && !catalog.value.skills.length && <p>还没有纳入管理的技能。</p>}
+              {catalog.value && !catalog.value.skills.length && <p>还没有技能</p>}
               {!!catalog.value?.discovered.length && (
                 <details className="host-discovered">
-                  <summary>发现的工作指引</summary>
+                  <summary>未管理的技能文件</summary>
                   {catalog.value.discovered.map((s) => (
                     <div key={s.source}>
                       <strong>{s.name}</strong>
@@ -185,10 +182,7 @@ export function Skills({
                 .filter((t) => `${t.name} ${t.description}`.toLowerCase().includes(query.toLowerCase()))
                 .map((t) => (
                   <details key={`${t.source}:${t.name}`}>
-                    <summary>
-                      <Terminal size={15} />
-                      {t.name}
-                    </summary>
+                    <summary>{t.name}</summary>
                     <ToolReader tool={t} sessions={host.sessions} project={project} go={go} />
                   </details>
                 ))}
@@ -211,7 +205,6 @@ export function Skills({
             <div className="asm-empty">
               <FileCode size={30} />
               <h2>选择技能，继续阅读或编辑</h2>
-              <p>正式内容、候选、工具与版本历史在同一工作空间中。</p>
               {!!store.all().length && (
                 <div>
                   <h3>未保存的文件</h3>
@@ -253,7 +246,7 @@ export function Skills({
                   I(false);
                   catalog.refresh();
                 } catch (e) {
-                  E(`${e instanceof Error ? e.message : '请求未完成'}。结果未确认，请先刷新目录。`);
+                  E(`${e instanceof Error ? e.message : '请求未完成'}。结果未确认，请先核对目录。`);
                 } finally {
                   U(false);
                 }
@@ -281,11 +274,11 @@ export function Skills({
           </select>
         </Field>
         <details>
-          <summary>Extension 与知识文件归属</summary>
-          <p>路径相对于包根目录。每个 Extension 只绑定一项技能；知识须为独立 Markdown。</p>
+          <summary>代码扩展与知识文件归属</summary>
+          <p>路径相对于来源根目录。每个代码扩展只绑定一项技能；知识须为独立 Markdown 文件。</p>
           <textarea aria-label="Skill 绑定" value={binding} onChange={(e) => B(e.target.value)} rows={5} />
         </details>
-        <p>导入只准备候选，不执行包入口或安装脚本，不授予执行信任。</p>
+        <p>导入只保存为候选版本，不会运行其中的代码或安装脚本，也不代表已被信任。</p>
         {error && <p role="alert">{error}</p>}
       </Modal>
       {importOp && (
@@ -341,7 +334,7 @@ function ToolReader({
       ) : (
         <p>
           {tool.sessions.length} 个会话已加载 · {tool.callableSessions.length} 个会话可调用
-          {tool.status === 'provided' ? ' · Pi 可提供' : ''}
+          {tool.status === 'provided' ? ' · 内置工具，尚无会话加载' : ''}
         </p>
       )}
       {tool.skillId && (
@@ -922,13 +915,13 @@ function SkillReader({
               {latest.review?.digest === latest.digest
                 ? ' · 此内容已有人工审查'
                 : latest.evolution?.digest === latest.digest
-                  ? ' · 具有开发活动授权'
+                  ? ' · 已获改进授权'
                   : !latest.extensions.length
-                    ? ' · 工作指引，无执行 Extension'
+                    ? ' · 纯说明，不含代码'
                     : ''}
             </p>
             <details>
-              <summary>版本与 digest</summary>
+              <summary>版本与校验值</summary>
               <Evidence
                 value={{
                   version: latest.id,
@@ -938,7 +931,7 @@ function SkillReader({
                 }}
               />
             </details>
-            <p>审查完整快照，包含代码、资源引用和锁定依赖。执行代码使用 Host 本机用户权限。</p>
+            <p>审查完整快照，包含代码、资源引用和锁定依赖。代码会以本机当前用户的权限运行。</p>
             <div className="host-snapshot-browser">
               <Field label="快照文件">
                 <select
@@ -987,7 +980,7 @@ function SkillReader({
             )}
             {!!latest.review && <p>审查结论：{latest.review.notes}</p>}
             <div className="asm-publishbar">
-              <span>通过 Host 检查和版本切换后生效。</span>
+              <span>检查通过并切换版本后生效。</span>
               <Button
                 kind="primary"
                 disabled={!canWrite || !reviewed(latest) || !!draftCount || latest.id === detail.skill.current}
@@ -1192,7 +1185,7 @@ function SkillReader({
         open={!!review}
         onClose={() => R(undefined)}
         title="记录候选审查"
-        description="审查只绑定当前精确版本及 digest；编辑后必须重新审查。"
+        description="审查只对当前这一版本有效；编辑后必须重新审查。"
         footer={
           <Button
             kind="primary"
@@ -1279,7 +1272,7 @@ function SkillReader({
         <p>
           {confirm?.action === 'rollback'
             ? '只切换能力版本，记忆、历史与已发生的外部操作不会回退。'
-            : 'Host 会检查并协调当前会话，再更新实际版本。'}
+            : '会先检查并协调正在进行的会话，再更新实际版本。'}
         </p>
         <p>检查期间可继续阅读，结果会在此更新。</p>
         {error && <p role="alert">{error}</p>}

@@ -10,16 +10,18 @@ export function Source({
   route,
   go,
   back,
+  showBack,
 }: {
   api: Api;
   route: Extract<Route, { page: 'source' }>;
   go: (route: Route) => void;
   back: () => void;
+  showBack: boolean;
 }) {
   const ref = route.reference;
   return (
     <>
-      <Back back={back}>返回上一页</Back>
+      {showBack && <Back back={back}>返回上一页</Back>}
       <h1 tabIndex={-1}>依据与来源</h1>
       <div className="live-source-actions">
         {ref.sessionId && ref.entryId && (
@@ -75,7 +77,7 @@ export function Source({
       ) : ref.reflectionId ? (
         <ReflectionReference route={route} go={go} />
       ) : (
-        <Notice title="缺少可定位的来源">Host 未返回可读取的来源标识。</Notice>
+        <Notice title="缺少可定位的来源">这条依据没有记录来源位置，无法跳转。</Notice>
       )}
     </>
   );
@@ -94,11 +96,11 @@ function TraceSource({
   const read = useRead<ReturnType<DiagnosticService['get']>>(api, `/diagnostics/${encodeURIComponent(traceId)}`);
   return (
     <>
-      {read.loading && <p role="status">正在读取来源轨迹…</p>}
+      {read.loading && <p role="status">正在读取来源执行过程…</p>}
       {read.error && <Failure error={read.error} retry={read.refresh} />}
       {read.value && (
         <section>
-          <h2>执行证据</h2>
+          <h2>执行步骤</h2>
           {read.value.calls.map(
             (call) =>
               call.resultEntryId && (
@@ -115,10 +117,8 @@ function TraceSource({
                 </Button>
               ),
           )}
-          {!read.value.calls.length && <p>这段轨迹未返回工具调用结果。</p>}
-          <Button onClick={() => go({ page: 'session', sessionId: read.value?.trace.sessionId })}>
-            打开轨迹所属会话
-          </Button>
+          {!read.value.calls.length && <p>这段执行过程没有步骤结果。</p>}
+          <Button onClick={() => go({ page: 'session', sessionId: read.value?.trace.sessionId })}>打开所属会话</Button>
         </section>
       )}
     </>
@@ -136,7 +136,7 @@ function ReflectionReference({ route, go }: { route: Extract<Route, { page: 'sou
         })
       }
     >
-      打开引用的反思记录
+      打开引用的自动复盘
     </Button>
   );
 }

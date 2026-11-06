@@ -147,20 +147,6 @@
 .session-message.assistant {
   margin-bottom: 40px;
 }
-.session-author {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #4f5c4c;
-  margin: 0 0 16px;
-}
-.session-author span {
-  font-size: 12px;
-  color: #62695e;
-  font-weight: 400;
-}
 .session-room .prose {
   font-size: 16px;
   line-height: 1.85;
@@ -534,3 +520,9 @@
 }
 
 #a-chat-actions { display: flex; align-items: center; gap: 4px; }
+.session-room .host-tool h3 {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 12px 0 6px;
+  font-weight: 500;
+}

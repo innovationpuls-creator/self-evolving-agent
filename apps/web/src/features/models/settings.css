@@ -1,75 +1,17 @@
-.d6-settings {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  background: var(--paper);
-}
-
-.d6-settings-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 28px max(32px, calc((100% - 1040px) / 2));
-  border-bottom: 1px solid var(--line);
-}
-
-.d6-settings-heading h1 {
-  margin: 0 0 6px;
-  font-size: 25px;
-  letter-spacing: -0.025em;
-}
-
-.d6-settings-heading p,
 .d6-settings p {
   margin-top: 0;
   color: var(--muted);
 }
 
-.d6-quiet-action,
 .d6-connection-control button {
   flex: 0 0 auto;
   background: transparent;
-}
-
-.d6-settings-content {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 32px 64px;
-}
-
-.d6-host-connection {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 28px 0 24px;
-  border-bottom: 1px solid var(--line);
-}
-
-.d6-host-connection h2 {
-  margin: 0 0 5px;
-  font-size: 16px;
-}
-
-.d6-host-origin {
-  margin-bottom: 8px;
-  font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
-  overflow-wrap: anywhere;
-}
-
-.d6-host-summary {
-  max-width: 590px;
-  margin-bottom: 0;
-  font-size: 13px;
-  line-height: 1.75;
 }
 
 .d6-connection-control {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-top: 3px;
 }
 
 .d6-connection-status {
@@ -88,16 +30,8 @@
   background: #ae8950;
 }
 
-.d6-connection-status.is-ready {
-  color: #35553f;
-}
-
-.d6-connection-status.is-ready i {
-  background: var(--accent);
-}
-
 .d6-settings-notice {
-  margin: 20px 0 0;
+  margin: 0 0 20px;
   padding: 11px 13px;
   background: var(--warning);
   color: #71583b !important;
@@ -110,55 +44,75 @@
 }
 
 .d6-settings .settings-body {
-  max-width: none;
+  max-width: 700px;
   margin: 0;
-  padding: 32px 0 0;
-}
-
-.d6-settings .settings-body > h2 {
-  margin: 0 0 10px;
-  font-size: 20px;
-  letter-spacing: -0.015em;
-}
-
-.d6-settings .settings-body > .section-kicker {
-  display: none;
-}
-
-.d6-settings .settings-body > p {
-  max-width: 620px;
-  margin-bottom: 22px;
+  padding: 0;
 }
 
 .d6-settings .settings-actions {
+  display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 12px 0 18px;
 }
 
-.d6-settings .settings-note {
-  max-width: 700px;
+.d6-settings .model-connected {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.d6-settings .model-connected li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.d6-settings .model-connected span::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+}
+
+.d6-settings .model-connected button {
+  background: transparent;
+}
+
+.d6-settings .model-key-entry summary {
+  cursor: pointer;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.d6-settings form fieldset {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.d6-settings .settings-actions .primary {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 7px 14px;
+  color: white;
+}
+
+.d6-settings .settings-actions .primary:disabled {
+  opacity: 0.55;
 }
 
 .d6-settings [aria-label="提供方登录"] {
   max-width: 700px;
   padding: 22px 0;
   border-top: 1px solid var(--line);
-}
-
-@media (max-width: 767px) {
-  .d6-settings-heading {
-    padding: 22px 20px;
-  }
-
-  .d6-settings-content {
-    padding: 0 20px 48px;
-  }
-
-  .d6-host-connection {
-    display: grid;
-    gap: 15px;
-  }
-
-  .d6-connection-control {
-    padding-top: 0;
-  }
 }

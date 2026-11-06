@@ -83,7 +83,7 @@ try {
   await page.locator('.shell').waitFor();
   await page.getByRole('button', { name: '模型设置', exact: true }).click();
   await page.getByLabel('模型提供方').selectOption('openai-codex');
-  await page.getByRole('button', { name: '导入 Pi 授权' }).click();
+  await page.getByRole('button', { name: '从本机导入已有登录' }).click();
   await page
     .locator('.start select option[value="openai-codex/gpt-6-luna"]')
     .waitFor({ state: 'attached', timeout: 30000 });

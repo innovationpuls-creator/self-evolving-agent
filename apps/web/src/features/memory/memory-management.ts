@@ -75,7 +75,7 @@ export async function reconcileMemory(api: Api, store: MemoryDrafts, draft: Memo
   }
   const latest = await readMemory(api, draft.project, draft.receipt.id);
   if (!latest.history.some((r) => r.revision === draft.receipt?.revision))
-    throw Error('Host 尚未返回已提交修订，请重新核对。');
+    throw Error('尚未读取到刚提交的修订，请重新核对。');
   store.set({ ...draft, latest, phase: 'saved', error: undefined });
   return latest;
 }

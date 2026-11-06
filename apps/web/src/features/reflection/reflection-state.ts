@@ -10,7 +10,7 @@ export const reflectionStatusLabels: Record<ReflectionJobStatus, string> = {
   succeeded: '已完成',
   failed: '失败',
   interrupted: '已中断',
-  waiting_user: '需要处理',
+  waiting_user: '需要重新检查',
 };
 
 export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, offset = 0, statusOnly = false) {
@@ -59,7 +59,7 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, off
         if (generation === epoch.current) setLoaded({ scope, catalog });
       })
       .catch((reason: unknown) => {
-        if (generation === epoch.current) setError(reason instanceof Error ? reason.message : '反思状态读取失败');
+        if (generation === epoch.current) setError(reason instanceof Error ? reason.message : '自动复盘状态读取失败');
       })
       .finally(() => {
         if (generation === epoch.current) setLoading(false);

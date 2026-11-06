@@ -76,7 +76,7 @@ try {
   await page.locator('.sidebar').waitFor();
   await page.evaluate(() => sessionStorage.setItem('agent-connection-token', 'revoked-or-invalid-connection-token'));
   await page.reload();
-  await page.getByRole('heading', { name: '连接 Agent Host', exact: true }).waitFor();
+  await page.getByRole('heading', { name: '连接 Agent', exact: true }).waitFor();
   assert.equal(await page.evaluate(() => sessionStorage.getItem('agent-connection-token')), null);
   console.log(
     JSON.stringify({

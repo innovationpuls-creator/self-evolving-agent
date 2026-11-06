@@ -6,7 +6,7 @@ import { TrajectoryPanel, type TrajectoryViewState } from '../features/diagnosti
 import { Failure } from '../components/reading';
 import { Catalog, ReflectionDetail } from '../features/reflection/Reflection';
 import { Button, Field, Modal, Notice } from '../components/ui';
-import { ShellSurface, type ShellController, type Page } from './Shell';
+import { ShellSurface, folderName, type ShellController, type Page } from './Shell';
 import { useProductNavigation } from './navigation';
 import { TaskTitle } from '../components/Title';
 import { SessionRoom, type SessionDraft } from '../features/chat/Session';
@@ -20,6 +20,7 @@ import { EvolutionCatalog, SuggestionDetail, ActivityView } from '../features/ev
 import { Source } from '../features/diagnostics/Source';
 import type { Host, Route } from './types';
 import '../styles/product.css';
+import './onboarding.css';
 export function App() {
   const nav = useProductNavigation(),
     r = nav.route;
@@ -192,6 +193,18 @@ export function App() {
       CR(false);
     }
   };
+  const openCreate = () => {
+    CWD(workspaceProject || context?.cwd || '');
+    M(
+      context
+        ? `${context.provider}:${context.model}`
+        : host.models[0]
+          ? `${host.models[0].provider}:${host.models[0].id}`
+          : '',
+    );
+    CE('');
+    C(true);
+  };
   if (locked || (host.connection !== 'ready' && !sessionStorage.getItem('agent-connection-token')))
     return (
       <div className="app quiet product-view host-product">
@@ -205,7 +218,7 @@ export function App() {
                 .catch(() => {});
             }}
           >
-            <h1>连接 Agent Host</h1>
+            <h1>连接 Agent</h1>
             {host.error && <p role="alert">{host.error}</p>}
             <Field label="连接令牌">
               <input type="password" value={token} onChange={(e) => T(e.target.value)} autoComplete="off" />
@@ -228,27 +241,11 @@ export function App() {
         connection:
           host.connection === 'ready' ? '已连接' : host.connection === 'syncing' ? '正在同步' : '等待重新连接',
         retry: host.retry,
-        create: () => {
-          CWD(workspaceProject || context?.cwd || '');
-          M(
-            context
-              ? `${context.provider}:${context.model}`
-              : host.models[0]
-                ? `${host.models[0].provider}:${host.models[0].id}`
-                : '',
-          );
-          CE('');
-          C(true);
-        },
+        create: openCreate,
         dialogs: (
-          <Modal
-            open={create}
-            onClose={() => C(false)}
-            title="开始一段新会话"
-            description="任务在 Host 项目目录中执行。"
-          >
-            <Field label="Host 工作目录">
-              <input value={cwd} onChange={(e) => CWD(e.target.value)} placeholder="项目绝对路径" />
+          <Modal open={create} onClose={() => C(false)} title="开始一段新会话">
+            <Field label="项目文件夹">
+              <input value={cwd} onChange={(e) => CWD(e.target.value)} placeholder="例如 /Users/you/project" />
             </Field>
             <Field label="模型">
               <select value={model} onChange={(e) => M(e.target.value)}>
@@ -260,14 +257,15 @@ export function App() {
               </select>
             </Field>
             {!host.models.length && (
-              <Notice title="尚未配置模型">
+              <Notice title="还没有可用的模型">
+                <p>先在“模型与连接”中连接一个模型，再回来创建会话。</p>
                 <Button
                   onClick={() => {
                     C(false);
                     nav.go({ page: 'settings' });
                   }}
                 >
-                  配置模型授权
+                  去连接模型
                 </Button>
               </Notice>
             )}
@@ -337,7 +335,7 @@ export function App() {
         </div>
         <div hidden={r.page === 'session' && !!r.sessionId} className="host-workspace-view">
           <div className={`aw host-reading ${r.page === 'trajectory' ? 'host-trajectory' : ''}`} data-aw-page={page}>
-            {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} />}
+            {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} create={openCreate} />}
             {r.page === 'reflections' && <Catalog api={host.api} sessions={host.sessions} route={r} go={nav.go} />}
             {r.page === 'reflection' && (
               <ReflectionDetail api={host.api} sessions={host.sessions} route={r} go={nav.go} back={nav.back} />
@@ -349,12 +347,13 @@ export function App() {
                 route={r}
                 go={nav.go}
                 back={nav.back}
+                showBack={!nav.depth}
                 sessionIds={host.sessions.map((session) => session.id)}
               />
             )}
             {r.page === 'result' &&
               (r.target.kind === 'memory' ? (
-                <MemoryReader host={host} route={r} go={nav.go} back={nav.back} />
+                <MemoryReader host={host} route={r} go={nav.go} back={nav.back} showBack={!nav.depth} />
               ) : r.target.kind === 'skill' ? (
                 <Skills
                   host={host}
@@ -392,6 +391,7 @@ export function App() {
                 store={memoryDrafts.current}
                 go={(route) => nav.go(route, true)}
                 back={nav.back}
+                showBack={!nav.depth}
               />
             )}
             {r.page === 'skills' && (
@@ -409,23 +409,14 @@ export function App() {
             {r.page === 'activity' && <ActivityView key={r.id} host={host} id={r.id} go={nav.go} back={nav.back} />}
             {r.page === 'settings' && <Settings host={host} back={nav.back} />}
             {r.page === 'trajectory' && (
-              <>
-                <Button
-                  kind="ghost"
-                  className="aw-return"
-                  onClick={() => nav.go({ page: 'session', sessionId: r.sessionId })}
-                >
-                  回到对话
-                </Button>
-                <TrajectoryPanel
-                  key={r.sessionId}
-                  api={host.api}
-                  session={selected?.id === r.sessionId ? selected : undefined}
-                  active={r.page === 'trajectory'}
-                  states={states.current}
-                  onTargetDone={() => {}}
-                />
-              </>
+              <TrajectoryPanel
+                key={r.sessionId}
+                api={host.api}
+                session={selected?.id === r.sessionId ? selected : undefined}
+                active={r.page === 'trajectory'}
+                states={states.current}
+                onTargetDone={() => {}}
+              />
             )}
           </div>
         </div>
@@ -433,13 +424,13 @@ export function App() {
     </ShellSurface>
   );
 }
-function SessionPicker({ host, go }: { host: Host; go: (route: Route) => void }) {
+function SessionPicker({ host, go, create }: { host: Host; go: (route: Route) => void; create: () => void }) {
   return (
     <>
       <header className="aw-heading">
         <h1 tabIndex={-1}>会话</h1>
       </header>
-      {host.connection !== 'ready' && <p role="status">正在同步 Host…</p>}
+      {host.connection !== 'ready' && <p role="status">正在同步…</p>}
       <div className="host-session-picker">
         {host.sessions.map((s) => (
           <button
@@ -450,11 +441,48 @@ function SessionPicker({ host, go }: { host: Host; go: (route: Route) => void })
             onClick={() => go({ page: 'session', sessionId: s.id })}
           >
             <TaskTitle title={s.title || '未命名会话'} />
-            <small>{s.cwd}</small>
+            <small title={s.cwd}>{folderName(s.cwd) || s.cwd}</small>
           </button>
         ))}
       </div>
-      {host.connection === 'ready' && !host.sessions.length && <p>还没有会话。可以从导航中新建。</p>}
+      {host.connection === 'ready' && !host.sessions.length && (
+        <FirstRun modelReady={host.models.length > 0} settings={() => go({ page: 'settings' })} create={create} />
+      )}
     </>
+  );
+}
+function FirstRun({ modelReady, settings, create }: { modelReady: boolean; settings: () => void; create: () => void }) {
+  // No session exists yet, so steps 2 and 3 complete only when the first session is created.
+  const steps = [
+    { title: '连接模型', done: modelReady, action: '去设置', run: settings },
+    { title: '选择项目文件夹', done: false, action: '新建会话', run: create },
+    { title: '开始提问', done: false, action: '新建会话', run: create },
+  ];
+  const current = steps.findIndex((step) => !step.done);
+  return (
+    <section className="onboarding" aria-label="开始使用">
+      <ol>
+        {steps.map((step, i) => (
+          <li
+            key={step.title}
+            className={step.done ? 'done' : i === current ? 'current' : undefined}
+            aria-current={i === current ? 'step' : undefined}
+          >
+            <span className="onboarding-mark" aria-hidden="true">
+              {step.done ? '✓' : i + 1}
+            </span>
+            <span className="onboarding-title">
+              {step.title}
+              {step.done && <span className="sr-only">（已完成）</span>}
+            </span>
+            {i === current && (
+              <Button kind="primary" onClick={step.run}>
+                {step.action}
+              </Button>
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }

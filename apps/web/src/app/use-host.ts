@@ -18,7 +18,7 @@ async function request<T>(path: string, method = 'GET', data?: unknown, signal?:
     });
   } catch (error) {
     if (signal?.aborted) throw error;
-    throw new Error('暂时无法连接 Agent Host，请检查 Host 是否仍在运行。');
+    throw new Error('暂时无法连接本机服务，请确认应用仍在运行。');
   }
   const result = await response.json();
   if (response.status === 401 && path !== '/connect' && token === sessionStorage.getItem(connectionKey)) {
