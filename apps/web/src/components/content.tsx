@@ -8,7 +8,7 @@ import typescript from 'highlight.js/lib/languages/typescript';
 import json from 'highlight.js/lib/languages/json';
 import markdown from 'highlight.js/lib/languages/markdown';
 import { Copy, Check, ChevronDown, ChevronRight, FileCode, Braces } from 'lucide-react';
-import { Button, TabBar } from './ui';
+import { TabBar } from './ui';
 hljs.registerLanguage('typescript', typescript);
 hljs.registerLanguage('javascript', typescript);
 hljs.registerLanguage('json', json);

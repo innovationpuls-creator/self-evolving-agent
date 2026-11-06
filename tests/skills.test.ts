@@ -11,6 +11,7 @@ import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { startHost } from '../apps/host/transport/server.js';
 import { SkillError, type SkillRecord } from '../apps/host/skills/skills.js';
 import { skillPackage, bindings, echoCode } from './fixtures/skills-package.js';
+import { present } from './support.js';
 declare global {
   var __skillEvidence:
     | { loads: number; hooks: number; calls: string[]; gate?: Promise<void>; started?: () => void }
@@ -98,7 +99,7 @@ test('ordinary native discovery, management, edit conflict, disable, rollback an
     const [r] = await f.skills.import({ source: root, project: f.dir });
     assert.ok(r);
     assert.equal((await f.publish(r)).status, 'applied');
-    let state = await f.prompt([
+    const state = await f.prompt([
       ['read', { path: join(f.skills.packagePath(f.skills.version(r.latest)), 'SKILL.md') }],
     ]);
     assert.ok(JSON.stringify(state.messages).includes('Read a local file.'));
@@ -198,7 +199,7 @@ test('content tampering, escaping links, shared bindings, unknown project extens
     await assert.rejects(
       f.skills.import({
         source,
-        bindings: [...bindings, { skill: bindings[1]!.skill, extensions: bindings[0]!.extensions }],
+        bindings: [...bindings, { skill: present(bindings[1]).skill, extensions: present(bindings[0]).extensions }],
       }),
       /共享/,
     );
@@ -329,7 +330,7 @@ test('knowledge revisions refresh documents without reloading executable runtime
     const changed = await f.skills.edit(a.id, f.skills.record(a.id).revision, [
       {
         path: 'skills/echo/SKILL.md',
-        content: (await f.skills.read(a.id, a.latest, 'skills/echo/SKILL.md')).content + '\nUpdated rule.',
+        content: `${(await f.skills.read(a.id, a.latest, 'skills/echo/SKILL.md')).content}\nUpdated rule.`,
       },
     ]);
     await f.review(changed.skill);
@@ -367,7 +368,10 @@ test('draft deletions, stale revision recovery, frontmatter and knowledge editor
     assert.equal(updated.skill.name, 'renamed');
     assert.ok(!updated.files.includes('remove.md'));
     await assert.rejects(
-      f.skills.import({ source: join(f.dir, 'pkg'), bindings: [bindings[0]!, bindings[0]!, bindings[1]!] }),
+      f.skills.import({
+        source: join(f.dir, 'pkg'),
+        bindings: [present(bindings[0]), present(bindings[0]), present(bindings[1])],
+      }),
       /重复/,
     );
   } finally {
@@ -425,8 +429,8 @@ test('SQL commit and partial reload failures restore all original Sessions; fail
       string,
       { session: import('@earendil-works/pi-coding-agent').AgentSession; skillFailed?: boolean }
     >;
-    const one = live.get(f.s.id)!,
-      two = live.get(s2.id)!,
+    const one = present(live.get(f.s.id)),
+      two = present(live.get(s2.id)),
       original = one.session,
       manager = original.sessionManager;
     const edited = await f.skills.edit(a.id, f.skills.record(a.id).revision, [
@@ -644,18 +648,20 @@ test('native compaction, selected history branch, model configuration and subscr
     await f.review(a);
     assert.equal((await f.publish(a)).status, 'applied');
     f.fake.setResponses([fauxAssistantMessage('long first answer')]);
-    await f.host.service.prompt(f.s.id, 'first ' + 'historical context '.repeat(4500));
+    await f.host.service.prompt(f.s.id, `first ${'historical context '.repeat(4500)}`);
     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
-    const firstLeaf = (
-      Reflect.get(f.host.service, 'active').get(f.s.id)
-        .session as import('@earendil-works/pi-coding-agent').AgentSession
-    ).sessionManager.getLeafId()!;
+    const firstLeaf = present(
+      (
+        Reflect.get(f.host.service, 'active').get(f.s.id)
+          .session as import('@earendil-works/pi-coding-agent').AgentSession
+      ).sessionManager.getLeafId(),
+    );
     f.fake.setResponses([fauxAssistantMessage('second answer')]);
-    await f.host.service.prompt(f.s.id, 'second ' + 'recent context '.repeat(6500));
+    await f.host.service.prompt(f.s.id, `second ${'recent context '.repeat(6500)}`);
     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
     await f.host.service.action(f.s.id, 'branch', firstLeaf);
     f.fake.setResponses([fauxAssistantMessage('branched answer')]);
-    await f.host.service.prompt(f.s.id, 'branched ' + 'recent context '.repeat(6500));
+    await f.host.service.prompt(f.s.id, `branched ${'recent context '.repeat(6500)}`);
     await f.wait(async () => !(await f.host.service.viewSession(f.s.id)).busy);
     f.fake.setResponses([fauxAssistantMessage('Summary of the branch and earlier context.')]);
     await f.host.service.action(f.s.id, 'compact');
@@ -717,7 +723,7 @@ test('disabled special Skill stays absent across restart and upgrade while its p
     const skills = second.service.skills;
     await writeFile(join(source, 'extensions/echo.js'), echoCode('upgrade'));
     const added = await skills.import({ source, bindings });
-    const upgraded = added.find((r) => r.id === a.id)!;
+    const upgraded = present(added.find((r) => r.id === a.id));
     const v = skills.version(upgraded.latest);
     await skills.review(
       a.id,

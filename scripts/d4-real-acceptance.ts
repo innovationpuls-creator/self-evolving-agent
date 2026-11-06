@@ -6,7 +6,6 @@ import { join, resolve } from 'node:path';
 import { chromium } from 'playwright-core';
 import { startHost } from '../apps/host/transport/server.js';
 import type { EvolutionActivity } from '../apps/host/evolution/activities.js';
-import type { SkillRecord } from '../apps/host/skills/skills.js';
 
 const root = await mkdtemp(join(tmpdir(), 'd4-real-')),
   output = resolve(`docs/evidence/d4-business-${new Date().toISOString().replaceAll(/[:.]/g, '-')}`);
@@ -30,7 +29,7 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 page.setDefaultTimeout(20000);
 const request = async <T>(path: string, method = 'GET', body?: unknown): Promise<T> => {
-  const response = await fetch(host.origin + '/api' + path, {
+  const response = await fetch(`${host.origin}/api${path}`, {
     method,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -67,15 +66,15 @@ try {
   assert.ok(model, 'real Provider required');
   receipt.model = model;
   const initial = await host.service.create(root, model.provider, model.id);
-  await page.goto(host.origin + '/#token=' + token);
+  await page.goto(`${host.origin}/#token=${token}`);
   await page.locator('.connection[data-connection="ready"]').waitFor();
   await page.locator('nav button').filter({ hasText: root }).click();
   await page.getByText('能力目标与开发活动', { exact: true }).click();
   await page.getByLabel('能力目标', { exact: true }).fill(goal);
   await page.getByRole('button', { name: '进入独立讨论', exact: true }).click();
   await page.getByRole('region', { name: '能力开发活动' }).waitFor();
-  const activities = await request<EvolutionActivity[]>('/activities');
-  const a = activities[0]!;
+  const [a] = await request<EvolutionActivity[]>('/activities');
+  assert.ok(a, 'activity required');
   receipt.activityId = a.id;
   receipt.discussionSessionId = a.sessionId;
   await page
@@ -102,8 +101,9 @@ try {
   receipt.activity = completed;
   assert.equal(completed.status, 'completed', completed.error ?? 'activity not completed');
   assert.equal(completed.releases.length, 1, 'real code result required');
-  const release = completed.releases[0]!,
-    skill = host.service.skills.record(release.skillId),
+  const [release] = completed.releases;
+  assert.ok(release);
+  const skill = host.service.skills.record(release.skillId),
     v1 = host.service.skills.version(release.version);
   assert.equal(v1.review, undefined, 'D2 human review must remain absent');
   assert.ok(v1.evolution);
@@ -200,7 +200,7 @@ try {
   receipt.sourceAtReceiptSha256 = createHash('sha256')
     .update(await readFile('apps/host/runtime/agent.ts'))
     .digest('hex');
-  await writeFile(join(output, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
+  await writeFile(join(output, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`);
   await browser.close();
   await host.close();
   await rm(root, { recursive: true, force: true });

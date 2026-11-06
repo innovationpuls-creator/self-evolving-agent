@@ -25,7 +25,7 @@ const receipt: Record<string, unknown> = {
 const request = async <T>(page: Page, path: string, method = 'GET', body?: unknown): Promise<T> =>
   page.evaluate(
     async ({ path, method, body }) => {
-      const response = await fetch('/api' + path, {
+      const response = await fetch(`/api${path}`, {
         method,
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('agent-connection-token')}`,
@@ -90,8 +90,8 @@ try {
   await page.getByLabel('能力目标', { exact: true }).fill('讨论一个以后再实现的文件格式检查能力');
   await page.getByRole('button', { name: '进入独立讨论', exact: true }).click();
   await page.getByRole('region', { name: '能力开发活动' }).waitFor();
-  const activities = await request<EvolutionActivity[]>(page, '/activities'),
-    a = activities[0]!;
+  const [a] = await request<EvolutionActivity[]>(page, '/activities');
+  assert.ok(a, 'activity required');
   browser = await chromium.launch({
     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless: true,
@@ -99,7 +99,7 @@ try {
   const web = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   web.setDefaultTimeout(20000);
   const token = await page.evaluate(() => sessionStorage.getItem('agent-connection-token'));
-  await web.goto(new URL(page.url()).origin + '/#token=' + token);
+  await web.goto(`${new URL(page.url()).origin}/#token=${token}`);
   await web.locator('.shell').waitFor();
   await web.locator('nav button').filter({ hasText: '讨论一个以后再实现的文件格式检查能力' }).click();
   await web.getByText('确认开发范围', { exact: true }).click();
@@ -153,7 +153,7 @@ try {
   receipt.error = e instanceof Error ? e.message : String(e);
   throw e;
 } finally {
-  await writeFile(join(output, 'receipt.json'), JSON.stringify(receipt, null, 2) + '\n');
+  await writeFile(join(output, 'receipt.json'), `${JSON.stringify(receipt, null, 2)}\n`);
   await browser?.close();
   await app.close();
   await rm(root, { recursive: true, force: true });

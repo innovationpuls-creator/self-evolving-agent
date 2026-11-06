@@ -13,6 +13,7 @@ import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { SessionManager } from '@earendil-works/pi-coding-agent';
 import { startHost } from '../apps/host/transport/server.js';
 import { EncryptedStore, SensitiveData, snapshot, restore } from '../apps/host/storage/storage.js';
+import { present } from './support.js';
 
 async function fixture() {
   const dir = await mkdtemp(join(tmpdir(), 'agent-test-')),
@@ -126,7 +127,7 @@ test('HTTP and WebSocket reject unauthenticated, cross-origin and rebinding requ
     assert.equal((await f.request('/connect', 'POST', { token: 'wrong' })).status, 401);
     const login = await f.request('/connect', 'POST', { token: f.token }, { Origin: f.host.origin });
     assert.equal(login.status, 200);
-    const cookie = login.headers.get('set-cookie')!.split(';')[0]!;
+    const cookie = present(login.headers.get('set-cookie')?.split(';')[0]);
     const denied = await fetch(`${f.host.origin}/api/sessions`, {
       method: 'POST',
       headers: { Cookie: cookie, 'Content-Type': 'application/json' },
@@ -180,9 +181,11 @@ test('native tool execution, stream events, independent sessions, branching and 
     assert.ok(!events.join('').includes(secret));
     assert.ok(events.some((e) => e.includes('tool_execution_end')));
     assert.equal((await (await f.request(`/sessions/${other.id}`)).json()).messages.length, 0);
-    const leaves = (await f.host.service.store.read<{ session: { entries: Array<{ id: string; type: string }> } }>(
-      `sessions/${first.id}.enc`,
-    ))!.session.entries;
+    const leaves = present(
+      await f.host.service.store.read<{ session: { entries: Array<{ id: string; type: string }> } }>(
+        `sessions/${first.id}.enc`,
+      ),
+    ).session.entries;
     const user = leaves.find((e) => e.type === 'message');
     assert.ok(user);
     assert.equal((await f.request(`/sessions/${first.id}/branch`, 'POST', { value: user.id })).status, 200);
@@ -266,7 +269,7 @@ test('parallel sessions keep their conversation separate and native compaction s
       fauxAssistantMessage(JSON.stringify(context.messages).includes('alpha-only') ? 'alpha-result' : 'beta-result');
     f.fake.setResponses([reply, reply]);
     await Promise.all([
-      f.request(`/sessions/${a.id}/prompt`, 'POST', { text: 'alpha-only ' + 'historical context '.repeat(6000) }),
+      f.request(`/sessions/${a.id}/prompt`, 'POST', { text: `alpha-only ${'historical context '.repeat(6000)}` }),
       f.request(`/sessions/${b.id}/prompt`, 'POST', { text: 'beta-only' }),
     ]);
     const [sa, sb] = await Promise.all([f.settle(a.id), f.settle(b.id)]);
@@ -275,7 +278,7 @@ test('parallel sessions keep their conversation separate and native compaction s
     assert.ok(JSON.stringify(sb.messages).includes('beta-result'));
     assert.ok(!JSON.stringify(sb.messages).includes('alpha-only'));
     f.fake.setResponses([fauxAssistantMessage('alpha follow-up result')]);
-    await f.request(`/sessions/${a.id}/prompt`, 'POST', { text: 'alpha follow-up ' + 'recent context '.repeat(6500) });
+    await f.request(`/sessions/${a.id}/prompt`, 'POST', { text: `alpha follow-up ${'recent context '.repeat(6500)}` });
     await f.settle(a.id);
     f.fake.setResponses([fauxAssistantMessage('Summary: user requested alpha-only and received alpha-result.')]);
     await f.host.service.action(a.id, 'compact');
@@ -341,7 +344,7 @@ test('browser authentication does not issue a cross-port cookie', async () => {
 test('WebSocket first-frame authentication gates every event and rejects invalid credentials', async () => {
   const f = await fixture();
   try {
-    const ws = new WebSocket(f.host.origin.replace('http', 'ws') + '/events', { origin: f.host.origin });
+    const ws = new WebSocket(`${f.host.origin.replace('http', 'ws')}/events`, { origin: f.host.origin });
     const messages: string[] = [];
     ws.on('message', (v) => messages.push(v.toString()));
     await once(ws, 'open');
@@ -350,12 +353,12 @@ test('WebSocket first-frame authentication gates every event and rejects invalid
     assert.equal(messages.length, 0);
     ws.send(JSON.stringify({ type: 'authenticate', token: f.token }));
     await once(ws, 'message');
-    assert.equal(JSON.parse(messages[0]!).type, 'connected');
+    assert.equal(JSON.parse(present(messages[0])).type, 'connected');
     f.host.service.emit('event', { type: 'sentinel-after-auth' });
     await once(ws, 'message');
-    assert.match(messages[1]!, /sentinel-after-auth/);
+    assert.match(present(messages[1]), /sentinel-after-auth/);
     ws.close();
-    const bad = new WebSocket(f.host.origin.replace('http', 'ws') + '/events', { origin: f.host.origin });
+    const bad = new WebSocket(`${f.host.origin.replace('http', 'ws')}/events`, { origin: f.host.origin });
     await once(bad, 'open');
     bad.send(JSON.stringify({ type: 'authenticate', token: 'invalid' }));
     const [code] = await once(bad, 'close');
@@ -423,7 +426,7 @@ test('damaged current checkpoint falls back visibly; a wholly broken session can
     await f.request(`/sessions/${good.id}/prompt`, 'POST', { text: 'checkpoint prompt' });
     await f.settle(good.id);
     const name = `sessions/${good.id}.enc`;
-    const previous = await f.host.service.store.read<{ session: ReturnType<typeof snapshot> }>(name + '.prev');
+    const previous = await f.host.service.store.read<{ session: ReturnType<typeof snapshot> }>(`${name}.prev`);
     assert.ok(previous);
     await f.host.close();
     closed = true;
@@ -433,7 +436,7 @@ test('damaged current checkpoint falls back visibly; a wholly broken session can
     second.service.runtime.registerNativeProvider(f.fake.provider);
     const restored = await second.service.viewSession(good.id);
     assert.equal(restored.interrupted, true);
-    assert.match(restored.error!, /上一有效检查点/);
+    assert.match(present(restored.error), /上一有效检查点/);
     assert.equal(restored.leafId, previous.session.leafId);
     const list = await second.service.list();
     assert.equal(list.length, 2);
@@ -625,13 +628,13 @@ test('every native thinking and tool-argument streaming frame protects credentia
 test('oversize and unauthenticated WebSocket handshakes close without crashing the Host', async () => {
   const f = await fixture();
   try {
-    const huge = new WebSocket(f.host.origin.replace('http', 'ws') + '/events', { origin: f.host.origin });
+    const huge = new WebSocket(`${f.host.origin.replace('http', 'ws')}/events`, { origin: f.host.origin });
     huge.on('error', () => {});
     await once(huge, 'open');
     huge.send('x'.repeat(2048));
     const [code] = await once(huge, 'close');
     assert.equal(code, 1009);
-    const idle = new WebSocket(f.host.origin.replace('http', 'ws') + '/events', { origin: f.host.origin });
+    const idle = new WebSocket(`${f.host.origin.replace('http', 'ws')}/events`, { origin: f.host.origin });
     await once(idle, 'open');
     const [idleCode] = await once(idle, 'close');
     assert.equal(idleCode, 4401);

@@ -1,3 +1,4 @@
+// biome-ignore lint/correctness/noUnusedImports: tsx runs tests/web-state.test.ts with the classic JSX transform (apps/web is outside the root tsconfig), which needs React in scope.
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

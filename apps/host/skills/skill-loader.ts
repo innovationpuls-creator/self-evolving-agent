@@ -8,7 +8,7 @@ import {
   type ResourceLoader,
   type SettingsManager,
 } from '@earendil-works/pi-coding-agent';
-import { SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
+import { type SkillService, type SkillLoadout, type SkillResourceSource, SkillError } from './skills.js';
 
 // Only the native loader's approved, materialized local paths may import code.
 export class SkillResourceLoader implements ResourceLoader {

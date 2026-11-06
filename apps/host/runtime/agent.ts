@@ -229,8 +229,8 @@ export class AgentService extends EventEmitter {
         .map((row) => String(row.id)),
     );
     for (const name of await readdir(join(this.dataDir, 'sessions'))) {
-      const match = /^([a-f0-9-]{36})\.enc(?:\.prev)?$/.exec(name);
-      if (match) ids.add(match[1]!);
+      const id = /^([a-f0-9-]{36})\.enc(?:\.prev)?$/.exec(name)?.[1];
+      if (id) ids.add(id);
     }
     let valid = 0;
     for (const id of ids) {
@@ -1390,7 +1390,8 @@ export class AgentService extends EventEmitter {
               throw new SkillError(`候选 Tool 与现有能力名称冲突：${name}`);
           }
         }
-        if (tools.length && tools.some((t) => !op.evolution!.probes.some((p) => p.tool === t.name)))
+        const { probes } = op.evolution;
+        if (tools.length && tools.some((t) => !probes.some((p) => p.tool === t.name)))
           throw new SkillError('每个候选 Tool 都需要实际调用检查');
         candidate.setActiveToolsByName([...candidate.getActiveToolNames(), ...tools.map((t) => t.name)]);
         for (const probe of op.evolution.probes) {
@@ -1443,7 +1444,8 @@ export class AgentService extends EventEmitter {
     }
     this.skills.waiting(op);
     const release = await this.acquireBarrier();
-    const states = new Map<Active, { active: string[]; definitions: Map<string, string> }>();
+    type ToolState = { active: string[]; definitions: Map<string, string> };
+    const states = new Map<Active, ToolState>();
     try {
       await Promise.all([...this.loading.values(), ...this.creating]);
       const affected = [...this.active.values()].filter((a) => !changed.project || a.record.cwd === changed.project);
@@ -1456,18 +1458,18 @@ export class AgentService extends EventEmitter {
         await item.save;
       }
       for (const item of affected) {
-        states.set(item, {
+        const before: ToolState = {
           active: item.session.getActiveToolNames(),
           definitions: new Map(
             item.session
               .getAllTools()
               .map((t) => [t.name, JSON.stringify(item.session.getToolDefinition(t.name)?.parameters)]),
           ),
-        });
+        };
+        states.set(item, before);
         item.loader.setLoadout(next);
         await item.session.reload();
         if (item.skillFailed) throw new SkillError('正式生命周期检查失败');
-        const before = states.get(item)!;
         const active = before.active.filter(
           (name) =>
             before.definitions.get(name) === JSON.stringify(item.session.getToolDefinition(name)?.parameters) &&
@@ -1513,7 +1515,8 @@ export class AgentService extends EventEmitter {
     this.drainDone = new Promise<void>((ok) => (finish = ok));
     try {
       while (this.queued.length && !this.closing && !this.gate) {
-        const q = this.queued.shift()!;
+        const q = this.queued.shift();
+        if (!q) break;
         try {
           await this.dispatchPrompt(q.id, q.text, q.files);
           await this.active.get(q.id)?.run;

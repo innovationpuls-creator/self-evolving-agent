@@ -6,15 +6,14 @@ import { z } from 'zod';
 import type { ModelRuntime, ToolDefinition, SessionManager } from '@earendil-works/pi-coding-agent';
 import {
   validateToolArguments,
-  type AssistantMessage,
   type ToolCall,
   type Tool,
   type Model,
   type Api,
   type TranscriptContext,
 } from '@earendil-works/pi-ai';
-import { EncryptedStore, restore, type Snapshot, type SensitiveData } from '../storage/storage.js';
-import { MemoryService, type MemoryContext, type MemorySource } from '../memory/memory.js';
+import { type EncryptedStore, restore, type Snapshot, type SensitiveData } from '../storage/storage.js';
+import type { MemoryService, MemoryContext, MemorySource } from '../memory/memory.js';
 import { memoryTools } from '../memory/memory-tools.js';
 import { diagnosticTools } from '../diagnostics/diagnostic-tools.js';
 import type {
@@ -29,7 +28,6 @@ import {
   evolutionEvidence,
   evolutionInput,
   type EvolutionEvidence,
-  type EvolutionContext,
   type EvolutionService,
 } from '../evolution/evolution.js';
 import { evolutionTools } from '../evolution/evolution-tools.js';
@@ -532,8 +530,12 @@ export class ReflectionService {
     const diagnosticIds = new Map<string, string>();
     const scopedDiagnosticId = (kind: string, id: unknown) => {
       const key = `${kind}:${z.string().min(1).max(256).parse(id)}`;
-      if (!diagnosticIds.has(key)) diagnosticIds.set(key, randomUUID());
-      return diagnosticIds.get(key)!;
+      let value = diagnosticIds.get(key);
+      if (!value) {
+        value = randomUUID();
+        diagnosticIds.set(key, value);
+      }
+      return value;
     };
     const live = () => {
       signal.throwIfAborted();
@@ -553,7 +555,7 @@ export class ReflectionService {
       const next = { ...current, changes: [...current.changes, change] };
       this.save(next);
     };
-    const source = (callId: string): MemoryContext => {
+    const source = (callId: string): MemoryContext & { source: MemorySource } => {
       live();
       const entry = manager
         ?.getBranch()
@@ -747,7 +749,7 @@ export class ReflectionService {
             {
               reason: this.d.sensitive.text(args.reason),
               sessionId,
-              entryId: ctx.source!.entryId,
+              entryId: ctx.source.entryId,
               reflectionId: record.id,
               evidence: invocationEvidence.get(id)?.sources,
             },

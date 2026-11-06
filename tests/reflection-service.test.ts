@@ -10,6 +10,7 @@ import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { AgentService } from '../apps/host/runtime/agent.js';
 import type { ReflectionExecutor } from '../apps/host/reflection/reflection-service.js';
+import { present } from './support.js';
 
 /** Deterministic Pi/IPC contract test only. This executor is never a product sandbox fallback. */
 class TestExecutor implements ReflectionExecutor {
@@ -53,17 +54,17 @@ class TestExecutor implements ReflectionExecutor {
             void handle(m.operation, m.input).then(
               (result) =>
                 child.stdin.write(
-                  JSON.stringify({ kind: 'response', requestId: m.requestId, ok: true, result }) + '\n',
+                  `${JSON.stringify({ kind: 'response', requestId: m.requestId, ok: true, result })}\n`,
                 ),
               (e) => {
                 this.errors.push(e);
                 child.stdin.write(
-                  JSON.stringify({ kind: 'response', requestId: m.requestId, ok: false, error: String(e) }) + '\n',
+                  `${JSON.stringify({ kind: 'response', requestId: m.requestId, ok: false, error: String(e) })}\n`,
                 );
               },
             );
         });
-        child.stdin.write(JSON.stringify(start) + '\n');
+        child.stdin.write(`${JSON.stringify(start)}\n`);
       });
     } finally {
       await rm(cwd, { recursive: true, force: true });
@@ -130,7 +131,7 @@ test('stable encrypted marker schedules independent native Pi reflection, contro
     await waitFor(() => host.reflection.jobs.list().some((j) => ['succeeded', 'failed'].includes(j.status)));
     assert.equal(host.reflection.jobs.list()[0]?.status, 'succeeded', JSON.stringify(executor.errors.map(String)));
     assert.deepEqual(executor.errors, []);
-    const record = host.reflection.list(session.id)[0]!;
+    const record = present(host.reflection.list(session.id)[0]);
     assert.equal(record.summary, 'Reviewed history');
     assert.equal(record.changes.length, 2);
     assert.equal(host.memory.search({ actor: 'user', project: session.cwd }, { query: '' }).items.length, 1);
@@ -140,9 +141,9 @@ test('stable encrypted marker schedules independent native Pi reflection, contro
     await new Promise((r) => setTimeout(r, 200));
     assert.equal(host.reflection.jobs.list().length, 1);
     assert.equal(executor.runs, 1);
-    const suggestion = host.evolution.list({ actor: 'user' }, {}).items[0]!;
+    const suggestion = present(host.evolution.list({ actor: 'user' }, {}).items[0]);
     const adopted = await host.evolution.adopt(suggestion.id, suggestion.revision, host.ensureDiscussion.bind(host));
-    const discussion = await host.viewSession(adopted.discussionSessionId!);
+    const discussion = await host.viewSession(present(adopted.discussionSessionId));
     assert.equal(discussion.purpose, 'discussion');
     assert.equal(discussion.busy, false);
     assert.equal(executor.runs, 1);

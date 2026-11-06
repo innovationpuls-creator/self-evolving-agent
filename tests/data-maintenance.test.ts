@@ -14,6 +14,7 @@ import { backupData, restoreBackup, verifyBackup } from '../apps/host/storage/ma
 import { commitDataFormat } from '../apps/host/storage/schema.js';
 import { acquireDataLock } from '../apps/host/storage/data-lock.js';
 import { skillPackage, bindings } from './fixtures/skills-package.js';
+import { present } from './support.js';
 
 const checks: Record<string, unknown>[] = [];
 const hash = (value: unknown) => createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -89,7 +90,7 @@ test('encrypted backup and new-directory migration preserve all committed rows, 
   try {
     const source = await skillPackage(join(f.root, 'package'));
     const imported = await f.host.service.skills.import({ source, bindings });
-    const skill = imported.find((s) => s.name === 'echo')!;
+    const skill = present(imported.find((s) => s.name === 'echo'));
     const version = f.host.service.skills.version(skill.latest);
     await f.host.service.skills.review(
       skill.id,
@@ -191,7 +192,7 @@ test('tamper, wrong key, occupied destination and active Host never overwrite da
     assert.deepEqual(await readFile(archive), bytes);
     await assert.rejects(restoreBackup({ archive, destination: f.dataDir, key: f.key }));
     for (const mode of ['wrong-key', 'tamper', 'truncate']) {
-      const damaged = join(f.root, mode + '.agentbackup'),
+      const damaged = join(f.root, `${mode}.agentbackup`),
         destination = join(f.root, mode);
       const buffer = Buffer.from(bytes);
       buffer[25] = (buffer[25] ?? 0) ^ 1;
@@ -241,7 +242,7 @@ test('legacy upgrade backs up before writes; failed migration rolls back; unknow
     await f.close();
     const backups = (await readdir(f.root)).filter((n) => n.includes('.pre-d5-') && n.endsWith('.agentbackup'));
     assert.equal(backups.length, 1);
-    const backup = join(f.root, backups[0]!);
+    const backup = join(f.root, present(backups[0]));
     const v = new DatabaseSync(join(f.dataDir, 'product.sqlite'));
     assert.equal(v.prepare('PRAGMA user_version').get()?.user_version, 1);
     v.exec('PRAGMA user_version=99');
@@ -424,11 +425,11 @@ test.after(async () => {
     await mkdir(resolve(path, '..'), { recursive: true });
     await writeFile(
       path,
-      JSON.stringify(
+      `${JSON.stringify(
         { environment: { node: process.version, platform: process.platform, arch: process.arch }, checks },
         null,
         2,
-      ) + '\n',
+      )}\n`,
     );
   }
 });

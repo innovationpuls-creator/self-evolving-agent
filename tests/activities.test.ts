@@ -8,6 +8,7 @@ import { fauxProvider } from '@earendil-works/pi-ai/providers/faux';
 import { fauxAssistantMessage, fauxToolCall } from '@earendil-works/pi-ai';
 import { startHost } from '../apps/host/transport/server.js';
 import type { ActivityResult } from '../apps/host/evolution/activities.js';
+import { present } from './support.js';
 
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'd4-activities-')),
@@ -113,7 +114,7 @@ test('user goal -> read-only discussion -> authorization -> native candidate che
       existingSkills: [],
     });
     await f.wait(async () => !(await f.host.service.viewSession(a.sessionId)).busy);
-    const target = granted.grant!.targets[0]!;
+    const target = present(granted.grant?.targets[0]);
     // Native write boundary enforces granted directories, including symlink resolution.
     const outside = await f.turn(a.sessionId, 'write', { path: join(f.root, 'outside.txt'), content: 'denied' });
     assert.ok(outside.messages.some((m) => m.role === 'toolResult' && m.isError));
@@ -123,8 +124,8 @@ test('user goal -> read-only discussion -> authorization -> native candidate che
     await f.wait(() => f.host.service.activities.get(a.id).status !== 'checking');
     const completed = f.host.service.activities.get(a.id);
     assert.equal(completed.status, 'completed', completed.error ?? 'activity did not complete');
-    const skill = f.host.service.skills.record(completed.releases[0]!.skillId),
-      v1 = skill.current!;
+    const skill = f.host.service.skills.record(present(completed.releases[0]).skillId),
+      v1 = present(skill.current);
     assert.ok(f.host.service.skills.version(v1).evolution);
     assert.equal(f.host.service.skills.version(v1).review, undefined, 'must not forge D2 human review');
     const used = await f.turn(f.session.id, 'text_compare', { text: 'ordinary' });
@@ -134,7 +135,7 @@ test('user goal -> read-only discussion -> authorization -> native candidate che
     const called = await f.turn(f.session.id, 'text_compare', { text: 'ordinary' });
     assert.match(JSON.stringify(called.messages.at(-2)), /v1:ordinary/);
     const b = await f.start([], [skill.id]),
-      bt = b.grant!.targets[0]!;
+      bt = present(b.grant?.targets[0]);
     await candidate(bt.directory, bt.name, 'v2:');
     await f.turn(b.sessionId, 'evolution_complete', result(bt.key, 'text_compare', 'v2:sample'));
     await f.wait(() => f.host.service.activities.get(b.id).status !== 'checking');
@@ -143,13 +144,13 @@ test('user goal -> read-only discussion -> authorization -> native candidate che
       'completed',
       f.host.service.activities.get(b.id).error ?? 'activity did not complete',
     );
-    const v2 = f.host.service.skills.record(skill.id).current!;
+    const v2 = present(f.host.service.skills.record(skill.id).current);
     assert.notEqual(v1, v2);
     const rollback = f.host.service.skills.publish(skill.id, v1, f.host.service.skills.record(skill.id).revision);
     await f.host.service.skills.settled();
     assert.equal(f.host.service.skills.operation(rollback.id).status, 'applied');
     assert.equal(f.host.service.skills.record(skill.id).current, v1);
-    const saved = await readFile(join(f.dataDir, 'sessions', a.sessionId + '.enc'), 'utf8');
+    const saved = await readFile(join(f.dataDir, 'sessions', `${a.sessionId}.enc`), 'utf8');
     assert.ok(!saved.includes('Create a reusable'));
     await f.host.close();
     const restarted = await startHost({ dataDir: f.dataDir, key: f.key, token: f.token });
@@ -167,7 +168,7 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
   const f = await fixture();
   try {
     const a = await f.start(['stable-tool']),
-      target = a.grant!.targets[0]!;
+      target = present(a.grant?.targets[0]);
     await candidate(target.directory, target.name, 'stable:');
     await f.turn(a.sessionId, 'evolution_complete', result(target.key, 'stable_tool', 'stable:sample'));
     await f.wait(() => f.host.service.activities.get(a.id).status !== 'checking');
@@ -176,10 +177,10 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
       'completed',
       f.host.service.activities.get(a.id).error ?? 'activity did not complete',
     );
-    const id = f.host.service.activities.get(a.id).releases[0]!.skillId,
+    const id = present(f.host.service.activities.get(a.id).releases[0]).skillId,
       current = f.host.service.skills.record(id).current;
     const failed = await f.start([], [id]),
-      ft = failed.grant!.targets[0]!;
+      ft = present(failed.grant?.targets[0]);
     await candidate(ft.directory, ft.name, 'bad:', true);
     await f.turn(failed.sessionId, 'evolution_complete', result(ft.key, 'stable_tool', 'bad:sample'));
     await f.wait(() => f.host.service.activities.get(failed.id).status !== 'checking');
@@ -189,7 +190,7 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
     const cancelled = await f.start(['cancelled-tool']);
     await f.host.service.cancelActivity(cancelled.id);
     const postCancel = await f.turn(cancelled.sessionId, 'write', {
-      path: join(cancelled.grant!.targets[0]!.directory, 'x'),
+      path: join(present(cancelled.grant?.targets[0]).directory, 'x'),
       content: 'denied',
     });
     assert.ok(postCancel.messages.some((m) => m.role === 'toolResult' && m.isError));
@@ -206,7 +207,7 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
     assert.equal(f.host.service.skills.record(id).current, current);
     // A failed first publication leaves a draft that the user can explicitly authorize for repair.
     const draftActivity = await f.start(['repairable-tool']),
-      draftTarget = draftActivity.grant!.targets[0]!;
+      draftTarget = present(draftActivity.grant?.targets[0]);
     await candidate(draftTarget.directory, draftTarget.name, 'broken:', true);
     await f.turn(
       draftActivity.sessionId,
@@ -215,10 +216,10 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
     );
     await f.wait(() => f.host.service.activities.get(draftActivity.id).status !== 'checking');
     assert.equal(f.host.service.activities.get(draftActivity.id).status, 'failed');
-    const draft = f.host.service.skills.records().find((s) => s.name === 'repairable-tool')!;
+    const draft = present(f.host.service.skills.records().find((s) => s.name === 'repairable-tool'));
     assert.equal(draft.current, undefined);
     const repair = await f.start([], [draft.id]),
-      repairTarget = repair.grant!.targets[0]!;
+      repairTarget = present(repair.grant?.targets[0]);
     await candidate(repairTarget.directory, repairTarget.name, 'repaired:');
     await f.turn(
       repair.sessionId,
@@ -228,7 +229,10 @@ test('failed development, invalid candidate, cancellation, out-of-scope submissi
     await f.wait(() => f.host.service.activities.get(repair.id).status !== 'checking');
     assert.equal(f.host.service.activities.get(repair.id).status, 'completed');
     assert.ok(f.host.service.skills.record(draft.id).current);
-    assert.equal(f.host.service.skills.version(f.host.service.skills.record(draft.id).current!).review, undefined);
+    assert.equal(
+      f.host.service.skills.version(present(f.host.service.skills.record(draft.id).current)).review,
+      undefined,
+    );
     assert.equal(f.host.service.skills.record(id).current, current);
     await f.turn(f.session.id, 'tool_search', { query: 'stable_tool', limit: 5 });
     const healthy = await f.turn(f.session.id, 'stable_tool', { text: 'healthy' });
@@ -248,8 +252,8 @@ test('active native Shell cancellation, failed Provider, frozen grant and restar
   const f = await fixture();
   try {
     const a = await f.start(['cancel-running']),
-      directory = a.grant!.targets[0]!.directory;
-    const grantId = a.grant!.id;
+      directory = present(a.grant?.targets[0]).directory;
+    const grantId = present(a.grant).id;
     await assert.rejects(
       f.host.service.authorizeActivity(a.id, {
         baseRevision: a.revision,
@@ -317,27 +321,27 @@ test('an existing multi-Skill package evolves only its selected Skill; disabled 
       await f.host.service.skills.settled();
       assert.equal(f.host.service.skills.operation(op.id).status, 'applied');
     }
-    const selected = imported.find((r) => r.name === 'echo')!,
-      sibling = imported.find((r) => r.name === 'other')!;
+    const selected = present(imported.find((r) => r.name === 'echo')),
+      sibling = present(imported.find((r) => r.name === 'other'));
     const siblingBefore = f.host.service.skills.record(sibling.id);
     const disable = f.host.service.skills.publish(
       selected.id,
-      f.host.service.skills.record(selected.id).current!,
+      present(f.host.service.skills.record(selected.id).current),
       f.host.service.skills.record(selected.id).revision,
       false,
     );
     await f.host.service.skills.settled();
     assert.equal(f.host.service.skills.operation(disable.id).status, 'applied');
     const a = await f.start([], [selected.id]),
-      t = a.grant!.targets[0]!;
+      t = present(a.grant?.targets[0]);
     await writeFile(join(t.directory, 'extensions/echo.js'), echoCode('evolved'));
     await f.turn(a.sessionId, 'evolution_complete', {
       summary: 'Improve the selected echo only',
       packages: [
         {
           target: t.key,
-          skillFile: bindings[0]!.skill,
-          extensions: bindings[0]!.extensions,
+          skillFile: present(bindings[0]).skill,
+          extensions: present(bindings[0]).extensions,
           probes: [{ tool: 'skill_echo', args: { value: 'sample' }, expectedText: 'evolved:sample' }],
         },
       ],
@@ -352,7 +356,7 @@ test('an existing multi-Skill package evolves only its selected Skill; disabled 
     assert.deepEqual(f.host.service.skills.record(sibling.id), siblingBefore);
     const used = await f.turn(f.session.id, 'skill_other', {});
     assert.match(JSON.stringify(used.messages), /other-ok/);
-    const current = f.host.service.skills.record(selected.id).current!;
+    const current = present(f.host.service.skills.record(selected.id).current);
     const version = f.host.service.skills.version(current);
     assert.equal(version.review, undefined);
     assert.ok(version.evolution);

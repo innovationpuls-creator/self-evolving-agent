@@ -94,8 +94,18 @@ try {
   assert.ok(JSON.parse(lockFile.content).lockfileVersion);
   await assert.rejects(readFile(marker), { code: 'ENOENT' });
   const session = await request(page, '/sessions', { cwd: dir, provider: 'openai-codex', model: 'gpt-6-luna' });
-  await desktop.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]!.close());
-  assert.equal(await desktop.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]!.isVisible()), false);
+  // evaluate() serializes each callback into Electron Main, so the window lookup must stay inline.
+  await desktop.evaluate(({ BrowserWindow }) => {
+    const [win] = BrowserWindow.getAllWindows();
+    if (!win) throw new Error('Desktop window missing');
+    win.close();
+  });
+  const visible = await desktop.evaluate(({ BrowserWindow }) => {
+    const [win] = BrowserWindow.getAllWindows();
+    if (!win) throw new Error('Desktop window missing');
+    return win.isVisible();
+  });
+  assert.equal(visible, false);
   await request(page, '/models');
   const hostPid = await desktop.evaluate(
     ({ app }) => app.getAppMetrics().find((p) => p.type === 'Utility' && p.name === 'Agent Host')?.pid,

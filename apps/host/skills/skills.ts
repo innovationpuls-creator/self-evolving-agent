@@ -261,7 +261,7 @@ export class SkillService {
   }
   loadout(): SkillLoadout {
     const records = this.records();
-    return { records, versions: records.filter((r) => r.current).map((r) => this.version(r.current!)) };
+    return { records, versions: records.flatMap((r) => (r.current ? [this.version(r.current)] : [])) };
   }
   root(v: SkillVersion) {
     return join(this.dataDir, 'skills', 'versions', v.snapshot);
@@ -748,7 +748,8 @@ export class SkillService {
           this.transaction(() => {
             if (evolution) {
               evolution.signal.throwIfAborted();
-              this.evolutionAuthority!(evolution.activityId, id);
+              if (!this.evolutionAuthority) throw new SkillError('开发授权服务尚未就绪');
+              this.evolutionAuthority(evolution.activityId, id);
               this.saveVersion({
                 ...v,
                 evolution: {

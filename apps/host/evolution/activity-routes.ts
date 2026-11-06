@@ -17,8 +17,8 @@ export async function activityRoutes(service: AgentService, req: IncomingMessage
     return true;
   }
   const match = /^\/api\/activities\/([a-f0-9-]{36})(?:\/(authorize|cancel))?$/.exec(url.pathname);
-  if (!match) return false;
-  const id = match[1]!;
+  const id = match?.[1];
+  if (!match || !id) return false;
   if (!match[2] && req.method === 'GET') json(res, 200, service.activities.get(id));
   else if (match[2] === 'authorize' && req.method === 'POST')
     json(res, 202, await service.authorizeActivity(id, activityGrant.parse(await body(req))));

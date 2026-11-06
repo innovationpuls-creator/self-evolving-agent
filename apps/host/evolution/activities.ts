@@ -136,8 +136,7 @@ export class ActivityService {
       const release = a.releases.find((r) => r.skillId === skillId && r.version === versionId);
       const operation = release ? this.skills.operation(release.operationId) : undefined;
       if (
-        !operation ||
-        operation.status !== 'applied' ||
+        operation?.status !== 'applied' ||
         operation.evolution?.activityId !== activityId ||
         operation.checks?.some((c) => !c.passed)
       )

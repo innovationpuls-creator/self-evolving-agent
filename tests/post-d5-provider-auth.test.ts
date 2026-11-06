@@ -23,6 +23,7 @@ import {
   type ProviderAuthFlow,
 } from '../apps/host/runtime/provider-auth.js';
 import { EncryptedStore } from '../apps/host/storage/storage.js';
+import { present } from './support.js';
 
 const access = 'mock-oauth-access-token-853729';
 const refresh = 'mock-oauth-refresh-token-984537';
@@ -159,26 +160,26 @@ test('native OAuth browser/select/device/redirect flow persists only encrypted H
     return oauth;
   });
   try {
-    const before = (await f.service.list()).find((provider) => provider.id === f.id)!;
+    const before = present((await f.service.list()).find((provider) => provider.id === f.id));
     assert.deepEqual(before.methods, [{ type: 'oauth', label: 'Browser or device login' }]);
     assert.equal(before.stored, undefined);
     const flow = f.service.start(f.id, 'oauth');
     const select = await waitFor(f.service, flow.id, (state) => state.prompt?.type === 'select');
-    assert.throws(() => f.service.submit(flow.id, select.prompt!.id, 'unsupported'), /支持的选项/);
-    f.service.submit(flow.id, select.prompt!.id, 'browser');
+    assert.throws(() => f.service.submit(flow.id, present(select.prompt).id, 'unsupported'), /支持的选项/);
+    f.service.submit(flow.id, present(select.prompt).id, 'browser');
     const manual = await waitFor(f.service, flow.id, (state) => state.prompt?.type === 'manual_code');
     assert.ok(manual.events.some((event) => event.type === 'auth_url'));
     assert.ok(manual.events.some((event) => event.type === 'device_code' && event.userCode === 'ABCD-EFGH'));
-    assert.equal('signal' in manual.prompt!, false);
-    assert.throws(() => f.service.submit(flow.id, select.prompt!.id, 'browser'), /已结束/);
-    f.service.submit(flow.id, manual.prompt!.id, 'http://localhost/callback?code=mock-authorization-code');
+    assert.equal('signal' in present(manual.prompt), false);
+    assert.throws(() => f.service.submit(flow.id, present(select.prompt).id, 'browser'), /已结束/);
+    f.service.submit(flow.id, present(manual.prompt).id, 'http://localhost/callback?code=mock-authorization-code');
     const result = await waitFor(f.service, flow.id, (state) => state.status !== 'running');
     assert.equal(result.status, 'succeeded');
     assert.equal(f.held, false);
     assert.equal(f.changes, 1);
     assert.deepEqual(result.events, []);
     assert.equal(result.prompt, undefined);
-    const status = (await f.service.list()).find((provider) => provider.id === f.id)!;
+    const status = present((await f.service.list()).find((provider) => provider.id === f.id));
     assert.equal(status.stored, 'oauth');
     assert.equal(status.configured, true);
     assert.ok(!JSON.stringify([status, result]).includes(access));
@@ -210,9 +211,9 @@ test('native API key login forwards text and secret inputs without echoing value
   try {
     const flow = f.service.start(f.id, 'api_key');
     const text = await waitFor(f.service, flow.id, (state) => state.prompt?.type === 'text');
-    f.service.submit(flow.id, text.prompt!.id, 'mock-tenant-1234');
+    f.service.submit(flow.id, present(text.prompt).id, 'mock-tenant-1234');
     const secret = await waitFor(f.service, flow.id, (state) => state.prompt?.type === 'secret');
-    f.service.submit(flow.id, secret.prompt!.id, access);
+    f.service.submit(flow.id, present(secret.prompt).id, access);
     const done = await waitFor(f.service, flow.id, (state) => state.status !== 'running');
     assert.equal(done.status, 'succeeded');
     assert.ok(!JSON.stringify(done).includes(access));
@@ -432,7 +433,7 @@ test('provider failures and progress cannot expose registered tokens or arbitrar
     const flow = f.service.start(f.id, 'oauth');
     const pending = await waitFor(f.service, flow.id, (state) => !!state.prompt);
     assert.ok(!JSON.stringify(pending).includes(access));
-    f.service.submit(flow.id, pending.prompt!.id, 'continue');
+    f.service.submit(flow.id, present(pending.prompt).id, 'continue');
     const done = await waitFor(f.service, flow.id, (state) => state.status !== 'running');
     assert.equal(done.status, 'failed');
     assert.ok(!JSON.stringify(done).includes(refresh));
@@ -469,7 +470,7 @@ test('logout persistence failure reports failure and retains stored authorizatio
 test('logout preserves and truthfully reports an ambient provider authorization', async () => {
   const f = await fixture(async () => oauth);
   try {
-    const original = f.owner.runtime.getProvider(f.id)!;
+    const original = present(f.owner.runtime.getProvider(f.id));
     f.owner.runtime.registerNativeProvider({
       ...original,
       auth: {
@@ -581,7 +582,7 @@ test('route helper validates inputs and projects only safe status and interactio
     const flow = (await started.json()) as ProviderAuthFlow;
     const pending = await waitFor(f.service, flow.id, (state) => !!state.prompt);
     const answer = await request(`/api/provider-auth/login/${flow.id}/input`, 'POST', {
-      promptId: pending.prompt!.id,
+      promptId: present(pending.prompt).id,
       value: access,
     });
     assert.equal(answer.status, 200);

@@ -5,6 +5,7 @@ import { memoryTools } from '../apps/host/memory/memory-tools.js';
 import { memoryFeedback } from '../apps/host/memory/memory-feedback.js';
 import { reflectionOutputGuidance } from '../apps/host/reflection/reflection-prompt.js';
 import { catalogFixture } from '../scripts/post-d5-reflection-memory.js';
+import { present } from './support.js';
 
 test('light catalog pages all history with bounded queries, complete detail, and no environment probes', async () => {
   let checks = 0;
@@ -172,7 +173,7 @@ test('Memory writes emit revision/source feedback; reads never write, errors nev
     assert.equal(fixture.host.memory.search(ctx).total, 0);
     const saved = await call('memory_save', { knowledge, reason: '用户本轮说明' });
     assert.equal(saved.isError, undefined);
-    const current = fixture.host.memory.search(ctx).items[0]!;
+    const current = present(fixture.host.memory.search(ctx).items[0]);
     assert.deepEqual(saved.details, { memory: memoryFeedback(current) });
     assert.equal(memoryFeedback(current).sources[0]?.sessionId, source.sessionId);
     assert.match(memoryFeedback(current).message, /新增记忆/);

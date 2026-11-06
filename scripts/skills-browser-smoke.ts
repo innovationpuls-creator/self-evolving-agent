@@ -85,7 +85,7 @@ try {
     ).content;
   };
   const initial = await editorA().inputValue();
-  await editorB.fill(initial + '\nB change.');
+  await editorB.fill(`${initial}\nB change.`);
   await detailOf(b).getByRole('button', { name: '保存候选', exact: true }).click();
   await detailOf(b).getByRole('status').filter({ hasText: '候选已保存' }).waitFor();
   await a.waitForFunction(
@@ -93,28 +93,28 @@ try {
   );
   assert.equal(await editorA().isEditable(), false, 'stale buffer must not accept edits for a newer candidate');
   assert.equal(await saveA().count(), 0, 'stale buffer must not offer saving over a newer candidate');
-  assert.equal(await latestContent(), initial + '\nB change.');
+  assert.equal(await latestContent(), `${initial}\nB change.`);
   // A dirty draft based on an older revision is flagged and cannot be saved over the other window's candidate.
   await a.reload();
   await a.locator('.app.host-product').waitFor();
   await openSkill(a, skill.name);
   await detailOf(a).getByRole('button', { name: '编辑', exact: true }).click();
   const second = await editorA().inputValue();
-  assert.equal(second, initial + '\nB change.');
-  await editorA().fill(initial + '\nA stale overwrite.');
-  await editorB.fill(second + '\nB second change.');
+  assert.equal(second, `${initial}\nB change.`);
+  await editorA().fill(`${initial}\nA stale overwrite.`);
+  await editorB.fill(`${second}\nB second change.`);
   await detailOf(b).getByRole('button', { name: '保存候选', exact: true }).click();
   await detailOf(b).getByRole('status').filter({ hasText: '候选已保存' }).waitFor();
   await detailOf(a).getByText('候选已被其他窗口修改', { exact: true }).waitFor();
   assert.ok((await saveA().count()) === 0 || (await saveA().isDisabled()), 'stale draft must not be savable');
-  assert.equal(await latestContent(), second + '\nB second change.');
+  assert.equal(await latestContent(), `${second}\nB second change.`);
   // Leaving the page in-app keeps the unsaved draft; leaving the document is guarded.
   await a.getByLabel('记忆', { exact: true }).click();
   await a.getByRole('heading', { name: '已保存的记忆' }).waitFor();
   await openSkills(a);
   await a.getByRole('button', { name: `继续编辑 ${skill.name}`, exact: true }).click();
   await editorA().waitFor();
-  assert.equal(await editorA().inputValue(), initial + '\nA stale overwrite.');
+  assert.equal(await editorA().inputValue(), `${initial}\nA stale overwrite.`);
   const guarded = new Promise<string>((ok) =>
     a.once('dialog', (dialog) => {
       ok(dialog.type());
@@ -127,7 +127,7 @@ try {
   );
   assert.equal(await within(guarded, 'beforeunload guard dialog'), 'beforeunload');
   assert.equal(await leaving, 'stayed', 'dismissing the guard must keep the page');
-  assert.equal(await editorA().inputValue(), initial + '\nA stale overwrite.');
+  assert.equal(await editorA().inputValue(), `${initial}\nA stale overwrite.`);
   a.once('dialog', (dialog) => void dialog.accept());
   await a.goto('about:blank');
   assert.equal(a.url(), 'about:blank');
@@ -141,7 +141,7 @@ try {
     .fill('Reviewed fixture code and host aliases, no external dependencies or filesystem effects.');
   assert.equal(await reviewB.getByRole('button', { name: '记录审查', exact: true }).isEnabled(), true);
   await open(a, skill.id);
-  await editorA().fill(initial + '\nV2 change.');
+  await editorA().fill(`${initial}\nV2 change.`);
   await detailOf(a).getByRole('button', { name: '保存候选', exact: true }).click();
   await detailOf(a).getByRole('status').filter({ hasText: '候选已保存' }).waitFor();
   await reviewB.waitFor({ state: 'detached' });

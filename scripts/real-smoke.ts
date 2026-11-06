@@ -13,7 +13,8 @@ let host: Awaited<ReturnType<typeof startHost>> | undefined;
 try {
   host = await startHost({ dataDir: join(root, 'data'), key, token });
   const request = async (path: string, method = 'GET', data?: unknown) => {
-    const response = await fetch(`${host!.origin}/api${path}`, {
+    if (!host) throw new Error('Host not running');
+    const response = await fetch(`${host.origin}/api${path}`, {
       method,
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: data === undefined ? undefined : JSON.stringify(data),
@@ -65,7 +66,9 @@ try {
   host = undefined;
   const files = await readdir(join(root, 'data', 'sessions'));
   assert.equal(files.filter((name) => name.endsWith('.enc')).length, 1);
-  const bytes = await readFile(join(root, 'data', 'sessions', files[0]!), 'utf8');
+  const [file] = files;
+  assert.ok(file);
+  const bytes = await readFile(join(root, 'data', 'sessions', file), 'utf8');
   assert.ok(!bytes.includes('D1 real model native tool success'));
   host = await startHost({ dataDir: join(root, 'data'), key, token });
   const restored = await request(`/sessions/${session.id}`);

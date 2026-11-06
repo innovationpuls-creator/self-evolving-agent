@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -186,7 +186,8 @@ try {
   const special = catalog.skills.find((s) => s.name === 'd2-receipt');
   assert.ok(special);
   const detail = await call<{ versions: Array<{ id: string; digest: string }> }>(page, `/skills/${special.id}`);
-  const version = detail.versions.find((v) => v.id === special.latest)!;
+  const version = detail.versions.find((v) => v.id === special.latest);
+  assert.ok(version);
   const denied = await waitOp(
     page,
     await call(page, `/skills/${special.id}/publish`, 'POST', { version: version.id, baseRevision: special.revision }),
@@ -236,7 +237,8 @@ try {
       ),
     );
     assert.equal(result.id, id);
-    const plain = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.name === 'd2-plain')!;
+    const plain = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.name === 'd2-plain');
+    assert.ok(plain);
     const plainFile = await call<{ content: string }>(
       page,
       `/skills/${plain.id}/files?version=${plain.latest}&path=SKILL.md`,
@@ -260,7 +262,8 @@ try {
     await submit(page, '/skill:d2-plain');
     const v2 = await idle(page, id);
     assert.ok(JSON.stringify(v2.messages.slice(result.messages.length)).includes(`D2_PLAIN_V2:${phrase}`));
-    let live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === plain.id)!;
+    let live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === plain.id);
+    assert.ok(live);
     assert.equal(
       (
         await waitOp(
@@ -273,7 +276,8 @@ try {
       ).status,
       'applied',
     );
-    live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === special.id)!;
+    live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === special.id);
+    assert.ok(live);
     assert.equal(
       (
         await waitOp(
@@ -291,7 +295,8 @@ try {
     const turn = disabled.messages.slice(v2.messages.length);
     assert.ok(turn.some((m) => m.role === 'toolResult' && m.toolName === 'tool_search'));
     assert.ok(!turn.some((m) => m.role === 'toolResult' && m.toolName === 'd2_receipt'));
-    live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === special.id)!;
+    live = (await call<{ skills: Skill[] }>(page, '/skills')).skills.find((s) => s.id === special.id);
+    assert.ok(live);
     assert.equal(
       (
         await waitOp(
@@ -348,7 +353,7 @@ try {
     modelAndThinkingPreserved: specialRealModel,
     reviewDigest: version.digest,
   };
-  await writeFile(join(evidenceDir, 'skills-real.json'), JSON.stringify(receipt, null, 2) + '\n');
+  await writeFile(join(evidenceDir, 'skills-real.json'), `${JSON.stringify(receipt, null, 2)}\n`);
   console.log(JSON.stringify(receipt));
 } finally {
   await browser?.close();

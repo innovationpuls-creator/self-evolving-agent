@@ -53,28 +53,28 @@ export async function sessionRoutes(
     json(res, 201, await service.create(x.cwd, x.provider, x.model));
     return true;
   }
-  const recover = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route);
-  if (recover && req.method === 'POST') {
-    await service.recoverSkills(recover[1]!);
+  const recoverId = /^\/api\/sessions\/([a-f0-9-]{36})\/recover-skills$/.exec(route)?.[1];
+  if (recoverId && req.method === 'POST') {
+    await service.recoverSkills(recoverId);
     json(res, 200, { ok: true });
     return true;
   }
   const match = /^\/api\/sessions\/([a-f0-9-]{36})(?:\/(prompt|stop|compact|branch|model|thinking|export))?$/.exec(
     route,
   );
-  const resources = /^\/api\/sessions\/([a-f0-9-]{36})\/input-resources$/.exec(route);
-  if (resources && req.method === 'GET') {
+  const resourcesId = /^\/api\/sessions\/([a-f0-9-]{36})\/input-resources$/.exec(route)?.[1];
+  if (resourcesId && req.method === 'GET') {
     const kind = z.enum(['skills', 'files']).parse(url.searchParams.get('kind'));
     const query = z
       .string()
       .max(4096)
       .parse(url.searchParams.get('query') ?? '');
-    json(res, 200, await service.inputResources(resources[1]!, kind, query));
+    json(res, 200, await service.inputResources(resourcesId, kind, query));
     return true;
   }
-  if (match) {
-    const id = match[1]!,
-      action = match[2];
+  const id = match?.[1];
+  if (match && id) {
+    const action = match[2];
     if (!action && req.method === 'GET') {
       json(res, 200, await service.viewSession(id));
       return true;

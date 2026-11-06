@@ -40,18 +40,18 @@ export async function skillRoutes(
     json(res, 202, service.sensitive.copy(service.skills.startImport(input)));
     return true;
   }
-  const operation = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route);
-  if (operation && req.method === 'GET') {
-    json(res, 200, service.sensitive.copy(service.skills.operation(operation[1]!)));
+  const operationId = /^\/api\/skills\/operations\/([a-f0-9-]{36})$/.exec(route)?.[1];
+  if (operationId && req.method === 'GET') {
+    json(res, 200, service.sensitive.copy(service.skills.operation(operationId)));
     return true;
   }
   const skillRoute =
     /^\/api\/skills\/([a-f0-9-]{36})(?:\/(files|edit|review|publish|enabled|rollback|knowledge|draft|import-draft))?$/.exec(
       route,
     );
-  if (skillRoute) {
-    const id = skillRoute[1]!,
-      action = skillRoute[2];
+  const id = skillRoute?.[1];
+  if (skillRoute && id) {
+    const action = skillRoute[2];
     if (!action && req.method === 'GET') {
       json(res, 200, service.sensitive.copy(await service.skillDetail(id)));
       return true;

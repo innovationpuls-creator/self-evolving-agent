@@ -14,8 +14,7 @@ export function snapshot(manager: SessionManager): Snapshot {
 }
 export function restore(saved: Snapshot) {
   if (
-    !saved ||
-    !saved.header ||
+    !saved?.header ||
     !Array.isArray(saved.entries) ||
     (saved.leafId !== null && !saved.entries.some((entry) => entry.id === saved.leafId))
   )
