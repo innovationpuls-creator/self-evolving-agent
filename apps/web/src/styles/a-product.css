@@ -57,16 +57,9 @@
   font-size: 13px;
   font-weight: 400;
 }
-.quiet .module-nav .secondary-entry {
-  margin-top: 0;
-  font-size: 13px;
-}
 .quiet .module-nav button {
   font-size: 13px;
   padding: 11px 10px;
-}
-.quiet .navigation-divider {
-  margin: 24px 8px 22px;
 }
 .quiet .sidebar-bottom small {
   font-size: 11px;
@@ -74,15 +67,6 @@
 .quiet .workspace-head {
   height: 56px;
   padding-inline: 30px;
-}
-.quiet .memory-page,
-.quiet .reflection-page,
-.quiet .skills-page,
-.quiet .evolution-page,
-.quiet .settings-page,
-.quiet .trace-page {
-  max-width: 1160px;
-  padding: 38px 44px 64px;
 }
 .quiet .section-head {
   margin-bottom: 30px;
@@ -116,30 +100,8 @@
 .quiet .conversation {
   padding: 26px 38px 0;
 }
-.quiet .conversation-top,
-.quiet .conversation > [data-orientation],
-.quiet .conversation-grid {
+.quiet .conversation > [data-orientation] {
   max-width: 800px;
-}
-.quiet .conversation-top h1 {
-  font-size: 17px;
-}
-.quiet .user-message {
-  border-left: 0;
-  margin: 24px 0 28px auto;
-  padding: 16px 20px;
-  background: var(--faint);
-  border-radius: 12px;
-  max-width: 680px;
-}
-.quiet .user-message p {
-  font-size: 15px;
-}
-.quiet .message-person {
-  margin-bottom: 6px;
-}
-.quiet .response-meta {
-  margin: 26px 0 18px;
 }
 .quiet .tool-activity {
   padding: 8px 0;
@@ -147,160 +109,6 @@
 }
 .quiet .tool-activity summary {
   padding-block: 8px;
-}
-.quiet .composer {
-  border-radius: 12px;
-  box-shadow: none;
-}
-.quiet .composer:focus-within {
-  box-shadow: none;
-  border-color: var(--accent);
-}
-.quiet .composer textarea {
-  font-size: 14px;
-}
-.quiet .knowledge-library {
-  grid-template-columns: 238px minmax(0, 1fr);
-  gap: 36px;
-}
-.quiet .memory-index {
-  padding-top: 24px;
-}
-.quiet .knowledge-item {
-  border: 0;
-  border-radius: 6px;
-  padding: 15px 12px;
-  margin-bottom: 6px;
-}
-.quiet .knowledge-item.selected {
-  box-shadow: none;
-}
-.quiet .knowledge-item strong {
-  font-size: 13px;
-  line-height: 1.7;
-}
-.quiet .knowledge-item small {
-  margin-top: 6px;
-}
-.quiet .memory-detail {
-  padding-top: 28px;
-}
-.quiet .memory-detail-head h2 {
-  font-size: 20px;
-}
-.quiet .knowledge-current > p {
-  font-size: 16px;
-  line-height: 1.95;
-}
-.quiet .knowledge-state {
-  margin-bottom: 22px;
-}
-.quiet .suggestion-reading,
-.quiet .activity-reading {
-  max-width: 760px;
-  margin-inline: auto;
-}
-.quiet .suggestion-document {
-  padding: 32px 0;
-}
-.quiet .suggestion-document h2 {
-  font-size: 24px;
-  line-height: 1.5;
-  margin-top: 18px;
-}
-.quiet .suggestion-lead {
-  font-size: 15px;
-  line-height: 1.95;
-  margin-top: 18px;
-}
-.quiet .proposal-comparison {
-  margin: 30px 0 24px;
-  gap: 26px;
-}
-.quiet .proposal-comparison h3 {
-  font-size: 14px;
-}
-.quiet .proposal-comparison section + section {
-  padding-left: 26px;
-}
-.quiet .suggestion-limit {
-  font-size: 13px;
-  padding: 16px 18px;
-  background: var(--faint);
-  border-radius: 6px;
-  color: var(--ink);
-}
-.quiet .decision-state {
-  display: none;
-}
-.quiet .suggestion-decision {
-  margin-top: 22px;
-}
-.quiet .discussion-title {
-  margin-top: 24px;
-}
-.quiet .discussion-background {
-  padding: 20px 0;
-  background: none;
-  border-block: 1px solid var(--line);
-  margin: 24px 0;
-}
-.quiet .discussion-background p {
-  font-size: 14px;
-  line-height: 1.9;
-}
-.quiet .activity-main .field textarea {
-  min-height: 120px;
-  font-size: 14px;
-  padding: 14px;
-  border-radius: 8px;
-}
-.quiet .discussion-message > p {
-  padding: 14px 18px;
-  background: var(--faint);
-  border-radius: 8px;
-}
-.quiet .discussion-message {
-  padding: 24px 0;
-}
-.quiet .discussion-message > div {
-  margin-top: 20px;
-}
-.quiet .decision-hint {
-  font-size: 12px;
-  line-height: 1.8;
-  margin-top: 14px;
-}
-.quiet .journal-index button {
-  padding: 18px 14px;
-  border-radius: 6px;
-}
-.quiet .result-task {
-  font-size: 21px;
-  line-height: 1.5;
-}
-.quiet .result-summary {
-  font-size: 16px;
-  line-height: 1.9;
-}
-.quiet .result-changes > button {
-  padding-block: 18px;
-}
-.quiet .skill-index > button {
-  border-radius: 6px;
-  padding: 18px 14px;
-}
-.quiet .skills-filter {
-  margin-bottom: 24px;
-}
-.quiet .skill-detail {
-  padding-top: 4px;
-}
-.quiet .settings-sections {
-  max-width: 800px;
-}
-.quiet .mobile-back {
-  color: var(--accent);
 }
 @media (min-width: 701px) and (max-width: 1050px) {
   .quiet .sidebar {
@@ -310,29 +118,6 @@
   .quiet .sidebar-search kbd {
     display: none;
   }
-  .quiet .memory-page,
-  .quiet .reflection-page,
-  .quiet .skills-page,
-  .quiet .evolution-page,
-  .quiet .settings-page,
-  .quiet .trace-page {
-    padding: 28px 26px 48px;
-  }
-  .quiet .knowledge-library {
-    grid-template-columns: 190px minmax(0, 1fr);
-    gap: 24px;
-  }
-  .quiet .memory-detail-head {
-    flex-wrap: wrap;
-  }
-  .quiet .proposal-comparison {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-  .quiet .proposal-comparison section + section {
-    padding: 0;
-    border: 0;
-  }
 }
 @media (max-width: 700px) {
   .quiet .sidebar {
@@ -341,14 +126,6 @@
   .quiet .workspace-head {
     height: 52px;
     padding-inline: 12px;
-  }
-  .quiet .memory-page,
-  .quiet .reflection-page,
-  .quiet .skills-page,
-  .quiet .evolution-page,
-  .quiet .settings-page,
-  .quiet .trace-page {
-    padding: 24px 20px 40px;
   }
   .quiet .section-head {
     gap: 12px;
@@ -364,55 +141,12 @@
   .quiet .conversation {
     padding: 20px 16px 0;
   }
-  .quiet .user-message {
-    padding: 14px 16px;
-    margin-block: 20px 24px;
-  }
   .quiet .btn {
     min-height: 40px;
   }
   .quiet .icon-btn {
     min-width: 38px;
     min-height: 38px;
-  }
-  .quiet .knowledge-library {
-    display: block;
-  }
-  .quiet .memory-detail-head {
-    flex-wrap: wrap;
-  }
-  .quiet .memory-detail {
-    padding-top: 16px;
-  }
-  .quiet .suggestion-document {
-    padding-block: 24px;
-  }
-  .quiet .suggestion-document h2 {
-    font-size: 22px;
-  }
-  .quiet .proposal-comparison {
-    grid-template-columns: 1fr;
-    gap: 22px;
-  }
-  .quiet .proposal-comparison section + section {
-    border: 0;
-    padding: 0;
-  }
-  .quiet .suggestion-decision {
-    gap: 12px;
-  }
-  .quiet .proposal-sources {
-    margin-top: 26px;
-  }
-  .quiet .skills-filter {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-  .quiet .skills-filter .search-box {
-    width: 100%;
-  }
-  .quiet .result-kind {
-    min-width: 64px;
   }
 }
 .quiet .execution-summary {

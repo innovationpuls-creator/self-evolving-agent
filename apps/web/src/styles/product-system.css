@@ -2,21 +2,12 @@
 @import "../components/ui.css";
 @import "./chrome.css";
 @import "./conversation.css";
-@import "./trace.css";
-@import "./memory.css";
-@import "./reflection.css";
-@import "./skills.css";
 @import "./evolution.css";
-@import "./settings.css";
 @import "./surfaces.css";
 @import "./responsive.css";
 @import "../components/content.css";
-@import "./trace-ledger.css";
 
-@import "./round3.css";
 @import "./a-navigation.css";
-
-@import "./a-results.css";
 
 @import "./a-product.css";
 

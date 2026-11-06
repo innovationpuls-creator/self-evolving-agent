@@ -11,7 +11,6 @@
   --danger: #a54138;
   --warning: #8c652d;
   --good: #316b51;
-  --radius: 6px;
   --xs: 12.8px;
   --body: 16px;
   --title: 25px;
@@ -280,17 +279,6 @@ hr {
   gap: 8px;
   flex-wrap: wrap;
 }
-.text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--accent);
-  font-size: var(--xs);
-  padding: 4px 0;
-}
-.text-link:hover {
-  text-decoration: underline;
-}
 .status {
   display: inline-flex;
   align-items: center;
@@ -300,16 +288,13 @@ hr {
   color: var(--muted);
   line-height: 1.4;
 }
-.status.good,
-.good-text {
+.status.good {
   color: var(--good);
 }
-.status.warn,
-.warn-text {
+.status.warn {
   color: var(--warning);
 }
 .status.bad,
-.bad-text,
 .danger-text {
   color: var(--danger);
 }
@@ -452,76 +437,11 @@ hr {
   padding: 8px 0;
   outline: none;
 }
-.scope-filter {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.scope-filter button {
-  padding: 5px 9px;
-  color: var(--muted);
-  font-size: var(--xs);
-  border-radius: 4px;
-}
-.scope-filter button[aria-pressed="true"] {
-  background: var(--accent-soft);
-  color: var(--accent);
-}
 .empty-search {
   padding: 28px 12px;
   font-size: var(--xs);
   color: var(--muted);
 }
-.state-view {
-  padding: 72px 24px;
-  max-width: 620px;
-  margin: auto;
-  text-align: center;
-  min-height: 380px;
-}
-.state-view > svg {
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-.state-view h2 {
-  margin-bottom: 12px;
-}
-.state-view p {
-  color: var(--muted);
-  font-size: var(--xs);
-  max-width: 440px;
-  margin: 0 auto 24px;
-}
-.skeleton-line {
-  height: 22px;
-  border-radius: 3px;
-  background: #e8e9e2;
-  width: 75%;
-  margin-bottom: 18px;
-}
-.skeleton-line.short {
-  width: 45%;
-}
-.skeleton-block {
-  height: 180px;
-  background: linear-gradient(90deg, #eeeee8, #f7f7f2, #eeeee8);
-  background-size: 200% 100%;
-  animation: load 1.5s infinite;
-  margin-bottom: 28px;
-}
-@keyframes load {
-  to {
-    background-position: -200% 0;
-  }
-}
 .back {
   margin-bottom: 12px;
-}
-.mobile-back {
-  display: none;
-}
-.lead {
-  font-size: var(--body);
-  line-height: 1.8;
-  margin: 15px 0 24px;
 }

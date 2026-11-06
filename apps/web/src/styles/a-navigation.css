@@ -109,20 +109,3 @@
     transition: none;
   }
 }
-.quiet .skill-index > button,
-.quiet .journal-index button {
-  border-left: 0;
-  border-radius: 8px;
-}
-.quiet .skill-index > button.selected,
-.quiet .journal-index button.selected {
-  background: var(--accent-soft);
-}
-.quiet .skill-index > button:focus-visible,
-.quiet .journal-index button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.quiet .skills-filter .search-box {
-  border-radius: 8px;
-}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ArrowRight, ChevronRight } from 'lucide-react';
 import { useReflectionCatalog, reflectionStatusLabels as labels } from './reflection-state';
+import { environmentChecked, environmentNotice, uncheckedPollMs } from './reflection-notice';
 import type { Session } from '../chat/session-state';
 import type { ReflectionJob } from '../../../../host/reflection/reflection-jobs';
 import type { ReflectionRecord } from '../../../../host/reflection/reflection-service';
@@ -25,25 +26,36 @@ export function Catalog({
   sessions,
   route,
   go,
+  connected,
 }: {
   api: Api;
   sessions: Session[];
+  connected: boolean;
   route: Extract<Route, { page: 'reflections' }>;
   go: (route: Route) => void;
 }) {
   const { catalog, loading, error, refresh } = useReflectionCatalog(api, route.sessionId, route.offset);
   const [checking, setChecking] = useState(false),
     [checkError, setCheckError] = useState('');
+  const unchecked = connected && !!catalog && !environmentChecked(catalog.availability),
+    notice = catalog && environmentNotice(catalog.availability);
+  useEffect(() => {
+    if (!unchecked) return;
+    const timer = setInterval(() => {
+      if (document.visibilityState === 'visible') refresh();
+    }, uncheckedPollMs);
+    return () => clearInterval(timer);
+  }, [unchecked, refresh]);
   const recheck = async () => {
     setChecking(true);
     setCheckError('');
     try {
       await api('/reflections/recheck', 'POST', {});
-      refresh();
     } catch (reason) {
       setCheckError(reason instanceof Error ? reason.message : '环境检查失败');
     } finally {
       setChecking(false);
+      refresh();
     }
   };
   return (
@@ -67,11 +79,11 @@ export function Catalog({
         </select>
       </div>
       {error && <Failure error={error} retry={refresh} />}
-      {loading && <p role="status">正在读取自动复盘…</p>}
+      {loading && !catalog && <p role="status">正在读取自动复盘…</p>}
       {catalog && !error && (
         <>
-          {!catalog.availability.available && (
-            <Notice title={'checkedAt' in catalog.availability ? '自动复盘暂不可用' : '尚未检查自动复盘环境'}>
+          {notice && (
+            <Notice title={notice}>
               <Button onClick={() => void recheck()} disabled={checking}>
                 {checking ? '正在检查…' : '重新检查'}
               </Button>

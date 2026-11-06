@@ -63,7 +63,8 @@ export function ShellSurface({
   const [search, setSearch] = useState(false),
     [query, setQuery] = useState('');
   const [mobile, setMobile] = useState(false),
-    [collapsed, setCollapsed] = useState(false);
+    [collapsed, setCollapsed] = useState(false),
+    [titleOpen, setTitleOpen] = useState<string>();
   const sidebar = useRef<HTMLElement>(null);
   const chat = x.page === 'chat',
     sessionView = chat || x.page === 'trace';
@@ -127,6 +128,18 @@ export function ShellSurface({
         <MenuIcon size={18} />
       </IconButton>
     </>
+  );
+  // Titles can come from a suggestion, a run goal or the first message; tapping wraps the full text.
+  const sessionTitle = (
+    <button
+      type="button"
+      className="session-title"
+      title={x.session.title}
+      aria-expanded={titleOpen === x.sid}
+      onClick={() => setTitleOpen((open) => (open === x.sid ? undefined : x.sid))}
+    >
+      {x.session.title}
+    </button>
   );
   return (
     <div
@@ -226,18 +239,14 @@ export function ShellSurface({
         )}
         <main className={`workspace ${collapsed ? 'expanded' : ''}`}>
           {sessionView && x.sid ? (
-            <header className="workspace-head">
+            <header className={`workspace-head ${titleOpen === x.sid ? 'title-open' : ''}`}>
               <div className="breadcrumbs">
                 {placeControls}
                 <div className="session-heading">
                   {!!folderName(x.session.project) && (
                     <span title={x.session.project}>{folderName(x.session.project)}</span>
                   )}
-                  {chat ? (
-                    <h1 title={x.session.title}>{x.session.title}</h1>
-                  ) : (
-                    <strong title={x.session.title}>{x.session.title}</strong>
-                  )}
+                  {chat ? <h1>{sessionTitle}</h1> : <strong>{sessionTitle}</strong>}
                 </div>
               </div>
               <div className="head-actions">

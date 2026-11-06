@@ -68,9 +68,33 @@ async function idle(page: Page, id: string) {
   return state;
 }
 async function submit(page: Page, value: string) {
-  await page.getByLabel('任务', { exact: true }).fill(value);
-  await page.getByRole('button', { name: '发送 ↑' }).click();
-  await page.getByRole('button', { name: '停止', exact: true }).waitFor();
+  await page.getByLabel('发送给 Agent', { exact: true }).fill(value);
+  await page.getByLabel('发送任务', { exact: true }).click();
+  await page.getByLabel('停止当前执行', { exact: true }).waitFor();
+}
+const detailOf = (page: Page) => page.getByRole('region', { name: '技能详情' });
+async function openSkill(page: Page, name: string) {
+  await page.getByLabel('技能与工具', { exact: true }).click();
+  await page.getByRole('heading', { name: '技能与工具' }).waitFor();
+  await page
+    .getByRole('complementary', { name: '能力目录' })
+    .getByRole('button')
+    .filter({ has: page.getByText(name, { exact: true }) })
+    .click();
+  await detailOf(page).getByRole('heading', { name, exact: true }).waitFor();
+}
+async function setEnabled(page: Page, enabled: boolean) {
+  const detail = detailOf(page);
+  await detail.getByRole('button', { name: enabled ? '启用' : '禁用', exact: true }).click();
+  await page
+    .getByRole('dialog', { name: enabled ? '启用技能' : '禁用技能' })
+    .getByRole('button', { name: enabled ? '确认启用' : '确认禁用', exact: true })
+    .click();
+  await detail.getByRole('button', { name: enabled ? '禁用' : '启用', exact: true }).waitFor();
+}
+async function openSession(page: Page, id: string) {
+  await page.locator(`.session-list [data-session="${id}"]`).click();
+  await page.getByLabel('发送给 Agent', { exact: true }).waitFor();
 }
 try {
   desktop = await _electron.launch({
@@ -80,14 +104,18 @@ try {
     timeout: 30000,
   });
   const page = await desktop.firstWindow();
-  await page.locator('.shell').waitFor();
-  await page.getByRole('button', { name: '模型设置', exact: true }).click();
+  await page.locator('.app.host-product').waitFor({ timeout: 30000 });
+  await page.getByLabel('模型与连接', { exact: true }).click();
   await page.getByLabel('模型提供方').selectOption('openai-codex');
   await page.getByRole('button', { name: '从本机导入已有登录' }).click();
-  await page
-    .locator('.start select option[value="openai-codex/gpt-6-luna"]')
+  await page.getByRole('status').filter({ hasText: '已导入本机已有登录' }).waitFor();
+  await page.getByRole('button', { name: '返回上一个位置', exact: true }).click();
+  await page.getByRole('button', { name: '新会话', exact: true }).click();
+  const create = page.getByRole('dialog', { name: '开始一段新会话' });
+  await create
+    .getByLabel('模型')
+    .locator('option[value="openai-codex:gpt-6-luna"]')
     .waitFor({ state: 'attached', timeout: 30000 });
-  await page.getByRole('button', { name: '模型设置', exact: true }).click();
   const source = join(root, '.agents/skills/d2-plain');
   await mkdir(source, { recursive: true });
   const phrase = randomUUID();
@@ -96,22 +124,29 @@ try {
     join(source, 'SKILL.md'),
     '---\nname: d2-plain\ndescription: Use this Skill when asked for the D2 plain phrase.\n---\nRead phrase-input.txt with the native read tool. Reply D2_PLAIN:<the exact file content>. Do not use bash, write, or edit.',
   );
-  await page.getByPlaceholder('工作目录的绝对路径').fill(root);
-  await page.locator('.start select').selectOption('openai-codex/gpt-6-luna');
-  await page.getByRole('button', { name: '创建会话 →' }).click();
-  await page.getByLabel('任务', { exact: true }).waitFor();
+  await create.getByLabel('项目文件夹').fill(root);
+  await create.getByLabel('模型').selectOption('openai-codex:gpt-6-luna');
+  await create.getByRole('button', { name: '创建会话', exact: true }).click();
+  await page.getByLabel('发送给 Agent', { exact: true }).waitFor();
   const [created] = await call<State[]>(page, '/sessions');
   assert.ok(created);
   const id = created.id;
-  await page.getByRole('button', { name: '能力管理', exact: true }).click();
-  await page.getByText('添加 Skill', { exact: true }).click();
-  await page.getByLabel('Skill 来源', { exact: true }).fill(source);
-  await page.getByRole('button', { name: '保存候选', exact: true }).click();
-  await page.locator('.skill-item').filter({ hasText: 'd2-plain' }).waitFor();
-  await page.locator('.skill-item').filter({ hasText: 'd2-plain' }).click();
-  await page.getByRole('button', { name: '检查并生效', exact: true }).click();
-  await page.locator('[data-operation-status="applied"]').filter({ hasText: '已生效' }).waitFor();
-  await page.getByRole('button', { name: '返回对话', exact: true }).click();
+  await page.getByLabel('技能与工具', { exact: true }).click();
+  await page.getByRole('button', { name: '导入技能', exact: true }).click();
+  const importDialog = page.getByRole('dialog', { name: '导入技能' });
+  await importDialog.getByLabel('Skill 来源', { exact: true }).fill(source);
+  // The former UI imported with global scope by default; keep that scope explicitly.
+  await importDialog.getByLabel('范围').selectOption('global');
+  await importDialog.getByRole('button', { name: '保存候选', exact: true }).click();
+  await openSkill(page, 'd2-plain');
+  await detailOf(page).getByRole('tab', { name: '审查与发布' }).click();
+  await detailOf(page).getByRole('button', { name: '检查并发布', exact: true }).click();
+  await page.getByRole('dialog', { name: '发布候选' }).getByRole('button', { name: '确认发布', exact: true }).click();
+  await detailOf(page)
+    .locator('[role="status"][data-operation-status="applied"]')
+    .filter({ hasText: '已生效' })
+    .waitFor();
+  await openSession(page, id);
   browser = await chromium.launch({
     executablePath: process.env.CHROME_PATH ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless: true,
@@ -119,7 +154,8 @@ try {
   const web = await browser.newPage({ viewport: { width: 1240, height: 850 } });
   const token = await page.evaluate(() => sessionStorage.getItem('agent-connection-token'));
   await web.goto(`${new URL(page.url()).origin}/#token=${token}`);
-  await web.locator('nav button').first().click();
+  await web.locator('.app.host-product').waitFor();
+  await openSession(web, id);
   await submit(web, 'Use the enabled Skill for the D2 plain phrase. Follow its instructions.');
   const plainState = await idle(page, id);
   assert.ok(JSON.stringify(plainState.messages).includes(`D2_PLAIN:${phrase}`));
@@ -129,16 +165,11 @@ try {
         m.role === 'toolResult' && m.toolName === 'read' && JSON.stringify(m.content).includes('Read phrase-input.txt'),
     ),
   );
-  await web.getByRole('button', { name: '能力管理', exact: true }).click();
-  await web.locator('.skill-item').filter({ hasText: 'd2-plain' }).click();
-  await web.getByRole('button', { name: '禁用', exact: true }).click();
-  await web.getByRole('button', { name: '启用', exact: true }).waitFor();
-  await page.getByRole('button', { name: '能力管理', exact: true }).click();
-  await page.locator('.skill-item').filter({ hasText: 'd2-plain' }).click();
-  await page.getByRole('button', { name: '启用', exact: true }).waitFor();
-  await page.getByRole('button', { name: '启用', exact: true }).click();
-  await page.getByRole('button', { name: '禁用', exact: true }).waitFor();
-  await page.getByRole('button', { name: '返回对话', exact: true }).click();
+  await openSkill(web, 'd2-plain');
+  await setEnabled(web, false);
+  await openSkill(page, 'd2-plain');
+  await setEnabled(page, true);
+  await openSession(page, id);
   const before = await idle(page, id);
   assert.equal(before.id, id);
   assert.equal(before.messages.length, plainState.messages.length);
@@ -270,7 +301,7 @@ try {
       ).status,
       'applied',
     );
-    await web.getByRole('button', { name: '返回对话', exact: true }).click();
+    await openSession(web, id);
     await submit(web, 'Use the enabled d2-receipt Skill to produce a receipt for exact value mac-web-after-reenable.');
     const resumed = await idle(page, id);
     assert.ok(
@@ -290,11 +321,11 @@ try {
     specialRealModel = true;
   }
   await web.reload();
-  await web.locator('nav button').first().click();
+  await web.locator('.app.host-product').waitFor();
+  await openSession(web, id);
   const same = await call<State>(web, `/sessions/${id}`);
   assert.equal(same.id, id);
-  await web.getByRole('button', { name: '能力管理', exact: true }).click();
-  await web.locator('.skill-item').filter({ hasText: 'd2-receipt' }).click();
+  await openSkill(web, 'd2-receipt');
   await mkdir(evidenceDir, { recursive: true });
   await web.screenshot({ path: join(evidenceDir, 'skills-macos.png'), fullPage: true });
   const receipt = {

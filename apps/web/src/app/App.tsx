@@ -336,7 +336,15 @@ export function App() {
         <div hidden={r.page === 'session' && !!r.sessionId} className="host-workspace-view">
           <div className={`aw host-reading ${r.page === 'trajectory' ? 'host-trajectory' : ''}`} data-aw-page={page}>
             {r.page === 'session' && !r.sessionId && <SessionPicker host={host} go={nav.go} create={openCreate} />}
-            {r.page === 'reflections' && <Catalog api={host.api} sessions={host.sessions} route={r} go={nav.go} />}
+            {r.page === 'reflections' && (
+              <Catalog
+                api={host.api}
+                sessions={host.sessions}
+                route={r}
+                go={nav.go}
+                connected={host.connection === 'ready'}
+              />
+            )}
             {r.page === 'reflection' && (
               <ReflectionDetail api={host.api} sessions={host.sessions} route={r} go={nav.go} back={nav.back} />
             )}

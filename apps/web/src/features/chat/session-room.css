@@ -169,10 +169,6 @@
 .session-room .prose .table-scroll {
   width: 100%;
 }
-.session-room .code-lines,
-.session-room .diff-body {
-  overscroll-behavior-x: contain;
-}
 .session-related {
   display: flex;
   flex-wrap: wrap;

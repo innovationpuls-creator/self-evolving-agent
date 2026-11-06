@@ -115,21 +115,6 @@
 .dropdown [role="menuitem"][data-highlighted] {
   background: #e9ede3;
 }
-.toast {
-  position: fixed;
-  z-index: 50;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: calc(100vw - 35px);
-  background: #303b2d;
-  color: #f8fbf3;
-  padding: 11px 18px;
-  border-radius: 6px;
-  font-size: var(--xs);
-  box-shadow: 0 4px 18px #0002;
-  animation: fade 140ms var(--ease);
-}
 @keyframes fade {
   from {
     opacity: 0;

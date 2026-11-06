@@ -30,7 +30,6 @@
   --aw-ink: #242923;
   --aw-sub: #687066;
   --aw-line: #e5e8e1;
-  --aw-soft: #f5f6f2;
   --aw-accent: #455c45;
   max-width: 1180px;
   margin: 0 auto;
@@ -51,6 +50,16 @@
 }
 .host-product .aw-journal-row.live-record {
   grid-template-columns: minmax(0, 1fr) 17px;
+}
+.host-product .aw-journal-row.live-record > span {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 12px;
+  min-width: 0;
+}
+.host-product .aw-journal-row.live-record > span > :is(p, h2) {
+  flex-basis: 100%;
 }
 .host-product .aw-journal-row h2 {
   display: -webkit-box;
@@ -142,10 +151,6 @@
   flex-shrink: 0;
   margin-top: 10px;
   color: var(--muted);
-}
-.host-product .host-full-title {
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
 .host-product .session-model {
   max-width: 260px;
@@ -283,26 +288,6 @@
 .host-product .aw-context .btn {
   margin-bottom: 8px;
 }
-.host-product .host-skills {
-  margin: 24px 0;
-}
-.host-product .host-skills .asm-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 16px;
-}
-.host-product .host-skills small {
-  display: block;
-  margin-top: 6px;
-}
-.host-product .host-tool-catalog {
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.host-product .host-tool-catalog details {
-  margin: 12px 0;
-}
 .host-product .host-connect {
   max-width: 460px;
   width: 100%;
@@ -379,14 +364,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   flex: 1 1 auto;
-}
-.host-product .sidebar .project-path {
-  min-width: 0;
-}
-.host-product .sidebar .project-path small {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .host-product .session-scroll .host-tool {
   margin: 0;

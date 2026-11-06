@@ -4,45 +4,6 @@
   display: flex;
   flex-direction: column;
 }
-.prototype-bar {
-  height: 31px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  background: #e8e7df;
-  border-bottom: 1px solid #ddded5;
-  font-size: 11px;
-  color: #62665c;
-}
-.prototype-bar > span,
-.prototype-bar > div {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-.prototype-bar button {
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: inherit;
-  padding: 3px 6px;
-}
-.prototype-bar .icon-btn {
-  min-height: 24px;
-  min-width: 24px;
-}
-.prototype-dot {
-  width: 5px;
-  height: 5px;
-  border: 1px solid #838b78;
-  border-radius: 50%;
-}
-.bar-divider {
-  opacity: 0.5;
-}
 .app-body {
   display: flex;
   min-height: 0;
@@ -103,9 +64,6 @@
   padding: 0 9px;
   margin: 0 0 8px;
 }
-.nav-label.spaced {
-  margin-top: 32px;
-}
 .session-list {
   display: flex;
   flex-direction: column;
@@ -149,11 +107,6 @@
 .session-list > button.selected strong {
   font-weight: 500;
 }
-.folder-icon {
-  font-size: 20px;
-  line-height: 1;
-  color: #969e8b;
-}
 .module-nav {
   display: flex;
   flex-direction: column;
@@ -168,11 +121,6 @@
   font-size: var(--xs);
   text-align: left;
   color: #686e61;
-}
-.nav-count {
-  margin-left: auto;
-  font-size: 11px;
-  color: #8d6748;
 }
 .sidebar-bottom {
   margin-top: auto;
@@ -242,6 +190,32 @@
 .breadcrumbs > .icon-btn {
   display: none;
 }
+/* Session title: one truncated line; tapping it wraps the full title and lets the header grow. */
+.session-title {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: default;
+}
+.session-title:focus-visible {
+  outline-offset: -2px;
+}
+.workspace > header.workspace-head.title-open {
+  flex-basis: auto;
+  height: auto;
+  min-height: 48px;
+  padding-block: 8px;
+}
+.workspace-head.title-open .session-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 /* Module pages: place controls float over the page's top padding instead of a header band. */
 .workspace-corner {
   position: sticky;
@@ -274,6 +248,7 @@
 }
 .head-actions {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   gap: 18px;
 }
@@ -299,61 +274,6 @@
   text-decoration: underline;
   color: inherit;
 }
-.memory-page,
-.trace-page,
-.reflection-page,
-.skills-page,
-.evolution-page,
-.settings-page {
-  padding: 34px 40px 60px;
-  max-width: 1440px;
-  margin: auto;
-}
-.workbook-top {
-  display: flex;
-  align-items: center;
-  height: 58px;
-  padding: 0 24px;
-  border-bottom: 1px solid var(--line);
-  background: white;
-  flex-shrink: 0;
-}
-.wordmark {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 230px;
-}
-.wordmark > span {
-  font-weight: 600;
-  font-size: 20px;
-  letter-spacing: -0.6px;
-}
-.wordmark small {
-  font-size: 11px;
-  margin-left: 4px;
-}
-.workbook-top nav {
-  display: flex;
-  align-self: stretch;
-  gap: 32px;
-}
-.workbook-top nav > button {
-  font-size: var(--xs);
-  color: var(--muted);
-  padding: 0 5px;
-  border-bottom: 2px solid transparent;
-}
-.workbook-top nav > button[aria-current="page"] {
-  color: var(--ink);
-  border-color: var(--ink);
-  font-weight: 600;
-}
-.top-actions {
-  margin-left: auto;
-  display: flex;
-  gap: 8px;
-}
 .studio {
   --canvas: #fafbfd;
   --paper: #fff;
@@ -365,11 +285,6 @@
   --accent: #3c5e86;
   --accent-soft: #e9eff7;
   --good: #397264;
-}
-.studio .prototype-bar {
-  background: #29313b;
-  color: #b7c0cb;
-  border-color: #29313b;
 }
 .studio .sidebar {
   width: 232px;
@@ -396,75 +311,11 @@
   box-shadow: inset 2px 0 #4a688c;
   border-radius: 0 4px 4px 0;
 }
-.workbook-subnav {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin-top: 12px;
-}
-.workbook-subnav button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  text-align: left;
-  font-size: var(--xs);
-  color: var(--muted);
-  border-radius: 4px;
-}
-.workbook-subnav button.selected {
-  background: #e5eaf0;
-  color: #374f6c;
-}
-.sidebar-note {
-  margin-top: 32px;
-  padding: 18px 8px;
-  border-top: 1px solid var(--line);
-}
-.sidebar-note button {
-  display: block;
-  line-height: 1.7;
-  padding: 12px 0;
-  font-size: var(--xs);
-  color: #52637a;
-}
 .studio .sidebar-bottom small {
   color: var(--muted);
 }
 .studio .module-nav {
   margin-top: 20px;
-}
-.workspace-object-nav {
-  margin-top: 28px;
-  border-top: 1px solid var(--line);
-  padding-top: 20px;
-}
-.workspace-object-nav > button {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  width: 100%;
-  padding: 10px 9px;
-  text-align: left;
-  font-size: 11px;
-  line-height: 1.7;
-  color: #64758a;
-}
-.workspace-object-nav > button:hover {
-  background: #e8edf4;
-}
-.workspace-object-nav > button > span:not(.tiny-dot) {
-  font-size: 10px;
-  color: #8290a2;
-  white-space: nowrap;
-  margin-top: 1px;
-}
-.workspace-object-nav .tiny-dot {
-  margin-top: 7px;
-}
-.workspace-object-nav small {
-  font: 10px / 1.8 monospace;
-  margin-left: auto;
 }
 .studio.settings-active .sidebar {
   display: none;
@@ -505,8 +356,4 @@
 .quiet .nav-label {
   font-size: 12px;
   letter-spacing: 0;
-}
-.quiet .nav-count {
-  font-variant-numeric: tabular-nums;
-  font-size: 12px;
 }

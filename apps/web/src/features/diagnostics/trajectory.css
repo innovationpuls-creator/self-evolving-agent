@@ -1,6 +1,3 @@
-.session-tabs { display: flex; gap: 6px; padding: 8px 32px; border-bottom: 1px solid var(--line); }
-.session-tabs [aria-selected="true"] { background: var(--selected); border-color: var(--accent); }
-.chat-content { display: flex; flex: 1; min-height: 0; flex-direction: column; }
 [hidden] { display: none !important; }
 .trajectory-panel { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
 .trajectory-toolbar { display: flex; gap: 8px; padding: 10px 24px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
@@ -30,7 +27,6 @@
 .trajectory-inspector pre { max-height: 380px; overflow: auto; }
 .trajectory-new { position: sticky; bottom: 10px; display: block; margin: 10px auto; }
 @media (max-width: 760px) {
-  .session-tabs { padding: 8px 16px; }
   .trajectory-toolbar, .trajectory-ledger { padding: 10px 16px; }
   .trajectory-toolbar input { width: 100%; }
   .trajectory-workspace[data-detail="true"] > .trajectory-ledger { display: none; }

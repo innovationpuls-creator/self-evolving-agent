@@ -390,12 +390,6 @@
   font-size: var(--xs);
   margin: 11px 0 7px;
 }
-.evidence-meta {
-  font-size: 11px;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 14px;
-}
 .evidence .btn.ghost {
   padding-left: 0;
 }

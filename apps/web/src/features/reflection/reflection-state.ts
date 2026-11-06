@@ -19,7 +19,8 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, off
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [revision, setRevision] = useState(0);
-  const epoch = useRef(0);
+  const epoch = useRef(0),
+    fetchedScope = useRef<string>(undefined);
   const owner = useRef({ api, scope });
   if (owner.current.api !== api || owner.current.scope !== scope) {
     epoch.current++;
@@ -38,13 +39,21 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, off
         refresh();
       }, 120);
     };
+    // The Host updates its environment check without an event when no Job changes status.
+    const visible = () => {
+      if (document.visibilityState === 'visible') changed();
+    };
     window.addEventListener('agent-reflection-changed', changed);
     window.addEventListener('agent-reconnected', refresh);
+    window.addEventListener('focus', changed);
+    document.addEventListener('visibilitychange', visible);
     return () => {
       epoch.current++;
       clearTimeout(timer);
       window.removeEventListener('agent-reflection-changed', changed);
       window.removeEventListener('agent-reconnected', refresh);
+      window.removeEventListener('focus', changed);
+      document.removeEventListener('visibilitychange', visible);
     };
   }, [refresh]);
 
@@ -52,11 +61,15 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, off
     const generation = ++epoch.current;
     const controller = new AbortController();
     setLoading(true);
-    setError('');
+    // A refetch of the same scope keeps its error until it resolves, so a failing retry does not flicker.
+    if (fetchedScope.current !== scope) setError('');
+    fetchedScope.current = scope;
     const query = `?${new URLSearchParams({ view: statusOnly ? 'status' : 'summary', limit: '20', offset: String(offset), ...(sessionId ? { sessionId } : {}) })}`;
     void api<ReflectionCatalog>(`/reflections${query}`, 'GET', undefined, controller.signal)
       .then((catalog) => {
-        if (generation === epoch.current) setLoaded({ scope, catalog });
+        if (generation !== epoch.current) return;
+        setLoaded({ scope, catalog });
+        setError('');
       })
       .catch((reason: unknown) => {
         if (generation === epoch.current) setError(reason instanceof Error ? reason.message : '自动复盘状态读取失败');
