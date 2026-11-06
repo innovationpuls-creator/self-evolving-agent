@@ -1,1 +1,0 @@
-{"mode":"actual browser","width":850,"expected":"Skill detail visible after selection","actual":"existing workspace CSS hides .asm-detail at <=1000px; new manager missed asm-detail-open semantics","status":"failed","resolution":"A-only explicit data-detail display rule; rerun unchanged functional assertions"}

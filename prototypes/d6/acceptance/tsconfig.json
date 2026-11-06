@@ -1,4 +1,0 @@
-{
-	"extends": "../capability-integration/tsconfig.json",
-	"include": ["tests/**/*.ts", "scripts/**/*.ts"]
-}

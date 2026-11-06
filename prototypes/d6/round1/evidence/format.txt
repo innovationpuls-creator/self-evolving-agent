@@ -1,5 +1,0 @@
-
-> format:check
-> biome format src scripts package.json tsconfig.json biome.json vite.config.ts
-
-Checked 8 files in 5ms. No fixes applied.

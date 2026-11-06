@@ -1,8 +1,0 @@
-[
-  {
-    "name": "global import 202 is candidate only; external draft import creates a new immutable version",
-    "width": 390,
-    "status": "failed",
-    "actual": "TypeError: Cannot read properties of undefined (reading 'current')\n    at file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/import-draft.mjs:43:26\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async check (file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/common.mjs:80:20)\n    at async file://<USER_HOME>/Documents/ChatGPT/agent/prototypes/d6/capability-integration/scripts/import-draft.mjs:17:1"
-  }
-]

@@ -4,9 +4,23 @@
 
 设计与范围见 [设计文档](docs/README.md)、[当前决策](DECISIONS.md)和 [D1 交付要求](docs/08-交付规划/DP-03-D1首个可用产品的开发计划.md)。
 
-验收记录：[D1](D1-ACCEPTANCE.md)、[D4 自主能力进化](D4-ACCEPTANCE.md)、[D5 可靠性交付](D5-ACCEPTANCE.md)、[Web 产品完善](WEB-PRODUCT-ACCEPTANCE.md)、[Desktop 钥匙串启动](DESKTOP-KEYCHAIN-ACCEPTANCE.md)、[D6 正式客户端](D6-CLIENT-DELIVERY.md)。
+阶段状态、有效决定与待办见 [DECISIONS.md](DECISIONS.md)；最近交付见 [D6 正式客户端](docs/D6-CLIENT-DELIVERY.md)。D1～D5 验收记录可在提交 `3350478` 中查看。
 
-工程目录见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)，本轮目录迁移与验证记录见 [目录迁移报告](HOST-DIRECTORY-MIGRATION.md)。
+## 目录
+
+| 位置 | 内容 |
+|---|---|
+| `apps/host` | 独立 Agent Host：Pi 会话、传输、Skill、Memory、Diagnostic、Reflection、Evolution、加密存储 |
+| `apps/desktop` | Electron：启动 Host、系统密钥保护、后台运行、备份恢复菜单 |
+| `apps/web` | React 客户端：`app/` 协调，`components/` 共享组件，`features/` 业务界面 |
+| `apps/shared` | Host 与客户端共用的敏感信息保护 |
+| `packages/pi-diagnostics` | 原生 Pi 可独立安装的诊断 Extension |
+| `tests` | 单元与集成测试（`npm test`） |
+| `scripts` | 打包、签名与当前验收脚本；`scripts/archive` 为历史阶段脚本 |
+| `docs` | 产品、体验、需求、领域、架构、技术决策、质量与交付规划 |
+| `experiments` | 历史技术实验，只读 |
+
+模块边界详见 [DP-02](docs/08-交付规划/DP-02-正式项目结构与开发任务管理.md#当前实现目录)。
 
 ## 从源码启动
 
@@ -43,7 +57,7 @@ Host 仅监听本机地址，校验 HTTP、WebSocket 的认证与来源。HTTP �
 npm run package:desktop
 ```
 
-应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。本地开发签名与正式签名的配置、尚待人工验收的边界见 [钥匙串启动报告](DESKTOP-KEYCHAIN-ACCEPTANCE.md#开发与正式签名)。
+应用输出到 `release/`，包含 Electron 运行时，运行打包后的应用不需要另装 Node.js 或 Pi。当前平台的打包结果不代表其他平台实际运行已通过；公证和自动更新属于后续交付。macOS 的 ad-hoc 开发包在重新构建后可能再次触发钥匙串授权；可用签名身份通过 `AGENT_CODESIGN_IDENTITY` 指定。钥匙串授权需要用户在系统提示中处理，应用不会取消凭据加密。本地开发签名与正式签名的配置、尚待人工验收的边界见提交 `3350478` 中的 DESKTOP-KEYCHAIN-ACCEPTANCE.md。
 
 在 **Agent** 菜单保存加密备份、从备份恢复到新目录。维护会拒绝正在运行的任务；空闲时正常关闭 Host 后执行，再重新连接。升级、迁移、损坏处理、CLI 及密钥保存要求见 [备份恢复与手动更新](docs/D5-OPERATIONS.md)。原生 Pi 可独立安装 [Pi Diagnostics Extension](packages/pi-diagnostics/README.md)，按需查询同项目的跨会话指标与原始证据。
 
@@ -89,9 +103,9 @@ npm run test:skills:ui
 
 ## 当前边界
 
-当前提供 D1～D5 本机能力。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端、诊断、导出及产品落盘的真实凭证传播专项已通过，保护范围和未知秘密限制见 [D5 验收报告](D5-ACCEPTANCE.md)。
+当前提供 D1～D6 本机能力。普通 Agent 的原生工具具有本机用户权限，工作目录不是沙箱。模型、客户端、诊断、导出及产品落盘的真实凭证传播专项已通过，保护范围和未知秘密限制见提交 `3350478` 中的 D5 验收报告。
 
-运行时要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。D5 已通过 30 分钟本机持续负载、恢复和既有 Apple Development 签名包验证；Windows 实机、Developer ID 公证与公开分发没有验证。Windows 受限 Reflection 继续不可用。D6 独立原型正在迭代并等待用户验收；正式 Web/Desktop 改造须待用户确认设计方向。
+运行时要求有效 Apple 同团队签名，ad-hoc 包不可用时保留具体原因，不降级为 Host 内执行。D4 已支持目标授权后的原生自主开发与自动发布。开发 Shell 及特殊 Skill Extension 具有本机用户/Host 权限；独立 AgentSession、候选目录及版本检查不提供 OS 沙箱。D5 已通过 30 分钟本机持续负载、恢复和既有 Apple Development 签名包验证；Windows 实机、Developer ID 公证与公开分发没有验证。Windows 受限 Reflection 继续不可用。D6 正式客户端已按用户确认的 D6-A 方案交付，见 [D6 交付](docs/D6-CLIENT-DELIVERY.md)。
 
 ## 自主能力进化
 
@@ -110,7 +124,7 @@ npm run package:desktop
 npm run test:d4:desktop
 ```
 
-Desktop 检查默认使用 `release/Agent-darwin-arm64/Agent.app`，可用 `AGENT_APP_PATH` 指定可执行文件。macOS 使用现有有效签名身份可避免 ad-hoc 包重新触发的钥匙串等待。完整证据与限制见 [D4 验收记录](D4-ACCEPTANCE.md)。
+Desktop 检查默认使用 `release/Agent-darwin-arm64/Agent.app`，可用 `AGENT_APP_PATH` 指定可执行文件。macOS 使用现有有效签名身份可避免 ad-hoc 包重新触发的钥匙串等待。完整证据与限制见提交 `3350478` 中的 D4 验收记录。
 
 ## 能力目录、输入引用与授权
 
@@ -130,8 +144,8 @@ Memory 回归命令（客户端检查前先 build，真实模型检查前先 pac
 
 ```sh
 npx tsx --test tests/memory.test.ts
-npx tsx scripts/memory-browser-smoke.ts
-npx tsx scripts/memory-ui-smoke.ts
+npx tsx scripts/archive/memory-browser-smoke.ts
+npx tsx scripts/archive/memory-ui-smoke.ts
 ```
 
 
@@ -153,22 +167,22 @@ HTTP 使用现有 Bearer 认证：
 
 完整 Prompt、Thinking、参数和结果仍只存在于加密 Pi Session。SQLite 诊断仅存指标及引用，单条元数据上限64KiB、队列上限1000，超限或写入失败标识缺失而不阻止正常任务；已存在指标不会因证据故障消失。异常重启不重放，未结束记录标中断；只有原生确实保存的事实能够补齐，未采集耗时保持未知。上线前历史不补造 Trace，仍可按原生 Entry 取证。
 
-Host System Log 只保存固定故障 code、级别和关联 ID，最多5000条且不超过30天；Trace 详情的 `systemLogs` 提供关联工程故障。诊断历史本身随业务数据保留，未新增自动删除政策。真实双端验收可运行 `npx tsx scripts/diagnostic-ui-smoke.ts`（先打包，会使用模型额度）。
+Host System Log 只保存固定故障 code、级别和关联 ID，最多5000条且不超过30天；Trace 详情的 `systemLogs` 提供关联工程故障。诊断历史本身随业务数据保留，未新增自动删除政策。真实双端验收可运行 `npx tsx scripts/archive/diagnostic-ui-smoke.ts`（先打包，会使用模型额度）。
 
-`npx tsx scripts/skills-response-browser-smoke.ts` 在已构建 Web 上验证 10 项异步响应、重连和跨项目状态场景，不使用模型。完整自动化回归使用 `npm test`。
+`npx tsx scripts/archive/skills-response-browser-smoke.ts` 在已构建 Web 上验证 10 项异步响应、重连和跨项目状态场景，不使用模型。完整自动化回归使用 `npm test`。
 
 ## Web 产品回归
 
 先 build，再执行浏览器机制回归（临时项目、真实 Host、确定性 Faux Provider，不作为 Reflection 正式验收）：
 
 ```sh
-npx tsx scripts/web-product-browser-smoke.ts
+npx tsx scripts/archive/web-product-browser-smoke.ts
 ```
 
 真实 Provider、原生工具、Diagnostic 来源和 Reflection 阻塞持久化：
 
 ```sh
-npx tsx scripts/web-product-real-smoke.ts
+npx tsx scripts/archive/web-product-real-smoke.ts
 ```
 
-该命令使用本机 Pi 授权和模型额度，Reflection 环境检查使用已打包应用。打包后可执行 `npx tsx scripts/web-product-desktop-smoke.ts`；macOS 钥匙串授权未完成时，Desktop 检查会阻塞，不能视为通过。各命令生成独立的 `docs/evidence/web-product-*.json` 收据；历史 D3 收据保持原样。
+该命令使用本机 Pi 授权和模型额度，Reflection 环境检查使用已打包应用。打包后可执行 `npx tsx scripts/archive/web-product-desktop-smoke.ts`；macOS 钥匙串授权未完成时，Desktop 检查会阻塞，不能视为通过。各命令生成独立的 `docs/evidence/web-product-*.json` 收据；历史 D3 收据保持原样。

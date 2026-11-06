@@ -1,9 +1,0 @@
-{
-  "index": 23,
-  "mode": "parallel-4",
-  "pid": 55575,
-  "code": 1,
-  "durationMs": 1646.125709,
-  "stdout": "✔ committed effects survive reflection_save, succeeded, restart and duplicate Tool Call (509.943166ms)\n✖ committed effects survive reflection_save, failed, restart and duplicate Tool Call (1.782166ms)\n✔ committed effects survive reflection_save, interrupted, restart and duplicate Tool Call (517.069083ms)\nℹ tests 3\nℹ suites 0\nℹ pass 2\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1562.115416\n\n✖ failing tests:\n\ntest at prototypes/d6/acceptance/tests/reflection-race.test.ts:1:1206\n✖ committed effects survive reflection_save, failed, restart and duplicate Tool Call (1.782166ms)\n  TypeError [Error]: Cannot read properties of undefined (reading 'jobs')\n      at TestContext.<anonymous> (/Users/torch/Documents/ChatGPT/agent/prototypes/d6/acceptance/runs/2026-10-26T12-39-30.039Z-command-86da12b4/workspace/prototypes/d6/acceptance/tests/reflection-race.test.ts:178:176)\n      at async Test.run (node:internal/test_runner/test:1409:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)\n",
-  "stderr": ""
-}

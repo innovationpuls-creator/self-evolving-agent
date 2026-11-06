@@ -1,9 +1,0 @@
-{
-  "status": "passed",
-  "textFilesChanged": 1,
-  "archivesChecked": 15,
-  "credentialSources": 3,
-  "rawSecretsFound": 0,
-  "errors": [],
-  "scope": "current phase evidence only; private runtime untouched; PNG/video pixels not OCR scanned"
-}

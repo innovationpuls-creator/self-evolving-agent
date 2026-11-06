@@ -1,5 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": { "lib": ["ES2023", "DOM", "DOM.Iterable"], "types": ["node", "vite/client"] },
-  "include": ["tests", "scripts/*.ts", "../src/real/skill-management.ts"]
-}

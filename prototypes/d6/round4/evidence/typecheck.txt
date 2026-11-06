@@ -1,4 +1,0 @@
-
-> typecheck:round4
-> tsc --noEmit -p round4/tsconfig.json
-

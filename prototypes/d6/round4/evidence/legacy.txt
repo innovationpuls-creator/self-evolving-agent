@@ -1,9 +1,0 @@
-
-> test:browser
-> node scripts/browser.mjs
-
-24 checks; 132 screenshots
-18 state/focus groups
-2 detailed visual groups
-8 cross-module contracts
-2 Diff inspections passed

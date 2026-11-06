@@ -24,6 +24,7 @@
     "test:skills:ui": "tsx scripts/skills-ui-smoke.ts",
     "test:d4:real": "tsx scripts/d4-real-acceptance.ts",
     "test:d4:desktop": "tsx scripts/d4-desktop-acceptance.ts",
+    "test:d6:ui": "tsx scripts/d6-client-smoke.ts",
     "data": "tsx scripts/data-maintenance.ts",
     "test:d5:data": "tsx --test tests/data-maintenance.test.ts"
   },
