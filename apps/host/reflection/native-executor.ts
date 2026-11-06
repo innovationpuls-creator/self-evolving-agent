@@ -41,7 +41,8 @@ export class NativeReflectionExecutor {
     signal?.throwIfAborted();
     if (process.platform !== 'darwin') return { available: false, reason: 'Reflection 原生隔离尚未支持此平台' };
     const bundle = this.bundle();
-    if (!bundle) return { available: false, reason: '未配置同版本 Agent.app，Reflection 原生隔离不可用' };
+    if (!bundle)
+      return { available: false, reason: 'Host 未在 Agent.app 中运行，也未指定 Agent.app，Reflection 原生隔离不可用' };
     try {
       const canonical = await realpath(bundle);
       if (!canonical.endsWith('.app')) throw new Error('bundle');

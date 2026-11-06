@@ -5,4 +5,3 @@ type Availability = { available: boolean; reason?: string; checkedAt?: number };
 export const environmentChecked = (availability: Availability) => 'checkedAt' in availability;
 export const environmentNotice = (availability: Availability) =>
   availability.available ? undefined : environmentChecked(availability) ? '自动复盘暂不可用' : '尚未检查自动复盘环境';
-export const uncheckedPollMs = 5000;

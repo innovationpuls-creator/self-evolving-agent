@@ -39,21 +39,14 @@ export function useReflectionCatalog(api: ReflectionApi, sessionId?: string, off
         refresh();
       }, 120);
     };
-    // The Host updates its environment check without an event when no Job changes status.
-    const visible = () => {
-      if (document.visibilityState === 'visible') changed();
-    };
+    // The Host emits `reflection` for Job, Record and environment-check changes; a reconnect re-reads what was missed.
     window.addEventListener('agent-reflection-changed', changed);
     window.addEventListener('agent-reconnected', refresh);
-    window.addEventListener('focus', changed);
-    document.addEventListener('visibilitychange', visible);
     return () => {
       epoch.current++;
       clearTimeout(timer);
       window.removeEventListener('agent-reflection-changed', changed);
       window.removeEventListener('agent-reconnected', refresh);
-      window.removeEventListener('focus', changed);
-      document.removeEventListener('visibilitychange', visible);
     };
   }, [refresh]);
 

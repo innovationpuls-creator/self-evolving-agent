@@ -86,7 +86,7 @@ export async function reflectionRoutes(
   } catch (error) {
     if (error instanceof ReflectionError) json(res, error.status, { error: error.message, code: error.code });
     else if (error instanceof z.ZodError) json(res, 400, { error: '反思字段无效', code: 'REFLECTION_INPUT' });
-    else json(res, 503, { error: '反思状态读取或操作未完成，请重新读取', code: 'REFLECTION_UNAVAILABLE' });
+    else json(res, 503, { error: '反思状态读取或操作未完成，请重试', code: 'REFLECTION_UNAVAILABLE' });
   }
   return true;
 }

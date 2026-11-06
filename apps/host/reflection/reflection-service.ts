@@ -200,6 +200,8 @@ export class ReflectionService {
       const promise = this.executor.available(controller.signal).then((value) => {
         controller.signal.throwIfAborted();
         this.environment = { ...value, checkedAt: Date.now() };
+        // Every completed check changes checkedAt and may change the result even when no Job moves.
+        this.notify();
         return this.environment;
       });
       const check = { controller, promise, waiters: 0 };
@@ -235,7 +237,7 @@ export class ReflectionService {
   async recheck(signal?: AbortSignal) {
     const available = await this.availability(true, signal);
     if (available.available) this.jobs.recheck();
-    else this.jobs.setUnavailable(available.reason ?? 'Reflection 沙箱不可用');
+    else this.jobs.setUnavailable(available.reason ?? '反思环境检查未通过');
     this.wake();
   }
   catalog(input: { sessionId?: string; limit?: number; offset?: number; statusOnly?: boolean } = {}) {
@@ -280,7 +282,7 @@ export class ReflectionService {
       pending: counts.reduce((sum, row) => sum + (row.status === 'pending' ? Number(row.count) : 0), 0),
       availability: this.environment ?? {
         available: false,
-        reason: '尚未检查反思环境；有待执行任务时自动检查，也可手动检查。',
+        reason: '尚未完成反思环境检查；Host 空闲时会自动检查，也可手动检查。',
       },
     });
   }
@@ -308,6 +310,9 @@ export class ReflectionService {
     this.d.db
       .prepare('INSERT INTO reflections VALUES (?,?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data')
       .run(safe.id, safe.sessionId, safe.project, JSON.stringify(safe));
+    this.notify();
+  }
+  private notify() {
     try {
       this.d.changed();
     } catch {
@@ -348,7 +353,7 @@ export class ReflectionService {
       const available = await this.availability();
       if (this.closing) return;
       if (!available.available) {
-        this.jobs.setUnavailable(available.reason ?? 'Reflection 沙箱不可用');
+        this.jobs.setUnavailable(available.reason ?? '反思环境检查未通过');
         return;
       }
       const job = this.jobs.pendingClaim(() => this.d.canRun());
