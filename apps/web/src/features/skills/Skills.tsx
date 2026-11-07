@@ -415,6 +415,7 @@ function SkillReader({
   const refresh = () => {
     read.refresh();
   };
+  // The detail can refresh from a Host event before the next poll; re-read the operation then so its status is not stale.
   useEffect(() => {
     if (!pending || (operation?.id === pending.id && !['checking', 'waiting'].includes(operation.status))) return;
     let alive = true;
@@ -436,7 +437,7 @@ function SkillReader({
       alive = false;
       clearInterval(timer);
     };
-  }, [host.api, pending?.id, operation?.status, read.refresh]);
+  }, [host.api, pending?.id, operation?.status, read.refresh, detail?.skill.revision]);
   useEffect(() => {
     if (detail && pending && operation) {
       if (operationApplied(operation, detail.skill, pending)) {

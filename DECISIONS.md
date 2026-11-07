@@ -68,10 +68,16 @@
 
 ## 未通过或待做
 
-- Reflection 偶发失败原因未定位。
-- 真实模型自主开发新 Tool 并自动发布的完整 D4 验收，D6 后未重做。
 - 仅 macOS arm64 实测；无 Windows、公证、自动更新。
-- Web 单一 JS chunk 约 782 kB。
-- Biome lint 有 104 条警告。
-- `apps/web/src/styles/` 19 层样式叠加（含 `round3.css`、`a-*.css`），需按功能整合并做 1440/850/390px 视觉回归。
+- 敏感数据保护会把十六进制摘要中形如手机号的 11 位数字也遮蔽（如 Memory 的 project 标识），需调整共享脱敏规则，待授权。
+- Reflection 模型请求固定 120 s 超时，覆盖整段响应；长而正常的生成也会被中断，是否放宽待决定。
 - 来源待核实：EQ-04～EQ-07 完整原文、部分原会话附件（如 TD-13）。不补造历史依据。
+
+## 已解决（2026-11-06）
+
+- Reflection 偶发失败：根因为 Tool Call 重放未经过与首次结果相同的脱敏投影，项目摘要含类手机号数字时两次内容不一致；重放已统一投影，失败记录固定阶段与类别诊断码（`35504fa`）。
+- 真实模型 D4 完整验收已在 D6 后重做：`test:d4:real`、`test:d4:desktop` 通过（`e5fd2ae`）。
+- Web 首屏 JS 由 771 kB 单 chunk 降为 420 kB（页面懒加载 + 空闲预取，`5e2799a`）。
+- Biome lint 警告清零（`bad458f`）；剩余 info 仅在 `scripts/archive`。
+- 样式按功能整合：`styles/` 为 foundation、shell、conversation、surfaces、module-pages，其余在 components/ 与 features/，1440/850/390 计算样式零差异（`0834865`）。
+- 复盘环境检查完成时 Host 推送 `reflection` 事件，各客户端即时更新（`f2aab0e`）。

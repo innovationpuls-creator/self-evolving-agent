@@ -19,9 +19,9 @@
 | 4 | Web JS 按页面懒加载拆包 | 构建 chunk 体积与首屏加载时间前后量化对比；test:d6:ui 通过 | pass | 1 | verifier PASS（复测 15 次）：首屏 JS 771→420 kB（gzip 233→132），会话列表出现 55→43 ms（1x）、208→181 ms（4x），4x 长任务 68→0 ms；代价：未预取时首次进入页面 +14 ms（1x）/+26 ms（4x），恢复会话 4x +2 ms；连接就绪后空闲预取，预取后导航无差异；CSS 字节一致；分块加载失败显示“页面未能加载/重新读取”并可恢复；草稿、轨迹切换、会话恢复与 HEAD 一致；typecheck/lint/test/build/test:d6:ui 通过 |
 | 5 | 定位并修复 Reflection 偶发失败 | 给出可复现的原因与证据；修复后相关测试与多次运行通过 | pass | 1 | verifier PASS：原失败运行库中项目 Memory 键（sha256 hex）含 `18384912946`，被手机号规则脱敏；首次 Tool 结果经 sensitive.copy、重放不经过，内容不一致→任务 failed、stages=[]（随机路径约 0.33% 触发）。HEAD 下强制复现 3/3 失败，修复后 10/10 通过；重放改走同一脱敏。另修：canRun 增加 isStreaming/isCompacting；执行前原生组件不可用改为 waiting_user；固定阶段/类别诊断码、模型超时单独编码。tests/reflection-failures.test.ts 6 项 HEAD 失败、修复后通过；反思测试 ×20 全过；npm test 226（225 pass/1 skip） |
 | 6 | 重做 D4 真实模型完整验收 | `test:d4:real`（及 `test:d4:desktop`）通过 | pass | 1 | test:d4:real verifier PASS：脚本旧选择器逐项换为等价或更强断言（Host 断言未删改，real 23→24、desktop 8→10）；真实模型 gpt-6.1-sol 自主开发 text_diff，4/4 检查通过后发布，普通会话发现并调用，v2→v1 回退后仍可用（docs/evidence/d4-business-2026-11-06T19-27-02-352Z）。test:d4:desktop：用户批准钥匙串后通过（打包 Desktop + Chrome 共用 Host：讨论、授权对话框可选未生效草稿、取消及刷新后仍为已取消、未加载未批准代码、建议采纳入口；docs/evidence/d4-desktop-2026-11-07T03-20-12-153Z） |
-| 7 | 回归与文档：verify、test:d6:ui、DECISIONS.md 更新 | 命令全部通过；DECISIONS.md 待做清单与实际一致 | pending | 0 | |
+| 7 | 回归与文档：verify、test:d6:ui、DECISIONS.md 更新 | 命令全部通过；DECISIONS.md 待做清单与实际一致 | pass | 2 | 第 1 次 FAIL（命令全过，DECISIONS.md 未更新）→ 已更新待做/已解决。verifier：`npm run verify` exit 0（226：225 pass/1 skip，lint 0 警告）、test:d6:ui、test:skills:browser 通过；顺修技能操作状态滞后（详情刷新即重读操作，HEAD 最长滞后 951 ms→0） |
 
-- 实际结果：
+- 实际结果：7 步全部 pass，无 blocked。Host 复盘环境事件；Reflection 偶发失败根因定位并修复（重放脱敏不一致）；样式按功能整合（零视觉差异）；lint 103→0；首屏 JS 771→420 kB；D4 真实验收（real + 打包 Desktop）通过；技能操作状态滞后修复。`npm run verify` exit 0，`test:d6:ui`、`test:skills:browser` 通过。未提升新规则。未验证：Windows；真机移动端；失败的技能操作状态仍按 1.2 s 轮询更新。待授权：共享脱敏规则误遮十六进制摘要；Reflection 模型 120 s 超时策略。
 
 ## 失败记录
 
@@ -33,6 +33,7 @@
 | visibility: control hidden on assumed semantics without checking host behavior for all reachable states | 2 | R2-4 | 已提升 |
 | derived-label: deduplicated label computed over data the user cannot see (filtered/collapsed/windowed) | 1 | R2-3 | 观察中 |
 | refresh: manual reload removed where host emits no change event for that data | 1 | R2-6 | 观察中 |
+| docs: DECISIONS.md pending list not updated to reflect completed steps | 1 | 7 | 观察中 |
 
 ## 已完成任务
 
