@@ -67,35 +67,46 @@ try {
   receipt.model = model;
   const initial = await host.service.create(root, model.provider, model.id);
   await page.goto(`${host.origin}/#token=${token}`);
-  await page.locator('.connection[data-connection="ready"]').waitFor();
-  await page.locator('nav button').filter({ hasText: root }).click();
-  await page.getByText('能力目标与开发活动', { exact: true }).click();
-  await page.getByLabel('能力目标', { exact: true }).fill(goal);
-  await page.getByRole('button', { name: '进入独立讨论', exact: true }).click();
-  await page.getByRole('region', { name: '能力开发活动' }).waitFor();
+  await page.locator('.sidebar-bottom').getByText('已连接', { exact: true }).waitFor();
+  const shown = page.locator('.host-retained-session:not([hidden])');
+  await page.locator(`.session-list [data-session="${initial.id}"]`).click();
+  // The capability entry belongs to a session with a finished turn, so the user first works in it.
+  await shown
+    .getByLabel('发送给 Agent', { exact: true })
+    .fill('我经常需要核对文档两版之间的行级修改。这一轮不要使用任何工具，只简短回复收到。');
+  await shown.getByLabel('发送任务', { exact: true }).click();
+  const worked = await idle(initial.id);
+  assert.equal(worked.error, undefined);
+  const activityPanel = shown.getByLabel('能力目标与改进进度', { exact: true });
+  await activityPanel.getByText('让 Agent 改进这类任务', { exact: true }).click();
+  await activityPanel.getByLabel('希望获得的能力', { exact: true }).fill(goal);
+  await activityPanel.getByRole('button', { name: '进入独立讨论', exact: true }).click();
+  await activityPanel.locator('[data-activity-status="discussion"]').getByText('讨论中', { exact: true }).waitFor();
   const [a] = await request<EvolutionActivity[]>('/activities');
   assert.ok(a, 'activity required');
+  await page.locator(`.session-list [data-session="${a.sessionId}"][aria-current="page"]`).waitFor();
   receipt.activityId = a.id;
   receipt.discussionSessionId = a.sessionId;
-  await page
-    .getByLabel('任务', { exact: true })
+  await shown
+    .getByLabel('发送给 Agent', { exact: true })
     .fill('先讨论这个目标的实际用途、输入输出与边界。先不要开发，等我在授权表单确认。');
-  await page.getByRole('button', { name: '发送 ↑', exact: true }).click();
+  await shown.getByLabel('发送任务', { exact: true }).click();
   const discussed = await idle(a.sessionId);
   assert.equal(discussed.error, undefined);
   assert.equal(host.service.activities.get(a.id).status, 'discussion');
   assert.ok(discussed.messages.some((m) => m.role === 'assistant'));
   receipt.discussion = { nativeSessionId: discussed.id, messages: discussed.messages.length, unauthorized: false };
-  await page.getByText('确认开发范围', { exact: true }).click();
-  await page
-    .getByLabel('授权目标与限制')
+  await activityPanel.getByRole('button', { name: '审阅开发授权', exact: true }).click();
+  const grant = page.getByRole('dialog', { name: '授权能力开发' });
+  await grant
+    .getByLabel('授权目标与限制', { exact: true })
     .fill(
       goal +
         ' 授权仅限新建 text-diff，不修改任何其他能力；使用纯本地计算，不访问外部数据服务。自主完成实现和实际测试后提交。',
     );
-  await page.getByLabel('允许创建的能力名称').fill('text-diff');
+  await grant.getByLabel('允许新建的技能名称', { exact: true }).fill('text-diff');
   await page.screenshot({ path: join(output, 'web-grant.png') });
-  await page.getByRole('button', { name: '授权并开始开发', exact: true }).click();
+  await grant.getByRole('button', { name: '授权并开始开发', exact: true }).click();
   console.log('Real user UI authorization submitted; autonomous development running.');
   let completed = await finish(a.id);
   receipt.activity = completed;
@@ -161,21 +172,25 @@ try {
   assert.equal(completed.status, 'completed', completed.error ?? 'improvement did not complete');
   const v2 = host.service.skills.record(skill.id).current;
   assert.ok(v2 && v2 !== v1.id);
-  // User uses the existing rollback UI.
-  await page.getByRole('button', { name: '查看能力版本与回退', exact: true }).click();
-  await page
-    .getByText('版本与修订历史', { exact: true })
-    .click()
-    .catch(() => {});
-  const version = page.locator('.skill-version').filter({ hasText: v1.id.slice(0, 8) });
+  // User uses the existing rollback UI, starting from the release shown in the development session.
+  await page.locator(`.session-list [data-session="${a.sessionId}"]`).click();
+  const releaseRow = activityPanel.locator('.host-activity-release[data-release-status="applied"]');
+  await releaseRow.getByText('此活动已发布的历史版本', { exact: true }).waitFor();
+  await releaseRow.getByRole('button', { name: '查看精确版本', exact: true }).click();
+  await page.getByRole('tab', { name: '版本', exact: true }).click();
+  const version = page.locator('.asm-version-list section').filter({ hasText: v1.id.slice(0, 8) });
   await version.getByRole('button', { name: '恢复此版本', exact: true }).click();
+  await page
+    .getByRole('dialog', { name: '恢复正式版本' })
+    .getByRole('button', { name: '确认恢复', exact: true })
+    .click();
   const deadline = Date.now() + 30000;
   while (host.service.skills.record(skill.id).current !== v1.id) {
     assert.ok(Date.now() < deadline, 'UI rollback timeout');
     await new Promise((r) => setTimeout(r, 100));
   }
   receipt.rollback = { from: v2, to: v1.id, current: host.service.skills.record(skill.id).current };
-  await version.getByText(/当前正式版本/).waitFor();
+  await version.getByText('当前正式', { exact: true }).waitFor();
   await page.screenshot({ path: join(output, 'web-version-rollback.png') });
   const after = await host.service.create(root, model.provider, model.id);
   await host.service.prompt(

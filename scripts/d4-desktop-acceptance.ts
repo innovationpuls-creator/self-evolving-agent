@@ -43,7 +43,8 @@ try {
   const page = await app.firstWindow({ timeout: 60000 });
   page.setDefaultTimeout(20000);
   await page
-    .locator('.shell')
+    .locator('.sidebar-bottom')
+    .getByText('已连接', { exact: true })
     .waitFor({ timeout: 60000 })
     .catch(async (e) => {
       receipt.startup = await page.locator('body').innerText();
@@ -85,13 +86,32 @@ try {
     provider: model.provider,
     model: model.id,
   });
-  await page.locator('nav button').filter({ hasText: root }).click();
-  await page.getByText('能力目标与开发活动', { exact: true }).click();
-  await page.getByLabel('能力目标', { exact: true }).fill('讨论一个以后再实现的文件格式检查能力');
-  await page.getByRole('button', { name: '进入独立讨论', exact: true }).click();
-  await page.getByRole('region', { name: '能力开发活动' }).waitFor();
+  const shown = (client: Page) => client.locator('.host-retained-session:not([hidden])');
+  const activityPanel = (client: Page) => shown(client).getByLabel('能力目标与改进进度', { exact: true });
+  await page.locator(`.session-list [data-session="${s.id}"]`).click();
+  // The capability entry belongs to a session with a finished turn, so the user first works in it.
+  await shown(page).getByLabel('发送给 Agent', { exact: true }).fill('这一轮不要使用任何工具，只简短回复收到。');
+  await shown(page).getByLabel('发送任务', { exact: true }).click();
+  const turnDeadline = Date.now() + 180000;
+  for (;;) {
+    const view = await request<{ busy: boolean; error?: string }>(page, `/sessions/${s.id}`);
+    if (!view.busy) {
+      assert.equal(view.error, undefined);
+      break;
+    }
+    assert.ok(Date.now() < turnDeadline, 'first turn timeout');
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  await activityPanel(page).getByText('让 Agent 改进这类任务', { exact: true }).click();
+  await activityPanel(page).getByLabel('希望获得的能力', { exact: true }).fill('讨论一个以后再实现的文件格式检查能力');
+  await activityPanel(page).getByRole('button', { name: '进入独立讨论', exact: true }).click();
+  await activityPanel(page)
+    .locator('[data-activity-status="discussion"]')
+    .getByText('讨论中', { exact: true })
+    .waitFor();
   const [a] = await request<EvolutionActivity[]>(page, '/activities');
   assert.ok(a, 'activity required');
+  await page.locator(`.session-list [data-session="${a.sessionId}"][aria-current="page"]`).waitFor();
   browser = await chromium.launch({
     executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     headless: true,
@@ -100,22 +120,29 @@ try {
   web.setDefaultTimeout(20000);
   const token = await page.evaluate(() => sessionStorage.getItem('agent-connection-token'));
   await web.goto(`${new URL(page.url()).origin}/#token=${token}`);
-  await web.locator('.shell').waitFor();
-  await web.locator('nav button').filter({ hasText: '讨论一个以后再实现的文件格式检查能力' }).click();
-  await web.getByText('确认开发范围', { exact: true }).click();
-  await web.getByRole('checkbox', { name: 'format-draft（未生效候选）' }).check();
+  await web.locator('.sidebar-bottom').getByText('已连接', { exact: true }).waitFor();
+  await web.locator(`.session-list [data-session="${a.sessionId}"]`).click();
+  await activityPanel(web).getByRole('button', { name: '审阅开发授权', exact: true }).click();
+  const grant = web.getByRole('dialog', { name: '授权能力开发' });
+  await grant.locator('summary').filter({ hasText: '允许修改的已有技能' }).click();
+  await grant.getByRole('checkbox', { name: /^format-draft\s*尚未生效候选$/ }).check();
   receipt.unpublishedDraftCanBeSelected = true;
-  await web.getByLabel('允许创建的能力名称').fill('format-check');
+  await grant.getByLabel('允许新建的技能名称', { exact: true }).fill('format-check');
   await web.screenshot({ path: join(output, 'web-discussion-same-host.png') });
-  await page.getByRole('button', { name: '取消活动', exact: true }).click();
-  await web.getByText('已取消', { exact: true }).waitFor();
+  await activityPanel(page).getByRole('button', { name: '取消活动', exact: true }).click();
+  await page.getByRole('dialog', { name: '取消改进' }).getByRole('button', { name: '确认取消', exact: true }).click();
+  const cancelled = (client: Page) =>
+    shown(client).locator('.host-activity[data-activity-status="cancelled"]').getByText('已取消', { exact: true });
+  await cancelled(web).waitFor();
   assert.equal((await request<EvolutionActivity>(web, `/activities/${a.id}`)).status, 'cancelled');
   const catalog = await request<{ skills: Array<{ current?: string }> }>(page, '/skills');
   assert.equal(catalog.skills.length, 1);
   assert.ok(catalog.skills.every((s) => !s.current));
   await page.screenshot({ path: join(output, 'desktop-cancel.png') });
   await web.reload();
-  await web.getByText('已取消', { exact: true }).waitFor();
+  await web.locator('.sidebar-bottom').getByText('已连接', { exact: true }).waitFor();
+  await web.locator(`.session-list [data-session="${a.sessionId}"]`).click();
+  await cancelled(web).waitFor();
   receipt.sharedHost = {
     sourceSession: s.id,
     discussionSession: a.sessionId,
